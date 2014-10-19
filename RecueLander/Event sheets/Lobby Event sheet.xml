@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Lobby Event sheet</name>
+    <events>
+        <variable constant="0" name="Jugador" sid="4266181065721705" static="0" type="number">1</variable>
+        <event-block sid="7118582774471779">
+            <conditions>
+                <condition id="3" name="On touched object" sid="3139037085929895" type="Touch">
+                    <param id="0" name="Object">connect</param>
+                </condition>
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block any="1" sid="8583906555822049">
+                    <conditions>
+                        <condition id="0" name="Compare text" sid="6524903237150387" type="connect">
+                            <param id="0" name="Text to compare">&quot;Conectar&quot;</param>
+                            <param id="1" name="Case sensitivity">0</param>
+                        </condition>
+                        <condition id="0" name="Compare text" sid="7776914717771222" type="connect">
+                            <param id="0" name="Text to compare">&quot;Error intentalo de nuevo&quot;&amp;newline&amp;&quot;Conectar&quot;</param>
+                            <param id="1" name="Case sensitivity">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Connect" sid="6406159691758632" type="Socket">
+                            <param id="0" name="Address">&quot;127.0.0.1&quot;</param>
+                            <param id="1" name="Port">8080</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-block sid="5613431645578126">
+            <conditions>
+                <condition id="1" name="On connect" sid="1010767208867938" type="Socket" />
+            </conditions>
+            <actions>
+                <action id="0" name="Set text" sid="8279442537079393" type="connect">
+                    <param id="0" name="Text">&quot;Conectado....&quot; &amp;newline&amp; &quot;Esperando jugadores&quot;</param>
+                </action>
+                <action id="4" name="Emit" sid="936094404127529" type="Socket">
+                    <param id="0" name="Event">&quot;joint&quot;</param>
+                    <param id="1" name="Data">&quot;&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="6371641395577745">
+            <conditions>
+                <condition id="2" name="On error" sid="763064243932975" type="Socket" />
+            </conditions>
+            <actions>
+                <action id="0" name="Set text" sid="4145685099681305" type="connect">
+                    <param id="0" name="Text">&quot;Error intentalo de nuevo&quot;&amp;newline&amp;&quot;Conectar&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="9212252015969322">
+            <conditions>
+                <condition id="0" name="On data received" sid="781461290466321" type="Socket" />
+            </conditions>
+            <actions>
+                <action id="3" name="SplitDataReceived" sid="2291204928226313" type="Socket" />
+            </actions>
+        </event-block>
+        <event-block sid="7528872827113967">
+            <conditions>
+                <condition id="-8" name="Compare two values" sid="1574112155481589" type="System">
+                    <param id="0" name="First value">Socket.LastDataElement(0)</param>
+                    <param id="1" name="Comparison">0</param>
+                    <param id="2" name="Second value">&quot;Jugador&quot;</param>
+                </condition>
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block sid="5615600707833569">
+                    <conditions>
+                        <condition id="-8" name="Compare two values" sid="8773683780333153" type="System">
+                            <param id="0" name="First value">Socket.LastDataElement(1)</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Second value">&quot;PJ1&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="9091782044103942" type="System">
+                            <param id="0" name="Variable">Jugador</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="8565806399868043">
+                    <conditions>
+                        <condition id="-8" name="Compare two values" sid="9115947585245034" type="System">
+                            <param id="0" name="First value">Socket.LastDataElement(1)</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Second value">&quot;PJ2&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="1693264359594126" type="System">
+                            <param id="0" name="Variable">Jugador</param>
+                            <param id="1" name="Value">2</param>
+                        </action>
+                        <action id="4" name="Emit" sid="5844540300980909" type="Socket">
+                            <param id="0" name="Event">&quot;Start&quot;</param>
+                            <param id="1" name="Data">&quot;&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-block sid="1812838907649304">
+            <conditions>
+                <condition id="-8" name="Compare two values" sid="9136574769052919" type="System">
+                    <param id="0" name="First value">Socket.LastDataElement(0)</param>
+                    <param id="1" name="Comparison">0</param>
+                    <param id="2" name="Second value">&quot;Start&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="-2" name="Go to layout" sid="6270839802964738" type="System">
+                    <param id="0" name="Layout">PruebasMulti</param>
+                </action>
+            </actions>
+        </event-block>
+    </events>
+</c2eventsheet>

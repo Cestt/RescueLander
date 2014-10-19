@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Scroll Tactil</name>
+    <events>
+        <variable constant="0" name="DragMouseY" sid="845629499692242" static="0" type="number">0</variable>
+        <variable constant="0" name="DragMouseX" sid="976807049447573" static="0" type="number">0</variable>
+        <variable constant="0" name="DragScrollY" sid="9108563529903945" static="0" type="number">0</variable>
+        <variable constant="0" name="DragScrollX" sid="1613481353565273" static="0" type="number">0</variable>
+        <variable constant="0" name="Dragging" sid="9412570492063021" static="0" type="number">0</variable>
+        <event-block sid="8220123947854473">
+            <conditions>
+                <condition id="2" name="Is in touch" sid="293520541487939" type="Touch" />
+                <condition id="7" name="Compare touch speed" sid="5041196515944053" type="Touch">
+                    <param id="0" name="Touch index">0</param>
+                    <param id="1" name="Comparison">4</param>
+                    <param id="2" name="Speed">0</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="-9" name="Set value" sid="3847686594741979" type="System">
+                    <param id="0" name="Variable">Dragging</param>
+                    <param id="1" name="Value">1</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="6839919016731817">
+            <conditions>
+                <condition id="0" name="On any touch start" sid="360868951849105" type="Touch" />
+            </conditions>
+            <actions>
+                <action id="-9" name="Set value" sid="5072925240506624" type="System">
+                    <param id="0" name="Variable">DragMouseX</param>
+                    <param id="1" name="Value">Touch.AbsoluteX</param>
+                </action>
+                <action id="-9" name="Set value" sid="9295314552452401" type="System">
+                    <param id="0" name="Variable">DragMouseY</param>
+                    <param id="1" name="Value">Touch.AbsoluteY</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="4250853366578412">
+            <conditions>
+                <condition id="2" inverted="1" name="Is in touch" sid="2982106012340449" type="Touch" />
+            </conditions>
+            <actions>
+                <action id="-9" name="Set value" sid="7940041245665778" type="System">
+                    <param id="0" name="Variable">Dragging</param>
+                    <param id="1" name="Value">0</param>
+                </action>
+                <action id="-9" name="Set value" sid="9418070392164385" type="System">
+                    <param id="0" name="Variable">DragScrollX</param>
+                    <param id="1" name="Value">scrollx</param>
+                </action>
+                <action id="-9" name="Set value" sid="1304782603807998" type="System">
+                    <param id="0" name="Variable">DragScrollY</param>
+                    <param id="1" name="Value">scrolly</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="5464912403183422">
+            <conditions>
+                <condition id="-14" name="Compare variable" sid="3125026049292282" type="System">
+                    <param id="0" name="Variable">Dragging</param>
+                    <param id="1" name="Comparison">0</param>
+                    <param id="2" name="Value">1</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="-5" name="Scroll to X" sid="7577003741678836" type="System">
+                    <param id="0" name="X">DragMouseX+DragMouseX-Touch.AbsoluteX</param>
+                </action>
+            </actions>
+        </event-block>
+    </events>
+</c2eventsheet>

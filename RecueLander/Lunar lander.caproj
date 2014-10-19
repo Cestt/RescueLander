@@ -1,0 +1,1008 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2project>
+    <name>Lunar lander</name>
+    <description></description>
+    <version>1.0.0.0</version>
+    <author></author>
+    <author-email></author-email>
+    <author-website>http://</author-website>
+    <app-id>com.mycompany.myapp</app-id>
+    <unique-id>ngvcb2i47qau</unique-id>
+    <saved-with-version>18400</saved-with-version>
+    <used-plugins>
+        <plugin author="Scirra" id="Browser" version="1">Browser</plugin>
+        <plugin author="Scirra" id="Function" version="1">Function</plugin>
+        <plugin author="Scirra" id="Keyboard" version="1">Keyboard</plugin>
+        <plugin author="Scirra" id="Particles" version="1">Particles</plugin>
+        <plugin author="Original work: Zack0Wack0 - LastDataElement modifications by juantar, minify by Johnny Sheffield" id="Socket" version="1">Socket</plugin>
+        <plugin author="Scirra" id="Sprite" version="1">Sprite</plugin>
+        <plugin author="Scirra" id="Text" version="1">Text</plugin>
+        <plugin author="Scirra" id="Touch" version="1">Touch</plugin>
+        <plugin author="Zack0Wack0/Scirra" id="WebStorage" version="1">WebStorage</plugin>
+    </used-plugins>
+    <used-behaviors>
+        <behavior author="Scirra" id="Bullet" version="1">Bullet</behavior>
+        <behavior author="Scirra" id="Flash" version="1">Flash</behavior>
+        <behavior author="Scirra" id="Physics" version="1">Physics</behavior>
+        <behavior author="Scirra" id="Pin" version="1">Pin</behavior>
+        <behavior author="Scirra" id="bound" version="1">Bound to layout</behavior>
+        <behavior author="Scirra" id="scrollto" version="1">Scroll To</behavior>
+        <behavior author="Scirra" id="wrap" version="1">Wrap</behavior>
+    </used-behaviors>
+    <used-effects>
+        <effect author="Scirra" id="colorblend">Color</effect>
+    </used-effects>
+    <configurations>
+        <configuration exporter-descname="HTML5" exporter-id="html5" name="HTML5" />
+    </configurations>
+    <window-size>
+        <width>864</width>
+        <height>486</height>
+    </window-size>
+    <pixel-rounding>0</pixel-rounding>
+    <preview-effects>1</preview-effects>
+    <first-layout>Menu Inicial</first-layout>
+    <use-loader-layout>0</use-loader-layout>
+    <configuration-settings>
+        <prop name="Clear background">Yes</prop>
+        <prop name="Downscaling">Medium quality</prop>
+        <prop name="Enable WebGL">On</prop>
+        <prop name="Fullscreen in browser">Scale inner</prop>
+        <prop name="Fullscreen scaling">High quality</prop>
+        <prop name="Loader style">Progress bar &amp; logo</prop>
+        <prop name="Orientations">Landscape</prop>
+        <prop name="Pause on unfocus">No</prop>
+        <prop name="Physics engine">Box2D asm.js</prop>
+        <prop name="Preload sounds">Yes</prop>
+        <prop name="Preview browser">(default)</prop>
+        <prop name="Sampling">Linear</prop>
+        <prop name="Use high-DPI display">Yes</prop>
+    </configuration-settings>
+    <object-folder>
+        <object-type name="Nave" sid="2676298836422963">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="Vida" sid="8291053455330504" type="number" />
+                <instance-variable name="Fuel" sid="7906005220065059" type="number" />
+                <instance-variable name="Astronautas" sid="5318242880550736" type="number" />
+                <instance-variable name="FuelInicial" sid="4055292843164202" type="number" />
+                <instance-variable name="VidaInicial" sid="9614968257404762" type="number" />
+            </instance-variables>
+            <behaviors>
+                <behavior-type name="Physics" sid="9247090936137923">
+                    <behavior id="Physics" />
+                </behavior-type>
+                <behavior-type name="ScrollTo" sid="4829242506014419">
+                    <behavior id="scrollto" />
+                </behavior-type>
+                <behavior-type name="BoundToLayout" sid="6482813086754199">
+                    <behavior id="bound" />
+                </behavior-type>
+                <behavior-type name="Pin" sid="4066086303231675">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="4336136637786321" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.503906" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Ship.png">
+                        <image-point name="Imagepoint 1" x="0.492188" y="0.226563" />
+                        <image-point name="Imagepoint 2" x="0.5" y="0.769531" />
+                        <collision-poly>
+                            <point x="0.116732" y="0.122568" />
+                            <point x="0.321012" y="0.120623" />
+                            <point x="0.474754" y="0.2607" />
+                            <point x="0.79572" y="0.267495" />
+                            <point x="0.890625" y="0.340779" />
+                            <point x="0.988419" y="0.5" />
+                            <point x="0.890625" y="0.658257" />
+                            <point x="0.772373" y="0.736435" />
+                            <point x="0.474766" y="0.735409" />
+                            <point x="0.317121" y="0.881323" />
+                            <point x="0.116732" y="0.883261" />
+                            <point x="0.222078" y="0.68193" />
+                            <point x="0.0195313" y="0.810675" />
+                            <point x="0.0195313" y="0.679497" />
+                            <point x="0.117188" y="0.680171" />
+                            <point x="0.117188" y="0.321453" />
+                            <point x="0.0195313" y="0.320157" />
+                            <point x="0.0195313" y="0.180881" />
+                            <point x="0.218294" y="0.318344" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Reactor" sid="3739674322820615">
+            <plugin id="Particles" />
+            <behaviors>
+                <behavior-type name="Pin" sid="6883232989534661">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <texture />
+        </object-type>
+        <object-type name="Keyboard" sid="8759974427602714">
+            <plugin id="Keyboard" />
+        </object-type>
+        <object-type name="BarraVida" sid="5239333203168364">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="WidthInic" sid="2536001801846197" type="number" />
+            </instance-variables>
+            <animation-folder>
+                <animation framecount="3" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7752627690515721" speed="0">
+                    <frame duration="1" hotspotX="0" hotspotY="0.545455" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\verde.png" />
+                    <frame duration="1" hotspotX="0.503759" hotspotY="0.545455" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\naranja.png" />
+                    <frame duration="1" hotspotX="0.503759" hotspotY="0.545455" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\barra roja.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="BarraFuel" sid="4218711504048917">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="WidthInicial" sid="5175954086280182" type="number" />
+            </instance-variables>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="50901460962269" speed="5">
+                    <frame duration="1" hotspotX="0" hotspotY="0.545455" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\barra azul.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Touch" sid="188292602470915">
+            <plugin id="Touch" />
+        </object-type>
+        <object-type name="Plataforma" sid="2887378532851873">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7108623179366887" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Landing_Platform.png">
+                        <collision-poly>
+                            <point x="0.0961538" y="0.296875" />
+                            <point x="0.830128" y="0.296875" />
+                            <point x="0.758013" y="0.984375" />
+                            <point x="0.183494" y="0.984375" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Astronautas" sid="479428904319116">
+            <plugin id="Text" />
+        </object-type>
+        <object-type name="Play" sid="4260442357459619">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="1123372757035619" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Exit" sid="6291607403054436">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="4960035019669822" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Browser" sid="5654211457892177">
+            <plugin id="Browser" />
+        </object-type>
+        <object-type name="Socket" sid="3101798758820413">
+            <plugin id="Socket" />
+        </object-type>
+        <object-type name="connect" sid="5775280276102388">
+            <plugin id="Text" />
+        </object-type>
+        <object-type name="Multi" sid="3421618691647934">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="PJ" sid="2558865232932271" type="number" />
+            </instance-variables>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9826123931479424" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Nave2" sid="6439628774078802">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="Vida" sid="6828060484672893" type="number" />
+                <instance-variable name="MaxAstronautas" sid="1251122266036171" type="number" />
+                <instance-variable name="Astronautas" sid="8437408670136354" type="number" />
+            </instance-variables>
+            <behaviors>
+                <behavior-type name="Physics" sid="5036472375187249">
+                    <behavior id="Physics" />
+                </behavior-type>
+                <behavior-type name="ScrollTo" sid="8088355746483708">
+                    <behavior id="scrollto" />
+                </behavior-type>
+                <behavior-type name="BoundToLayout" sid="287383545762647">
+                    <behavior id="bound" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="8595776474009768" speed="5">
+                    <frame duration="1" hotspotX="0.501953" hotspotY="0.501953" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Ship\Ship.png">
+                        <image-point name="Imagepoint 1" x="0.519531" y="0.234375" />
+                        <image-point name="Imagepoint 2" x="0.511719" y="0.757813" />
+                        <collision-poly>
+                            <point x="0.117188" y="0.113281" />
+                            <point x="0.34375" y="0.111328" />
+                            <point x="0.484375" y="0.257813" />
+                            <point x="0.753906" y="0.246094" />
+                            <point x="0.900391" y="0.345703" />
+                            <point x="1" y="0.5" />
+                            <point x="0.904297" y="0.660156" />
+                            <point x="0.761719" y="0.742188" />
+                            <point x="0.470703" y="0.738281" />
+                            <point x="0.339844" y="0.875" />
+                            <point x="0.113281" y="0.875" />
+                            <point x="0.220392" y="0.771105" />
+                            <point x="0.116565" y="0.72971" />
+                            <point x="0.0182874" y="0.818794" />
+                            <point x="0.0170438" y="0.668839" />
+                            <point x="0.100494" y="0.65799" />
+                            <point x="0.103332" y="0.589417" />
+                            <point x="0.0933836" y="0.413208" />
+                            <point x="0.0873411" y="0.319031" />
+                            <point x="0.00317363" y="0.326416" />
+                            <point x="0.0102538" y="0.191895" />
+                            <point x="0.102539" y="0.243164" />
+                            <point x="0.224609" y="0.228516" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Reactor2" sid="7648245444757294">
+            <plugin id="Particles" />
+            <behaviors>
+                <behavior-type name="Pin" sid="9249379898624937">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <texture />
+        </object-type>
+        <object-type name="Nivels" sid="7887496327730123">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="8352111306054927" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\UI\icono.png">
+                        <collision-poly>
+                            <point x="0.0753968" y="0.0570571" />
+                            <point x="0.5" y="0" />
+                            <point x="0.928571" y="0.0540541" />
+                            <point x="0.996032" y="0.498498" />
+                            <point x="0.928571" y="0.945946" />
+                            <point x="0.5" y="1" />
+                            <point x="0.0753968" y="0.942943" />
+                            <point x="0" y="0.498498" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="WebStorage" sid="8351528860352662">
+            <plugin id="WebStorage" />
+        </object-type>
+        <object-type name="Test" sid="4920229833899723">
+            <plugin id="Text" />
+        </object-type>
+        <object-type name="Fondo" sid="8078500147058072">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="1640802197201724" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\Mars_01_Background.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Astronauta" sid="5240174173178502">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="7" loop="1" name="Default" pingpong="1" repeatcount="1" repeatto="0" sid="1663146104823686" speed="15">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_01.png">
+                        <collision-poly>
+                            <point x="0.263672" y="0.136719" />
+                            <point x="0.734375" y="0.136719" />
+                            <point x="0.837891" y="0.75" />
+                            <point x="0.664063" y="0.96875" />
+                            <point x="0.332031" y="0.96875" />
+                            <point x="0.157227" y="0.75" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_02.png">
+                        <collision-poly>
+                            <point x="0.263672" y="0.136719" />
+                            <point x="0.734375" y="0.136719" />
+                            <point x="0.837891" y="0.75" />
+                            <point x="0.664063" y="0.96875" />
+                            <point x="0.332031" y="0.96875" />
+                            <point x="0.157227" y="0.75" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_03.png">
+                        <collision-poly>
+                            <point x="0.263672" y="0.136719" />
+                            <point x="0.734375" y="0.136719" />
+                            <point x="0.837891" y="0.75" />
+                            <point x="0.664063" y="0.96875" />
+                            <point x="0.332031" y="0.96875" />
+                            <point x="0.157227" y="0.75" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_04.png">
+                        <collision-poly>
+                            <point x="0.263672" y="0.136719" />
+                            <point x="0.734375" y="0.136719" />
+                            <point x="0.837891" y="0.75" />
+                            <point x="0.664063" y="0.96875" />
+                            <point x="0.332031" y="0.96875" />
+                            <point x="0.157227" y="0.75" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_05.png">
+                        <collision-poly>
+                            <point x="0.263672" y="0.136719" />
+                            <point x="0.734375" y="0.136719" />
+                            <point x="0.837891" y="0.75" />
+                            <point x="0.664063" y="0.96875" />
+                            <point x="0.332031" y="0.96875" />
+                            <point x="0.157227" y="0.75" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_06.png">
+                        <collision-poly>
+                            <point x="0.263672" y="0.136719" />
+                            <point x="0.734375" y="0.136719" />
+                            <point x="0.837891" y="0.75" />
+                            <point x="0.664063" y="0.96875" />
+                            <point x="0.332031" y="0.96875" />
+                            <point x="0.157227" y="0.75" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_07.png">
+                        <collision-poly>
+                            <point x="0.263672" y="0.136719" />
+                            <point x="0.734375" y="0.136719" />
+                            <point x="0.837891" y="0.75" />
+                            <point x="0.664063" y="0.96875" />
+                            <point x="0.332031" y="0.96875" />
+                            <point x="0.157227" y="0.75" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Lander" sid="1229872193019091">
+            <plugin id="Sprite" />
+            <behaviors>
+                <behavior-type name="Pin" sid="4034419358060864">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2904581272103842" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Function" sid="4271606432599825">
+            <plugin id="Function" />
+        </object-type>
+        <object-type name="BarraBase" sid="6386868645866743">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2833243826399895" speed="5">
+                    <frame duration="1" hotspotX="0.503759" hotspotY="0.545455" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Barra base.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Thusters" sid="3073901958723645">
+            <plugin id="Particles" />
+            <instance-variables>
+                <instance-variable name="Thuster" sid="1378911123636939" type="number" />
+            </instance-variables>
+            <behaviors>
+                <behavior-type name="Pin" sid="2730265466910499">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <texture original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Thruster_smoke.png" />
+        </object-type>
+        <object-type name="Ventana" sid="6473881875701811">
+            <plugin id="Sprite" />
+            <behaviors>
+                <behavior-type name="Pin" sid="235639993442865">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7203012049242542" speed="5">
+                    <frame duration="1" hotspotX="0.511111" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Ship_Window.png">
+                        <collision-poly>
+                            <point x="0.159091" y="0.844444" />
+                            <point x="0" y="0.511111" />
+                            <point x="0.159091" y="0.155556" />
+                            <point x="0.5" y="0.0222222" />
+                            <point x="0.840909" y="0.155556" />
+                            <point x="0.977273" y="0.511111" />
+                            <point x="0.840909" y="0.844444" />
+                            <point x="0.5" y="0.977778" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Minimap" sid="2275560295734607">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="1061748371116579" speed="5">
+                    <frame duration="1" hotspotX="0" hotspotY="0" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\MInimap_Background.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="NaveMini" sid="7259052710657416">
+            <plugin id="Sprite" />
+            <behaviors>
+                <behavior-type name="ScrollTo" sid="7302128036558167">
+                    <behavior id="scrollto" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="6065852816884908" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Ship_Ico.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Fire" sid="2903489646172814">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="FireState" sid="6173053047567972" type="number" />
+            </instance-variables>
+            <behaviors>
+                <behavior-type name="Pin" sid="1120005699101569">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="13" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="3964271936932577" speed="20">
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire01.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire02.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire03.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire04.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire05.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire06.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire07.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire08.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire09.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire10.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire11.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire12.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire13.png" />
+                </animation>
+                <animation framecount="5" loop="1" name="Loop" pingpong="1" repeatcount="1" repeatto="0" sid="6420172470090328" speed="11">
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire09.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire10.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire11.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire12.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire13.png" />
+                </animation>
+                <animation framecount="13" loop="0" name="Default_Reverse" pingpong="0" repeatcount="1" repeatto="0" sid="8303166309106129" speed="20">
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire13.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire09.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire12.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire11.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire10.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire08.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire07.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire06.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire05.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire04.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire03.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire02.png" />
+                    <frame duration="1" hotspotX="0.506329" hotspotY="0" original-source="C:\Users\Javi\SkyDrive\Diseño 3D\Lunar lander\Fire\Fire01.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Smoke" sid="6098897365262694">
+            <plugin id="Particles" />
+            <behaviors>
+                <behavior-type name="Pin" sid="9249862568749497">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <effects>
+                <effect-type name="Color">
+                    <effect id="colorblend" />
+                </effect-type>
+            </effects>
+            <texture original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Thruster_smoke.png" />
+        </object-type>
+        <object-type name="Astronaut_Halo_" sid="3617141467347472">
+            <plugin id="Sprite" />
+            <behaviors>
+                <behavior-type name="Pin" sid="614365804542317">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="6" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2834389541164703" speed="35">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_01.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_03.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_05.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_07.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_08.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_09.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="SueloMenu" sid="494843352185444">
+            <plugin id="Sprite" />
+            <behaviors>
+                <behavior-type name="Wrap" sid="6720141658394097">
+                    <behavior id="wrap" />
+                </behavior-type>
+                <behavior-type name="Bullet" sid="9366710036044741">
+                    <behavior id="Bullet" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="5492102496990154" speed="5">
+                    <frame duration="1" hotspotX="0.50026" hotspotY="0.501139" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\suelo_menu.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="TextMenu" sid="2975131234724791">
+            <plugin id="Text" />
+            <behaviors>
+                <behavior-type name="Flash" sid="266195094702102">
+                    <behavior id="Flash" />
+                </behavior-type>
+            </behaviors>
+        </object-type>
+        <object-type name="Mover" sid="2766910549069333">
+            <plugin id="Sprite" />
+            <behaviors>
+                <behavior-type name="ScrollTo" sid="1010169180185699">
+                    <behavior id="scrollto" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7690084848796365" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Final" sid="7945955727966782">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="Finales" sid="413017501350487" type="number" />
+            </instance-variables>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="5001687112919388" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Play_Anim" sid="5302823561176823">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="13" loop="1" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2250060795394058" speed="12">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim00.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim01.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim02.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim03.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim04.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim05.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim06.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim07.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim08.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim09.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim10.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim11.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\UI\Play_Anim\Play_Anim12.png">
+                        <collision-poly>
+                            <point x="0" y="0.0449219" />
+                            <point x="1" y="0.046875" />
+                            <point x="1" y="0.910156" />
+                            <point x="0" y="0.908203" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="BotonBack" sid="8101298046802664">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2615993166267772" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Source code\Art\UI\Back_Arrow.png">
+                        <collision-poly>
+                            <point x="0.188679" y="0.269058" />
+                            <point x="0.5" y="0.217489" />
+                            <point x="0.847484" y="0.217489" />
+                            <point x="0.954403" y="0.5" />
+                            <point x="0.814465" y="0.735426" />
+                            <point x="0.5" y="0.735426" />
+                            <point x="0.149371" y="0.786996" />
+                            <point x="0.0188679" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Estrellas" sid="8250235934791613">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="Nivel" sid="2812246661488086" type="number" />
+                <instance-variable name="Estrella" sid="4281024237793897" type="number" />
+            </instance-variables>
+            <animation-folder>
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7643775129692437" speed="0">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Source code\Art\UI\Star lose.png">
+                        <collision-poly>
+                            <point x="0.34" y="0.34" />
+                            <point x="0.5" y="0.02" />
+                            <point x="0.66" y="0.34" />
+                            <point x="0.906667" y="0.5" />
+                            <point x="0.796667" y="0.796667" />
+                            <point x="0.213333" y="0.786667" />
+                            <point x="0.103333" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Source code\Art\UI\Estrella Win.png">
+                        <collision-poly>
+                            <point x="0.34" y="0.34" />
+                            <point x="0.5" y="0.02" />
+                            <point x="0.66" y="0.34" />
+                            <point x="0.903333" y="0.5" />
+                            <point x="0.796667" y="0.796667" />
+                            <point x="0.213333" y="0.786667" />
+                            <point x="0.103333" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="FondoIntermedio" sid="3825500751458409">
+            <plugin id="Sprite" />
+            <behaviors>
+                <behavior-type name="Wrap" sid="4821981246351813">
+                    <behavior id="wrap" />
+                </behavior-type>
+                <behavior-type name="Bullet" sid="2975558578985666">
+                    <behavior id="Bullet" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="6966253332688779" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501916" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Montañas back.png">
+                        <collision-poly>
+                            <point x="0.113889" y="0.557823" />
+                            <point x="0.5" y="0.0952381" />
+                            <point x="0.925694" y="0.363946" />
+                            <point x="1" y="0.5" />
+                            <point x="0.986806" y="0.935374" />
+                            <point x="0.0125" y="0.938776" />
+                            <point x="0.145833" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="AstronautaRecoger" sid="7867206898187388">
+            <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="Astro" sid="217698631076899" type="number" />
+            </instance-variables>
+            <animation-folder>
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2068157216401665" speed="0">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Astronaut_Ico_Empty.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.474576" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Source code\Art\UI\Astronaut_Ico.png">
+                        <collision-poly>
+                            <point x="0.075" y="0.186441" />
+                            <point x="0.5" y="0.0338983" />
+                            <point x="0.925" y="0.186441" />
+                            <point x="0.775" y="0.474576" />
+                            <point x="0.925" y="0.762712" />
+                            <point x="0.5" y="0.79661" />
+                            <point x="0.05" y="0.779661" />
+                            <point x="0.225" y="0.474576" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="FondoAtras" sid="4371542226462658">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="360167045343326" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501916" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Montañas back_2.png">
+                        <collision-poly>
+                            <point x="0.113194" y="0.554422" />
+                            <point x="0.5" y="0.0918367" />
+                            <point x="0.927778" y="0.353741" />
+                            <point x="1" y="0.5" />
+                            <point x="0.9875" y="0.938776" />
+                            <point x="0.0118056" y="0.942177" />
+                            <point x="0.145833" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="NaveVida" sid="8457996891343301">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="5640904707145291" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Source code\Art\Ship.png">
+                        <collision-poly>
+                            <point x="0.128906" y="0.871094" />
+                            <point x="0.238281" y="0.5" />
+                            <point x="0.253906" y="0.253906" />
+                            <point x="0.5" y="0.015625" />
+                            <point x="0.746094" y="0.253906" />
+                            <point x="0.757813" y="0.5" />
+                            <point x="0.871094" y="0.871094" />
+                            <point x="0.5" y="0.890625" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="BarrilFuel" sid="8577819973104161">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7811598897195073" speed="5">
+                    <frame duration="1" hotspotX="0.509434" hotspotY="0.5" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Oil_Ico.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="DegradadoFondo" sid="2866289257801522">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7205877517577386" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\degradado.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="SueloLVL0" sid="6189722945326923">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="4" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9272950651177398" speed="0">
+                    <frame duration="1" hotspotX="0.501558" hotspotY="0.5" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\Mars_01_Ground_A.png">
+                        <collision-poly>
+                            <point x="0" y="0.768056" />
+                            <point x="0.495327" y="0.770833" />
+                            <point x="0.577882" y="0.795833" />
+                            <point x="0.628505" y="0.855555" />
+                            <point x="0.656932" y="0.913194" />
+                            <point x="0.708529" y="0.94618" />
+                            <point x="0.774825" y="0.957118" />
+                            <point x="1" y="0.957031" />
+                            <point x="0.996885" y="0.998611" />
+                            <point x="0" y="1" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\Mars_01_Ground_B.png">
+                        <collision-poly>
+                            <point x="0" y="0.959722" />
+                            <point x="0.852484" y="0.9625" />
+                            <point x="0.912267" y="0.904861" />
+                            <point x="0.963898" y="0.714236" />
+                            <point x="0.996894" y="0.622223" />
+                            <point x="0.996894" y="0.998611" />
+                            <point x="0.00310559" y="0.998611" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\Mars_01_Ground_C.png">
+                        <collision-poly>
+                            <point x="0.653727" y="0.291667" />
+                            <point x="0.759317" y="0.280903" />
+                            <point x="0.958075" y="0.285417" />
+                            <point x="0.993789" y="0.305556" />
+                            <point x="0.996894" y="0.998611" />
+                            <point x="0.00310559" y="0.998611" />
+                            <point x="0.0186335" y="0.568859" />
+                            <point x="0.130702" y="0.48355" />
+                            <point x="0.168236" y="0.467101" />
+                            <point x="0.268148" y="0.442535" />
+                            <point x="0.480396" y="0.429514" />
+                            <point x="0.501164" y="0.424305" />
+                            <point x="0.567547" y="0.334722" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.501558" hotspotY="0.5" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\Mars_01_Ground_D.png">
+                        <collision-poly>
+                            <point x="0.00233645" y="0.301736" />
+                            <point x="0.0327104" y="0.774652" />
+                            <point x="0.0560747" y="0.818056" />
+                            <point x="0.148754" y="0.8375" />
+                            <point x="0.246496" y="0.839584" />
+                            <point x="0.323112" y="0.827952" />
+                            <point x="0.381036" y="0.809375" />
+                            <point x="0.752045" y="0.554688" />
+                            <point x="0.79892" y="0.537066" />
+                            <point x="1" y="0.536111" />
+                            <point x="1" y="1" />
+                            <point x="0.00311526" y="0.998611" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Logo" sid="3024689189851979">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="5816253646611964" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Logo.png">
+                        <collision-poly>
+                            <point x="0.457778" y="0.605882" />
+                            <point x="0.5" y="0.0205882" />
+                            <point x="0.646667" y="0.467647" />
+                            <point x="0.922222" y="0.5" />
+                            <point x="0.948889" y="0.932353" />
+                            <point x="0.5" y="0.997059" />
+                            <point x="0.0511111" y="0.932353" />
+                            <point x="0.0777778" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+    </object-folder>
+    <families>
+        <family name="Colisionar" plugin-id="Sprite" sid="4756467415239035">
+            <members>
+                <member>Plataforma</member>
+                <member>SueloLVL0</member>
+            </members>
+            <behaviors>
+                <behavior-type name="Physics" sid="1757757871310015">
+                    <behavior id="Physics" />
+                </behavior-type>
+            </behaviors>
+        </family>
+        <family name="Niveles" plugin-id="Sprite" sid="5399197288236672">
+            <members>
+                <member>Nivels</member>
+            </members>
+            <instance-variables>
+                <instance-variable name="Nivel" sid="1495758126771824" type="number" />
+                <instance-variable name="Unlock" sid="9991843777877198" type="number" />
+            </instance-variables>
+        </family>
+    </families>
+    <layout-folder>
+        <layout>PruebasSingle.xml</layout>
+        <layout>PruebasMulti.xml</layout>
+        <layout>Menu Inicial.xml</layout>
+        <layout>Lobby.xml</layout>
+        <layout>Menu niveles.xml</layout>
+        <layout>Nivel1.xml</layout>
+    </layout-folder>
+    <event-folder>
+        <event-sheet>PruebasSingle event sheet.xml</event-sheet>
+        <event-sheet>Menu Inicial event sheet.xml</event-sheet>
+        <event-sheet>PruebasMulti event sheet.xml</event-sheet>
+        <event-sheet>Lobby Event sheet.xml</event-sheet>
+        <event-sheet>Scroll Tactil.xml</event-sheet>
+        <event-sheet>Menu NivelesEvent Sheet.xml</event-sheet>
+        <event-sheet>Nivel1EventSheet.xml</event-sheet>
+    </event-folder>
+    <global-instances>
+        <global-instance type="Keyboard" uid="3" />
+        <global-instance type="Touch" uid="6">
+            <properties>
+                <use-mouse-input>Yes</use-mouse-input>
+            </properties>
+        </global-instance>
+        <global-instance type="Browser" uid="15" />
+        <global-instance type="Socket" uid="13" />
+        <global-instance type="WebStorage" uid="31" />
+        <global-instance type="Function" uid="42" />
+    </global-instances>
+    <sounds-folder />
+    <music-folder />
+    <files-folder>
+        <file-folder name="Icons">
+            <file name="icon-16.png" />
+            <file name="icon-32.png" />
+            <file name="icon-114.png" />
+            <file name="icon-128.png" />
+            <file name="icon-256.png" />
+            <file name="loading-logo.png" />
+        </file-folder>
+        <file name="frostys_winterland-webfont.eot" />
+        <file name="frostys_winterland-webfont.svg" />
+        <file name="frostys_winterland-webfont.ttf" />
+        <file name="frostys_winterland-webfont.woff" />
+        <file name="stylesheet.css" />
+    </files-folder>
+</c2project>
