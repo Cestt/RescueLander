@@ -11,6 +11,7 @@
     <saved-with-version>18400</saved-with-version>
     <used-plugins>
         <plugin author="Scirra" id="Browser" version="1">Browser</plugin>
+        <plugin author="Scirra" id="Dictionary" version="1">Dictionary</plugin>
         <plugin author="Scirra" id="Function" version="1">Function</plugin>
         <plugin author="Scirra" id="Keyboard" version="1">Keyboard</plugin>
         <plugin author="Scirra" id="Particles" version="1">Particles</plugin>
@@ -756,7 +757,7 @@
         <object-type name="Play_Anim" sid="5302823561176823">
             <plugin id="Sprite" />
             <animation-folder>
-                <animation framecount="13" loop="1" name="Default" pingpong="1" repeatcount="1" repeatto="0" sid="2250060795394058" speed="12">
+                <animation framecount="6" loop="1" name="Default" pingpong="1" repeatcount="1" repeatto="0" sid="2250060795394058" speed="12">
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim00.png">
                         <collision-poly>
                             <point x="0" y="0.0449219" />
@@ -798,62 +799,6 @@
                         </collision-poly>
                     </frame>
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim05.png">
-                        <collision-poly>
-                            <point x="0" y="0.0449219" />
-                            <point x="1" y="0.046875" />
-                            <point x="1" y="0.910156" />
-                            <point x="0" y="0.908203" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim06.png">
-                        <collision-poly>
-                            <point x="0" y="0.0449219" />
-                            <point x="1" y="0.046875" />
-                            <point x="1" y="0.910156" />
-                            <point x="0" y="0.908203" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim07.png">
-                        <collision-poly>
-                            <point x="0" y="0.0449219" />
-                            <point x="1" y="0.046875" />
-                            <point x="1" y="0.910156" />
-                            <point x="0" y="0.908203" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim08.png">
-                        <collision-poly>
-                            <point x="0" y="0.0449219" />
-                            <point x="1" y="0.046875" />
-                            <point x="1" y="0.910156" />
-                            <point x="0" y="0.908203" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim09.png">
-                        <collision-poly>
-                            <point x="0" y="0.0449219" />
-                            <point x="1" y="0.046875" />
-                            <point x="1" y="0.910156" />
-                            <point x="0" y="0.908203" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim10.png">
-                        <collision-poly>
-                            <point x="0" y="0.0449219" />
-                            <point x="1" y="0.046875" />
-                            <point x="1" y="0.910156" />
-                            <point x="0" y="0.908203" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim11.png">
-                        <collision-poly>
-                            <point x="0" y="0.0449219" />
-                            <point x="1" y="0.046875" />
-                            <point x="1" y="0.910156" />
-                            <point x="0" y="0.908203" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim12.png">
                         <collision-poly>
                             <point x="0" y="0.0449219" />
                             <point x="1" y="0.046875" />
@@ -1098,6 +1043,9 @@
                 </animation>
             </animation-folder>
         </object-type>
+        <object-type global="1" name="Dictionary" sid="1573954640061306">
+            <plugin id="Dictionary" />
+        </object-type>
     </object-folder>
     <families>
         <family name="Colisionar" plugin-id="Sprite" sid="4756467415239035">
@@ -1125,14 +1073,12 @@
         <layout>PruebasSingle.xml</layout>
         <layout>PruebasMulti.xml</layout>
         <layout>Menu Inicial.xml</layout>
-        <layout>Menu niveles.xml</layout>
         <layout>Nivel1.xml</layout>
     </layout-folder>
     <event-folder>
         <event-sheet>Mecanicas juego eventsheet.xml</event-sheet>
         <event-sheet>Menu Inicial event sheet.xml</event-sheet>
         <event-sheet>Scroll Tactil.xml</event-sheet>
-        <event-sheet>Menu NivelesEvent Sheet.xml</event-sheet>
     </event-folder>
     <global-instances>
         <global-instance type="Keyboard" uid="3" />

@@ -28,29 +28,33 @@
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="0" name="Set local value" sid="4179939331630957" type="WebStorage">
+                                <action id="0" name="Add key" sid="4179939331630957" type="Dictionary">
                                     <param id="0" name="Key">&quot;Nivel&quot;&amp;loopindex&amp;&quot;Estrellas&quot;</param>
                                     <param id="1" name="Value">-1</param>
                                 </action>
-                                <action id="0" name="Set local value" sid="3947183739223803" type="WebStorage">
+                                <action id="0" name="Add key" sid="3947183739223803" type="Dictionary">
                                     <param id="0" name="Key">&quot;Nivel&quot;&amp;loopindex&amp;&quot;Puntos&quot;</param>
                                     <param id="1" name="Value">0</param>
                                 </action>
-                                <action id="0" name="Set local value" sid="898948557212883" type="WebStorage">
+                                <action id="0" name="Add key" sid="898948557212883" type="Dictionary">
                                     <param id="0" name="Key">&quot;Nivel&quot;&amp;loopindex&amp;&quot;Unlock&quot;</param>
                                     <param id="1" name="Value">0</param>
                                 </action>
-                                <action id="0" name="Set local value" sid="5393296409926423" type="WebStorage">
+                                <action id="0" name="Add key" sid="5393296409926423" type="Dictionary">
                                     <param id="0" name="Key">&quot;Unlocks&quot;</param>
                                     <param id="1" name="Value">0</param>
                                 </action>
-                                <action id="0" name="Set local value" sid="9309813253324207" type="WebStorage">
+                                <action id="0" name="Add key" sid="9309813253324207" type="Dictionary">
                                     <param id="0" name="Key">&quot;Tutorial&quot;</param>
                                     <param id="1" name="Value">0</param>
                                 </action>
-                                <action id="0" name="Set local value" sid="108435200685045" type="WebStorage">
+                                <action id="0" name="Add key" sid="108435200685045" type="Dictionary">
                                     <param id="0" name="Key">&quot;Data&quot;</param>
                                     <param id="1" name="Value">1</param>
+                                </action>
+                                <action id="0" name="Set local value" sid="4809336003870329" type="WebStorage">
+                                    <param id="0" name="Key">&quot;Data&quot;</param>
+                                    <param id="1" name="Value">Dictionary.AsJSON</param>
                                 </action>
                             </actions>
                         </event-block>
@@ -62,7 +66,11 @@
                             <param id="0" name="Key">&quot;Data&quot;</param>
                         </condition>
                     </conditions>
-                    <actions />
+                    <actions>
+                        <action id="4" name="Load" sid="3325328449907809" type="Dictionary">
+                            <param id="0" name="JSON">WebStorage.LocalValue(&quot;Data&quot;)</param>
+                        </action>
+                    </actions>
                     <sub-events>
                         <event-block sid="5848343346326055">
                             <conditions>
@@ -79,7 +87,7 @@
                                         <condition id="-7" name="Compare instance variable" sid="421592008771312" type="Niveles">
                                             <param id="0" name="Instance variable">Nivel</param>
                                             <param id="1" name="Comparison">3</param>
-                                            <param id="2" name="Value">WebStorage.LocalValue(&quot;Unlocks&quot;)</param>
+                                            <param id="2" name="Value">Dictionary.Get(&quot;Unlocks&quot;)</param>
                                         </condition>
                                     </conditions>
                                     <actions>
@@ -99,7 +107,7 @@
                                         <condition id="-7" name="Compare instance variable" sid="7392686732893965" type="Estrellas">
                                             <param id="0" name="Instance variable">Estrella</param>
                                             <param id="1" name="Comparison">3</param>
-                                            <param id="2" name="Value">WebStorage.LocalValue(&quot;Nivel&quot;&amp;loopindex&amp;&quot;Estrellas&quot;)</param>
+                                            <param id="2" name="Value">Dictionary.Get(&quot;Nivel&quot;&amp;loopindex&amp;&quot;Estrellas&quot;)</param>
                                         </condition>
                                     </conditions>
                                     <actions>
@@ -135,7 +143,7 @@
                     <sub-events>
                         <event-block disabled="1" sid="4789507589820566">
                             <conditions>
-                                <condition id="7" name="Compare key value (as number)" sid="6366970431573312" type="WebStorage">
+                                <condition id="0" name="Compare value" sid="6366970431573312" type="Dictionary">
                                     <param id="0" name="Key">&quot;Tutorial&quot;</param>
                                     <param id="1" name="Comparison">0</param>
                                     <param id="2" name="Value">0</param>

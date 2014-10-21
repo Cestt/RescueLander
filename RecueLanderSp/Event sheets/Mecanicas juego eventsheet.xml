@@ -17,6 +17,12 @@
                     <param id="0" name="Family name">&quot;frostys_winterlandregular&quot;</param>
                     <param id="1" name="CSS URL">&quot;stylesheet.css&quot;</param>
                 </action>
+                <action id="0" name="Set text" sid="8907393118219867" type="Astronautas">
+                    <param id="0" name="Text">NivelActual</param>
+                </action>
+                <action id="-15" name="Set visible" sid="464249152712256" type="Astronautas">
+                    <param id="0" name="Visibility">1</param>
+                </action>
             </actions>
             <sub-events>
                 <event-block sid="7252571278022234">
@@ -788,45 +794,66 @@
                         <action id="-9" name="Destroy" sid="8884157788035447" type="Ventana" />
                         <action id="-9" name="Destroy" sid="5327242424040615" type="Fire" />
                         <action id="-9" name="Destroy" sid="1324162133289632" type="Thusters" />
-                        <action id="0" name="Set text" sid="3626811016501799" type="Astronautas">
-                            <param id="0" name="Text">&quot;YOU LOSE&quot;</param>
-                        </action>
-                        <action id="-15" name="Set visible" sid="6751826259985649" type="Astronautas">
-                            <param id="0" name="Visibility">1</param>
-                        </action>
                     </actions>
                     <sub-events>
-                        <event-block sid="8184141724275724">
+                        <event-block sid="6997645235361842">
                             <conditions>
-                                <condition id="-8" name="Compare two values" sid="9486678690824849" type="System">
-                                    <param id="0" name="First value">WebStorage.LocalValue(&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;)</param>
-                                    <param id="1" name="Comparison">2</param>
-                                    <param id="2" name="Second value">AstroRecogidos-1</param>
+                                <condition id="3" name="Has key" sid="6265737337179174" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="0" name="Set local value" sid="364146236906476" type="WebStorage">
-                                    <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
-                                    <param id="1" name="Value">AstroRecogidos-1</param>
+                                <action id="0" name="Set text" sid="3626811016501799" type="Astronautas">
+                                    <param id="0" name="Text">&quot;YOU LOSE&quot;</param>
                                 </action>
-                                <action id="-16" name="Wait" sid="3437839547932507" type="System">
-                                    <param id="0" name="Seconds">2</param>
-                                </action>
-                                <action id="-2" name="Go to layout" sid="2642271017443494" type="System">
-                                    <param id="0" name="Layout">Menu Inicial</param>
+                                <action id="-15" name="Set visible" sid="6751826259985649" type="Astronautas">
+                                    <param id="0" name="Visibility">1</param>
                                 </action>
                             </actions>
+                            <sub-events>
+                                <event-block sid="8184141724275724">
+                                    <conditions>
+                                        <condition id="-8" name="Compare two values" sid="9486678690824849" type="System">
+                                            <param id="0" name="First value">Dictionary.Get(&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;)</param>
+                                            <param id="1" name="Comparison">2</param>
+                                            <param id="2" name="Second value">AstroRecogidos-1</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="1" name="Set key" sid="884372902478967" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
+                                            <param id="1" name="Value">str(AstroRecogidos-1)</param>
+                                        </action>
+                                        <action id="-16" name="Wait" sid="3437839547932507" type="System">
+                                            <param id="0" name="Seconds">2</param>
+                                        </action>
+                                        <action id="-2" name="Go to layout" sid="2642271017443494" type="System">
+                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="888423667764981">
+                                    <conditions>
+                                        <condition id="-22" name="Else" sid="7660016097288803" type="System" />
+                                    </conditions>
+                                    <actions>
+                                        <action id="-16" name="Wait" sid="3751825805842022" type="System">
+                                            <param id="0" name="Seconds">2</param>
+                                        </action>
+                                        <action id="-2" name="Go to layout" sid="1132960766636714" type="System">
+                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
                         </event-block>
-                        <event-block sid="888423667764981">
+                        <event-block sid="5316664226879695">
                             <conditions>
-                                <condition id="-22" name="Else" sid="7660016097288803" type="System" />
+                                <condition id="-22" name="Else" sid="5833549106002613" type="System" />
                             </conditions>
                             <actions>
-                                <action id="-16" name="Wait" sid="3751825805842022" type="System">
-                                    <param id="0" name="Seconds">2</param>
-                                </action>
-                                <action id="-2" name="Go to layout" sid="1132960766636714" type="System">
-                                    <param id="0" name="Layout">Menu Inicial</param>
+                                <action id="0" name="Set text" sid="6003628642733685" type="Astronautas">
+                                    <param id="0" name="Text">&quot;Save Failure&quot;</param>
                                 </action>
                             </actions>
                         </event-block>
@@ -843,47 +870,58 @@
                             <param id="0" name="Object">Nave</param>
                             <param id="1" name="Time scale">0</param>
                         </action>
-                        <action id="0" name="Set text" sid="8046412878309827" type="Astronautas">
-                            <param id="0" name="Text">&quot;YOU WIN&quot;</param>
-                        </action>
-                        <action id="-15" name="Set visible" sid="8030987348645542" type="Astronautas">
-                            <param id="0" name="Visibility">1</param>
-                        </action>
                     </actions>
                     <sub-events>
-                        <event-block sid="5477366918015995">
+                        <event-block sid="4725987352597471">
                             <conditions>
-                                <condition id="-8" name="Compare two values" sid="2192232548298184" type="System">
-                                    <param id="0" name="First value">WebStorage.LocalValue(&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;)</param>
-                                    <param id="1" name="Comparison">2</param>
-                                    <param id="2" name="Second value">AstroRecogidos-1</param>
+                                <condition id="3" name="Has key" sid="4527278128678354" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="0" name="Set local value" sid="3677042051378838" type="WebStorage">
-                                    <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
-                                    <param id="1" name="Value">AstroRecogidos-1</param>
+                                <action id="0" name="Set text" sid="8046412878309827" type="Astronautas">
+                                    <param id="0" name="Text">&quot;YOU WIN&quot;</param>
                                 </action>
-                                <action id="-16" name="Wait" sid="8302305673348129" type="System">
-                                    <param id="0" name="Seconds">2</param>
-                                </action>
-                                <action id="-2" name="Go to layout" sid="8862870999843178" type="System">
-                                    <param id="0" name="Layout">Menu Inicial</param>
+                                <action id="-15" name="Set visible" sid="8030987348645542" type="Astronautas">
+                                    <param id="0" name="Visibility">1</param>
                                 </action>
                             </actions>
-                        </event-block>
-                        <event-block sid="1842812586134352">
-                            <conditions>
-                                <condition id="-22" name="Else" sid="8516826318437812" type="System" />
-                            </conditions>
-                            <actions>
-                                <action id="-16" name="Wait" sid="1308806834658861" type="System">
-                                    <param id="0" name="Seconds">2</param>
-                                </action>
-                                <action id="-2" name="Go to layout" sid="1873216169573001" type="System">
-                                    <param id="0" name="Layout">Menu Inicial</param>
-                                </action>
-                            </actions>
+                            <sub-events>
+                                <event-block sid="7547813537576669">
+                                    <conditions>
+                                        <condition id="-8" name="Compare two values" sid="281690675727477" type="System">
+                                            <param id="0" name="First value">Dictionary.Get(&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;)</param>
+                                            <param id="1" name="Comparison">2</param>
+                                            <param id="2" name="Second value">AstroRecogidos-1</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="1" name="Set key" sid="3720092271624693" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
+                                            <param id="1" name="Value">str(AstroRecogidos-1)</param>
+                                        </action>
+                                        <action id="-16" name="Wait" sid="101463243168618" type="System">
+                                            <param id="0" name="Seconds">2</param>
+                                        </action>
+                                        <action id="-2" name="Go to layout" sid="5977496063619681" type="System">
+                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="4409372003221423">
+                                    <conditions>
+                                        <condition id="-22" name="Else" sid="438209567319113" type="System" />
+                                    </conditions>
+                                    <actions>
+                                        <action id="-16" name="Wait" sid="7616358520031343" type="System">
+                                            <param id="0" name="Seconds">2</param>
+                                        </action>
+                                        <action id="-2" name="Go to layout" sid="1754674385233901" type="System">
+                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
                         </event-block>
                     </sub-events>
                 </event-block>
