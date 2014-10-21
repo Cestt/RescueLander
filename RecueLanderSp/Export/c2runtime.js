@@ -13699,6 +13699,188 @@ cr.plugins_.Browser = function(runtime)
 }());
 ;
 ;
+cr.plugins_.Dictionary = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.Dictionary.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+	typeProto.onCreate = function()
+	{
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	instanceProto.onCreate = function()
+	{
+		this.dictionary = {};
+		this.cur_key = "";		// current key in for-each loop
+		this.key_count = 0;
+	};
+	instanceProto.saveToJSON = function ()
+	{
+		return this.dictionary;
+	};
+	instanceProto.loadFromJSON = function (o)
+	{
+		this.dictionary = o;
+		this.key_count = 0;
+		for (var p in this.dictionary)
+		{
+			if (this.dictionary.hasOwnProperty(p))
+				this.key_count++;
+		}
+	};
+	function Cnds() {};
+	Cnds.prototype.CompareValue = function (key_, cmp_, value_)
+	{
+		return cr.do_cmp(this.dictionary[key_], cmp_, value_);
+	};
+	Cnds.prototype.ForEachKey = function ()
+	{
+		var current_event = this.runtime.getCurrentEventStack().current_event;
+		for (var p in this.dictionary)
+		{
+			if (this.dictionary.hasOwnProperty(p))
+			{
+				this.cur_key = p;
+				this.runtime.pushCopySol(current_event.solModifiers);
+				current_event.retrigger();
+				this.runtime.popSol(current_event.solModifiers);
+			}
+		}
+		this.cur_key = "";
+		return false;
+	};
+	Cnds.prototype.CompareCurrentValue = function (cmp_, value_)
+	{
+		return cr.do_cmp(this.dictionary[this.cur_key], cmp_, value_);
+	};
+	Cnds.prototype.HasKey = function (key_)
+	{
+		return this.dictionary.hasOwnProperty(key_);
+	};
+	Cnds.prototype.IsEmpty = function ()
+	{
+		return this.key_count === 0;
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+	Acts.prototype.AddKey = function (key_, value_)
+	{
+		if (!this.dictionary.hasOwnProperty(key_))
+			this.key_count++;
+		this.dictionary[key_] = value_;
+	};
+	Acts.prototype.SetKey = function (key_, value_)
+	{
+		if (this.dictionary.hasOwnProperty(key_))
+			this.dictionary[key_] = value_;
+	};
+	Acts.prototype.DeleteKey = function (key_)
+	{
+		if (this.dictionary.hasOwnProperty(key_))
+		{
+			delete this.dictionary[key_];
+			this.key_count--;
+		}
+	};
+	Acts.prototype.Clear = function ()
+	{
+		cr.wipe(this.dictionary);		// avoid garbaging
+		this.key_count = 0;
+	};
+	Acts.prototype.JSONLoad = function (json_)
+	{
+		var o;
+		try {
+			o = JSON.parse(json_);
+		}
+		catch(e) { return; }
+		if (!o["c2dictionary"])		// presumably not a c2dictionary object
+			return;
+		this.dictionary = o["data"];
+		this.key_count = 0;
+		for (var p in this.dictionary)
+		{
+			if (this.dictionary.hasOwnProperty(p))
+				this.key_count++;
+		}
+	};
+	Acts.prototype.JSONDownload = function (filename)
+	{
+		var a = document.createElement("a");
+		if (typeof a.download === "undefined")
+		{
+			var str = 'data:text/html,' + encodeURIComponent("<p><a download='data.json' href=\"data:application/json,"
+				+ encodeURIComponent(JSON.stringify({
+						"c2dictionary": true,
+						"data": this.dictionary
+					}))
+				+ "\">Download link</a></p>");
+			window.open(str);
+		}
+		else
+		{
+			var body = document.getElementsByTagName("body")[0];
+			a.textContent = filename;
+			a.href = "data:application/json," + encodeURIComponent(JSON.stringify({
+						"c2dictionary": true,
+						"data": this.dictionary
+					}));
+			a.download = filename;
+			body.appendChild(a);
+			var clickEvent = document.createEvent("MouseEvent");
+			clickEvent.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+			a.dispatchEvent(clickEvent);
+			body.removeChild(a);
+		}
+	};
+	pluginProto.acts = new Acts();
+	function Exps() {};
+	Exps.prototype.Get = function (ret, key_)
+	{
+		if (this.dictionary.hasOwnProperty(key_))
+			ret.set_any(this.dictionary[key_]);
+		else
+			ret.set_int(0);
+	};
+	Exps.prototype.KeyCount = function (ret)
+	{
+		ret.set_int(this.key_count);
+	};
+	Exps.prototype.CurrentKey = function (ret)
+	{
+		ret.set_string(this.cur_key);
+	};
+	Exps.prototype.CurrentValue = function (ret)
+	{
+		if (this.dictionary.hasOwnProperty(this.cur_key))
+			ret.set_any(this.dictionary[this.cur_key]);
+		else
+			ret.set_int(0);
+	};
+	Exps.prototype.AsJSON = function (ret)
+	{
+		ret.set_string(JSON.stringify({
+			"c2dictionary": true,
+			"data": this.dictionary
+		}));
+	};
+	pluginProto.exps = new Exps();
+}());
+;
+;
 cr.plugins_.Function = function(runtime)
 {
 	this.runtime = runtime;
@@ -14690,191 +14872,6 @@ cr.plugins_.Particles = function(runtime)
 		ret.set_float(this.timeout);
 	};
 	pluginProto.exps = new Exps();
-}());
-/*! Socket.IO.min.js build:0.8.7, production. Copyright(c) 2011 LearnBoost <dev@learnboost.com> MIT Licensed */
-document.write("<script src='socket.io.min.js'><\/script>");
-;
-;
-cr.plugins_.Socket = function(runtime)
-{
-	this.runtime = runtime;
-};
-(function ()
-{
-	var pluginProto = cr.plugins_.Socket.prototype;
-	pluginProto.Type = function(plugin)
-	{
-		this.plugin = plugin;
-		this.runtime = plugin.runtime;
-	};
-	var typeProto = pluginProto.Type.prototype;
-	typeProto.onCreate = function()
-	{
-	};
-	pluginProto.Instance = function(type)
-	{
-		this.type = type;
-		this.runtime = type.runtime;
-		this.dataStack = [];
-		this.lastAddress = "";
-		this.lastPort = 80;
-		this.socket = null;
-		this.LastDataArray = [];
-	};
-	var instanceProto = pluginProto.Instance.prototype;
-	instanceProto.onCreate = function()
-	{
-	};
-	instanceProto.send = function(data)
-	{
-		var socket = this.socket;
-		if(socket != null)
-			socket["send"](data);
-	};
-	instanceProto.emit = function(ent,data)
-	{
-		var socket = this.socket;
-		if(socket != null)
-			socket["emit"](ent,data);
-	};
-	instanceProto.disconnect = function()
-	{
-		var socket = this.socket;
-		if(socket != null)
-			socket["disconnect"]();
-	};
-    var MAX_SLOTS_FOR_DATA = 100;
-	instanceProto.connect = function(host,port)
-	{
-		var socket = this.socket;
-		if(socket != undefined || socket != null)
-			socket["disconnect"]();
-		this.lastAddress = host;
-		this.lastPort = port;
-		socket = window["io"]["connect"]('http://' + host + ':' + port, {'force new connection': true});
-		this.socket = socket;
-		var instance = this;
-		var runtime = instance.runtime;
-		socket["on"]
-		(
-			'message',
-			function(data)
-			{
-				instance.dataStack.push(data);
-				runtime.trigger(pluginProto.cnds.OnData,instance);
-			}
-		);
-		socket["on"]
-		(
-			'connect_failed',
-			function(event)
-			{
-				runtime.trigger(pluginProto.cnds.OnError,instance);
-			}
-		);
-		socket["on"]
-		(
-			'connect',
-			function(event)
-			{
-				runtime.trigger(pluginProto.cnds.OnConnect,instance);
-			}
-		);
-		socket["on"]
-		(
-			'disconnect',
-			function()
-			{
-				runtime.trigger(pluginProto.cnds.OnDisconnect,instance);
-			}
-		);
-	};
-	pluginProto.cnds = {};
-	var cnds = pluginProto.cnds;
-	cnds.OnConnect = function()
-	{
-		return true;
-	};
-	cnds.OnDisconnect = function()
-	{
-		return true;
-	};
-	cnds.OnError = function()
-	{
-		return true;
-	};
-	cnds.OnData = function()
-	{
-		return true;
-};
-	cnds.IsDataAvailable = function () {
-	    return (this.dataStack.length > 0);
-	};
-	pluginProto.acts = {};
-	var acts = pluginProto.acts;
-	acts.Connect = function(host,port)
-	{
-		host = host.toString();
-		port = port.toString();
-		this.connect(host,port);
-	};
-	acts.Send = function(data)
-	{
-		data = data.toString();
-		this.send(data);
-	};
-	acts.Emit = function(ent,data)
-	{
-		data = data.toString();
-		ent = ent.toString();
-		this.emit(ent,data);
-	};
-	acts.Disconnect = function()
-	{
-		this.disconnect();
-	};
-	acts.SplitDataReceived = function () {
-	    var oldest_data = get_last_data(this.dataStack);
-	    this.LastDataArray = oldest_data.split(',');
-	};
-	pluginProto.exps = {};
-	var exps = pluginProto.exps;
-	function jpt_splice(arr, index) {
-	    for (var i = index, len = arr.length - 1; i < len; i++)
-	        arr[i] = arr[i + 1];
-	    arr.length = len;
-	}
-	function get_last_data(dataStack)
-	{
-		var dataLength = dataStack.length;
-		var data = "";
-		if (dataLength > 0) {
-		    data = dataStack[0];
-		    jpt_splice(dataStack, 0);
-		}
-		return data;
-	}
-	exps.LastData = function(result)
-	{
-		var dataStack = this.dataStack;
-		var data = get_last_data(dataStack);
-		result.set_string(data);
-	};
-	exps.LastPort = function(result)
-	{
-		result.set_string(this.lastPort);
-	};
-	exps.LastAddress = function(result)
-	{
-		result.set_string(this.lastAddress);
-	};
-	exps.LastDataElement = function (ret, index)
-	{
-		var element = "";
-		if (index < this.LastDataArray.length)
-			element = this.LastDataArray[index];
-		ret.set_string(element);
-	};
 }());
 ;
 ;
@@ -20761,6 +20758,18 @@ cr.getProjectModel = function() { return [
 		false
 	]
 ,	[
+		cr.plugins_.Dictionary,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
+	]
+,	[
 		cr.plugins_.Keyboard,
 		true,
 		false,
@@ -20785,18 +20794,6 @@ cr.getProjectModel = function() { return [
 		true
 	]
 ,	[
-		cr.plugins_.Text,
-		false,
-		true,
-		true,
-		true,
-		true,
-		true,
-		true,
-		true,
-		false
-	]
-,	[
 		cr.plugins_.Sprite,
 		false,
 		true,
@@ -20809,15 +20806,15 @@ cr.getProjectModel = function() { return [
 		false
 	]
 ,	[
-		cr.plugins_.Socket,
+		cr.plugins_.Text,
+		false,
 		true,
-		false,
-		false,
-		false,
-		false,
-		false,
-		false,
-		false,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
 		false
 	]
 ,	[
@@ -20864,7 +20861,7 @@ cr.getProjectModel = function() { return [
 			false,
 			4336136637786321,
 			[
-				["images/nave-sheet0.png", 46975, 0, 0, 256, 256, 1, 0.5, 0.50390625,[["Imagepoint 1", 0.4921875, 0.2265625],["Imagepoint 2", 0.5, 0.76953125]],[-0.3832679986953735,-0.3813382387161255,-0.1789880096912384,-0.383283257484436,-0.02524599432945252,-0.243206262588501,0.2957199811935425,-0.2364112436771393,0.390625,-0.1631272435188294,0.4884189963340759,-0.00390625,0.390625,0.154350757598877,0.2723730206489563,0.2325287461280823,-0.02523401379585266,0.2315027713775635,-0.1828790009021759,0.377416729927063,-0.3832679986953735,0.3793547749519348,-0.2779220044612885,0.1780237555503845,-0.4804686903953552,0.3067687749862671,-0.4804686903953552,0.1755907535552979,-0.3828119933605194,0.176264762878418,-0.3828119933605194,-0.1824532449245453,-0.4804686903953552,-0.183749258518219,-0.4804686903953552,-0.32302525639534,-0.2817060053348541,-0.1855622529983521],0]
+				["images/nave-sheet0.png", 46988, 0, 0, 256, 256, 1, 0.5, 0.50390625,[["Imagepoint 1", 0.4921875, 0.2265625],["Imagepoint 2", 0.5, 0.76953125]],[-0.3832679986953735,-0.3813382387161255,-0.1789880096912384,-0.383283257484436,-0.02524599432945252,-0.243206262588501,0.2957199811935425,-0.2364112436771393,0.390625,-0.1631272435188294,0.4884189963340759,-0.00390625,0.390625,0.154350757598877,0.2723730206489563,0.2325287461280823,-0.02523401379585266,0.2315027713775635,-0.1828790009021759,0.377416729927063,-0.3832679986953735,0.3793547749519348,-0.2779220044612885,0.1780237555503845,-0.4804686903953552,0.3067687749862671,-0.4804686903953552,0.1755907535552979,-0.3828119933605194,0.176264762878418,-0.3828119933605194,-0.1824532449245453,-0.4804686903953552,-0.183749258518219,-0.4804686903953552,-0.32302525639534,-0.2817060053348541,-0.1855622529983521],0]
 			]
 			]
 		],
@@ -20898,28 +20895,6 @@ cr.getProjectModel = function() { return [
 	]
 ,	[
 		"t1",
-		cr.plugins_.Particles,
-		false,
-		[],
-		1,
-		0,
-		["images/reactor.png", 155, 1],
-		null,
-		[
-		[
-			"Pin",
-			cr.behaviors.Pin,
-			6883232989534661
-		]
-		],
-		false,
-		false,
-		3739674322820615,
-		[],
-		null
-	]
-,	[
-		"t2",
 		cr.plugins_.Keyboard,
 		false,
 		[],
@@ -20937,7 +20912,7 @@ cr.getProjectModel = function() { return [
 		,[]
 	]
 ,	[
-		"t3",
+		"t2",
 		cr.plugins_.Sprite,
 		false,
 		[2536001801846197],
@@ -20954,9 +20929,9 @@ cr.getProjectModel = function() { return [
 			false,
 			7752627690515721,
 			[
-				["images/barravida-sheet0.png", 2510, 1, 1, 135, 9, 1, 0, 0.5555555820465088,[],[],0],
-				["images/barravida-sheet0.png", 2510, 1, 12, 135, 9, 1, 0, 0.5555555820465088,[],[],0],
-				["images/barravida-sheet0.png", 2510, 1, 23, 135, 9, 1, 0, 0.5555555820465088,[],[],0]
+				["images/barravida-sheet0.png", 2533, 1, 1, 133, 11, 1, 0, 0.5454545617103577,[],[],0],
+				["images/barravida-sheet0.png", 2533, 1, 14, 133, 11, 1, 0, 0.5454545617103577,[],[],0],
+				["images/barravida-sheet0.png", 2533, 1, 27, 133, 11, 1, 0, 0.5454545617103577,[],[],0]
 			]
 			]
 		],
@@ -20969,7 +20944,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t4",
+		"t3",
 		cr.plugins_.Sprite,
 		false,
 		[5175954086280182],
@@ -20999,7 +20974,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t5",
+		"t4",
 		cr.plugins_.Touch,
 		false,
 		[],
@@ -21017,7 +20992,7 @@ cr.getProjectModel = function() { return [
 		,[1]
 	]
 ,	[
-		"t6",
+		"t5",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21034,7 +21009,7 @@ cr.getProjectModel = function() { return [
 			false,
 			7108623179366887,
 			[
-				["images/plataforma-sheet0.png", 21195, 0, 0, 312, 64, 1, 0.5, 0.5,[],[-0.4038462042808533,-0.203125,0.330128014087677,-0.203125,0.2580130100250244,0.484375,-0.3165059983730316,0.484375],0]
+				["images/plataforma-sheet0.png", 21208, 0, 0, 312, 64, 1, 0.5, 0.5,[],[-0.4038462042808533,-0.203125,0.330128014087677,-0.203125,0.2580130100250244,0.484375,-0.3165059983730316,0.484375],0]
 			]
 			]
 		],
@@ -21047,7 +21022,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t7",
+		"t6",
 		cr.plugins_.Text,
 		false,
 		[],
@@ -21064,67 +21039,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t8",
-		cr.plugins_.Sprite,
-		false,
-		[],
-		0,
-		0,
-		null,
-		[
-			[
-			"Default",
-			5,
-			false,
-			1,
-			0,
-			false,
-			1123372757035619,
-			[
-				["images/play-sheet0.png", 155, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],1]
-			]
-			]
-		],
-		[
-		],
-		false,
-		false,
-		4260442357459619,
-		[],
-		null
-	]
-,	[
-		"t9",
-		cr.plugins_.Sprite,
-		false,
-		[],
-		0,
-		0,
-		null,
-		[
-			[
-			"Default",
-			5,
-			false,
-			1,
-			0,
-			false,
-			4960035019669822,
-			[
-				["images/exit-sheet0.png", 155, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],1]
-			]
-			]
-		],
-		[
-		],
-		false,
-		false,
-		6291607403054436,
-		[],
-		null
-	]
-,	[
-		"t10",
+		"t7",
 		cr.plugins_.Browser,
 		false,
 		[],
@@ -21142,25 +21057,7 @@ cr.getProjectModel = function() { return [
 		,[]
 	]
 ,	[
-		"t11",
-		cr.plugins_.Socket,
-		false,
-		[],
-		0,
-		0,
-		null,
-		null,
-		[
-		],
-		false,
-		false,
-		3101798758820413,
-		[],
-		null
-		,[]
-	]
-,	[
-		"t12",
+		"t8",
 		cr.plugins_.Text,
 		false,
 		[],
@@ -21177,7 +21074,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t13",
+		"t9",
 		cr.plugins_.Sprite,
 		false,
 		[2558865232932271],
@@ -21207,7 +21104,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t14",
+		"t10",
 		cr.plugins_.Sprite,
 		false,
 		[6828060484672893,1251122266036171,8437408670136354],
@@ -21224,7 +21121,7 @@ cr.getProjectModel = function() { return [
 			false,
 			8595776474009768,
 			[
-				["images/nave2-sheet0.png", 147942, 0, 0, 512, 512, 1, 0.501953125, 0.501953125,[["Imagepoint 1", 0.51953125, 0.234375],["Imagepoint 2", 0.51171875, 0.7578125]],[-0.3847651183605194,-0.3886721134185791,-0.158203125,-0.3906251192092896,-0.017578125,-0.2441401183605194,0.2519528865814209,-0.2558591365814209,0.3984378576278687,-0.1562501192092896,0.498046875,-0.001953125,0.4023438692092896,0.1582028865814209,0.2597658634185791,0.2402348518371582,-0.03125011920928955,0.2363278865814209,-0.1621091365814209,0.373046875,-0.3886721134185791,0.373046875,-0.2815611362457275,0.2691518664360046,-0.3853881359100342,0.2277568578720093,-0.4836657345294952,0.3168408870697022,-0.484909325838089,0.1668858528137207,-0.401459127664566,0.1560368537902832,-0.398621141910553,0.0874638557434082,-0.4085695147514343,-0.0887451171875,-0.4146120250225067,-0.1829221248626709,-0.4987795054912567,-0.1755371391773224,-0.4916993379592896,-0.3100581169128418,-0.3994141221046448,-0.2587891221046448,-0.2773441076278687,-0.2734371423721314],0]
+				["images/nave2-sheet0.png", 147955, 0, 0, 512, 512, 1, 0.501953125, 0.501953125,[["Imagepoint 1", 0.51953125, 0.234375],["Imagepoint 2", 0.51171875, 0.7578125]],[-0.3847651183605194,-0.3886721134185791,-0.158203125,-0.3906251192092896,-0.017578125,-0.2441401183605194,0.2519528865814209,-0.2558591365814209,0.3984378576278687,-0.1562501192092896,0.498046875,-0.001953125,0.4023438692092896,0.1582028865814209,0.2597658634185791,0.2402348518371582,-0.03125011920928955,0.2363278865814209,-0.1621091365814209,0.373046875,-0.3886721134185791,0.373046875,-0.2815611362457275,0.2691518664360046,-0.3853881359100342,0.2277568578720093,-0.4836657345294952,0.3168408870697022,-0.484909325838089,0.1668858528137207,-0.401459127664566,0.1560368537902832,-0.398621141910553,0.0874638557434082,-0.4085695147514343,-0.0887451171875,-0.4146120250225067,-0.1829221248626709,-0.4987795054912567,-0.1755371391773224,-0.4916993379592896,-0.3100581169128418,-0.3994141221046448,-0.2587891221046448,-0.2773441076278687,-0.2734371423721314],0]
 			]
 			]
 		],
@@ -21252,29 +21149,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t15",
-		cr.plugins_.Particles,
-		false,
-		[],
-		1,
-		0,
-		["images/reactor.png", 155, 1],
-		null,
-		[
-		[
-			"Pin",
-			cr.behaviors.Pin,
-			9249379898624937
-		]
-		],
-		false,
-		false,
-		7648245444757294,
-		[],
-		null
-	]
-,	[
-		"t16",
+		"t11",
 		cr.plugins_.Sprite,
 		false,
 		[1495758126771824,9991843777877198],
@@ -21291,7 +21166,7 @@ cr.getProjectModel = function() { return [
 			false,
 			8352111306054927,
 			[
-				["images/nivels-sheet0.png", 113029, 0, 0, 252, 333, 1, 0.5, 0.5015015006065369,[],[-0.4246031939983368,-0.4444443881511688,0,-0.5015015006065369,0.4285709857940674,-0.4474473893642426,0.4960319995880127,-0.003003507852554321,0.4285709857940674,0.444444477558136,0,0.4984984993934631,-0.4246031939983368,0.4414414763450623,-0.5,-0.003003507852554321],0]
+				["images/nivels-sheet0.png", 113042, 0, 0, 252, 333, 1, 0.5, 0.5015015006065369,[],[-0.4246031939983368,-0.4444443881511688,0,-0.5015015006065369,0.4285709857940674,-0.4474473893642426,0.4960319995880127,-0.003003507852554321,0.4285709857940674,0.444444477558136,0,0.4984984993934631,-0.4246031939983368,0.4414414763450623,-0.5,-0.003003507852554321],0]
 			]
 			]
 		],
@@ -21304,7 +21179,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t17",
+		"t12",
 		cr.plugins_.WebStorage,
 		false,
 		[],
@@ -21322,7 +21197,7 @@ cr.getProjectModel = function() { return [
 		,[]
 	]
 ,	[
-		"t18",
+		"t13",
 		cr.plugins_.Text,
 		false,
 		[],
@@ -21339,7 +21214,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t19",
+		"t14",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21356,7 +21231,7 @@ cr.getProjectModel = function() { return [
 			false,
 			1640802197201724,
 			[
-				["images/fondo-sheet0.png", 340360, 0, 0, 1280, 720, 1, 0.5, 0.5,[],[],0]
+				["images/fondo-sheet0.png", 340373, 0, 0, 1280, 720, 1, 0.5, 0.5,[],[],0]
 			]
 			]
 		],
@@ -21369,7 +21244,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t20",
+		"t15",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21405,7 +21280,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t21",
+		"t16",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21440,7 +21315,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t22",
+		"t17",
 		cr.plugins_.Function,
 		false,
 		[],
@@ -21458,7 +21333,7 @@ cr.getProjectModel = function() { return [
 		,[]
 	]
 ,	[
-		"t23",
+		"t18",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21488,20 +21363,15 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t24",
+		"t19",
 		cr.plugins_.Particles,
 		false,
 		[1378911123636939],
-		1,
+		0,
 		0,
 		["images/thusters.png", 1160, 0],
 		null,
 		[
-		[
-			"Pin",
-			cr.behaviors.Pin,
-			2730265466910499
-		]
 		],
 		false,
 		false,
@@ -21510,7 +21380,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t25",
+		"t20",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21527,7 +21397,7 @@ cr.getProjectModel = function() { return [
 			false,
 			7203012049242542,
 			[
-				["images/ventana-sheet0.png", 2943, 0, 0, 45, 44, 1, 0.5111111402511597, 0.5,[],[-0.3520201444625855,0.3444439768791199,-0.5111111402511597,0.01111102104187012,-0.3520201444625855,-0.3444440066814423,-0.01111114025115967,-0.4777778089046478,0.3297978639602661,-0.3444440066814423,0.466161847114563,0.01111102104187012,0.3297978639602661,0.3444439768791199,-0.01111114025115967,0.4777780175209045],0]
+				["images/ventana-sheet0.png", 2956, 0, 0, 45, 44, 1, 0.5111111402511597, 0.5,[],[-0.3520201444625855,0.3444439768791199,-0.5111111402511597,0.01111102104187012,-0.3520201444625855,-0.3444440066814423,-0.01111114025115967,-0.4777778089046478,0.3297978639602661,-0.3444440066814423,0.466161847114563,0.01111102104187012,0.3297978639602661,0.3444439768791199,-0.01111114025115967,0.4777780175209045],0]
 			]
 			]
 		],
@@ -21545,7 +21415,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t26",
+		"t21",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21562,7 +21432,7 @@ cr.getProjectModel = function() { return [
 			false,
 			1061748371116579,
 			[
-				["images/minimap-sheet0.png", 14502, 0, 0, 250, 250, 1, 0, 0,[],[],0]
+				["images/minimap-sheet0.png", 14515, 0, 0, 250, 250, 1, 0, 0,[],[],0]
 			]
 			]
 		],
@@ -21575,7 +21445,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t27",
+		"t22",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21592,7 +21462,7 @@ cr.getProjectModel = function() { return [
 			false,
 			6065852816884908,
 			[
-				["images/navemini-sheet0.png", 3778, 0, 0, 64, 64, 1, 0.5, 0.5,[],[],0]
+				["images/navemini-sheet0.png", 3791, 0, 0, 64, 64, 1, 0.5, 0.5,[],[],0]
 			]
 			]
 		],
@@ -21610,7 +21480,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t28",
+		"t23",
 		cr.plugins_.Sprite,
 		false,
 		[6173053047567972],
@@ -21620,66 +21490,66 @@ cr.getProjectModel = function() { return [
 		[
 			[
 			"Default",
-			20,
+			10,
 			false,
 			1,
 			0,
 			false,
 			3964271936932577,
 			[
-				["images/fire-sheet0.png", 36482, 1, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 82, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 163, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 244, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 325, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 406, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 1, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 82, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 163, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 244, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 325, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 406, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 1, 261, 79, 128, 1, 0.5063291192054749, 0,[],[],0]
+				["images/fire-sheet0.png", 44376, 1, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 110, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 219, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 328, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 1, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 110, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 219, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 328, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet1.png", 7060, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0]
 			]
 			]
 ,			[
 			"Loop",
-			11,
+			6,
 			true,
 			1,
 			0,
 			true,
 			6420172470090328,
 			[
-				["images/fire-sheet0.png", 36482, 163, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 244, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 325, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 406, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 1, 261, 79, 128, 1, 0.5063291192054749, 0,[],[],0]
+				["images/fire-sheet1.png", 7060, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
+				["images/fire-sheet0.png", 44376, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
+				["images/fire-sheet0.png", 44376, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
+				["images/fire-sheet0.png", 44376, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
+				["images/fire-sheet0.png", 44376, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0]
 			]
 			]
 ,			[
 			"Default_Reverse",
-			20,
+			10,
 			false,
 			1,
 			0,
 			false,
-			8303166309106129,
+			6510790409974259,
 			[
-				["images/fire-sheet0.png", 36482, 1, 261, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 163, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 406, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 325, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 244, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 82, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 1, 131, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 406, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 325, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 244, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 163, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 82, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0],
-				["images/fire-sheet0.png", 36482, 1, 1, 79, 128, 1, 0.5063291192054749, 0,[],[],0]
+				["images/fire-sheet1.png", 7060, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 328, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 219, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 110, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 1, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 328, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 219, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 110, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["images/fire-sheet0.png", 44376, 1, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0]
 			]
 			]
 		],
@@ -21697,7 +21567,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t29",
+		"t24",
 		cr.plugins_.Particles,
 		false,
 		[],
@@ -21719,7 +21589,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t30",
+		"t25",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21759,7 +21629,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t31",
+		"t26",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21799,7 +21669,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t32",
+		"t27",
 		cr.plugins_.Text,
 		false,
 		[],
@@ -21821,7 +21691,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t33",
+		"t28",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21856,7 +21726,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t34",
+		"t29",
 		cr.plugins_.Sprite,
 		false,
 		[413017501350487],
@@ -21886,7 +21756,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t35",
+		"t30",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21900,22 +21770,15 @@ cr.getProjectModel = function() { return [
 			true,
 			1,
 			0,
-			false,
+			true,
 			2250060795394058,
 			[
-				["images/play_anim-sheet0.png", 191199, 1, 1, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 191199, 515, 1, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 191199, 1029, 1, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 191199, 1, 515, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 191199, 515, 515, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 191199, 1029, 515, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 191199, 1, 1029, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 191199, 515, 1029, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 191199, 1029, 1029, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet1.png", 86971, 1, 1, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet1.png", 86971, 515, 1, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet1.png", 86971, 1029, 1, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet1.png", 86971, 1, 515, 512, 512, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0]
+				["images/play_anim-sheet0.png", 55102, 1, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["images/play_anim-sheet0.png", 55102, 403, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["images/play_anim-sheet0.png", 55102, 1, 403, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["images/play_anim-sheet0.png", 55102, 403, 403, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["images/play_anim-sheet1.png", 36977, 1, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["images/play_anim-sheet1.png", 36977, 403, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0]
 			]
 			]
 		],
@@ -21928,7 +21791,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t36",
+		"t31",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -21945,7 +21808,7 @@ cr.getProjectModel = function() { return [
 			false,
 			2615993166267772,
 			[
-				["images/botonback-sheet0.png", 36134, 0, 0, 636, 446, 1, 0.5, 0.5,[],[-0.3113210201263428,-0.2309420108795166,0,-0.2825109958648682,0.3474839925765991,-0.2825109958648682,0.4544029831886292,0,0.3144649863243103,0.2354260087013245,0,0.2354260087013245,-0.3506290018558502,0.2869960069656372,-0.4811320900917053,0],0]
+				["images/botonback-sheet0.png", 36147, 0, 0, 636, 446, 1, 0.5, 0.5,[],[-0.3113210201263428,-0.2309420108795166,0,-0.2825109958648682,0.3474839925765991,-0.2825109958648682,0.4544029831886292,0,0.3144649863243103,0.2354260087013245,0,0.2354260087013245,-0.3506290018558502,0.2869960069656372,-0.4811320900917053,0],0]
 			]
 			]
 		],
@@ -21958,7 +21821,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t37",
+		"t32",
 		cr.plugins_.Sprite,
 		false,
 		[2812246661488086,4281024237793897],
@@ -21975,8 +21838,8 @@ cr.getProjectModel = function() { return [
 			false,
 			7643775129692437,
 			[
-				["images/estrellas-sheet0.png", 19514, 0, 0, 300, 300, 1, 0.5, 0.5,[],[-0.1599999964237213,-0.1599999964237213,0,-0.4799999892711639,0.1600000262260437,-0.1599999964237213,0.4066669940948486,0,0.2966669797897339,0.2966669797897339,-0.2866669893264771,0.2866669893264771,-0.3966670036315918,0],0],
-				["images/estrellas-sheet1.png", 36573, 0, 0, 300, 300, 1, 0.5, 0.5,[],[-0.1599999964237213,-0.1599999964237213,0,-0.4799999892711639,0.1600000262260437,-0.1599999964237213,0.4033330082893372,0,0.2966669797897339,0.2966669797897339,-0.2866669893264771,0.2866669893264771,-0.3966670036315918,0],0]
+				["images/estrellas-sheet0.png", 19527, 0, 0, 300, 300, 1, 0.5, 0.5,[],[-0.1599999964237213,-0.1599999964237213,0,-0.4799999892711639,0.1600000262260437,-0.1599999964237213,0.4066669940948486,0,0.2966669797897339,0.2966669797897339,-0.2866669893264771,0.2866669893264771,-0.3966670036315918,0],0],
+				["images/estrellas-sheet1.png", 36586, 0, 0, 300, 300, 1, 0.5, 0.5,[],[-0.1599999964237213,-0.1599999964237213,0,-0.4799999892711639,0.1600000262260437,-0.1599999964237213,0.4033330082893372,0,0.2966669797897339,0.2966669797897339,-0.2866669893264771,0.2866669893264771,-0.3966670036315918,0],0]
 			]
 			]
 		],
@@ -21989,7 +21852,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t38",
+		"t33",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -22006,7 +21869,7 @@ cr.getProjectModel = function() { return [
 			false,
 			6966253332688779,
 			[
-				["images/fondointermedio-sheet0.png", 11741, 0, 0, 1280, 261, 1, 0.5, 0.5019156932830811,[],[-0.3861109912395477,0.05590730905532837,0,-0.4066776037216187,0.4256939888000488,-0.1379697024822235,0.5,-0.001915693283081055,0.4868059754371643,0.4334583282470703,-0.487500011920929,0.4368603229522705,-0.3541669845581055,-0.001915693283081055],0]
+				["images/fondointermedio-sheet0.png", 11754, 0, 0, 1280, 261, 1, 0.5, 0.5019156932830811,[],[0.4256939888000488,-0.1379697024822235,0.5,-0.001915693283081055,0.4868059754371643,0.4334583282470703],0]
 			]
 			]
 		],
@@ -22029,7 +21892,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t39",
+		"t34",
 		cr.plugins_.Sprite,
 		false,
 		[217698631076899],
@@ -22060,7 +21923,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t40",
+		"t35",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -22077,7 +21940,7 @@ cr.getProjectModel = function() { return [
 			false,
 			360167045343326,
 			[
-				["images/fondoatras-sheet0.png", 19612, 0, 0, 1280, 261, 1, 0.5, 0.5019156932830811,[],[-0.3868060111999512,0.05250632762908936,0,-0.4100790023803711,0.4277780055999756,-0.1481747031211853,0.5,-0.001915693283081055,0.4874999523162842,0.4368603229522705,-0.4881944060325623,0.4402613043785095,-0.3541669845581055,-0.001915693283081055],0]
+				["images/fondoatras-sheet0.png", 19625, 0, 0, 1280, 261, 1, 0.5, 0.5019156932830811,[],[-0.3868060111999512,0.05250632762908936,0,-0.4100790023803711,0.4277780055999756,-0.1481747031211853,0.5,-0.001915693283081055,0.4874999523162842,0.4368603229522705,-0.4881944060325623,0.4402613043785095,-0.3541669845581055,-0.001915693283081055],0]
 			]
 			]
 		],
@@ -22090,7 +21953,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t41",
+		"t36",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -22107,7 +21970,7 @@ cr.getProjectModel = function() { return [
 			false,
 			5640904707145291,
 			[
-				["images/navevida-sheet0.png", 47741, 0, 0, 256, 256, 1, 0.5, 0.5,[],[-0.3710939884185791,0.3710939884185791,-0.2617189884185791,0,-0.2460939884185791,-0.2460939884185791,0,-0.484375,0.2460939884185791,-0.2460939884185791,0.2578129768371582,0,0.3710939884185791,0.3710939884185791,0,0.390625],0]
+				["images/navevida-sheet0.png", 47754, 0, 0, 256, 256, 1, 0.5, 0.5,[],[-0.3710939884185791,0.3710939884185791,-0.2617189884185791,0,-0.2460939884185791,-0.2460939884185791,0,-0.484375,0.2460939884185791,-0.2460939884185791,0.2578129768371582,0,0.3710939884185791,0.3710939884185791,0,0.390625],0]
 			]
 			]
 		],
@@ -22120,7 +21983,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t42",
+		"t37",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -22150,7 +22013,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t43",
+		"t38",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -22167,7 +22030,7 @@ cr.getProjectModel = function() { return [
 			false,
 			7205877517577386,
 			[
-				["images/degradadofondo-sheet0.png", 185481, 0, 0, 1280, 720, 1, 0.5, 0.5,[],[],0]
+				["images/degradadofondo-sheet0.png", 185494, 0, 0, 1280, 720, 1, 0.5, 0.5,[],[],0]
 			]
 			]
 		],
@@ -22180,7 +22043,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t44",
+		"t39",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -22200,7 +22063,7 @@ cr.getProjectModel = function() { return [
 				["images/suelolvl0-sheet0.png", 200787, 649, 1, 321, 720, 1, 0.5015576481819153, 0.5,[],[-0.5015576481819153,0.2680559754371643,-0.006230652332305908,0.2708330154418945,0.07632434368133545,0.2958329916000366,0.1269473433494568,0.35555499792099,0.1553743481636047,0.4131940007209778,0.2069713473320007,0.446179986000061,0.2732673287391663,0.4571179747581482,0.4984423518180847,0.4570310115814209,0.495327353477478,0.4986109733581543,-0.5015576481819153,0.5],0],
 				["images/suelolvl0-sheet0.png", 200787, 1, 1, 322, 720, 1, 0.5, 0.5,[],[-0.5,0.4597219824790955,0.3524839878082275,0.4625000357627869,0.4122670292854309,0.4048609733581543,0.4638980031013489,0.2142360210418701,0.4968940019607544,0.1222230195999146,0.4968940019607544,0.4986109733581543,-0.4968944191932678,0.4986109733581543],0],
 				["images/suelolvl0-sheet0.png", 200787, 325, 1, 322, 720, 1, 0.5, 0.5,[],[0.1537269949913025,-0.2083329856395721,0.2593169808387756,-0.2190969884395599,0.4580749869346619,-0.2145830094814301,0.49378901720047,-0.1944440007209778,0.4968940019607544,0.4986109733581543,-0.4968944191932678,0.4986109733581543,-0.4813665151596069,0.06885898113250732,-0.369297981262207,-0.01644998788833618,-0.3317639827728272,-0.03289899230003357,-0.2318519949913025,-0.05746498703956604,-0.01960399746894836,-0.07048600912094116,0.001164019107818604,-0.07569500803947449,0.0675470232963562,-0.1652779877185822],0],
-				["images/suelolvl0-sheet1.png", 74024, 0, 0, 321, 720, 1, 0.5015576481819153, 0.5,[],[-0.4992212057113648,-0.1982640027999878,-0.4688472449779511,0.2746520042419434,-0.4454829394817352,0.3180559873580933,-0.352803647518158,0.3374999761581421,-0.2550616264343262,0.3395839929580689,-0.1784456372261047,0.3279520273208618,-0.1205216348171234,0.309374988079071,0.2504873275756836,0.0546879768371582,0.2973623275756836,0.03706598281860352,0.4984423518180847,0.03611099720001221,0.4984423518180847,0.5,-0.4984423816204071,0.4986109733581543],0]
+				["images/suelolvl0-sheet1.png", 74037, 0, 0, 321, 720, 1, 0.5015576481819153, 0.5,[],[-0.4992212057113648,-0.1982640027999878,-0.4688472449779511,0.2746520042419434,-0.4454829394817352,0.3180559873580933,-0.352803647518158,0.3374999761581421,-0.2550616264343262,0.3395839929580689,-0.1784456372261047,0.3279520273208618,-0.1205216348171234,0.309374988079071,0.2504873275756836,0.0546879768371582,0.2973623275756836,0.03706598281860352,0.4984423518180847,0.03611099720001221,0.4984423518180847,0.5,-0.4984423816204071,0.4986109733581543],0]
 			]
 			]
 		],
@@ -22213,7 +22076,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t45",
+		"t40",
 		cr.plugins_.Sprite,
 		false,
 		[],
@@ -22230,7 +22093,7 @@ cr.getProjectModel = function() { return [
 			false,
 			5816253646611964,
 			[
-				["images/logo-sheet0.png", 71193, 0, 0, 466, 362, 1, 0.5, 0.5,[],[-0.04222199320793152,0.1058819890022278,0,-0.4794118106365204,0.1466670036315918,-0.03235301375389099,0.4222220182418823,0,0.4488890171051025,0.4323530197143555,0,0.4970589876174927,-0.448888897895813,0.4323530197143555,-0.4222221970558167,0],0]
+				["images/logo-sheet0.png", 71206, 0, 0, 466, 362, 1, 0.5, 0.5,[],[-0.04222199320793152,0.1058819890022278,0,-0.4794118106365204,0.1466670036315918,-0.03235301375389099,0.4222220182418823,0,0.4488890171051025,0.4323530197143555,0,0.4970589876174927,-0.448888897895813,0.4323530197143555,-0.4222221970558167,0],0]
 			]
 			]
 		],
@@ -22243,7 +22106,46 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t46",
+		"t41",
+		cr.plugins_.Dictionary,
+		false,
+		[],
+		0,
+		0,
+		null,
+		null,
+		[
+		],
+		true,
+		false,
+		1573954640061306,
+		[],
+		null
+	]
+,	[
+		"t42",
+		cr.plugins_.Particles,
+		false,
+		[],
+		1,
+		1,
+		["images/thusters.png", 1160, 0],
+		null,
+		[
+		[
+			"Pin",
+			cr.behaviors.Pin,
+			3191690802054494
+		]
+		],
+		false,
+		false,
+		4667522524022772,
+		[["colorblend", "Color"]],
+		null
+	]
+,	[
+		"t43",
 		cr.plugins_.Sprite,
 		true,
 		[],
@@ -22265,7 +22167,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t47",
+		"t44",
 		cr.plugins_.Sprite,
 		true,
 		[1495758126771824,9991843777877198],
@@ -22283,8 +22185,8 @@ cr.getProjectModel = function() { return [
 	]
 	],
 	[
-		[46,6,44]
-,		[47,16]
+		[43,5,39]
+,		[44,11]
 	],
 	[
 	[
@@ -22292,7 +22194,7 @@ cr.getProjectModel = function() { return [
 		1280,
 		1024,
 		false,
-		"PruebasSingle event sheet",
+		"Mecanicas juego eventsheet",
 		2760745877349201,
 		[
 		[
@@ -22328,38 +22230,6 @@ cr.getProjectModel = function() { return [
 			0,
 			0,
 			[
-			[
-				[248.0592346191406, 226.4890899658203, 0, 34, 34, 0, 1.570796370506287, 1, 0, 0.5, 0, 0, []],
-				1,
-				2,
-				[
-				],
-				[
-				[
-				]
-				],
-				[
-					30,
-					30,
-					0,
-					200,
-					32,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					-150,
-					0,
-					0,
-					800,
-					0,
-					0,
-					1
-				]
-			]
 			],
 			[			]
 		]
@@ -22380,7 +22250,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[1142.5, 898.5, 0, 91, 119, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				6,
+				5,
 				9,
 				[
 				],
@@ -22464,8 +22334,8 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[530, 62, 0, 560, 31, 0, 0, 1, 0, 0.5555555820465088, 0, 0, []],
-				3,
+				[530, 62, 0, 560, 31, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
+				2,
 				4,
 				[
 					[0]
@@ -22481,7 +22351,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[24, 62, 0, 560, 31, 0, 0, 1, 0.1171428561210632, 0.5080000162124634, 0, 0, []],
-				4,
+				3,
 				5,
 				[
 					[0]
@@ -22497,7 +22367,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[258, 39, 0, 32, 46, 0, 0, 1, 0, 0, 0, 0, []],
-				7,
+				6,
 				10,
 				[
 				],
@@ -22528,7 +22398,7 @@ cr.getProjectModel = function() { return [
 		1280,
 		1024,
 		false,
-		"PruebasMulti event sheet",
+		null,
 		6060435902370908,
 		[
 		[
@@ -22546,38 +22416,6 @@ cr.getProjectModel = function() { return [
 			0,
 			0,
 			[
-			[
-				[767, 896, 0, 83, 34, 0, 1.570796370506287, 1, 0, 0.5, 0, 0, []],
-				15,
-				26,
-				[
-				],
-				[
-				[
-				]
-				],
-				[
-					30,
-					30,
-					0,
-					200,
-					32,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					-150,
-					0,
-					0,
-					800,
-					0,
-					0,
-					1
-				]
-			]
 			],
 			[			]
 		]
@@ -22596,38 +22434,6 @@ cr.getProjectModel = function() { return [
 			0,
 			0,
 			[
-			[
-				[622, 896, 0, 83, 34, 0, 1.570796370506287, 1, 0, 0.5, 0, 0, []],
-				1,
-				16,
-				[
-				],
-				[
-				[
-				]
-				],
-				[
-					30,
-					30,
-					0,
-					200,
-					32,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					-150,
-					0,
-					0,
-					800,
-					0,
-					0,
-					1
-				]
-			]
 			],
 			[			]
 		]
@@ -22688,7 +22494,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1142.5, 898.5, 0, 91, 119, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				6,
+				5,
 				20,
 				[
 				],
@@ -22715,7 +22521,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[768, 871, 0, 120, 120, 0, -1.570796489715576, 1, 0.501953125, 0.501953125, 0, 0, []],
-				14,
+				10,
 				28,
 				[
 					[200],
@@ -22768,8 +22574,8 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[530, 62, 0, 200, 31, 0, 0, 1, 0, 0.5555555820465088, 0, 0, []],
-				3,
+				[530, 62, 0, 200, 31, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
+				2,
 				21,
 				[
 					[0]
@@ -22785,7 +22591,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[24, 62, 0, 200, 31, 0, 0, 1, 0.1171428561210632, 0.5080000162124634, 0, 0, []],
-				4,
+				3,
 				22,
 				[
 					[0]
@@ -22801,7 +22607,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[258, 39, 0, 32, 46, 0, 0, 1, 0, 0, 0, 0, []],
-				7,
+				6,
 				23,
 				[
 				],
@@ -22852,7 +22658,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[388, 220, 0, 776.0564575195313, 436.5317687988281, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				19,
+				14,
 				55,
 				[
 				],
@@ -22867,7 +22673,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1937, 220, 0, 776.0560302734375, 436.5320129394531, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				43,
+				38,
 				103,
 				[
 				],
@@ -22882,7 +22688,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1163, 220, 0, 776.0560302734375, 436.5320129394531, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				43,
+				38,
 				56,
 				[
 				],
@@ -22897,7 +22703,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1371.800048828125, 360, 0, 1707.555541992188, 261, 0, 0, 1, 0.5, 0.5019156932830811, 0, 0, []],
-				38,
+				33,
 				95,
 				[
 				],
@@ -22923,7 +22729,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[-335.5, 360, 0, -1707.555541992188, 261, 0, 0, 1, 0.5, 0.5019156932830811, 0, 0, []],
-				38,
+				33,
 				96,
 				[
 				],
@@ -22949,7 +22755,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[962.333251953125, 337, 0, 1916, 261, 0, 0, 1, 0.5, 0.5019156932830811, 0, 0, []],
-				40,
+				35,
 				100,
 				[
 				],
@@ -22964,7 +22770,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[961, 553, 0, 2591.34619140625, 434.2021789550781, 0, 0, 1, 0.5002597570419312, 0.5011389255523682, 0, 0, []],
-				31,
+				26,
 				54,
 				[
 				],
@@ -22990,7 +22796,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[-962, 553, 0, 2591.34619140625, 434.2021789550781, 0, 0, 1, 0.5002597570419312, 0.5011389255523682, 0, 0, []],
-				31,
+				26,
 				69,
 				[
 				],
@@ -23034,7 +22840,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[396.3861999511719, 224.3704376220703, 0, 317.7140502929688, 111.9865417480469, 0, 0, 0, 0.5, 0.5, 0, 0, []],
-				32,
+				27,
 				11,
 				[
 				],
@@ -23056,7 +22862,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[947.3314819335938, 133.9794158935547, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
+				11,
 				60,
 				[
 					[0],
@@ -23073,7 +22879,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1142.369750976563, 135.6324310302734, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
+				11,
 				61,
 				[
 					[1],
@@ -23090,7 +22896,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1320.053588867188, 134.8056182861328, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
+				11,
 				62,
 				[
 					[2],
@@ -23107,7 +22913,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1469.638305664063, 135.6324462890625, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
+				11,
 				63,
 				[
 					[3],
@@ -23124,7 +22930,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[944.0140380859375, 287.4591064453125, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
+				11,
 				64,
 				[
 					[4],
@@ -23141,7 +22947,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1128.3125, 285.8060913085938, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
+				11,
 				65,
 				[
 					[5],
@@ -23158,7 +22964,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1317.564331054688, 288.2859191894531, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
+				11,
 				66,
 				[
 					[6],
@@ -23175,7 +22981,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1467.97705078125, 288.2859191894531, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
+				11,
 				67,
 				[
 					[7],
@@ -23191,8 +22997,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[859, 441, 0, 58.19596862792969, 40.81038284301758, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				36,
+				[896, 441, 0, 58.19596862792969, 40.81038284301758, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				31,
 				45,
 				[
 				],
@@ -23206,8 +23012,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[415, 333, 0, 188.9576721191406, 188.9576721191406, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				35,
+				[415, 333, 0, 147.6231842041016, 147.6231842041016, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				30,
 				70,
 				[
 				],
@@ -23240,7 +23046,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[916, 176, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				71,
 				[
 					[0],
@@ -23257,7 +23063,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[946, 162, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				72,
 				[
 					[0],
@@ -23274,7 +23080,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[975, 175, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				73,
 				[
 					[0],
@@ -23291,7 +23097,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1111, 176, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				74,
 				[
 					[1],
@@ -23308,7 +23114,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1141, 162, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				75,
 				[
 					[1],
@@ -23325,7 +23131,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1170, 175, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				76,
 				[
 					[1],
@@ -23342,7 +23148,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1289, 176, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				77,
 				[
 					[2],
@@ -23359,7 +23165,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1319, 162, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				78,
 				[
 					[2],
@@ -23376,7 +23182,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1348, 175, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				79,
 				[
 					[2],
@@ -23393,7 +23199,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1439, 178, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				80,
 				[
 					[3],
@@ -23410,7 +23216,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1469, 164, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				81,
 				[
 					[3],
@@ -23427,7 +23233,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1498, 177, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				82,
 				[
 					[3],
@@ -23444,7 +23250,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[916, 323, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				83,
 				[
 					[4],
@@ -23461,7 +23267,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[946, 309, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				84,
 				[
 					[4],
@@ -23478,7 +23284,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[975, 322, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				85,
 				[
 					[4],
@@ -23495,7 +23301,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1099, 323, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				86,
 				[
 					[5],
@@ -23512,7 +23318,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1129, 309, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				87,
 				[
 					[5],
@@ -23529,7 +23335,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1158, 322, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				88,
 				[
 					[5],
@@ -23546,7 +23352,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1288, 323, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				89,
 				[
 					[6],
@@ -23563,7 +23369,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1318, 309, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				90,
 				[
 					[6],
@@ -23580,7 +23386,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1347, 322, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				91,
 				[
 					[6],
@@ -23597,7 +23403,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1438, 323, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				92,
 				[
 					[7],
@@ -23614,7 +23420,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1468, 309, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				93,
 				[
 					[7],
@@ -23631,7 +23437,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1497, 322, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				32,
 				94,
 				[
 					[7],
@@ -23648,7 +23454,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[412, 162, 0, 285.2479858398438, 170.1610412597656, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				45,
+				40,
 				0,
 				[
 				],
@@ -23681,7 +23487,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[400.8123779296875, 269.3315734863281, 0, 250, 250, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				33,
+				28,
 				58,
 				[
 				],
@@ -23699,7 +23505,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1228.81201171875, 269.3320007324219, 0, 250, 250, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				34,
+				29,
 				68,
 				[
 					[0]
@@ -23715,7 +23521,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[393, 269, 0, 250, 250, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				34,
+				29,
 				57,
 				[
 					[1]
@@ -23734,193 +23540,17 @@ cr.getProjectModel = function() { return [
 		]
 		],
 		[
-		],
-		[]
-	]
-,	[
-		"Lobby",
-		600,
-		600,
-		false,
-		"Lobby Event sheet",
-		6148722283817612,
-		[
-		[
-			"Layer 0",
-			0,
-			1731479382918058,
-			true,
-			[255, 255, 255],
-			false,
-			1,
-			1,
-			1,
-			false,
-			1,
-			0,
-			0,
 			[
-			[
-				[197, 211, 0, 200, 110, 0, 0, 1, 0, 0, 0, 0, []],
-				12,
-				24,
+				null,
+				41,
+				13,
 				[
 				],
 				[
 				],
 				[
-					"Conectar",
-					0,
-					"12pt Arial",
-					"rgb(0,0,0)",
-					1,
-					1,
-					0,
-					0,
-					0
 				]
 			]
-			],
-			[			]
-		]
-		],
-		[
-		],
-		[]
-	]
-,	[
-		"Menu niveles",
-		1200,
-		600,
-		false,
-		"Menu NivelesEvent Sheet",
-		9759992852189466,
-		[
-		[
-			"Layer 0",
-			0,
-			6524151570633273,
-			true,
-			[255, 255, 255],
-			false,
-			1,
-			1,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			[
-				[122, 302, 0, 252, 333, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
-				12,
-				[
-					[0],
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[328, 301, 0, 252, 333, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
-				25,
-				[
-					[1],
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[771, 299, 0, 252, 333, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
-				27,
-				[
-					[4],
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[501, 302, 0, 252, 333, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
-				29,
-				[
-					[3],
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[990, 301, 0, 252, 333, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
-				16,
-				30,
-				[
-					[0],
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[147, 50, 0, 200, 30, 0, 0, 1, 0, 0, 0, 0, []],
-				18,
-				33,
-				[
-				],
-				[
-				],
-				[
-					"Text",
-					0,
-					"12pt Arial",
-					"rgb(0,0,0)",
-					0,
-					0,
-					0,
-					0,
-					0
-				]
-			]
-			],
-			[			]
-		]
-		],
-		[
 		],
 		[]
 	]
@@ -23929,7 +23559,7 @@ cr.getProjectModel = function() { return [
 		1920,
 		1080,
 		false,
-		"PruebasSingle event sheet",
+		"Mecanicas juego eventsheet",
 		6280676797678057,
 		[
 		[
@@ -23949,7 +23579,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[962.5, 544, 0, 1921, 1080, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				19,
+				14,
 				32,
 				[
 				],
@@ -23982,7 +23612,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[237.9341888427734, 540.2770385742188, 0, 474.3905334472656, 1078.661376953125, 0, 0, 1, 0.5015576481819153, 0.5, 0, 0, []],
-				44,
+				39,
 				34,
 				[
 				],
@@ -24009,7 +23639,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[706.289794921875, 540.066162109375, 0, 474.3909912109375, 1078.661010742188, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				44,
+				39,
 				59,
 				[
 				],
@@ -24036,7 +23666,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1173, 561, 0, 474.3909912109375, 1078.661010742188, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				44,
+				39,
 				104,
 				[
 				],
@@ -24063,7 +23693,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1663.875366210938, 555, 0, 520, 1079, 0, 0, 1, 0.5015576481819153, 0.5, 0, 0, []],
-				44,
+				39,
 				105,
 				[
 				],
@@ -24108,7 +23738,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[613, 1012, 0, 260.8674621582031, 51.98445510864258, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				6,
+				5,
 				40,
 				[
 				],
@@ -24153,14 +23783,12 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[578.1168823242188, 959.9300537109375, 0, 128, 128, 0, 3.036872863769531, 1, 0, 0.5, 0, 0, []],
-				24,
+				19,
 				47,
 				[
 					[1]
 				],
 				[
-				[
-				]
 				],
 				[
 					100,
@@ -24186,14 +23814,12 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[615.3287353515625, 960.0850830078125, 0, 128, 128, 0, 0.08217111974954605, 1, 0, 0.5, 0, 0, []],
-				24,
+				19,
 				46,
 				[
 					[0]
 				],
 				[
-				[
-				]
 				],
 				[
 					100,
@@ -24219,7 +23845,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[597.062255859375, 1002.611999511719, 0, 128, 128, 0, 1.570796370506287, 1, 0, 0.5, 0, 0, [[]]],
-				29,
+				24,
 				52,
 				[
 				],
@@ -24291,7 +23917,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[596.4566650390625, 1009.065551757813, 0, 1.559412717819214, 1.559412717819214, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				21,
+				16,
 				41,
 				[
 				],
@@ -24308,7 +23934,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[596.7079467773438, 947.6644897460938, 0, 13.10420894622803, 12.81300354003906, 0, 0, 1, 0.5111111402511597, 0.5, 0, 0, []],
-				25,
+				20,
 				48,
 				[
 				],
@@ -24324,8 +23950,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[596.75439453125, 993.2100219726563, 0, 20.38943672180176, 33.03604888916016, 0, 0, 1, 0.5063291192054749, 0, 0, 0, []],
-				28,
+				[596.75439453125, 993.2100219726563, 0, 27.61607170104981, 33.03604888916016, 0, 0, 1, 0.5046728849411011, 0, 0, 0, []],
+				23,
 				51,
 				[
 					[0]
@@ -24343,7 +23969,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[74.02817535400391, 816.032470703125, 0, 99.51730346679688, 99.51730346679688, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				30,
+				25,
 				53,
 				[
 				],
@@ -24354,6 +23980,38 @@ cr.getProjectModel = function() { return [
 				[
 					0,
 					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[663.0148315429688, 1114.091186523438, 0, 128, 128, 0, 0, 1, 0, 0.5, 0, 0, [[]]],
+				42,
+				12,
+				[
+				],
+				[
+				[
+				]
+				],
+				[
+					50,
+					60,
+					0,
+					200,
+					32,
+					100,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					-150,
+					0,
+					0,
+					800,
+					0,
 					0,
 					1
 				]
@@ -24378,7 +24036,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[74, 816, 0, 35, 35, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				20,
+				15,
 				8,
 				[
 				],
@@ -24393,7 +24051,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1509, 900, 0, 35, 35, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				20,
+				15,
 				19,
 				[
 				],
@@ -24408,7 +24066,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[1315.209106445313, 307.1953735351563, 0, 35, 35, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				20,
+				15,
 				39,
 				[
 				],
@@ -24441,7 +24099,7 @@ cr.getProjectModel = function() { return [
 			[
 			[
 				[328, 245, 0, 158.6539916992188, 46, 0, 0, 1, 0, 0, 0, 0, []],
-				7,
+				6,
 				38,
 				[
 				],
@@ -24461,7 +24119,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[184.8375091552734, 106.8629455566406, 0, 237.6548614501953, 21.98123931884766, 0, 0, 1, 0.5037593841552734, 0.5454545617103577, 0, 0, []],
-				23,
+				18,
 				43,
 				[
 				],
@@ -24476,7 +24134,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[185.8375091552734, 63.74536895751953, 0, 237.6548614501953, 21.98123931884766, 0, 0, 1, 0.5037593841552734, 0.5454545617103577, 0, 0, []],
-				23,
+				18,
 				7,
 				[
 				],
@@ -24491,7 +24149,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[66.83378601074219, 107.4130325317383, 0, 224.8386840820313, 17.43403434753418, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
-				4,
+				3,
 				37,
 				[
 					[0]
@@ -24507,7 +24165,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[689.927001953125, 42.57065582275391, 0, 158.9769897460938, 89.424560546875, 0, 0, 1, 0, 0, 0, 0, []],
-				26,
+				21,
 				49,
 				[
 				],
@@ -24522,7 +24180,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[727.561767578125, 73.91286468505859, 0, 6.848195552825928, 6.848195552825928, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				27,
+				22,
 				50,
 				[
 				],
@@ -24540,7 +24198,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[354.28369140625, 66.15394592285156, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				39,
+				34,
 				97,
 				[
 					[1]
@@ -24556,7 +24214,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[411.7628173828125, 65.18421173095703, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				39,
+				34,
 				98,
 				[
 					[2]
@@ -24572,7 +24230,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[463.4993286132813, 64.67757415771484, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				39,
+				34,
 				99,
 				[
 					[3]
@@ -24588,7 +24246,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[39.30105590820313, 63.85847091674805, 0, 31.16128730773926, 31.16128730773926, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				41,
+				36,
 				101,
 				[
 				],
@@ -24603,7 +24261,7 @@ cr.getProjectModel = function() { return [
 			]
 ,			[
 				[40.84002685546875, 107.33740234375, 0, 22.07414817810059, 27.48855781555176, 0, 0, 1, 0.5094339847564697, 0.5, 0, 0, []],
-				42,
+				37,
 				102,
 				[
 				],
@@ -24617,8 +24275,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[67.81571960449219, 64.74536895751953, 0, 229.7108306884766, 14.07812881469727, 0, 0, 1, 0, 0.5555555820465088, 0, 0, []],
-				3,
+				[67.81571960449219, 64.74536895751953, 0, 226.3077087402344, 17.20660209655762, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
+				2,
 				14,
 				[
 					[0]
@@ -24643,7 +24301,7 @@ cr.getProjectModel = function() { return [
 	],
 	[
 	[
-		"PruebasSingle event sheet",
+		"Mecanicas juego eventsheet",
 		[
 		[
 			1,
@@ -24701,7 +24359,7 @@ false,false,9952824070825181,false
 			],
 			[
 			[
-				7,
+				6,
 				cr.plugins_.Text.prototype.acts.SetWebFont,
 				null,
 				3097764909427221,
@@ -24723,614 +24381,226 @@ false,false,9952824070825181,false
 				]
 				]
 			]
-			]
-			,[
-			[
-				0,
-				null,
-				false,
-				null,
-				7252571278022234,
+,			[
+				23,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				5251412864304223,
+				false
+				,[
 				[
-				[
-					-1,
-					cr.system_object.prototype.cnds.CompareVar,
-					null,
-					0,
-					false,
-					false,
-					false,
-					5799262864812718,
-					false
-					,[
-					[
-						11,
-						"Multi"
-					]
-,					[
-						8,
-						0
-					]
-,					[
-						7,
-						[
-							0,
-							0
-						]
-					]
-					]
-				]
-				],
-				[
-				[
-					28,
-					cr.behaviors.Pin.prototype.acts.Pin,
-					"Pin",
-					5251412864304223,
-					false
-					,[
-					[
-						4,
-						0
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					28,
-					cr.plugins_.Sprite.prototype.acts.SetVisible,
-					null,
-					6041972678809633,
-					false
-					,[
-					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					0,
-					cr.behaviors.Physics.prototype.acts.SetWorldGravity,
-					"Physics",
-					4516249674817538,
-					false
-					,[
-					[
-						0,
-						[
-							1,
-							1.5
-						]
-					]
-					]
-				]
-,				[
-					0,
-					cr.behaviors.Physics.prototype.acts.EnableCollisions,
-					"Physics",
-					3322753197487977,
-					false
-					,[
-					[
-						4,
-						46
-					]
-,					[
-						3,
-						1
-					]
-					]
-				]
-,				[
-					21,
-					cr.behaviors.Pin.prototype.acts.Pin,
-					"Pin",
-					4517315430271638,
-					false
-					,[
-					[
-						4,
-						0
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					0,
-					cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
-					null,
-					5614992555514654,
-					false
-					,[
-					[
-						10,
-						3
-					]
-,					[
-						7,
-						[
-							21,
-							0,
-							false,
-							null
-							,1
-						]
-					]
-					]
-				]
-,				[
-					0,
-					cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
-					null,
-					7215557250510471,
-					false
-					,[
-					[
-						10,
-						4
-					]
-,					[
-						7,
-						[
-							21,
-							0,
-							false,
-							null
-							,0
-						]
-					]
-					]
-				]
-,				[
 					4,
-					cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
-					null,
-					8587464027201877,
-					false
-					,[
-					[
-						10,
-						0
-					]
-,					[
-						7,
-						[
-							20,
-							4,
-							cr.plugins_.Sprite.prototype.exps.Width,
-							false,
-							null
-						]
-					]
-					]
+					0
 				]
 ,				[
 					3,
-					cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
-					null,
-					5978502895640512,
-					false
-					,[
-					[
-						10,
-						0
-					]
-,					[
-						7,
-						[
-							20,
-							3,
-							cr.plugins_.Sprite.prototype.exps.Width,
-							false,
-							null
-						]
-					]
-					]
+					0
 				]
-,				[
-					24,
-					cr.plugins_.Particles.prototype.acts.SetSpraying,
-					null,
-					9079125817710479,
-					false
-					,[
-					[
-						3,
-						0
-					]
-					]
 				]
-,				[
-					24,
-					cr.behaviors.Pin.prototype.acts.Pin,
-					"Pin",
-					5152729429552493,
-					false
-					,[
+			]
+,			[
+				0,
+				cr.behaviors.Physics.prototype.acts.SetWorldGravity,
+				"Physics",
+				4516249674817538,
+				false
+				,[
+				[
+					0,
 					[
-						4,
-						0
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					29,
-					cr.behaviors.Pin.prototype.acts.Pin,
-					"Pin",
-					5171609692878818,
-					false
-					,[
-					[
-						4,
-						0
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					25,
-					cr.behaviors.Pin.prototype.acts.Pin,
-					"Pin",
-					3314343056711039,
-					false
-					,[
-					[
-						4,
-						0
-					]
-,					[
-						3,
-						1
-					]
-					]
-				]
-,				[
-					30,
-					cr.behaviors.Pin.prototype.acts.Pin,
-					"Pin",
-					259971113499809,
-					false
-					,[
-					[
-						4,
-						20
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					30,
-					cr.plugins_.Sprite.prototype.acts.SetVisible,
-					null,
-					338205002438729,
-					false
-					,[
-					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					35,
-					cr.plugins_.Sprite.prototype.acts.StartAnim,
-					null,
-					180430956826066,
-					false
-					,[
-					[
-						3,
-						1
-					]
+						1,
+						1.5
 					]
 				]
 				]
 			]
 ,			[
 				0,
-				null,
-				false,
-				null,
-				8116661313354989,
-				[
-				[
-					-1,
-					cr.system_object.prototype.cnds.CompareVar,
-					null,
-					0,
-					false,
-					false,
-					false,
-					75439879524485,
-					false
-					,[
-					[
-						11,
-						"Multi"
-					]
-,					[
-						8,
-						0
-					]
-,					[
-						7,
-						[
-							0,
-							1
-						]
-					]
-					]
-				]
-				],
-				[
-				[
-					1,
-					cr.behaviors.Pin.prototype.acts.Pin,
-					"Pin",
-					113057705596624,
-					false
-					,[
-					[
-						4,
-						0
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					15,
-					cr.behaviors.Pin.prototype.acts.Pin,
-					"Pin",
-					1021203161612677,
-					false
-					,[
-					[
-						4,
-						14
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					0,
-					cr.behaviors.Physics.prototype.acts.SetWorldGravity,
-					"Physics",
-					6231204061758253,
-					false
-					,[
-					[
-						0,
-						[
-							0,
-							5
-						]
-					]
-					]
-				]
-,				[
-					14,
-					cr.behaviors.Physics.prototype.acts.SetWorldGravity,
-					"Physics",
-					1501740409487476,
-					false
-					,[
-					[
-						0,
-						[
-							0,
-							5
-						]
-					]
-					]
-				]
-,				[
-					0,
-					cr.behaviors.Physics.prototype.acts.EnableCollisions,
-					"Physics",
-					5299689426342139,
-					false
-					,[
-					[
-						4,
-						46
-					]
-,					[
-						3,
-						1
-					]
-					]
-				]
-,				[
-					14,
-					cr.behaviors.Physics.prototype.acts.EnableCollisions,
-					"Physics",
-					1215601876008995,
-					false
-					,[
-					[
-						4,
-						46
-					]
-,					[
-						3,
-						1
-					]
-					]
-				]
-				]
+				cr.behaviors.Physics.prototype.acts.EnableCollisions,
+				"Physics",
+				3322753197487977,
+				false
 				,[
 				[
-					0,
-					null,
-					false,
-					null,
-					2806260875257717,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						3032103351477914,
-						false
-						,[
-						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								1
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						14,
-						cr.behaviors.scrollto.prototype.acts.SetEnabled,
-						"ScrollTo",
-						374198452852828,
-						false
-						,[
-						[
-							3,
-							0
-						]
-						]
-					]
-,					[
-						-1,
-						cr.system_object.prototype.acts.SetVar,
-						null,
-						2692825020357678,
-						false
-						,[
-						[
-							11,
-							"PosicionX"
-						]
-,						[
-							7,
-							[
-								20,
-								14,
-								cr.plugins_.Sprite.prototype.exps.X,
-								false,
-								null
-							]
-						]
-						]
-					]
-					]
+					4,
+					43
 				]
 ,				[
-					0,
-					null,
-					false,
-					null,
-					3895035083905488,
+					3,
+					1
+				]
+				]
+			]
+,			[
+				16,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				4517315430271638,
+				false
+				,[
+				[
+					4,
+					0
+				]
+,				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				0,
+				cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
+				null,
+				5614992555514654,
+				false
+				,[
+				[
+					10,
+					3
+				]
+,				[
+					7,
 					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
+						21,
 						0,
 						false,
-						false,
-						false,
-						2956562006637081,
-						false
-						,[
-						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								2
-							]
-						]
-						]
+						null
+						,1
 					]
-					],
+				]
+				]
+			]
+,			[
+				0,
+				cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
+				null,
+				7215557250510471,
+				false
+				,[
+				[
+					10,
+					4
+				]
+,				[
+					7,
 					[
-					[
+						21,
 						0,
-						cr.behaviors.scrollto.prototype.acts.SetEnabled,
-						"ScrollTo",
-						1415405602273376,
-						false
-						,[
-						[
-							3,
-							0
-						]
-						]
+						false,
+						null
+						,0
 					]
-,					[
-						-1,
-						cr.system_object.prototype.acts.SetVar,
-						null,
-						9969687905106535,
-						false
-						,[
-						[
-							11,
-							"PosicionX"
-						]
-,						[
-							7,
-							[
-								20,
-								0,
-								cr.plugins_.Sprite.prototype.exps.X,
-								false,
-								null
-							]
-						]
-						]
+				]
+				]
+			]
+,			[
+				3,
+				cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
+				null,
+				8587464027201877,
+				false
+				,[
+				[
+					10,
+					0
+				]
+,				[
+					7,
+					[
+						20,
+						3,
+						cr.plugins_.Sprite.prototype.exps.Width,
+						false,
+						null
 					]
+				]
+				]
+			]
+,			[
+				2,
+				cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
+				null,
+				5978502895640512,
+				false
+				,[
+				[
+					10,
+					0
+				]
+,				[
+					7,
+					[
+						20,
+						2,
+						cr.plugins_.Sprite.prototype.exps.Width,
+						false,
+						null
 					]
+				]
+				]
+			]
+,			[
+				24,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				5171609692878818,
+				false
+				,[
+				[
+					4,
+					0
+				]
+,				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				20,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				3314343056711039,
+				false
+				,[
+				[
+					4,
+					0
+				]
+,				[
+					3,
+					1
+				]
+				]
+			]
+,			[
+				25,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				259971113499809,
+				false
+				,[
+				[
+					4,
+					15
+				]
+,				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				25,
+				cr.plugins_.Sprite.prototype.acts.SetVisible,
+				null,
+				338205002438729,
+				false
+				,[
+				[
+					3,
+					0
 				]
 				]
 			]
@@ -25372,35 +24642,18 @@ false,false,9952824070825181,false
 				null,
 				false,
 				null,
-				9363822779181775,
+				1201713447601503,
 				[
 				[
-					-1,
-					cr.system_object.prototype.cnds.CompareVar,
+					4,
+					cr.plugins_.Touch.prototype.cnds.IsInTouch,
 					null,
 					0,
 					false,
 					false,
 					false,
-					6697151600283623,
+					5085002282307453,
 					false
-					,[
-					[
-						11,
-						"Multi"
-					]
-,					[
-						8,
-						0
-					]
-,					[
-						7,
-						[
-							0,
-							0
-						]
-					]
-					]
 				]
 				],
 				[
@@ -25411,203 +24664,87 @@ false,false,9952824070825181,false
 					null,
 					false,
 					null,
-					5420177936960762,
+					827231968863908,
 					[
 					[
-						2,
-						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+						-1,
+						cr.system_object.prototype.cnds.Compare,
 						null,
 						0,
 						false,
 						false,
 						false,
-						3977861557607429,
+						8180396428320483,
 						false
 						,[
 						[
-							9,
-							68
-						]
-						]
-					]
-,					[
-						24,
-						cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						2286876583941076,
-						false
-						,[
-						[
-							10,
-							0
+							7,
+							[
+								5,
+								[
+									20,
+									4,
+									cr.plugins_.Touch.prototype.exps.X,
+									false,
+									null
+								]
+								,[
+									19,
+									cr.system_object.prototype.exps.viewportleft
+									,[
+[
+										2,
+										"Naves"
+									]
+									]
+								]
+							]
 						]
 ,						[
 							8,
-							0
+							2
 						]
 ,						[
 							7,
 							[
-								0,
-								1
+								5,
+								[
+									19,
+									cr.system_object.prototype.exps.viewportright
+									,[
+[
+										2,
+										"Naves"
+									]
+									]
+								]
+								,[
+									20,
+									4,
+									cr.plugins_.Touch.prototype.exps.X,
+									false,
+									null
+								]
 							]
 						]
 						]
 					]
-					],
-					[
-					[
+,					[
+						4,
+						cr.plugins_.Touch.prototype.cnds.HasNthTouch,
+						null,
 						0,
-						cr.behaviors.Physics.prototype.acts.ApplyTorque,
-						"Physics",
-						3220498387793756,
+						false,
+						true,
+						false,
+						6274240761578638,
 						false
 						,[
 						[
 							0,
 							[
 								0,
-								25
-							]
-						]
-						]
-					]
-,					[
-						24,
-						cr.plugins_.Particles.prototype.acts.SetSpraying,
-						null,
-						8367693967176727,
-						false
-						,[
-						[
-							3,
-							1
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					2485880781875148,
-					[
-					[
-						2,
-						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-						null,
-						0,
-						false,
-						true,
-						false,
-						5918083267591773,
-						false
-						,[
-						[
-							9,
-							68
-						]
-						]
-					]
-,					[
-						24,
-						cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						7538741157110366,
-						false
-						,[
-						[
-							10,
-							0
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
 								1
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						24,
-						cr.plugins_.Particles.prototype.acts.SetSpraying,
-						null,
-						5002295071005174,
-						false
-						,[
-						[
-							3,
-							0
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					4631994307586731,
-					[
-					[
-						2,
-						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-						null,
-						0,
-						false,
-						false,
-						false,
-						8449251836495506,
-						false
-						,[
-						[
-							9,
-							65
-						]
-						]
-					]
-,					[
-						24,
-						cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						7032553335283457,
-						false
-						,[
-						[
-							10,
-							0
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								0
 							]
 						]
 						]
@@ -25618,7 +24755,7 @@ false,false,9952824070825181,false
 						0,
 						cr.behaviors.Physics.prototype.acts.ApplyTorque,
 						"Physics",
-						783233779002571,
+						2152253530850813,
 						false
 						,[
 						[
@@ -25630,405 +24767,6 @@ false,false,9952824070825181,false
 						]
 						]
 					]
-,					[
-						24,
-						cr.plugins_.Particles.prototype.acts.SetSpraying,
-						null,
-						9697617693559487,
-						false
-						,[
-						[
-							3,
-							1
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					4480429429725751,
-					[
-					[
-						2,
-						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-						null,
-						0,
-						false,
-						true,
-						false,
-						1369120253861873,
-						false
-						,[
-						[
-							9,
-							65
-						]
-						]
-					]
-,					[
-						24,
-						cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						9277705555615742,
-						false
-						,[
-						[
-							10,
-							0
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								0
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						24,
-						cr.plugins_.Particles.prototype.acts.SetSpraying,
-						null,
-						7029521595226889,
-						false
-						,[
-						[
-							3,
-							0
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					9814472976817034,
-					[
-					[
-						2,
-						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-						null,
-						0,
-						false,
-						false,
-						false,
-						1552652537852058,
-						false
-						,[
-						[
-							9,
-							32
-						]
-						]
-					]
-,					[
-						0,
-						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						3661336872380029,
-						false
-						,[
-						[
-							10,
-							1
-						]
-,						[
-							8,
-							4
-						]
-,						[
-							7,
-							[
-								0,
-								0
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						0,
-						cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-						"Physics",
-						2751941271312929,
-						false
-						,[
-						[
-							0,
-							[
-								1,
-								0.8
-							]
-						]
-,						[
-							0,
-							[
-								20,
-								0,
-								cr.plugins_.Sprite.prototype.exps.Angle,
-								false,
-								null
-							]
-						]
-,						[
-							7,
-							[
-								0,
-								1
-							]
-						]
-						]
-					]
-,					[
-						0,
-						cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-						"Physics",
-						1618369368610855,
-						false
-						,[
-						[
-							0,
-							[
-								1,
-								0.8
-							]
-						]
-,						[
-							0,
-							[
-								20,
-								0,
-								cr.plugins_.Sprite.prototype.exps.Angle,
-								false,
-								null
-							]
-						]
-,						[
-							7,
-							[
-								0,
-								2
-							]
-						]
-						]
-					]
-,					[
-						0,
-						cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
-						null,
-						7823498878405285,
-						false
-						,[
-						[
-							10,
-							1
-						]
-,						[
-							7,
-							[
-								1,
-								0.1
-							]
-						]
-						]
-					]
-,					[
-						4,
-						cr.plugins_.Sprite.prototype.acts.SetWidth,
-						null,
-						4731451365855858,
-						false
-						,[
-						[
-							0,
-							[
-								7,
-								[
-									6,
-									[
-										21,
-										4,
-										false,
-										null
-										,0
-									]
-									,[
-										21,
-										0,
-										false,
-										null
-										,1
-									]
-								]
-								,[
-									21,
-									0,
-									false,
-									null
-									,3
-								]
-							]
-						]
-						]
-					]
-,					[
-						29,
-						cr.plugins_.Particles.prototype.acts.SetSpraying,
-						null,
-						957278450563233,
-						false
-						,[
-						[
-							3,
-							1
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					3772285639118718,
-					[
-					[
-						2,
-						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-						null,
-						0,
-						false,
-						true,
-						false,
-						8109841781981339,
-						false
-						,[
-						[
-							9,
-							32
-						]
-						]
-					]
-					],
-					[
-					[
-						29,
-						cr.plugins_.Particles.prototype.acts.SetSpraying,
-						null,
-						5210034194570725,
-						false
-						,[
-						[
-							3,
-							0
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					6150904589996595,
-					[
-					[
-						0,
-						cr.behaviors.Physics.prototype.cnds.CompareAngularVelocity,
-						"Physics",
-						0,
-						false,
-						false,
-						false,
-						7471504134002845,
-						false
-						,[
-						[
-							8,
-							4
-						]
-,						[
-							0,
-							[
-								0,
-								60
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						0,
-						cr.behaviors.Physics.prototype.acts.SetAngularVelocity,
-						"Physics",
-						5984685841489653,
-						false
-						,[
-						[
-							0,
-							[
-								0,
-								60
-							]
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					[true, "Fire_Animation"],
-					false,
-					null,
-					8230929351219207,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.IsGroupActive,
-						null,
-						0,
-						false,
-						false,
-						false,
-						8230929351219207,
-						false
-						,[
-						[
-							1,
-							[
-								2,
-								"Fire_Animation"
-							]
-						]
-						]
-					]
-					],
-					[
 					]
 					,[
 					[
@@ -26036,270 +24774,32 @@ false,false,9952824070825181,false
 						null,
 						false,
 						null,
-						5970970332487002,
+						9533771932042015,
 						[
 						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.OnKey,
+							19,
+							cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
 							null,
-							1,
-							false,
-							false,
-							false,
-							5290564575919897,
-							false
-							,[
-							[
-								9,
-								32
-							]
-							]
-						]
-						],
-						[
-						[
-							28,
-							cr.plugins_.Sprite.prototype.acts.SetVisible,
-							null,
-							1345501436769311,
-							false
-							,[
-							[
-								3,
-								1
-							]
-							]
-						]
-						]
-						,[
-						[
 							0,
-							null,
 							false,
-							null,
-							69058935592229,
+							false,
+							false,
+							2332992121762718,
+							false
+							,[
 							[
-							[
-								28,
-								cr.plugins_.Sprite.prototype.cnds.IsAnimPlaying,
-								null,
-								0,
-								false,
-								false,
-								false,
-								7871208665001231,
-								false
-								,[
-								[
-									1,
-									[
-										2,
-										"Default_Reverse"
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								-1,
-								cr.system_object.prototype.acts.SetVar,
-								null,
-								527434914328535,
-								false
-								,[
-								[
-									11,
-									"Frame"
-								]
-,								[
-									7,
-									[
-										20,
-										28,
-										cr.plugins_.Sprite.prototype.exps.AnimationFrame,
-										false,
-										null
-									]
-								]
-								]
+								10,
+								0
 							]
 ,							[
-								28,
-								cr.plugins_.Sprite.prototype.acts.SetAnim,
-								null,
-								4493672839239442,
-								false
-								,[
-								[
-									1,
-									[
-										2,
-										"Default"
-									]
-								]
-,								[
-									3,
-									1
-								]
-								]
-							]
-,							[
-								28,
-								cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
-								null,
-								9269822122747439,
-								false
-								,[
-								[
-									0,
-									[
-										5,
-										[
-											20,
-											28,
-											cr.plugins_.Sprite.prototype.exps.AnimationFrameCount,
-											false,
-											null
-										]
-										,[
-											23,
-											"Frame"
-										]
-									]
-								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							2647822450337495,
-							[
-							[
-								-1,
-								cr.system_object.prototype.cnds.Else,
-								null,
-								0,
-								false,
-								false,
-								false,
-								4814067124404504,
-								false
-							]
-							],
-							[
-							[
-								28,
-								cr.plugins_.Sprite.prototype.acts.SetAnim,
-								null,
-								5019262399230166,
-								false
-								,[
-								[
-									1,
-									[
-										2,
-										"Default"
-									]
-								]
-,								[
-									3,
-									1
-								]
-								]
-							]
-,							[
-								-1,
-								cr.system_object.prototype.acts.SetVar,
-								null,
-								3183957314980234,
-								false
-								,[
-								[
-									11,
-									"Frame"
-								]
-,								[
-									7,
-									[
-										0,
-										0
-									]
-								]
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						4167744239327268,
-						[
-						[
-							28,
-							cr.plugins_.Sprite.prototype.cnds.OnAnimFinished,
-							null,
-							1,
-							false,
-							false,
-							false,
-							8050065975012128,
-							false
-							,[
-							[
-								1,
-								[
-									2,
-									"Default"
-								]
-							]
-							]
-						]
-,						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-							null,
-							0,
-							false,
-							false,
-							false,
-							1540159485213923,
-							false
-							,[
-							[
-								9,
-								32
-							]
-							]
-						]
-,						[
-							28,
-							cr.plugins_.Sprite.prototype.cnds.CompareFrame,
-							null,
-							0,
-							false,
-							false,
-							false,
-							9450973842705369,
-							false
-							,[
-							[
 								8,
 								0
 							]
 ,							[
-								0,
+								7,
 								[
 									0,
-									12
+									0
 								]
 							]
 							]
@@ -26307,20 +24807,13 @@ false,false,9952824070825181,false
 						],
 						[
 						[
-							28,
-							cr.plugins_.Sprite.prototype.acts.SetAnim,
+							19,
+							cr.plugins_.Particles.prototype.acts.SetSpraying,
 							null,
-							9072146251697214,
+							5926062546742533,
 							false
 							,[
 							[
-								1,
-								[
-									2,
-									"Loop"
-								]
-							]
-,							[
 								3,
 								1
 							]
@@ -26328,257 +24821,149 @@ false,false,9952824070825181,false
 						]
 						]
 					]
-,					[
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					2827459444666555,
+					[
+					[
+						-1,
+						cr.system_object.prototype.cnds.Compare,
+						null,
 						0,
-						null,
 						false,
-						null,
-						7774116983390537,
+						false,
+						false,
+						8769442241675817,
+						false
+						,[
 						[
-						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.OnKeyReleased,
-							null,
-							1,
-							false,
-							false,
-							false,
-							670420048436531,
-							false
-							,[
+							7,
 							[
-								9,
-								32
-							]
-							]
-						]
-						],
-						[
-						[
-							28,
-							cr.plugins_.Sprite.prototype.acts.SetAnim,
-							null,
-							3899677718688961,
-							false
-							,[
-							[
-								1,
+								5,
 								[
-									2,
-									"Default_Reverse"
+									19,
+									cr.system_object.prototype.exps.viewportright
+									,[
+[
+										2,
+										"Naves"
+									]
+									]
 								]
-							]
-,							[
-								3,
-								1
-							]
+								,[
+									20,
+									4,
+									cr.plugins_.Touch.prototype.exps.X,
+									false,
+									null
+								]
 							]
 						]
 ,						[
-							28,
-							cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
-							null,
-							649531904417904,
-							false
-							,[
+							8,
+							2
+						]
+,						[
+							7,
 							[
-								0,
+								5,
 								[
-									23,
-									"Frame"
+									20,
+									4,
+									cr.plugins_.Touch.prototype.exps.X,
+									false,
+									null
+								]
+								,[
+									19,
+									cr.system_object.prototype.exps.viewportleft
+									,[
+[
+										2,
+										"Naves"
+									]
+									]
 								]
 							]
-							]
 						]
 						]
+					]
+,					[
+						4,
+						cr.plugins_.Touch.prototype.cnds.HasNthTouch,
+						null,
+						0,
+						false,
+						true,
+						false,
+						6179421390122842,
+						false
 						,[
 						[
 							0,
-							null,
-							false,
-							null,
-							5329799050085284,
 							[
-							[
-								28,
-								cr.plugins_.Sprite.prototype.cnds.IsAnimPlaying,
-								null,
 								0,
-								false,
-								false,
-								false,
-								9550847123547455,
-								false
-								,[
-								[
-									1,
-									[
-										2,
-										"Default"
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								-1,
-								cr.system_object.prototype.acts.SetVar,
-								null,
-								3079397739285015,
-								false
-								,[
-								[
-									11,
-									"Frame"
-								]
-,								[
-									7,
-									[
-										20,
-										28,
-										cr.plugins_.Sprite.prototype.exps.AnimationFrame,
-										false,
-										null
-									]
-								]
-								]
-							]
-,							[
-								28,
-								cr.plugins_.Sprite.prototype.acts.SetAnim,
-								null,
-								8155303938583595,
-								false
-								,[
-								[
-									1,
-									[
-										2,
-										"Default"
-									]
-								]
-,								[
-									3,
-									1
-								]
-								]
-							]
-,							[
-								28,
-								cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
-								null,
-								4512743190551045,
-								false
-								,[
-								[
-									0,
-									[
-										5,
-										[
-											20,
-											28,
-											cr.plugins_.Sprite.prototype.exps.AnimationFrameCount,
-											false,
-											null
-										]
-										,[
-											23,
-											"Frame"
-										]
-									]
-								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							1157538122867241,
-							[
-							[
-								-1,
-								cr.system_object.prototype.cnds.Else,
-								null,
-								0,
-								false,
-								false,
-								false,
-								9880818588808775,
-								false
-							]
-							],
-							[
-							[
-								28,
-								cr.plugins_.Sprite.prototype.acts.SetAnim,
-								null,
-								2960736078337862,
-								false
-								,[
-								[
-									1,
-									[
-										2,
-										"Default_Reverse"
-									]
-								]
-,								[
-									3,
-									1
-								]
-								]
-							]
-,							[
-								-1,
-								cr.system_object.prototype.acts.SetVar,
-								null,
-								817789990509017,
-								false
-								,[
-								[
-									11,
-									"Frame"
-								]
-,								[
-									7,
-									[
-										0,
-										0
-									]
-								]
-								]
-							]
+								1
 							]
 						]
 						]
 					]
-,					[
+					],
+					[
+					[
+						0,
+						cr.behaviors.Physics.prototype.acts.ApplyTorque,
+						"Physics",
+						5509142905492879,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								25
+							]
+						]
+						]
+					]
+					]
+					,[
+					[
 						0,
 						null,
 						false,
 						null,
-						1922159717593474,
+						1334169213335861,
 						[
 						[
-							28,
-							cr.plugins_.Sprite.prototype.cnds.OnAnimFinished,
+							19,
+							cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
 							null,
-							1,
+							0,
 							false,
 							false,
 							false,
-							6072959535032012,
+							9307323247624823,
 							false
 							,[
 							[
-								1,
+								10,
+								0
+							]
+,							[
+								8,
+								0
+							]
+,							[
+								7,
 								[
-									2,
-									"Default_Reverse"
+									0,
+									1
 								]
 							]
 							]
@@ -26586,37 +24971,61 @@ false,false,9952824070825181,false
 						],
 						[
 						[
-							28,
-							cr.plugins_.Sprite.prototype.acts.SetVisible,
+							19,
+							cr.plugins_.Particles.prototype.acts.SetSpraying,
 							null,
-							7360591781406265,
+							4243228935080139,
 							false
 							,[
 							[
-								3,
-								0
-							]
-							]
-						]
-,						[
-							28,
-							cr.plugins_.Sprite.prototype.acts.SetAnim,
-							null,
-							4157939116503026,
-							false
-							,[
-							[
-								1,
-								[
-									2,
-									"Default"
-								]
-							]
-,							[
 								3,
 								1
 							]
 							]
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					7009987568062134,
+					[
+					[
+						4,
+						cr.plugins_.Touch.prototype.cnds.OnNthTouchEnd,
+						null,
+						1,
+						false,
+						false,
+						false,
+						902658554269459,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						19,
+						cr.plugins_.Particles.prototype.acts.SetSpraying,
+						null,
+						4105100837467921,
+						false
+						,[
+						[
+							3,
+							0
 						]
 						]
 					]
@@ -26629,26 +25038,81 @@ false,false,9952824070825181,false
 				null,
 				false,
 				null,
-				6502484360717051,
+				8568195495393901,
 				[
 				[
-					-1,
-					cr.system_object.prototype.cnds.CompareVar,
+					4,
+					cr.plugins_.Touch.prototype.cnds.HasNthTouch,
 					null,
 					0,
 					false,
 					false,
 					false,
-					1753890642127336,
+					716507643226378,
 					false
 					,[
 					[
-						11,
-						"Multi"
+						0,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+,				[
+					0,
+					cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					7158207857250221,
+					false
+					,[
+					[
+						10,
+						1
 					]
 ,					[
 						8,
-						0
+						4
+					]
+,					[
+						7,
+						[
+							0,
+							0
+						]
+					]
+					]
+				]
+				],
+				[
+				[
+					0,
+					cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
+					"Physics",
+					2372120195329576,
+					false
+					,[
+					[
+						0,
+						[
+							1,
+							0.8
+						]
+					]
+,					[
+						0,
+						[
+							20,
+							0,
+							cr.plugins_.Sprite.prototype.exps.Angle,
+							false,
+							null
+						]
 					]
 ,					[
 						7,
@@ -26659,6 +25123,229 @@ false,false,9952824070825181,false
 					]
 					]
 				]
+,				[
+					0,
+					cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
+					"Physics",
+					4706900813740487,
+					false
+					,[
+					[
+						0,
+						[
+							1,
+							0.8
+						]
+					]
+,					[
+						0,
+						[
+							20,
+							0,
+							cr.plugins_.Sprite.prototype.exps.Angle,
+							false,
+							null
+						]
+					]
+,					[
+						7,
+						[
+							0,
+							2
+						]
+					]
+					]
+				]
+,				[
+					0,
+					cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
+					null,
+					6870048553731022,
+					false
+					,[
+					[
+						10,
+						1
+					]
+,					[
+						7,
+						[
+							1,
+							0.1
+						]
+					]
+					]
+				]
+,				[
+					3,
+					cr.plugins_.Sprite.prototype.acts.SetWidth,
+					null,
+					5832080808641206,
+					false
+					,[
+					[
+						0,
+						[
+							7,
+							[
+								6,
+								[
+									21,
+									3,
+									false,
+									null
+									,0
+								]
+								,[
+									21,
+									0,
+									false,
+									null
+									,1
+								]
+							]
+							,[
+								21,
+								0,
+								false,
+								null
+								,3
+							]
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				999119399351282,
+				[
+				[
+					0,
+					cr.behaviors.Physics.prototype.cnds.CompareAngularVelocity,
+					"Physics",
+					0,
+					false,
+					false,
+					false,
+					1676616502810519,
+					false
+					,[
+					[
+						8,
+						4
+					]
+,					[
+						0,
+						[
+							0,
+							60
+						]
+					]
+					]
+				]
+				],
+				[
+				[
+					0,
+					cr.behaviors.Physics.prototype.acts.SetAngularVelocity,
+					"Physics",
+					2544376829336309,
+					false
+					,[
+					[
+						0,
+						[
+							0,
+							60
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				5137928511547035,
+				[
+				[
+					0,
+					cr.behaviors.Physics.prototype.cnds.CompareAngularVelocity,
+					"Physics",
+					0,
+					false,
+					false,
+					false,
+					613724135724753,
+					false
+					,[
+					[
+						8,
+						2
+					]
+,					[
+						0,
+						[
+							0,
+							-60
+						]
+					]
+					]
+				]
+				],
+				[
+				[
+					0,
+					cr.behaviors.Physics.prototype.acts.SetAngularVelocity,
+					"Physics",
+					9333986200264382,
+					false
+					,[
+					[
+						0,
+						[
+							0,
+							-60
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				[true, "Fire_Animation"],
+				false,
+				null,
+				8230929351219207,
+				[
+				[
+					-1,
+					cr.system_object.prototype.cnds.IsGroupActive,
+					null,
+					0,
+					false,
+					false,
+					false,
+					8230929351219207,
+					false
+					,[
+					[
+						1,
+						[
+							2,
+							"Fire_Animation"
+						]
+					]
+					]
+				]
 				],
 				[
 				]
@@ -26668,29 +25355,21 @@ false,false,9952824070825181,false
 					null,
 					false,
 					null,
-					6507188696127774,
+					5970970332487002,
 					[
 					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
+						4,
+						cr.plugins_.Touch.prototype.cnds.HasNthTouch,
 						null,
 						0,
 						false,
 						false,
 						false,
-						7065889658247258,
+						7820940089277115,
 						false
 						,[
 						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
+							0,
 							[
 								0,
 								1
@@ -26700,6 +25379,19 @@ false,false,9952824070825181,false
 					]
 					],
 					[
+					[
+						23,
+						cr.plugins_.Sprite.prototype.acts.SetVisible,
+						null,
+						1345501436769311,
+						false
+						,[
+						[
+							3,
+							1
+						]
+						]
+					]
 					]
 					,[
 					[
@@ -26707,133 +25399,24 @@ false,false,9952824070825181,false
 						null,
 						false,
 						null,
-						6290216476501129,
+						69058935592229,
 						[
 						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+							23,
+							cr.plugins_.Sprite.prototype.cnds.IsAnimPlaying,
 							null,
 							0,
 							false,
 							false,
 							false,
-							1972918988896779,
+							7871208665001231,
 							false
 							,[
 							[
-								9,
-								68
-							]
-							]
-						]
-						],
-						[
-						[
-							0,
-							cr.behaviors.Physics.prototype.acts.ApplyTorque,
-							"Physics",
-							845967026013438,
-							false
-							,[
-							[
-								0,
+								1,
 								[
-									0,
-									100
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						1165922442930724,
-						[
-						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-							null,
-							0,
-							false,
-							false,
-							false,
-							9618557851033656,
-							false
-							,[
-							[
-								9,
-								65
-							]
-							]
-						]
-						],
-						[
-						[
-							0,
-							cr.behaviors.Physics.prototype.acts.ApplyTorque,
-							"Physics",
-							5487138153751592,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									-100
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						6697521276868981,
-						[
-						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-							null,
-							0,
-							false,
-							false,
-							false,
-							1280762701660542,
-							false
-							,[
-							[
-								9,
-								32
-							]
-							]
-						]
-,						[
-							4,
-							cr.plugins_.Sprite.prototype.cnds.CompareWidth,
-							null,
-							0,
-							false,
-							false,
-							false,
-							5683633388838231,
-							false
-							,[
-							[
-								8,
-								4
-							]
-,							[
-								0,
-								[
-									0,
-									0
+									2,
+									"Default_Reverse"
 								]
 							]
 							]
@@ -26841,92 +25424,53 @@ false,false,9952824070825181,false
 						],
 						[
 						[
-							1,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
+							-1,
+							cr.system_object.prototype.acts.SetVar,
 							null,
-							5347148461431849,
+							527434914328535,
 							false
 							,[
 							[
-								0,
-								[
-									0,
-									100
-								]
-							]
-							]
-						]
-,						[
-							0,
-							cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-							"Physics",
-							7177067602925088,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									2
-								]
-							]
-,							[
-								0,
-								[
-									20,
-									0,
-									cr.plugins_.Sprite.prototype.exps.Angle,
-									false,
-									null
-								]
+								11,
+								"Frame"
 							]
 ,							[
 								7,
 								[
-									0,
-									1
-								]
-							]
-							]
-						]
-,						[
-							0,
-							cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-							"Physics",
-							6709833632352574,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									2
-								]
-							]
-,							[
-								0,
-								[
 									20,
-									0,
-									cr.plugins_.Sprite.prototype.exps.Angle,
+									23,
+									cr.plugins_.Sprite.prototype.exps.AnimationFrame,
 									false,
 									null
 								]
 							]
-,							[
-								7,
+							]
+						]
+,						[
+							23,
+							cr.plugins_.Sprite.prototype.acts.SetAnim,
+							null,
+							4493672839239442,
+							false
+							,[
+							[
+								1,
 								[
-									0,
-									2
+									2,
+									"Default"
 								]
+							]
+,							[
+								3,
+								1
 							]
 							]
 						]
 ,						[
-							4,
-							cr.plugins_.Sprite.prototype.acts.SetWidth,
+							23,
+							cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
 							null,
-							103904563317226,
+							9269822122747439,
 							false
 							,[
 							[
@@ -26935,14 +25479,14 @@ false,false,9952824070825181,false
 									5,
 									[
 										20,
-										4,
-										cr.plugins_.Sprite.prototype.exps.Width,
+										23,
+										cr.plugins_.Sprite.prototype.exps.AnimationFrameCount,
 										false,
 										null
 									]
 									,[
-										1,
-										0.1
+										23,
+										"Frame"
 									]
 								]
 							]
@@ -26955,7 +25499,7 @@ false,false,9952824070825181,false
 						null,
 						false,
 						null,
-						442281423841377,
+						2647822450337495,
 						[
 						[
 							-1,
@@ -26965,20 +25509,44 @@ false,false,9952824070825181,false
 							false,
 							false,
 							false,
-							369308142177025,
+							4814067124404504,
 							false
 						]
 						],
 						[
 						[
-							1,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
+							23,
+							cr.plugins_.Sprite.prototype.acts.SetAnim,
 							null,
-							1287809389115162,
+							5019262399230166,
 							false
 							,[
 							[
-								0,
+								1,
+								[
+									2,
+									"Default"
+								]
+							]
+,							[
+								3,
+								1
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.SetVar,
+							null,
+							3183957314980234,
+							false
+							,[
+							[
+								11,
+								"Frame"
+							]
+,							[
+								7,
 								[
 									0,
 									0
@@ -26995,38 +25563,161 @@ false,false,9952824070825181,false
 					null,
 					false,
 					null,
-					257022455131684,
+					4167744239327268,
 					[
 					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
+						23,
+						cr.plugins_.Sprite.prototype.cnds.OnAnimFinished,
+						null,
+						1,
+						false,
+						false,
+						false,
+						8050065975012128,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Default"
+							]
+						]
+						]
+					]
+,					[
+						23,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
 						null,
 						0,
 						false,
 						false,
 						false,
-						6291864850944446,
+						9450973842705369,
 						false
 						,[
 						[
-							11,
-							"Jugador"
-						]
-,						[
 							8,
 							0
 						]
 ,						[
-							7,
+							0,
 							[
 								0,
-								2
+								12
+							]
+						]
+						]
+					]
+,					[
+						4,
+						cr.plugins_.Touch.prototype.cnds.HasNthTouch,
+						null,
+						0,
+						false,
+						false,
+						false,
+						3162301835059929,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								1
 							]
 						]
 						]
 					]
 					],
 					[
+					[
+						23,
+						cr.plugins_.Sprite.prototype.acts.SetAnim,
+						null,
+						9072146251697214,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Loop"
+							]
+						]
+,						[
+							3,
+							1
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					7774116983390537,
+					[
+					[
+						4,
+						cr.plugins_.Touch.prototype.cnds.OnNthTouchEnd,
+						null,
+						1,
+						false,
+						false,
+						false,
+						2226065910311376,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						23,
+						cr.plugins_.Sprite.prototype.acts.SetAnim,
+						null,
+						3899677718688961,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Default_Reverse"
+							]
+						]
+,						[
+							3,
+							1
+						]
+						]
+					]
+,					[
+						23,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						649531904417904,
+						false
+						,[
+						[
+							0,
+							[
+								23,
+								"Frame"
+							]
+						]
+						]
+					]
 					]
 					,[
 					[
@@ -27034,133 +25725,24 @@ false,false,9952824070825181,false
 						null,
 						false,
 						null,
-						4705659893721908,
+						5329799050085284,
 						[
 						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+							23,
+							cr.plugins_.Sprite.prototype.cnds.IsAnimPlaying,
 							null,
 							0,
 							false,
 							false,
 							false,
-							2727980627377845,
+							9550847123547455,
 							false
 							,[
 							[
-								9,
-								68
-							]
-							]
-						]
-						],
-						[
-						[
-							14,
-							cr.behaviors.Physics.prototype.acts.ApplyTorque,
-							"Physics",
-							4402566059943997,
-							false
-							,[
-							[
-								0,
+								1,
 								[
-									0,
-									100
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						607024458252893,
-						[
-						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-							null,
-							0,
-							false,
-							false,
-							false,
-							4424934602711756,
-							false
-							,[
-							[
-								9,
-								65
-							]
-							]
-						]
-						],
-						[
-						[
-							14,
-							cr.behaviors.Physics.prototype.acts.ApplyTorque,
-							"Physics",
-							4698776118708745,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									-100
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						2073682450397335,
-						[
-						[
-							2,
-							cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
-							null,
-							0,
-							false,
-							false,
-							false,
-							8234353186640211,
-							false
-							,[
-							[
-								9,
-								32
-							]
-							]
-						]
-,						[
-							4,
-							cr.plugins_.Sprite.prototype.cnds.CompareWidth,
-							null,
-							0,
-							false,
-							false,
-							false,
-							5252706990851824,
-							false
-							,[
-							[
-								8,
-								4
-							]
-,							[
-								0,
-								[
-									0,
-									0
+									2,
+									"Default"
 								]
 							]
 							]
@@ -27168,122 +25750,70 @@ false,false,9952824070825181,false
 						],
 						[
 						[
-							15,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
+							-1,
+							cr.system_object.prototype.acts.SetVar,
 							null,
-							4392848176805945,
+							3079397739285015,
 							false
 							,[
 							[
-								0,
-								[
-									0,
-									100
-								]
-							]
-							]
-						]
-,						[
-							14,
-							cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-							"Physics",
-							7249869083897079,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									10
-								]
-							]
-,							[
-								0,
-								[
-									20,
-									14,
-									cr.plugins_.Sprite.prototype.exps.Angle,
-									false,
-									null
-								]
+								11,
+								"Frame"
 							]
 ,							[
 								7,
 								[
-									0,
-									1
-								]
-							]
-							]
-						]
-,						[
-							14,
-							cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-							"Physics",
-							2830182865211219,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									10
-								]
-							]
-,							[
-								0,
-								[
 									20,
-									14,
-									cr.plugins_.Sprite.prototype.exps.Angle,
+									23,
+									cr.plugins_.Sprite.prototype.exps.AnimationFrame,
 									false,
 									null
 								]
 							]
-,							[
-								7,
-								[
-									0,
-									2
-								]
-							]
 							]
 						]
 ,						[
-							0,
-							cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
+							23,
+							cr.plugins_.Sprite.prototype.acts.SetAnim,
 							null,
-							2221818499084923,
+							8155303938583595,
 							false
 							,[
 							[
-								10,
+								1,
+								[
+									2,
+									"Default"
+								]
+							]
+,							[
+								3,
 								1
 							]
-,							[
-								7,
-								[
-									0,
-									1
-								]
-							]
 							]
 						]
 ,						[
-							4,
-							cr.plugins_.Sprite.prototype.acts.SetWidth,
+							23,
+							cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
 							null,
-							3734019590173466,
+							4512743190551045,
 							false
 							,[
 							[
 								0,
 								[
-									21,
-									0,
-									false,
-									null
-									,1
+									5,
+									[
+										20,
+										23,
+										cr.plugins_.Sprite.prototype.exps.AnimationFrameCount,
+										false,
+										null
+									]
+									,[
+										23,
+										"Frame"
+									]
 								]
 							]
 							]
@@ -27295,7 +25825,7 @@ false,false,9952824070825181,false
 						null,
 						false,
 						null,
-						1346792110490385,
+						1157538122867241,
 						[
 						[
 							-1,
@@ -27305,26 +25835,114 @@ false,false,9952824070825181,false
 							false,
 							false,
 							false,
-							9295560285987795,
+							9880818588808775,
 							false
 						]
 						],
 						[
 						[
-							15,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
+							23,
+							cr.plugins_.Sprite.prototype.acts.SetAnim,
 							null,
-							7195385776069013,
+							2960736078337862,
 							false
 							,[
 							[
-								0,
+								1,
+								[
+									2,
+									"Default_Reverse"
+								]
+							]
+,							[
+								3,
+								1
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.SetVar,
+							null,
+							817789990509017,
+							false
+							,[
+							[
+								11,
+								"Frame"
+							]
+,							[
+								7,
 								[
 									0,
 									0
 								]
 							]
 							]
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					1922159717593474,
+					[
+					[
+						23,
+						cr.plugins_.Sprite.prototype.cnds.OnAnimFinished,
+						null,
+						1,
+						false,
+						false,
+						false,
+						6072959535032012,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Default_Reverse"
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						23,
+						cr.plugins_.Sprite.prototype.acts.SetVisible,
+						null,
+						7360591781406265,
+						false
+						,[
+						[
+							3,
+							0
+						]
+						]
+					]
+,					[
+						23,
+						cr.plugins_.Sprite.prototype.acts.SetAnim,
+						null,
+						4157939116503026,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Default"
+							]
+						]
+,						[
+							3,
+							1
 						]
 						]
 					]
@@ -27337,1397 +25955,46 @@ false,false,9952824070825181,false
 				null,
 				false,
 				null,
-				186510131961732,
+				6150904589996595,
 				[
 				[
-					5,
-					cr.plugins_.Touch.prototype.cnds.IsInTouch,
-					null,
+					0,
+					cr.behaviors.Physics.prototype.cnds.CompareAngularVelocity,
+					"Physics",
 					0,
 					false,
 					false,
 					false,
-					8971002253141987,
+					7471504134002845,
 					false
+					,[
+					[
+						8,
+						4
+					]
+,					[
+						0,
+						[
+							0,
+							60
+						]
+					]
+					]
 				]
 				],
 				[
-				]
-				,[
 				[
 					0,
-					null,
-					false,
-					null,
-					1632684450303359,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						1440277255317932,
-						false
-						,[
-						[
-							11,
-							"Multi"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								0
-							]
-						]
-						]
-					]
-					],
-					[
-					]
+					cr.behaviors.Physics.prototype.acts.SetAngularVelocity,
+					"Physics",
+					5984685841489653,
+					false
 					,[
 					[
 						0,
-						null,
-						false,
-						null,
-						827231968863908,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.Compare,
-							null,
-							0,
-							false,
-							false,
-							false,
-							8180396428320483,
-							false
-							,[
-							[
-								7,
-								[
-									5,
-									[
-										20,
-										5,
-										cr.plugins_.Touch.prototype.exps.X,
-										false,
-										null
-									]
-									,[
-										19,
-										cr.system_object.prototype.exps.viewportleft
-										,[
-[
-											2,
-											"Naves"
-										]
-										]
-									]
-								]
-							]
-,							[
-								8,
-								2
-							]
-,							[
-								7,
-								[
-									5,
-									[
-										19,
-										cr.system_object.prototype.exps.viewportright
-										,[
-[
-											2,
-											"Naves"
-										]
-										]
-									]
-									,[
-										20,
-										5,
-										cr.plugins_.Touch.prototype.exps.X,
-										false,
-										null
-									]
-								]
-							]
-							]
-						]
-,						[
-							5,
-							cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-							null,
-							0,
-							false,
-							true,
-							false,
-							6274240761578638,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									1
-								]
-							]
-							]
-						]
-						],
-						[
 						[
 							0,
-							cr.behaviors.Physics.prototype.acts.ApplyTorque,
-							"Physics",
-							2152253530850813,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									-25
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						2827459444666555,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.Else,
-							null,
-							0,
-							false,
-							false,
-							false,
-							1106653023362963,
-							false
-						]
-,						[
-							5,
-							cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-							null,
-							0,
-							false,
-							true,
-							false,
-							6179421390122842,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									1
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							0,
-							cr.behaviors.Physics.prototype.acts.ApplyTorque,
-							"Physics",
-							5509142905492879,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									25
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						8568195495393901,
-						[
-						[
-							5,
-							cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-							null,
-							0,
-							false,
-							false,
-							false,
-							716507643226378,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									1
-								]
-							]
-							]
-						]
-,						[
-							0,
-							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-							null,
-							0,
-							false,
-							false,
-							false,
-							7158207857250221,
-							false
-							,[
-							[
-								10,
-								1
-							]
-,							[
-								8,
-								4
-							]
-,							[
-								7,
-								[
-									0,
-									0
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							1,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
-							null,
-							1266426825844617,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									100
-								]
-							]
-							]
-						]
-,						[
-							0,
-							cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-							"Physics",
-							2372120195329576,
-							false
-							,[
-							[
-								0,
-								[
-									1,
-									0.8
-								]
-							]
-,							[
-								0,
-								[
-									20,
-									0,
-									cr.plugins_.Sprite.prototype.exps.Angle,
-									false,
-									null
-								]
-							]
-,							[
-								7,
-								[
-									0,
-									1
-								]
-							]
-							]
-						]
-,						[
-							0,
-							cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-							"Physics",
-							4706900813740487,
-							false
-							,[
-							[
-								0,
-								[
-									1,
-									0.8
-								]
-							]
-,							[
-								0,
-								[
-									20,
-									0,
-									cr.plugins_.Sprite.prototype.exps.Angle,
-									false,
-									null
-								]
-							]
-,							[
-								7,
-								[
-									0,
-									2
-								]
-							]
-							]
-						]
-,						[
-							0,
-							cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
-							null,
-							6870048553731022,
-							false
-							,[
-							[
-								10,
-								1
-							]
-,							[
-								7,
-								[
-									1,
-									0.1
-								]
-							]
-							]
-						]
-,						[
-							4,
-							cr.plugins_.Sprite.prototype.acts.SetWidth,
-							null,
-							5832080808641206,
-							false
-							,[
-							[
-								0,
-								[
-									7,
-									[
-										6,
-										[
-											21,
-											4,
-											false,
-											null
-											,0
-										]
-										,[
-											21,
-											0,
-											false,
-											null
-											,1
-										]
-									]
-									,[
-										21,
-										0,
-										false,
-										null
-										,3
-									]
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						6332598123561678,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.Else,
-							null,
-							0,
-							false,
-							false,
-							false,
-							8288299029140592,
-							false
-						]
-						],
-						[
-						[
-							1,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
-							null,
-							9273634247847484,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									0
-								]
-							]
-							]
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					999119399351282,
-					[
-					[
-						0,
-						cr.behaviors.Physics.prototype.cnds.CompareAngularVelocity,
-						"Physics",
-						0,
-						false,
-						false,
-						false,
-						1676616502810519,
-						false
-						,[
-						[
-							8,
-							4
-						]
-,						[
-							0,
-							[
-								0,
-								60
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						0,
-						cr.behaviors.Physics.prototype.acts.SetAngularVelocity,
-						"Physics",
-						2544376829336309,
-						false
-						,[
-						[
-							0,
-							[
-								0,
-								60
-							]
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					5137928511547035,
-					[
-					[
-						0,
-						cr.behaviors.Physics.prototype.cnds.CompareAngularVelocity,
-						"Physics",
-						0,
-						false,
-						false,
-						false,
-						613724135724753,
-						false
-						,[
-						[
-							8,
-							2
-						]
-,						[
-							0,
-							[
-								0,
-								-60
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						0,
-						cr.behaviors.Physics.prototype.acts.SetAngularVelocity,
-						"Physics",
-						9333986200264382,
-						false
-						,[
-						[
-							0,
-							[
-								0,
-								-60
-							]
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					207836516123147,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						899397446135416,
-						false
-						,[
-						[
-							11,
-							"Multi"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								1
-							]
-						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						2589211270240679,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.CompareVar,
-							null,
-							0,
-							false,
-							false,
-							false,
-							7507023045584285,
-							false
-							,[
-							[
-								11,
-								"Jugador"
-							]
-,							[
-								8,
-								0
-							]
-,							[
-								7,
-								[
-									0,
-									1
-								]
-							]
-							]
-						]
-						],
-						[
-						]
-						,[
-						[
-							0,
-							null,
-							false,
-							null,
-							8995736455686498,
-							[
-							[
-								-1,
-								cr.system_object.prototype.cnds.Compare,
-								null,
-								0,
-								false,
-								false,
-								false,
-								642749716834229,
-								false
-								,[
-								[
-									7,
-									[
-										20,
-										5,
-										cr.plugins_.Touch.prototype.exps.X,
-										false,
-										null
-									]
-								]
-,								[
-									8,
-									4
-								]
-,								[
-									7,
-									[
-										7,
-										[
-											19,
-											cr.system_object.prototype.exps.windowheight
-										]
-										,[
-											0,
-											2
-										]
-									]
-								]
-								]
-							]
-,							[
-								5,
-								cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-								null,
-								0,
-								false,
-								true,
-								false,
-								9221600317473267,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										1
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								0,
-								cr.behaviors.Physics.prototype.acts.ApplyTorque,
-								"Physics",
-								4967126630761376,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										100
-									]
-								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							2842287672829232,
-							[
-							[
-								-1,
-								cr.system_object.prototype.cnds.Compare,
-								null,
-								0,
-								false,
-								false,
-								false,
-								6543203865807953,
-								false
-								,[
-								[
-									7,
-									[
-										20,
-										5,
-										cr.plugins_.Touch.prototype.exps.X,
-										false,
-										null
-									]
-								]
-,								[
-									8,
-									2
-								]
-,								[
-									7,
-									[
-										7,
-										[
-											19,
-											cr.system_object.prototype.exps.windowheight
-										]
-										,[
-											0,
-											2
-										]
-									]
-								]
-								]
-							]
-,							[
-								5,
-								cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-								null,
-								0,
-								false,
-								true,
-								false,
-								6948137940521333,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										1
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								0,
-								cr.behaviors.Physics.prototype.acts.ApplyTorque,
-								"Physics",
-								4990575809573608,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										-100
-									]
-								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							1531342705902817,
-							[
-							[
-								5,
-								cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-								null,
-								0,
-								false,
-								false,
-								false,
-								5772824443691864,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										1
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								1,
-								cr.plugins_.Particles.prototype.acts.SetInitOpacity,
-								null,
-								9311828279520999,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										100
-									]
-								]
-								]
-							]
-,							[
-								0,
-								cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-								"Physics",
-								3698650007808964,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										10
-									]
-								]
-,								[
-									0,
-									[
-										20,
-										0,
-										cr.plugins_.Sprite.prototype.exps.Angle,
-										false,
-										null
-									]
-								]
-,								[
-									7,
-									[
-										0,
-										1
-									]
-								]
-								]
-							]
-,							[
-								0,
-								cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-								"Physics",
-								7356906498580856,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										10
-									]
-								]
-,								[
-									0,
-									[
-										20,
-										0,
-										cr.plugins_.Sprite.prototype.exps.Angle,
-										false,
-										null
-									]
-								]
-,								[
-									7,
-									[
-										0,
-										2
-									]
-								]
-								]
-							]
-,							[
-								4,
-								cr.plugins_.Sprite.prototype.acts.SetWidth,
-								null,
-								8568449457796171,
-								false
-								,[
-								[
-									0,
-									[
-										5,
-										[
-											20,
-											4,
-											cr.plugins_.Sprite.prototype.exps.Width,
-											false,
-											null
-										]
-										,[
-											1,
-											0.1
-										]
-									]
-								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							2235747585460916,
-							[
-							[
-								-1,
-								cr.system_object.prototype.cnds.Else,
-								null,
-								0,
-								false,
-								false,
-								false,
-								7933398523177078,
-								false
-							]
-							],
-							[
-							[
-								1,
-								cr.plugins_.Particles.prototype.acts.SetInitOpacity,
-								null,
-								7974167875374325,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										0
-									]
-								]
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						1732635452928807,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.CompareVar,
-							null,
-							0,
-							false,
-							false,
-							false,
-							7182751115370726,
-							false
-							,[
-							[
-								11,
-								"Jugador"
-							]
-,							[
-								8,
-								0
-							]
-,							[
-								7,
-								[
-									0,
-									2
-								]
-							]
-							]
-						]
-						],
-						[
-						]
-						,[
-						[
-							0,
-							null,
-							false,
-							null,
-							5874611828936932,
-							[
-							[
-								-1,
-								cr.system_object.prototype.cnds.Compare,
-								null,
-								0,
-								false,
-								false,
-								false,
-								7181615733658177,
-								false
-								,[
-								[
-									7,
-									[
-										20,
-										5,
-										cr.plugins_.Touch.prototype.exps.X,
-										false,
-										null
-									]
-								]
-,								[
-									8,
-									4
-								]
-,								[
-									7,
-									[
-										7,
-										[
-											19,
-											cr.system_object.prototype.exps.windowheight
-										]
-										,[
-											0,
-											2
-										]
-									]
-								]
-								]
-							]
-,							[
-								5,
-								cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-								null,
-								0,
-								false,
-								true,
-								false,
-								3362922779965469,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										1
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								14,
-								cr.behaviors.Physics.prototype.acts.ApplyTorque,
-								"Physics",
-								1102841065339251,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										100
-									]
-								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							82300346242261,
-							[
-							[
-								-1,
-								cr.system_object.prototype.cnds.Compare,
-								null,
-								0,
-								false,
-								false,
-								false,
-								9961359282910961,
-								false
-								,[
-								[
-									7,
-									[
-										20,
-										5,
-										cr.plugins_.Touch.prototype.exps.X,
-										false,
-										null
-									]
-								]
-,								[
-									8,
-									2
-								]
-,								[
-									7,
-									[
-										7,
-										[
-											19,
-											cr.system_object.prototype.exps.windowheight
-										]
-										,[
-											0,
-											2
-										]
-									]
-								]
-								]
-							]
-,							[
-								5,
-								cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-								null,
-								0,
-								false,
-								true,
-								false,
-								3742863024162317,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										1
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								14,
-								cr.behaviors.Physics.prototype.acts.ApplyTorque,
-								"Physics",
-								3375644867041069,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										-100
-									]
-								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							7221763095026725,
-							[
-							[
-								5,
-								cr.plugins_.Touch.prototype.cnds.HasNthTouch,
-								null,
-								0,
-								false,
-								false,
-								false,
-								5234258844063388,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										1
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								15,
-								cr.plugins_.Particles.prototype.acts.SetInitOpacity,
-								null,
-								6366892057903913,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										100
-									]
-								]
-								]
-							]
-,							[
-								14,
-								cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-								"Physics",
-								6009099406074148,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										10
-									]
-								]
-,								[
-									0,
-									[
-										20,
-										0,
-										cr.plugins_.Sprite.prototype.exps.Angle,
-										false,
-										null
-									]
-								]
-,								[
-									7,
-									[
-										0,
-										1
-									]
-								]
-								]
-							]
-,							[
-								14,
-								cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
-								"Physics",
-								4746840236586258,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										10
-									]
-								]
-,								[
-									0,
-									[
-										20,
-										0,
-										cr.plugins_.Sprite.prototype.exps.Angle,
-										false,
-										null
-									]
-								]
-,								[
-									7,
-									[
-										0,
-										2
-									]
-								]
-								]
-							]
-,							[
-								4,
-								cr.plugins_.Sprite.prototype.acts.SetWidth,
-								null,
-								5868020199266341,
-								false
-								,[
-								[
-									0,
-									[
-										5,
-										[
-											20,
-											4,
-											cr.plugins_.Sprite.prototype.exps.Width,
-											false,
-											null
-										]
-										,[
-											1,
-											0.1
-										]
-									]
-								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							5888029854574355,
-							[
-							[
-								-1,
-								cr.system_object.prototype.cnds.Else,
-								null,
-								0,
-								false,
-								false,
-								false,
-								1224876825647616,
-								false
-							]
-							],
-							[
-							[
-								15,
-								cr.plugins_.Particles.prototype.acts.SetInitOpacity,
-								null,
-								4962225586002471,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										0
-									]
-								]
-								]
-							]
-							]
-						]
+							60
 						]
 					]
 					]
@@ -28772,33 +26039,22 @@ false,false,9952824070825181,false
 				null,
 				false,
 				null,
-				4654419330020152,
+				1557259072272202,
 				[
 				[
-					-1,
-					cr.system_object.prototype.cnds.CompareVar,
+					0,
+					cr.plugins_.Sprite.prototype.cnds.OnCollision,
 					null,
 					0,
 					false,
 					false,
-					false,
-					455281004396709,
+					true,
+					1637900420331754,
 					false
 					,[
 					[
-						11,
-						"Multi"
-					]
-,					[
-						8,
-						0
-					]
-,					[
-						7,
-						[
-							0,
-							0
-						]
+						4,
+						43
 					]
 					]
 				]
@@ -28811,207 +26067,68 @@ false,false,9952824070825181,false
 					null,
 					false,
 					null,
-					1557259072272202,
+					6720789023134656,
 					[
 					[
 						0,
-						cr.plugins_.Sprite.prototype.cnds.OnCollision,
-						null,
+						cr.behaviors.Physics.prototype.cnds.CompareVelocity,
+						"Physics",
 						0,
 						false,
 						false,
-						true,
-						1637900420331754,
+						false,
+						1514513662312945,
 						false
 						,[
 						[
-							4,
-							46
+							3,
+							2
+						]
+,						[
+							8,
+							5
+						]
+,						[
+							0,
+							[
+								0,
+								80
+							]
 						]
 						]
 					]
 					],
 					[
-					]
-					,[
 					[
 						0,
+						cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
 						null,
-						false,
-						null,
-						6720789023134656,
-						[
-						[
-							0,
-							cr.behaviors.Physics.prototype.cnds.CompareVelocity,
-							"Physics",
-							0,
-							false,
-							false,
-							false,
-							1514513662312945,
-							false
-							,[
-							[
-								3,
-								2
-							]
-,							[
-								8,
-								5
-							]
-,							[
-								0,
-								[
-									0,
-									80
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							0,
-							cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
-							null,
-							4400624606558345,
-							false
-							,[
-							[
-								10,
-								0
-							]
-,							[
-								7,
-								[
-									5,
-									[
-										19,
-										cr.system_object.prototype.exps.sqrt
-										,[
-[
-											4,
-											[
-												9,
-												[
-													22,
-													0,
-													"Physics",
-													cr.behaviors.Physics.prototype.exps.VelocityX,
-													false,
-													null
-												]
-												,[
-													0,
-													2
-												]
-											]
-											,[
-												9,
-												[
-													22,
-													0,
-													"Physics",
-													cr.behaviors.Physics.prototype.exps.VelocityY,
-													false,
-													null
-												]
-												,[
-													0,
-													2
-												]
-											]
-										]
-										]
-									]
-									,[
-										0,
-										80
-									]
-								]
-							]
-							]
-						]
-,						[
-							3,
-							cr.plugins_.Sprite.prototype.acts.SetWidth,
-							null,
-							6378696249164194,
-							false
-							,[
-							[
-								0,
-								[
-									7,
-									[
-										6,
-										[
-											21,
-											3,
-											false,
-											null
-											,0
-										]
-										,[
-											21,
-											0,
-											false,
-											null
-											,0
-										]
-									]
-									,[
-										21,
-										0,
-										false,
-										null
-										,4
-									]
-								]
-							]
-							]
-						]
-						]
+						4400624606558345,
+						false
 						,[
 						[
-							0,
-							null,
-							false,
-							null,
-							9600199171731645,
+							10,
+							0
+						]
+,						[
+							7,
 							[
-							[
-								0,
-								cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-								null,
-								0,
-								false,
-								false,
-								false,
-								5733439188696288,
-								false
-								,[
+								5,
 								[
-									10,
-									0
-								]
-,								[
-									8,
-									2
-								]
-,								[
-									7,
-									[
-										7,
+									19,
+									cr.system_object.prototype.exps.sqrt
+									,[
+[
+										4,
 										[
-											6,
+											9,
 											[
-												21,
+												22,
 												0,
+												"Physics",
+												cr.behaviors.Physics.prototype.exps.VelocityX,
 												false,
 												null
-												,4
 											]
 											,[
 												0,
@@ -29019,357 +26136,52 @@ false,false,9952824070825181,false
 											]
 										]
 										,[
-											0,
-											3
+											9,
+											[
+												22,
+												0,
+												"Physics",
+												cr.behaviors.Physics.prototype.exps.VelocityY,
+												false,
+												null
+											]
+											,[
+												0,
+												2
+											]
 										]
 									]
-								]
-								]
-							]
-,							[
-								0,
-								cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-								null,
-								0,
-								false,
-								false,
-								false,
-								9939176932219131,
-								false
-								,[
-								[
-									10,
-									0
-								]
-,								[
-									8,
-									4
-								]
-,								[
-									7,
-									[
-										7,
-										[
-											21,
-											0,
-											false,
-											null
-											,4
-										]
-										,[
-											0,
-											3
-										]
 									]
 								]
-								]
-							]
-							],
-							[
-							[
-								3,
-								cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
-								null,
-								7746346802096372,
-								false
 								,[
-								[
 									0,
-									[
-										0,
-										1
-									]
+									80
 								]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							null,
-							false,
-							null,
-							5283751512500677,
-							[
-							[
-								0,
-								cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-								null,
-								0,
-								false,
-								false,
-								false,
-								4376975287828286,
-								false
-								,[
-								[
-									10,
-									0
-								]
-,								[
-									8,
-									2
-								]
-,								[
-									7,
-									[
-										7,
-										[
-											21,
-											0,
-											false,
-											null
-											,4
-										]
-										,[
-											0,
-											3
-										]
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								3,
-								cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
-								null,
-								7902161477172325,
-								false
-								,[
-								[
-									0,
-									[
-										0,
-										2
-									]
-								]
-								]
-							]
 							]
 						]
 						]
-					]
-					]
-				]
-				]
-			]
-,			[
-				0,
-				null,
-				false,
-				null,
-				4892304929474731,
-				[
-				[
-					-1,
-					cr.system_object.prototype.cnds.CompareVar,
-					null,
-					0,
-					false,
-					false,
-					false,
-					7807315816841747,
-					false
-					,[
-					[
-						11,
-						"Multi"
 					]
 ,					[
-						8,
-						0
-					]
-,					[
-						7,
-						[
-							0,
-							1
-						]
-					]
-					]
-				]
-				],
-				[
-				]
-				,[
-				[
-					0,
-					null,
-					false,
-					null,
-					8736464265408627,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
+						2,
+						cr.plugins_.Sprite.prototype.acts.SetWidth,
 						null,
-						0,
-						false,
-						false,
-						false,
-						202769329498519,
+						6378696249164194,
 						false
 						,[
 						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								1
-							]
-						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						9187725493270718,
-						[
-						[
 							0,
-							cr.plugins_.Sprite.prototype.cnds.OnCollision,
-							null,
-							0,
-							false,
-							false,
-							true,
-							2522460702642853,
-							false
-							,[
 							[
-								4,
-								46
-							]
-							]
-						]
-						],
-						[
-						]
-						,[
-						[
-							0,
-							null,
-							false,
-							null,
-							6469773949202372,
-							[
-							[
-								0,
-								cr.behaviors.Physics.prototype.cnds.CompareVelocity,
-								"Physics",
-								0,
-								false,
-								false,
-								false,
-								7370940697099697,
-								false
-								,[
+								7,
 								[
-									3,
-									2
-								]
-,								[
-									8,
-									5
-								]
-,								[
-									0,
+									6,
 									[
-										0,
-										60
+										21,
+										2,
+										false,
+										null
+										,0
 									]
-								]
-								]
-							]
-							],
-							[
-							[
-								0,
-								cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
-								null,
-								3087327295678582,
-								false
-								,[
-								[
-									10,
-									0
-								]
-,								[
-									7,
-									[
-										5,
-										[
-											19,
-											cr.system_object.prototype.exps.sqrt
-											,[
-[
-												4,
-												[
-													9,
-													[
-														22,
-														0,
-														"Physics",
-														cr.behaviors.Physics.prototype.exps.VelocityX,
-														false,
-														null
-													]
-													,[
-														0,
-														2
-													]
-												]
-												,[
-													9,
-													[
-														22,
-														0,
-														"Physics",
-														cr.behaviors.Physics.prototype.exps.VelocityY,
-														false,
-														null
-													]
-													,[
-														0,
-														2
-													]
-												]
-											]
-											]
-										]
-										,[
-											0,
-											60
-										]
-									]
-								]
-								]
-							]
-,							[
-								3,
-								cr.plugins_.Sprite.prototype.acts.SetWidth,
-								null,
-								4103237213407867,
-								false
-								,[
-								[
-									0,
-									[
+									,[
 										21,
 										0,
 										false,
@@ -29377,197 +26189,188 @@ false,false,9952824070825181,false
 										,0
 									]
 								]
+								,[
+									21,
+									0,
+									false,
+									null
+									,4
 								]
 							]
-							]
 						]
 						]
 					]
 					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					5214621386462495,
+					,[
 					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
 						0,
+						null,
 						false,
-						false,
-						false,
-						7242467724511721,
-						false
-						,[
+						null,
+						9600199171731645,
 						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
+						[
+							0,
+							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+							null,
+							0,
+							false,
+							false,
+							false,
+							5733439188696288,
+							false
+							,[
 							[
-								0,
+								10,
+								0
+							]
+,							[
+								8,
 								2
 							]
+,							[
+								7,
+								[
+									7,
+									[
+										6,
+										[
+											21,
+											0,
+											false,
+											null
+											,4
+										]
+										,[
+											0,
+											2
+										]
+									]
+									,[
+										0,
+										3
+									]
+								]
+							]
+							]
 						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						2337691582396884,
-						[
-						[
-							14,
-							cr.plugins_.Sprite.prototype.cnds.OnCollision,
+,						[
+							0,
+							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
 							null,
 							0,
 							false,
 							false,
-							true,
-							2164385202422927,
+							false,
+							9939176932219131,
 							false
 							,[
 							[
-								4,
-								46
+								10,
+								0
+							]
+,							[
+								8,
+								4
+							]
+,							[
+								7,
+								[
+									7,
+									[
+										21,
+										0,
+										false,
+										null
+										,4
+									]
+									,[
+										0,
+										3
+									]
+								]
 							]
 							]
 						]
 						],
 						[
+						[
+							2,
+							cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+							null,
+							7746346802096372,
+							false
+							,[
+							[
+								0,
+								[
+									0,
+									1
+								]
+							]
+							]
 						]
-						,[
+						]
+					]
+,					[
+						0,
+						null,
+						false,
+						null,
+						5283751512500677,
+						[
 						[
 							0,
+							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
 							null,
+							0,
 							false,
-							null,
-							5644720452121013,
+							false,
+							false,
+							4376975287828286,
+							false
+							,[
 							[
-							[
-								14,
-								cr.behaviors.Physics.prototype.cnds.CompareVelocity,
-								"Physics",
-								0,
-								false,
-								false,
-								false,
-								4258727096232007,
-								false
-								,[
-								[
-									3,
-									2
-								]
-,								[
-									8,
-									5
-								]
-,								[
-									0,
-									[
-										0,
-										60
-									]
-								]
-								]
-							]
-							],
-							[
-							[
-								14,
-								cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
-								null,
-								9353489755037279,
-								false
-								,[
-								[
-									10,
-									0
-								]
-,								[
-									7,
-									[
-										5,
-										[
-											19,
-											cr.system_object.prototype.exps.sqrt
-											,[
-[
-												4,
-												[
-													9,
-													[
-														22,
-														14,
-														"Physics",
-														cr.behaviors.Physics.prototype.exps.VelocityX,
-														false,
-														null
-													]
-													,[
-														0,
-														2
-													]
-												]
-												,[
-													9,
-													[
-														22,
-														14,
-														"Physics",
-														cr.behaviors.Physics.prototype.exps.VelocityY,
-														false,
-														null
-													]
-													,[
-														0,
-														2
-													]
-												]
-											]
-											]
-										]
-										,[
-											0,
-											60
-										]
-									]
-								]
-								]
+								10,
+								0
 							]
 ,							[
-								3,
-								cr.plugins_.Sprite.prototype.acts.SetWidth,
-								null,
-								9477538328548369,
-								false
-								,[
+								8,
+								2
+							]
+,							[
+								7,
 								[
-									0,
+									7,
 									[
 										21,
-										14,
+										0,
 										false,
 										null
-										,0
+										,4
+									]
+									,[
+										0,
+										3
 									]
 								]
+							]
+							]
+						]
+						],
+						[
+						[
+							2,
+							cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+							null,
+							7902161477172325,
+							false
+							,[
+							[
+								0,
+								[
+									0,
+									2
 								]
 							]
 							]
@@ -29616,7 +26419,7 @@ false,false,9952824070825181,false
 				],
 				[
 				[
-					22,
+					17,
 					cr.plugins_.Function.prototype.acts.CallFunction,
 					null,
 					1253886387554793,
@@ -29633,89 +26436,6 @@ false,false,9952824070825181,false
 						13,
 					]
 					]
-				]
-				]
-			]
-,			[
-				0,
-				null,
-				false,
-				null,
-				3232243964183482,
-				[
-				[
-					14,
-					cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-					null,
-					0,
-					false,
-					false,
-					false,
-					6264453154864789,
-					false
-					,[
-					[
-						10,
-						0
-					]
-,					[
-						8,
-						3
-					]
-,					[
-						7,
-						[
-							0,
-							0
-						]
-					]
-					]
-				]
-				],
-				[
-				[
-					11,
-					cr.plugins_.Socket.prototype.acts.Emit,
-					null,
-					8165852902360666,
-					false
-					,[
-					[
-						7,
-						[
-							2,
-							"Destroy"
-						]
-					]
-,					[
-						7,
-						[
-							2,
-							""
-						]
-					]
-					]
-				]
-,				[
-					14,
-					cr.plugins_.Sprite.prototype.acts.Destroy,
-					null,
-					9109393771471055,
-					false
-				]
-,				[
-					28,
-					cr.plugins_.Sprite.prototype.acts.Destroy,
-					null,
-					8261053999424796,
-					false
-				]
-,				[
-					24,
-					cr.plugins_.Particles.prototype.acts.Destroy,
-					null,
-					6919749615876231,
-					false
 				]
 				]
 			]
@@ -29760,7 +26480,7 @@ false,false,9952824070825181,false
 				7587542171841609,
 				[
 				[
-					3,
+					2,
 					cr.plugins_.Sprite.prototype.cnds.CompareWidth,
 					null,
 					0,
@@ -29786,7 +26506,7 @@ false,false,9952824070825181,false
 				],
 				[
 				[
-					3,
+					2,
 					cr.plugins_.Sprite.prototype.acts.SetWidth,
 					null,
 					3695633317074305,
@@ -29972,7 +26692,7 @@ false,false,4806698590460405,false
 						]
 					]
 ,					[
-						27,
+						22,
 						cr.plugins_.Sprite.prototype.acts.SetPos,
 						null,
 						7605720088058965,
@@ -29984,7 +26704,7 @@ false,false,4806698590460405,false
 								4,
 								[
 									20,
-									26,
+									21,
 									cr.plugins_.Sprite.prototype.exps.X,
 									false,
 									null
@@ -29995,7 +26715,7 @@ false,false,4806698590460405,false
 										6,
 										[
 											20,
-											26,
+											21,
 											cr.plugins_.Sprite.prototype.exps.Height,
 											false,
 											null
@@ -30018,7 +26738,7 @@ false,false,4806698590460405,false
 								4,
 								[
 									20,
-									26,
+									21,
 									cr.plugins_.Sprite.prototype.exps.Y,
 									false,
 									null
@@ -30029,7 +26749,7 @@ false,false,4806698590460405,false
 										6,
 										[
 											20,
-											26,
+											21,
 											cr.plugins_.Sprite.prototype.exps.Width,
 											false,
 											null
@@ -30093,7 +26813,7 @@ false,false,4806698590460405,false
 				5705242047448976,
 				[
 				[
-					20,
+					15,
 					cr.plugins_.Sprite.prototype.cnds.IsOverlapping,
 					null,
 					0,
@@ -30184,7 +26904,7 @@ false,false,4806698590460405,false
 					]
 				]
 ,				[
-					7,
+					6,
 					cr.plugins_.Text.prototype.acts.SetText,
 					null,
 					8359317392716192,
@@ -30203,14 +26923,14 @@ false,false,4806698590460405,false
 					]
 				]
 ,				[
-					20,
+					15,
 					cr.plugins_.Sprite.prototype.acts.Destroy,
 					null,
 					8258938211964617,
 					false
 				]
 ,				[
-					30,
+					25,
 					cr.plugins_.Sprite.prototype.acts.SetVisible,
 					null,
 					292534106562837,
@@ -30223,7 +26943,7 @@ false,false,4806698590460405,false
 					]
 				]
 ,				[
-					30,
+					25,
 					cr.plugins_.Sprite.prototype.acts.StartAnim,
 					null,
 					312665656142467,
@@ -30245,7 +26965,7 @@ false,false,4806698590460405,false
 				6436239080176009,
 				[
 				[
-					30,
+					25,
 					cr.plugins_.Sprite.prototype.cnds.CompareFrame,
 					null,
 					0,
@@ -30271,7 +26991,7 @@ false,false,4806698590460405,false
 				],
 				[
 				[
-					30,
+					25,
 					cr.plugins_.Sprite.prototype.acts.SetVisible,
 					null,
 					1406508965213679,
@@ -30293,7 +27013,7 @@ false,false,4806698590460405,false
 				4811956082994492,
 				[
 				[
-					21,
+					16,
 					cr.plugins_.Sprite.prototype.cnds.IsOverlapping,
 					null,
 					0,
@@ -30305,7 +27025,7 @@ false,false,4806698590460405,false
 					,[
 					[
 						4,
-						6
+						5
 					]
 					]
 				]
@@ -30435,12 +27155,12 @@ false,false,4806698590460405,false
 						,[
 						[
 							4,
-							39
+							34
 						]
 						]
 					]
 ,					[
-						39,
+						34,
 						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
 						null,
 						0,
@@ -30470,7 +27190,7 @@ false,false,4806698590460405,false
 					],
 					[
 					[
-						39,
+						34,
 						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
 						null,
 						3215287190457354,
@@ -30541,7 +27261,7 @@ false,false,4806698590460405,false
 							]
 						]
 ,						[
-							22,
+							17,
 							cr.plugins_.Function.prototype.acts.CallFunction,
 							null,
 							8343752515842053,
@@ -30573,7 +27293,7 @@ false,false,4806698590460405,false
 				1609594754431371,
 				[
 				[
-					22,
+					17,
 					cr.plugins_.Function.prototype.cnds.OnFunction,
 					null,
 					2,
@@ -30602,54 +27322,25 @@ false,false,4806698590460405,false
 					false
 				]
 ,				[
-					25,
+					20,
 					cr.plugins_.Sprite.prototype.acts.Destroy,
 					null,
 					8884157788035447,
 					false
 				]
 ,				[
-					28,
+					23,
 					cr.plugins_.Sprite.prototype.acts.Destroy,
 					null,
 					5327242424040615,
 					false
 				]
 ,				[
-					24,
+					19,
 					cr.plugins_.Particles.prototype.acts.Destroy,
 					null,
 					1324162133289632,
 					false
-				]
-,				[
-					7,
-					cr.plugins_.Text.prototype.acts.SetText,
-					null,
-					3626811016501799,
-					false
-					,[
-					[
-						7,
-						[
-							2,
-							"YOU LOSE"
-						]
-					]
-					]
-				]
-,				[
-					7,
-					cr.plugins_.Text.prototype.acts.SetVisible,
-					null,
-					6751826259985649,
-					false
-					,[
-					[
-						3,
-						1
-					]
-					]
 				]
 				]
 				,[
@@ -30658,76 +27349,17 @@ false,false,4806698590460405,false
 					null,
 					false,
 					null,
-					8184141724275724,
+					6997645235361842,
 					[
 					[
-						-1,
-						cr.system_object.prototype.cnds.Compare,
+						41,
+						cr.plugins_.Dictionary.prototype.cnds.HasKey,
 						null,
 						0,
 						false,
 						false,
 						false,
-						9486678690824849,
-						false
-						,[
-						[
-							7,
-							[
-								20,
-								17,
-								cr.plugins_.WebStorage.prototype.exps.LocalValue,
-								true,
-								null
-								,[
-[
-									10,
-									[
-										10,
-										[
-											2,
-											"Nivel"
-										]
-										,[
-											23,
-											"NivelActual"
-										]
-									]
-									,[
-										2,
-										"Estrellas"
-									]
-								]
-								]
-							]
-						]
-,						[
-							8,
-							2
-						]
-,						[
-							7,
-							[
-								5,
-								[
-									23,
-									"AstroRecogidos"
-								]
-								,[
-									0,
-									1
-								]
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						17,
-						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
-						null,
-						364146236906476,
+						6265737337179174,
 						false
 						,[
 						[
@@ -30751,48 +27383,251 @@ false,false,4806698590460405,false
 								]
 							]
 						]
-,						[
+						]
+					]
+					],
+					[
+					[
+						6,
+						cr.plugins_.Text.prototype.acts.SetText,
+						null,
+						3626811016501799,
+						false
+						,[
+						[
 							7,
 							[
-								5,
-								[
-									23,
-									"AstroRecogidos"
-								]
-								,[
-									0,
-									1
-								]
+								2,
+								"YOU LOSE"
 							]
 						]
 						]
 					]
 ,					[
-						-1,
-						cr.system_object.prototype.acts.Wait,
+						6,
+						cr.plugins_.Text.prototype.acts.SetVisible,
 						null,
-						3437839547932507,
+						6751826259985649,
 						false
 						,[
 						[
+							3,
+							1
+						]
+						]
+					]
+					]
+					,[
+					[
+						0,
+						null,
+						false,
+						null,
+						8184141724275724,
+						[
+						[
+							41,
+							cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+							null,
 							0,
+							false,
+							false,
+							false,
+							5372069905168854,
+							false
+							,[
 							[
-								0,
+								1,
+								[
+									10,
+									[
+										10,
+										[
+											2,
+											"Nivel"
+										]
+										,[
+											23,
+											"NivelActual"
+										]
+									]
+									,[
+										2,
+										"Estrellas"
+									]
+								]
+							]
+,							[
+								8,
 								2
 							]
+,							[
+								7,
+								[
+									5,
+									[
+										23,
+										"AstroRecogidos"
+									]
+									,[
+										0,
+										1
+									]
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							41,
+							cr.plugins_.Dictionary.prototype.acts.AddKey,
+							null,
+							4638772795844354,
+							false
+							,[
+							[
+								1,
+								[
+									10,
+									[
+										10,
+										[
+											2,
+											"Nivel"
+										]
+										,[
+											23,
+											"NivelActual"
+										]
+									]
+									,[
+										2,
+										"Estrellas"
+									]
+								]
+							]
+,							[
+								7,
+								[
+									5,
+									[
+										23,
+										"AstroRecogidos"
+									]
+									,[
+										0,
+										1
+									]
+								]
+							]
+							]
+						]
+,						[
+							12,
+							cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+							null,
+							887526230840372,
+							false
+							,[
+							[
+								1,
+								[
+									2,
+									"Data"
+								]
+							]
+,							[
+								7,
+								[
+									20,
+									41,
+									cr.plugins_.Dictionary.prototype.exps.AsJSON,
+									true,
+									null
+								]
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.Wait,
+							null,
+							3437839547932507,
+							false
+							,[
+							[
+								0,
+								[
+									0,
+									2
+								]
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.GoToLayout,
+							null,
+							2642271017443494,
+							false
+							,[
+							[
+								6,
+								"Menu Inicial"
+							]
+							]
 						]
 						]
 					]
 ,					[
-						-1,
-						cr.system_object.prototype.acts.GoToLayout,
+						0,
 						null,
-						2642271017443494,
-						false
-						,[
+						false,
+						null,
+						888423667764981,
 						[
-							6,
-							"Menu Inicial"
+						[
+							-1,
+							cr.system_object.prototype.cnds.Else,
+							null,
+							0,
+							false,
+							false,
+							false,
+							7660016097288803,
+							false
+						]
+						],
+						[
+						[
+							-1,
+							cr.system_object.prototype.acts.Wait,
+							null,
+							3751825805842022,
+							false
+							,[
+							[
+								0,
+								[
+									0,
+									2
+								]
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.GoToLayout,
+							null,
+							1132960766636714,
+							false
+							,[
+							[
+								6,
+								"Menu Inicial"
+							]
+							]
 						]
 						]
 					]
@@ -30803,7 +27638,7 @@ false,false,4806698590460405,false
 					null,
 					false,
 					null,
-					888423667764981,
+					5316664226879695,
 					[
 					[
 						-1,
@@ -30813,37 +27648,24 @@ false,false,4806698590460405,false
 						false,
 						false,
 						false,
-						7660016097288803,
+						5833549106002613,
 						false
 					]
 					],
 					[
 					[
-						-1,
-						cr.system_object.prototype.acts.Wait,
+						6,
+						cr.plugins_.Text.prototype.acts.SetText,
 						null,
-						3751825805842022,
+						6003628642733685,
 						false
 						,[
 						[
-							0,
+							7,
 							[
-								0,
-								2
+								2,
+								"Save Failure"
 							]
-						]
-						]
-					]
-,					[
-						-1,
-						cr.system_object.prototype.acts.GoToLayout,
-						null,
-						1132960766636714,
-						false
-						,[
-						[
-							6,
-							"Menu Inicial"
 						]
 						]
 					]
@@ -30859,7 +27681,7 @@ false,false,4806698590460405,false
 				2719461528513223,
 				[
 				[
-					22,
+					17,
 					cr.plugins_.Function.prototype.cnds.OnFunction,
 					null,
 					2,
@@ -30900,35 +27722,6 @@ false,false,4806698590460405,false
 					]
 					]
 				]
-,				[
-					7,
-					cr.plugins_.Text.prototype.acts.SetText,
-					null,
-					8046412878309827,
-					false
-					,[
-					[
-						7,
-						[
-							2,
-							"YOU WIN"
-						]
-					]
-					]
-				]
-,				[
-					7,
-					cr.plugins_.Text.prototype.acts.SetVisible,
-					null,
-					8030987348645542,
-					false
-					,[
-					[
-						3,
-						1
-					]
-					]
-				]
 				]
 				,[
 				[
@@ -30936,76 +27729,17 @@ false,false,4806698590460405,false
 					null,
 					false,
 					null,
-					5477366918015995,
+					4725987352597471,
 					[
 					[
-						-1,
-						cr.system_object.prototype.cnds.Compare,
+						41,
+						cr.plugins_.Dictionary.prototype.cnds.HasKey,
 						null,
 						0,
 						false,
 						false,
 						false,
-						2192232548298184,
-						false
-						,[
-						[
-							7,
-							[
-								20,
-								17,
-								cr.plugins_.WebStorage.prototype.exps.LocalValue,
-								true,
-								null
-								,[
-[
-									10,
-									[
-										10,
-										[
-											2,
-											"Nivel"
-										]
-										,[
-											23,
-											"NivelActual"
-										]
-									]
-									,[
-										2,
-										"Estrellas"
-									]
-								]
-								]
-							]
-						]
-,						[
-							8,
-							2
-						]
-,						[
-							7,
-							[
-								5,
-								[
-									23,
-									"AstroRecogidos"
-								]
-								,[
-									0,
-									1
-								]
-							]
-						]
-						]
-					]
-					],
-					[
-					[
-						17,
-						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
-						null,
-						3677042051378838,
+						4527278128678354,
 						false
 						,[
 						[
@@ -31029,215 +27763,39 @@ false,false,4806698590460405,false
 								]
 							]
 						]
-,						[
-							7,
-							[
-								5,
-								[
-									23,
-									"AstroRecogidos"
-								]
-								,[
-									0,
-									1
-								]
-							]
 						]
-						]
-					]
-,					[
-						-1,
-						cr.system_object.prototype.acts.Wait,
-						null,
-						8302305673348129,
-						false
-						,[
-						[
-							0,
-							[
-								0,
-								2
-							]
-						]
-						]
-					]
-,					[
-						-1,
-						cr.system_object.prototype.acts.GoToLayout,
-						null,
-						8862870999843178,
-						false
-						,[
-						[
-							6,
-							"Menu Inicial"
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					1842812586134352,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.Else,
-						null,
-						0,
-						false,
-						false,
-						false,
-						8516826318437812,
-						false
 					]
 					],
 					[
 					[
-						-1,
-						cr.system_object.prototype.acts.Wait,
+						6,
+						cr.plugins_.Text.prototype.acts.SetText,
 						null,
-						1308806834658861,
+						8046412878309827,
 						false
 						,[
 						[
-							0,
+							7,
 							[
-								0,
-								2
+								2,
+								"YOU WIN"
 							]
 						]
 						]
 					]
 ,					[
-						-1,
-						cr.system_object.prototype.acts.GoToLayout,
+						6,
+						cr.plugins_.Text.prototype.acts.SetVisible,
 						null,
-						1873216169573001,
+						8030987348645542,
 						false
 						,[
 						[
-							6,
-							"Menu Inicial"
-						]
-						]
-					]
-					]
-				]
-				]
-			]
-			]
-		]
-,		[
-			0,
-			[true, "Cleinte-Servidor"],
-			false,
-			null,
-			4186533106777139,
-			[
-			[
-				-1,
-				cr.system_object.prototype.cnds.IsGroupActive,
-				null,
-				0,
-				false,
-				false,
-				false,
-				4186533106777139,
-				false
-				,[
-				[
-					1,
-					[
-						2,
-						"Cleinte-Servidor"
-					]
-				]
-				]
-			]
-			],
-			[
-			]
-			,[
-			[
-				0,
-				null,
-				false,
-				null,
-				9710824838437014,
-				[
-				[
-					-1,
-					cr.system_object.prototype.cnds.CompareVar,
-					null,
-					0,
-					false,
-					false,
-					false,
-					3835840324236084,
-					false
-					,[
-					[
-						11,
-						"Multi"
-					]
-,					[
-						8,
-						0
-					]
-,					[
-						7,
-						[
-							0,
+							3,
 							1
 						]
-					]
-					]
-				]
-				],
-				[
-				]
-				,[
-				[
-					0,
-					null,
-					false,
-					null,
-					4566098032353926,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						3204426957325973,
-						false
-						,[
-						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								1
-							]
-						]
 						]
 					]
-					],
-					[
 					]
 					,[
 					[
@@ -31245,409 +27803,158 @@ false,false,4806698590460405,false
 						null,
 						false,
 						null,
-						3331875182326662,
+						7547813537576669,
 						[
 						[
-							0,
-							cr.behaviors.Physics.prototype.cnds.CompareVelocity,
-							"Physics",
-							0,
-							false,
-							false,
-							false,
-							2914180219176426,
-							false
-							,[
-							[
-								3,
-								2
-							]
-,							[
-								8,
-								4
-							]
-,							[
-								0,
-								[
-									0,
-									0
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							11,
-							cr.plugins_.Socket.prototype.acts.Emit,
+							41,
+							cr.plugins_.Dictionary.prototype.cnds.CompareValue,
 							null,
-							4135537047004242,
+							0,
+							false,
+							false,
+							false,
+							281690675727477,
 							false
 							,[
 							[
-								7,
-								[
-									2,
-									"Movement"
-								]
-							]
-,							[
-								7,
+								1,
 								[
 									10,
 									[
 										10,
 										[
-											10,
-											[
-												10,
-												[
-													20,
-													0,
-													cr.plugins_.Sprite.prototype.exps.X,
-													false,
-													null
-												]
-												,[
-													2,
-													","
-												]
-											]
-											,[
-												20,
-												0,
-												cr.plugins_.Sprite.prototype.exps.Y,
-												false,
-												null
-											]
+											2,
+											"Nivel"
 										]
 										,[
-											2,
-											","
+											23,
+											"NivelActual"
 										]
 									]
 									,[
-										20,
+										2,
+										"Estrellas"
+									]
+								]
+							]
+,							[
+								8,
+								2
+							]
+,							[
+								7,
+								[
+									5,
+									[
+										23,
+										"AstroRecogidos"
+									]
+									,[
 										0,
-										cr.plugins_.Sprite.prototype.exps.Angle,
-										false,
-										null
+										1
 									]
 								]
 							]
 							]
 						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						6990814581440791,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.CompareVar,
-							null,
-							0,
-							false,
-							false,
-							false,
-							8577607873357988,
-							false
-							,[
-							[
-								11,
-								"PosicionX"
-							]
-,							[
-								8,
-								1
-							]
-,							[
-								7,
-								[
-									20,
-									14,
-									cr.plugins_.Sprite.prototype.exps.X,
-									false,
-									null
-								]
-							]
-							]
-						]
 						],
 						[
 						[
-							15,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
+							41,
+							cr.plugins_.Dictionary.prototype.acts.AddKey,
 							null,
-							4800436967980469,
+							3720092271624693,
 							false
 							,[
 							[
-								0,
-								[
-									0,
-									100
-								]
-							]
-							]
-						]
-,						[
-							-1,
-							cr.system_object.prototype.acts.SetVar,
-							null,
-							6094380337860429,
-							false
-							,[
-							[
-								11,
-								"PosicionX"
-							]
-,							[
-								7,
-								[
-									20,
-									0,
-									cr.plugins_.Sprite.prototype.exps.X,
-									false,
-									null
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						7550059003395094,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.Else,
-							null,
-							0,
-							false,
-							false,
-							false,
-							7974674683006491,
-							false
-						]
-						],
-						[
-						[
-							15,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
-							null,
-							1976529588536892,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									0
-								]
-							]
-							]
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					3331215014564215,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						3013725437696788,
-						false
-						,[
-						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								2
-							]
-						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						6025115162205933,
-						[
-						[
-							14,
-							cr.behaviors.Physics.prototype.cnds.CompareVelocity,
-							"Physics",
-							0,
-							false,
-							false,
-							false,
-							2707144686949434,
-							false
-							,[
-							[
-								3,
-								2
-							]
-,							[
-								8,
-								4
-							]
-,							[
-								0,
-								[
-									0,
-									0
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							11,
-							cr.plugins_.Socket.prototype.acts.Emit,
-							null,
-							7892847776287953,
-							false
-							,[
-							[
-								7,
-								[
-									2,
-									"Movement"
-								]
-							]
-,							[
-								7,
+								1,
 								[
 									10,
 									[
 										10,
 										[
-											10,
-											[
-												10,
-												[
-													20,
-													14,
-													cr.plugins_.Sprite.prototype.exps.X,
-													false,
-													null
-												]
-												,[
-													2,
-													","
-												]
-											]
-											,[
-												20,
-												14,
-												cr.plugins_.Sprite.prototype.exps.Y,
-												false,
-												null
-											]
-										]
-										,[
 											2,
-											","
+											"Nivel"
+										]
+										,[
+											23,
+											"NivelActual"
 										]
 									]
 									,[
-										20,
-										14,
-										cr.plugins_.Sprite.prototype.exps.Angle,
-										false,
-										null
+										2,
+										"Estrellas"
+									]
+								]
+							]
+,							[
+								7,
+								[
+									5,
+									[
+										23,
+										"AstroRecogidos"
+									]
+									,[
+										0,
+										1
 									]
 								]
 							]
 							]
 						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						1773214634329407,
-						[
-						[
-							0,
-							cr.behaviors.Physics.prototype.cnds.CompareVelocity,
-							"Physics",
-							0,
-							false,
-							false,
-							false,
-							8500072941260513,
-							false
-							,[
-							[
-								3,
-								2
-							]
-,							[
-								8,
-								4
-							]
-,							[
-								0,
-								[
-									0,
-									0
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							1,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
+,						[
+							12,
+							cr.plugins_.WebStorage.prototype.acts.StoreLocal,
 							null,
-							7476385421202938,
+							9144476331737252,
+							false
+							,[
+							[
+								1,
+								[
+									2,
+									"Data"
+								]
+							]
+,							[
+								7,
+								[
+									20,
+									41,
+									cr.plugins_.Dictionary.prototype.exps.AsJSON,
+									true,
+									null
+								]
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.Wait,
+							null,
+							101463243168618,
 							false
 							,[
 							[
 								0,
 								[
 									0,
-									100
+									2
 								]
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.GoToLayout,
+							null,
+							5977496063619681,
+							false
+							,[
+							[
+								6,
+								"Menu Inicial"
 							]
 							]
 						]
@@ -31658,7 +27965,7 @@ false,false,4806698590460405,false
 						null,
 						false,
 						null,
-						8337588634846545,
+						4409372003221423,
 						[
 						[
 							-1,
@@ -31668,641 +27975,39 @@ false,false,4806698590460405,false
 							false,
 							false,
 							false,
-							1497177992010277,
+							438209567319113,
 							false
 						]
 						],
 						[
 						[
-							1,
-							cr.plugins_.Particles.prototype.acts.SetInitOpacity,
+							-1,
+							cr.system_object.prototype.acts.Wait,
 							null,
-							8302315010815984,
+							7616358520031343,
 							false
 							,[
 							[
 								0,
 								[
 									0,
-									0
+									2
 								]
 							]
 							]
 						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					8484710221064732,
-					[
-					[
-						11,
-						cr.plugins_.Socket.prototype.cnds.OnData,
-						null,
-						1,
-						false,
-						false,
-						false,
-						7476266784696852,
-						false
-					]
-					],
-					[
-					[
-						11,
-						cr.plugins_.Socket.prototype.acts.SplitDataReceived,
-						null,
-						5563967129138888,
-						false
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					6174209037118324,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						5572983876028331,
-						false
-						,[
-						[
-							11,
-							"Jugador"
-						]
 ,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								1
-							]
-						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						9603775025277603,
-						[
-						[
 							-1,
-							cr.system_object.prototype.cnds.Compare,
+							cr.system_object.prototype.acts.GoToLayout,
 							null,
-							0,
-							false,
-							false,
-							false,
-							9907848723075097,
+							1754674385233901,
 							false
 							,[
 							[
-								7,
-								[
-									20,
-									11,
-									cr.plugins_.Socket.prototype.exps.LastDataElement,
-									true,
-									null
-									,[
-[
-										0,
-										0
-									]
-									]
-								]
-							]
-,							[
-								8,
-								0
-							]
-,							[
-								7,
-								[
-									2,
-									"Movement"
-								]
+								6,
+								"Menu Inicial"
 							]
 							]
-						]
-						],
-						[
-						[
-							14,
-							cr.plugins_.Sprite.prototype.acts.SetPos,
-							null,
-							6282581127830627,
-							false
-							,[
-							[
-								0,
-								[
-									19,
-									cr.system_object.prototype.exps["int"]
-									,[
-[
-										20,
-										11,
-										cr.plugins_.Socket.prototype.exps.LastDataElement,
-										true,
-										null
-										,[
-[
-											0,
-											1
-										]
-										]
-									]
-									]
-								]
-							]
-,							[
-								0,
-								[
-									19,
-									cr.system_object.prototype.exps["int"]
-									,[
-[
-										20,
-										11,
-										cr.plugins_.Socket.prototype.exps.LastDataElement,
-										true,
-										null
-										,[
-[
-											0,
-											2
-										]
-										]
-									]
-									]
-								]
-							]
-							]
-						]
-,						[
-							14,
-							cr.plugins_.Sprite.prototype.acts.SetAngle,
-							null,
-							6234168954365148,
-							false
-							,[
-							[
-								0,
-								[
-									19,
-									cr.system_object.prototype.exps["int"]
-									,[
-[
-										20,
-										11,
-										cr.plugins_.Socket.prototype.exps.LastDataElement,
-										true,
-										null
-										,[
-[
-											0,
-											3
-										]
-										]
-									]
-									]
-								]
-							]
-							]
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					3548784973271872,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						8475688133178727,
-						false
-						,[
-						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								2
-							]
-						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						5691752996692828,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.Compare,
-							null,
-							0,
-							false,
-							false,
-							false,
-							6586891071810127,
-							false
-							,[
-							[
-								7,
-								[
-									20,
-									11,
-									cr.plugins_.Socket.prototype.exps.LastDataElement,
-									true,
-									null
-									,[
-[
-										0,
-										0
-									]
-									]
-								]
-							]
-,							[
-								8,
-								0
-							]
-,							[
-								7,
-								[
-									2,
-									"Movement"
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							0,
-							cr.plugins_.Sprite.prototype.acts.SetPos,
-							null,
-							2839541223814099,
-							false
-							,[
-							[
-								0,
-								[
-									19,
-									cr.system_object.prototype.exps["int"]
-									,[
-[
-										20,
-										11,
-										cr.plugins_.Socket.prototype.exps.LastDataElement,
-										true,
-										null
-										,[
-[
-											0,
-											1
-										]
-										]
-									]
-									]
-								]
-							]
-,							[
-								0,
-								[
-									19,
-									cr.system_object.prototype.exps["int"]
-									,[
-[
-										20,
-										11,
-										cr.plugins_.Socket.prototype.exps.LastDataElement,
-										true,
-										null
-										,[
-[
-											0,
-											2
-										]
-										]
-									]
-									]
-								]
-							]
-							]
-						]
-,						[
-							0,
-							cr.plugins_.Sprite.prototype.acts.SetAngle,
-							null,
-							2596650662504637,
-							false
-							,[
-							[
-								0,
-								[
-									19,
-									cr.system_object.prototype.exps["int"]
-									,[
-[
-										20,
-										11,
-										cr.plugins_.Socket.prototype.exps.LastDataElement,
-										true,
-										null
-										,[
-[
-											0,
-											3
-										]
-										]
-									]
-									]
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						9091649299529928,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.Else,
-							null,
-							0,
-							false,
-							false,
-							false,
-							8493772311270632,
-							false
-						]
-						],
-						[
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					4514625108424227,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						1976020243363624,
-						false
-						,[
-						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								1
-							]
-						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						4355464692865751,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.Compare,
-							null,
-							0,
-							false,
-							false,
-							false,
-							8379675311323107,
-							false
-							,[
-							[
-								7,
-								[
-									20,
-									11,
-									cr.plugins_.Socket.prototype.exps.LastDataElement,
-									true,
-									null
-									,[
-[
-										0,
-										0
-									]
-									]
-								]
-							]
-,							[
-								8,
-								0
-							]
-,							[
-								7,
-								[
-									2,
-									"Destroy"
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							14,
-							cr.plugins_.Sprite.prototype.acts.Destroy,
-							null,
-							5119124199256291,
-							false
-						]
-,						[
-							15,
-							cr.plugins_.Particles.prototype.acts.Destroy,
-							null,
-							580607543957188,
-							false
-						]
-						]
-					]
-					]
-				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					8675951059107785,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.CompareVar,
-						null,
-						0,
-						false,
-						false,
-						false,
-						555346953174339,
-						false
-						,[
-						[
-							11,
-							"Jugador"
-						]
-,						[
-							8,
-							0
-						]
-,						[
-							7,
-							[
-								0,
-								2
-							]
-						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						7410587013435309,
-						[
-						[
-							-1,
-							cr.system_object.prototype.cnds.Compare,
-							null,
-							0,
-							false,
-							false,
-							false,
-							4497114102027106,
-							false
-							,[
-							[
-								7,
-								[
-									20,
-									11,
-									cr.plugins_.Socket.prototype.exps.LastDataElement,
-									true,
-									null
-									,[
-[
-										0,
-										0
-									]
-									]
-								]
-							]
-,							[
-								8,
-								0
-							]
-,							[
-								7,
-								[
-									2,
-									"Destroy"
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							0,
-							cr.plugins_.Sprite.prototype.acts.Destroy,
-							null,
-							7318632813420546,
-							false
-						]
-,						[
-							1,
-							cr.plugins_.Particles.prototype.acts.Destroy,
-							null,
-							9736344272044675,
-							false
 						]
 						]
 					]
@@ -32310,37 +28015,6 @@ false,false,4806698590460405,false
 				]
 				]
 			]
-			]
-		]
-,		[
-			0,
-			[true, "Scale"],
-			false,
-			null,
-			95364125305228,
-			[
-			[
-				-1,
-				cr.system_object.prototype.cnds.IsGroupActive,
-				null,
-				0,
-				false,
-				false,
-				false,
-				95364125305228,
-				false
-				,[
-				[
-					1,
-					[
-						2,
-						"Scale"
-					]
-				]
-				]
-			]
-			],
-			[
 			]
 		]
 ,		[
@@ -32434,10 +28108,293 @@ false,false,7912363636648281,false
 				null,
 				false,
 				null,
+				9157394470888785,
+				[
+				[
+					12,
+					cr.plugins_.WebStorage.prototype.cnds.LocalStorageExists,
+					null,
+					0,
+					false,
+					false,
+					false,
+					2554890842026989,
+					false
+					,[
+					[
+						1,
+						[
+							2,
+							"Data"
+						]
+					]
+					]
+				]
+				],
+				[
+				[
+					41,
+					cr.plugins_.Dictionary.prototype.acts.Clear,
+					null,
+					1562441184657998,
+					false
+				]
+,				[
+					41,
+					cr.plugins_.Dictionary.prototype.acts.JSONLoad,
+					null,
+					3325328449907809,
+					false
+					,[
+					[
+						1,
+						[
+							20,
+							12,
+							cr.plugins_.WebStorage.prototype.exps.LocalValue,
+							true,
+							null
+							,[
+[
+								2,
+								"Data"
+							]
+							]
+						]
+					]
+					]
+				]
+				]
+				,[
+				[
+					0,
+					null,
+					false,
+					null,
+					5848343346326055,
+					[
+					[
+						-1,
+						cr.system_object.prototype.cnds.ForEachOrdered,
+						null,
+						0,
+						true,
+						false,
+						false,
+						2685557309658607,
+						false
+						,[
+						[
+							4,
+							44
+						]
+,						[
+							7,
+							[
+								21,
+								44,
+								false,
+								null
+								,0
+							]
+						]
+,						[
+							3,
+							0
+						]
+						]
+					]
+					],
+					[
+					]
+					,[
+					[
+						0,
+						null,
+						false,
+						null,
+						9671009933134291,
+						[
+						[
+							44,
+							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+							null,
+							0,
+							false,
+							false,
+							false,
+							421592008771312,
+							false
+							,[
+							[
+								10,
+								0
+							]
+,							[
+								8,
+								3
+							]
+,							[
+								7,
+								[
+									20,
+									41,
+									cr.plugins_.Dictionary.prototype.exps.Get,
+									false,
+									null
+									,[
+[
+										2,
+										"Unlocks"
+									]
+									]
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							44,
+							cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
+							null,
+							6041993810543557,
+							false
+							,[
+							[
+								10,
+								1
+							]
+,							[
+								7,
+								[
+									0,
+									1
+								]
+							]
+							]
+						]
+						]
+					]
+,					[
+						0,
+						null,
+						false,
+						null,
+						8309740139656917,
+						[
+						[
+							32,
+							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+							null,
+							0,
+							false,
+							false,
+							false,
+							6689462494696332,
+							false
+							,[
+							[
+								10,
+								0
+							]
+,							[
+								8,
+								0
+							]
+,							[
+								7,
+								[
+									19,
+									cr.system_object.prototype.exps.loopindex
+								]
+							]
+							]
+						]
+,						[
+							32,
+							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+							null,
+							0,
+							false,
+							false,
+							false,
+							7392686732893965,
+							false
+							,[
+							[
+								10,
+								1
+							]
+,							[
+								8,
+								3
+							]
+,							[
+								7,
+								[
+									20,
+									41,
+									cr.plugins_.Dictionary.prototype.exps.Get,
+									false,
+									null
+									,[
+[
+										10,
+										[
+											10,
+											[
+												2,
+												"Nivel"
+											]
+											,[
+												19,
+												cr.system_object.prototype.exps.loopindex
+											]
+										]
+										,[
+											2,
+											"Estrellas"
+										]
+									]
+									]
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							32,
+							cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+							null,
+							6623728620376195,
+							false
+							,[
+							[
+								0,
+								[
+									0,
+									1
+								]
+							]
+							]
+						]
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
 				9475604210845001,
 				[
 				[
-					17,
+					12,
 					cr.plugins_.WebStorage.prototype.cnds.LocalStorageExists,
 					null,
 					0,
@@ -32504,8 +28461,8 @@ false,false,7912363636648281,false
 					],
 					[
 					[
-						17,
-						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						41,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						4179939331630957,
 						false
@@ -32541,8 +28498,8 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						17,
-						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						41,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						3947183739223803,
 						false
@@ -32578,8 +28535,8 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						17,
-						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						41,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						898948557212883,
 						false
@@ -32615,8 +28572,8 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						17,
-						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						41,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						5393296409926423,
 						false
@@ -32638,8 +28595,8 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						17,
-						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						41,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						9309813253324207,
 						false
@@ -32661,8 +28618,8 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						17,
-						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						41,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						108435200685045,
 						false
@@ -32683,253 +28640,28 @@ false,false,7912363636648281,false
 						]
 						]
 					]
-					]
-				]
-				]
-			]
-,			[
-				0,
-				null,
-				false,
-				null,
-				9157394470888785,
-				[
-				[
-					17,
-					cr.plugins_.WebStorage.prototype.cnds.LocalStorageExists,
-					null,
-					0,
-					false,
-					false,
-					false,
-					2554890842026989,
-					false
-					,[
-					[
-						1,
-						[
-							2,
-							"Data"
-						]
-					]
-					]
-				]
-				],
-				[
-				]
-				,[
-				[
-					0,
-					null,
-					false,
-					null,
-					5848343346326055,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.ForEachOrdered,
+,					[
+						12,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
 						null,
-						0,
-						true,
-						false,
-						false,
-						2685557309658607,
+						4809336003870329,
 						false
 						,[
 						[
-							4,
-							47
+							1,
+							[
+								2,
+								"Data"
+							]
 						]
 ,						[
 							7,
 							[
-								21,
-								47,
-								false,
+								20,
+								41,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
 								null
-								,0
-							]
-						]
-,						[
-							3,
-							0
-						]
-						]
-					]
-					],
-					[
-					]
-					,[
-					[
-						0,
-						null,
-						false,
-						null,
-						9671009933134291,
-						[
-						[
-							47,
-							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-							null,
-							0,
-							false,
-							false,
-							false,
-							421592008771312,
-							false
-							,[
-							[
-								10,
-								0
-							]
-,							[
-								8,
-								3
-							]
-,							[
-								7,
-								[
-									20,
-									17,
-									cr.plugins_.WebStorage.prototype.exps.LocalValue,
-									true,
-									null
-									,[
-[
-										2,
-										"Unlocks"
-									]
-									]
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							47,
-							cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
-							null,
-							6041993810543557,
-							false
-							,[
-							[
-								10,
-								1
-							]
-,							[
-								7,
-								[
-									0,
-									1
-								]
-							]
-							]
-						]
-						]
-					]
-,					[
-						0,
-						null,
-						false,
-						null,
-						8309740139656917,
-						[
-						[
-							37,
-							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-							null,
-							0,
-							false,
-							false,
-							false,
-							6689462494696332,
-							false
-							,[
-							[
-								10,
-								0
-							]
-,							[
-								8,
-								0
-							]
-,							[
-								7,
-								[
-									19,
-									cr.system_object.prototype.exps.loopindex
-								]
-							]
-							]
-						]
-,						[
-							37,
-							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
-							null,
-							0,
-							false,
-							false,
-							false,
-							7392686732893965,
-							false
-							,[
-							[
-								10,
-								1
-							]
-,							[
-								8,
-								3
-							]
-,							[
-								7,
-								[
-									20,
-									17,
-									cr.plugins_.WebStorage.prototype.exps.LocalValue,
-									true,
-									null
-									,[
-[
-										10,
-										[
-											10,
-											[
-												2,
-												"Nivel"
-											]
-											,[
-												19,
-												cr.system_object.prototype.exps.loopindex
-											]
-										]
-										,[
-											2,
-											"Estrellas"
-										]
-									]
-									]
-								]
-							]
-							]
-						]
-						],
-						[
-						[
-							37,
-							cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
-							null,
-							6623728620376195,
-							false
-							,[
-							[
-								0,
-								[
-									0,
-									1
-								]
-							]
 							]
 						]
 						]
@@ -32948,7 +28680,7 @@ false,false,7912363636648281,false
 			5938484036841617,
 			[
 			[
-				5,
+				4,
 				cr.plugins_.Touch.prototype.cnds.IsInTouch,
 				null,
 				0,
@@ -32970,7 +28702,7 @@ false,false,7912363636648281,false
 				7667049290629447,
 				[
 				[
-					5,
+					4,
 					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
 					null,
 					1,
@@ -32982,7 +28714,7 @@ false,false,7912363636648281,false
 					,[
 					[
 						4,
-						35
+						30
 					]
 					]
 				]
@@ -33039,71 +28771,10 @@ false,false,7912363636648281,false
 				null,
 				false,
 				null,
-				3758412668206109,
-				[
-				[
-					5,
-					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
-					null,
-					1,
-					false,
-					false,
-					false,
-					8886926408860405,
-					false
-					,[
-					[
-						4,
-						13
-					]
-					]
-				]
-				],
-				[
-				[
-					-1,
-					cr.system_object.prototype.acts.SetVar,
-					null,
-					6024066362765796,
-					false
-					,[
-					[
-						11,
-						"Multi"
-					]
-,					[
-						7,
-						[
-							0,
-							1
-						]
-					]
-					]
-				]
-,				[
-					-1,
-					cr.system_object.prototype.acts.GoToLayout,
-					null,
-					9871802462522219,
-					false
-					,[
-					[
-						6,
-						"Lobby"
-					]
-					]
-				]
-				]
-			]
-,			[
-				0,
-				null,
-				false,
-				null,
 				1087169238035953,
 				[
 				[
-					5,
+					4,
 					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
 					null,
 					1,
@@ -33115,7 +28786,7 @@ false,false,7912363636648281,false
 					,[
 					[
 						4,
-						36
+						31
 					]
 					]
 				]
@@ -33153,7 +28824,7 @@ false,false,7912363636648281,false
 			1106708344864953,
 			[
 			[
-				5,
+				4,
 				cr.plugins_.Touch.prototype.cnds.OnTapGestureObject,
 				null,
 				1,
@@ -33165,7 +28836,7 @@ false,false,7912363636648281,false
 				,[
 				[
 					4,
-					47
+					44
 				]
 				]
 			]
@@ -33181,7 +28852,7 @@ false,false,7912363636648281,false
 				6605273863964258,
 				[
 				[
-					47,
+					44,
 					cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
 					null,
 					0,
@@ -33225,7 +28896,7 @@ false,false,7912363636648281,false
 						7,
 						[
 							21,
-							47,
+							11,
 							false,
 							null
 							,0
@@ -33320,7 +28991,7 @@ false,false,7912363636648281,false
 					6121710577270489,
 					[
 					[
-						34,
+						29,
 						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
 						null,
 						0,
@@ -33377,28 +29048,28 @@ false,false,7912363636648281,false
 									,[
 [
 										20,
-										34,
+										29,
 										cr.plugins_.Sprite.prototype.exps.X,
 										false,
 										null
 									]
 ,[
 										20,
-										34,
+										29,
 										cr.plugins_.Sprite.prototype.exps.Y,
 										false,
 										null
 									]
 ,[
 										20,
-										33,
+										28,
 										cr.plugins_.Sprite.prototype.exps.X,
 										false,
 										null
 									]
 ,[
 										20,
-										33,
+										28,
 										cr.plugins_.Sprite.prototype.exps.Y,
 										false,
 										null
@@ -33422,7 +29093,7 @@ false,false,7912363636648281,false
 						],
 						[
 						[
-							33,
+							28,
 							cr.plugins_.Sprite.prototype.acts.MoveForward,
 							null,
 							7573419708491147,
@@ -33557,7 +29228,7 @@ false,false,7912363636648281,false
 					9661876539292501,
 					[
 					[
-						34,
+						29,
 						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
 						null,
 						0,
@@ -33614,28 +29285,28 @@ false,false,7912363636648281,false
 									,[
 [
 										20,
-										34,
+										29,
 										cr.plugins_.Sprite.prototype.exps.X,
 										false,
 										null
 									]
 ,[
 										20,
-										34,
+										29,
 										cr.plugins_.Sprite.prototype.exps.Y,
 										false,
 										null
 									]
 ,[
 										20,
-										33,
+										28,
 										cr.plugins_.Sprite.prototype.exps.X,
 										false,
 										null
 									]
 ,[
 										20,
-										33,
+										28,
 										cr.plugins_.Sprite.prototype.exps.Y,
 										false,
 										null
@@ -33659,7 +29330,7 @@ false,false,7912363636648281,false
 						],
 						[
 						[
-							33,
+							28,
 							cr.plugins_.Sprite.prototype.acts.MoveForward,
 							null,
 							4770836424633964,
@@ -33727,550 +29398,6 @@ false,false,7912363636648281,false
 		]
 	]
 ,	[
-		"PruebasMulti event sheet",
-		[
-		[
-			2,
-			"PruebasSingle event sheet",
-			false
-		]
-		]
-	]
-,	[
-		"Lobby Event sheet",
-		[
-		[
-			1,
-			"Jugador",
-			0,
-			1,
-false,false,4266181065721705,false
-		]
-,		[
-			0,
-			null,
-			false,
-			null,
-			7118582774471779,
-			[
-			[
-				5,
-				cr.plugins_.Touch.prototype.cnds.OnTouchObject,
-				null,
-				1,
-				false,
-				false,
-				false,
-				3139037085929895,
-				false
-				,[
-				[
-					4,
-					12
-				]
-				]
-			]
-			],
-			[
-			]
-			,[
-			[
-				0,
-				null,
-				true,
-				null,
-				8583906555822049,
-				[
-				[
-					12,
-					cr.plugins_.Text.prototype.cnds.CompareText,
-					null,
-					0,
-					false,
-					false,
-					false,
-					6524903237150387,
-					false
-					,[
-					[
-						1,
-						[
-							2,
-							"Conectar"
-						]
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-,				[
-					12,
-					cr.plugins_.Text.prototype.cnds.CompareText,
-					null,
-					0,
-					false,
-					false,
-					false,
-					7776914717771222,
-					false
-					,[
-					[
-						1,
-						[
-							2,
-							"Error intentalo de nuevo\nConectar"
-						]
-					]
-,					[
-						3,
-						0
-					]
-					]
-				]
-				],
-				[
-				[
-					11,
-					cr.plugins_.Socket.prototype.acts.Connect,
-					null,
-					6406159691758632,
-					false
-					,[
-					[
-						1,
-						[
-							2,
-							"127.0.0.1"
-						]
-					]
-,					[
-						0,
-						[
-							0,
-							8080
-						]
-					]
-					]
-				]
-				]
-			]
-			]
-		]
-,		[
-			0,
-			null,
-			false,
-			null,
-			5613431645578126,
-			[
-			[
-				11,
-				cr.plugins_.Socket.prototype.cnds.OnConnect,
-				null,
-				1,
-				false,
-				false,
-				false,
-				1010767208867938,
-				false
-			]
-			],
-			[
-			[
-				12,
-				cr.plugins_.Text.prototype.acts.SetText,
-				null,
-				8279442537079393,
-				false
-				,[
-				[
-					7,
-					[
-						2,
-						"Conectado....\nEsperando jugadores"
-					]
-				]
-				]
-			]
-,			[
-				11,
-				cr.plugins_.Socket.prototype.acts.Emit,
-				null,
-				936094404127529,
-				false
-				,[
-				[
-					7,
-					[
-						2,
-						"joint"
-					]
-				]
-,				[
-					7,
-					[
-						2,
-						""
-					]
-				]
-				]
-			]
-			]
-		]
-,		[
-			0,
-			null,
-			false,
-			null,
-			6371641395577745,
-			[
-			[
-				11,
-				cr.plugins_.Socket.prototype.cnds.OnError,
-				null,
-				1,
-				false,
-				false,
-				false,
-				763064243932975,
-				false
-			]
-			],
-			[
-			[
-				12,
-				cr.plugins_.Text.prototype.acts.SetText,
-				null,
-				4145685099681305,
-				false
-				,[
-				[
-					7,
-					[
-						2,
-						"Error intentalo de nuevo\nConectar"
-					]
-				]
-				]
-			]
-			]
-		]
-,		[
-			0,
-			null,
-			false,
-			null,
-			9212252015969322,
-			[
-			[
-				11,
-				cr.plugins_.Socket.prototype.cnds.OnData,
-				null,
-				1,
-				false,
-				false,
-				false,
-				781461290466321,
-				false
-			]
-			],
-			[
-			[
-				11,
-				cr.plugins_.Socket.prototype.acts.SplitDataReceived,
-				null,
-				2291204928226313,
-				false
-			]
-			]
-		]
-,		[
-			0,
-			null,
-			false,
-			null,
-			7528872827113967,
-			[
-			[
-				-1,
-				cr.system_object.prototype.cnds.Compare,
-				null,
-				0,
-				false,
-				false,
-				false,
-				1574112155481589,
-				false
-				,[
-				[
-					7,
-					[
-						20,
-						11,
-						cr.plugins_.Socket.prototype.exps.LastDataElement,
-						true,
-						null
-						,[
-[
-							0,
-							0
-						]
-						]
-					]
-				]
-,				[
-					8,
-					0
-				]
-,				[
-					7,
-					[
-						2,
-						"Jugador"
-					]
-				]
-				]
-			]
-			],
-			[
-			]
-			,[
-			[
-				0,
-				null,
-				false,
-				null,
-				5615600707833569,
-				[
-				[
-					-1,
-					cr.system_object.prototype.cnds.Compare,
-					null,
-					0,
-					false,
-					false,
-					false,
-					8773683780333153,
-					false
-					,[
-					[
-						7,
-						[
-							20,
-							11,
-							cr.plugins_.Socket.prototype.exps.LastDataElement,
-							true,
-							null
-							,[
-[
-								0,
-								1
-							]
-							]
-						]
-					]
-,					[
-						8,
-						0
-					]
-,					[
-						7,
-						[
-							2,
-							"PJ1"
-						]
-					]
-					]
-				]
-				],
-				[
-				[
-					-1,
-					cr.system_object.prototype.acts.SetVar,
-					null,
-					9091782044103942,
-					false
-					,[
-					[
-						11,
-						"Jugador"
-					]
-,					[
-						7,
-						[
-							0,
-							1
-						]
-					]
-					]
-				]
-				]
-			]
-,			[
-				0,
-				null,
-				false,
-				null,
-				8565806399868043,
-				[
-				[
-					-1,
-					cr.system_object.prototype.cnds.Compare,
-					null,
-					0,
-					false,
-					false,
-					false,
-					9115947585245034,
-					false
-					,[
-					[
-						7,
-						[
-							20,
-							11,
-							cr.plugins_.Socket.prototype.exps.LastDataElement,
-							true,
-							null
-							,[
-[
-								0,
-								1
-							]
-							]
-						]
-					]
-,					[
-						8,
-						0
-					]
-,					[
-						7,
-						[
-							2,
-							"PJ2"
-						]
-					]
-					]
-				]
-				],
-				[
-				[
-					-1,
-					cr.system_object.prototype.acts.SetVar,
-					null,
-					1693264359594126,
-					false
-					,[
-					[
-						11,
-						"Jugador"
-					]
-,					[
-						7,
-						[
-							0,
-							2
-						]
-					]
-					]
-				]
-,				[
-					11,
-					cr.plugins_.Socket.prototype.acts.Emit,
-					null,
-					5844540300980909,
-					false
-					,[
-					[
-						7,
-						[
-							2,
-							"Start"
-						]
-					]
-,					[
-						7,
-						[
-							2,
-							""
-						]
-					]
-					]
-				]
-				]
-			]
-			]
-		]
-,		[
-			0,
-			null,
-			false,
-			null,
-			1812838907649304,
-			[
-			[
-				-1,
-				cr.system_object.prototype.cnds.Compare,
-				null,
-				0,
-				false,
-				false,
-				false,
-				9136574769052919,
-				false
-				,[
-				[
-					7,
-					[
-						20,
-						11,
-						cr.plugins_.Socket.prototype.exps.LastDataElement,
-						true,
-						null
-						,[
-[
-							0,
-							0
-						]
-						]
-					]
-				]
-,				[
-					8,
-					0
-				]
-,				[
-					7,
-					[
-						2,
-						"Start"
-					]
-				]
-				]
-			]
-			],
-			[
-			[
-				-1,
-				cr.system_object.prototype.acts.GoToLayout,
-				null,
-				6270839802964738,
-				false
-				,[
-				[
-					6,
-					"PruebasMulti"
-				]
-				]
-			]
-			]
-		]
-		]
-	]
-,	[
 		"Scroll Tactil",
 		[
 		[
@@ -34316,7 +29443,7 @@ false,false,9412570492063021,false
 			8220123947854473,
 			[
 			[
-				5,
+				4,
 				cr.plugins_.Touch.prototype.cnds.IsInTouch,
 				null,
 				0,
@@ -34327,7 +29454,7 @@ false,false,9412570492063021,false
 				false
 			]
 ,			[
-				5,
+				4,
 				cr.plugins_.Touch.prototype.cnds.CompareTouchSpeed,
 				null,
 				0,
@@ -34389,7 +29516,7 @@ false,false,9412570492063021,false
 			6839919016731817,
 			[
 			[
-				5,
+				4,
 				cr.plugins_.Touch.prototype.cnds.OnTouchStart,
 				null,
 				1,
@@ -34416,7 +29543,7 @@ false,false,9412570492063021,false
 					7,
 					[
 						20,
-						5,
+						4,
 						cr.plugins_.Touch.prototype.exps.AbsoluteX,
 						false,
 						null
@@ -34439,7 +29566,7 @@ false,false,9412570492063021,false
 					7,
 					[
 						20,
-						5,
+						4,
 						cr.plugins_.Touch.prototype.exps.AbsoluteY,
 						false,
 						null
@@ -34457,7 +29584,7 @@ false,false,9412570492063021,false
 			4250853366578412,
 			[
 			[
-				5,
+				4,
 				cr.plugins_.Touch.prototype.cnds.IsInTouch,
 				null,
 				0,
@@ -34592,7 +29719,7 @@ false,false,9412570492063021,false
 						]
 						,[
 							20,
-							5,
+							4,
 							cr.plugins_.Touch.prototype.exps.AbsoluteX,
 							false,
 							null
@@ -34603,68 +29730,6 @@ false,false,9412570492063021,false
 			]
 			]
 		]
-		]
-	]
-,	[
-		"Menu NivelesEvent Sheet",
-		[
-		[
-			2,
-			"Scroll Tactil",
-			false
-		]
-,		[
-			0,
-			null,
-			false,
-			null,
-			7950907485633612,
-			[
-			[
-				-1,
-				cr.system_object.prototype.cnds.OnLayoutStart,
-				null,
-				1,
-				false,
-				false,
-				false,
-				2329345464911884,
-				false
-			]
-			],
-			[
-			[
-				18,
-				cr.plugins_.Text.prototype.acts.SetText,
-				null,
-				8795967158925688,
-				false
-				,[
-				[
-					7,
-					[
-						20,
-						17,
-						cr.plugins_.WebStorage.prototype.exps.LocalValue,
-						true,
-						null
-						,[
-[
-							2,
-							"Unlocks"
-						]
-						]
-					]
-				]
-				]
-			]
-			]
-		]
-		]
-	]
-,	[
-		"Nivel1EventSheet",
-		[
 		]
 	]
 	],
