@@ -614,7 +614,7 @@
                     <properties>
                         <rate>18</rate>
                         <spray-cone>30</spray-cone>
-                        <type>One-shot</type>
+                        <type>Continuous spray</type>
                         <initial-particle-properties></initial-particle-properties>
                         <speed>75</speed>
                         <size>16</size>
@@ -634,6 +634,9 @@
                         <destroy-mode>Fade to invisible</destroy-mode>
                         <timeout>1.55</timeout>
                     </properties>
+                    <instance-variables>
+                        <Dusts>1</Dusts>
+                    </instance-variables>
                     <behavior-instances>
                         <behavior-instance type="Pin" />
                     </behavior-instances>
@@ -672,7 +675,7 @@
                     <properties>
                         <rate>18</rate>
                         <spray-cone>30</spray-cone>
-                        <type>One-shot</type>
+                        <type>Continuous spray</type>
                         <initial-particle-properties></initial-particle-properties>
                         <speed>75</speed>
                         <size>16</size>
@@ -692,6 +695,9 @@
                         <destroy-mode>Fade to invisible</destroy-mode>
                         <timeout>1.55</timeout>
                     </properties>
+                    <instance-variables>
+                        <Dusts>0</Dusts>
+                    </instance-variables>
                     <behavior-instances>
                         <behavior-instance type="Pin" />
                     </behavior-instances>
@@ -723,6 +729,62 @@
                         <hotspotX>0</hotspotX>
                         <hotspotY>0.5</hotspotY>
                         <angle>-3.054326296</angle>
+                        <opacity>1</opacity>
+                    </world>
+                </instance>
+                <instance type="Patas" uid="18">
+                    <properties>
+                        <initial-visibility>Visible</initial-visibility>
+                        <initial-animation>Default</initial-animation>
+                        <initial-frame>0</initial-frame>
+                        <collisions>Enabled</collisions>
+                    </properties>
+                    <instance-variables>
+                        <Pata>1</Pata>
+                    </instance-variables>
+                    <behavior-instances>
+                        <behavior-instance type="Pin" />
+                    </behavior-instances>
+                    <blend-mode>0</blend-mode>
+                    <effect-fallback>0</effect-fallback>
+                    <world>
+                        <x>616.135070801</x>
+                        <y>1000.231140137</y>
+                        <z>0</z>
+                        <width>13.726021767</width>
+                        <height>4.575218678</height>
+                        <depth>0</depth>
+                        <hotspotX>0.5</hotspotX>
+                        <hotspotY>0.5</hotspotY>
+                        <angle>0</angle>
+                        <opacity>1</opacity>
+                    </world>
+                </instance>
+                <instance type="Patas" uid="24">
+                    <properties>
+                        <initial-visibility>Visible</initial-visibility>
+                        <initial-animation>Default</initial-animation>
+                        <initial-frame>0</initial-frame>
+                        <collisions>Enabled</collisions>
+                    </properties>
+                    <instance-variables>
+                        <Pata>0</Pata>
+                    </instance-variables>
+                    <behavior-instances>
+                        <behavior-instance type="Pin" />
+                    </behavior-instances>
+                    <blend-mode>0</blend-mode>
+                    <effect-fallback>0</effect-fallback>
+                    <world>
+                        <x>577.182800293</x>
+                        <y>999.971130371</y>
+                        <z>0</z>
+                        <width>13.057920456</width>
+                        <height>3.609740734</height>
+                        <depth>0</depth>
+                        <hotspotX>0.5</hotspotX>
+                        <hotspotY>0.5</hotspotY>
+                        <angle>0</angle>
                         <opacity>1</opacity>
                     </world>
                 </instance>
@@ -831,7 +893,7 @@
                 <instance type="Astronautas" uid="38">
                     <properties>
                         <text>0</text>
-                        <initial-visibility>Visible</initial-visibility>
+                        <initial-visibility>Invisible</initial-visibility>
                         <font>Frosty&apos;s Winterland,-27,400,0</font>
                         <color>255,255,255</color>
                         <horizontal-alignment>Center</horizontal-alignment>
