@@ -21,6 +21,12 @@
                     <param id="0" name="Pin to">Nave</param>
                     <param id="1" name="Mode">0</param>
                 </action>
+<<<<<<< .mine
+                <action id="-15" name="Set visible" sid="6041972678809633" type="Fire">
+                    <param id="0" name="Visibility">0</param>
+                </action>
+=======
+>>>>>>> .r16
                 <action behavior="Physics" id="12" name="Set world gravity" sid="4516249674817538" type="Nave">
                     <param id="0" name="Gravity">1.5</param>
                 </action>
@@ -48,7 +54,7 @@
                     <param id="0" name="Instance variable">WidthInic</param>
                     <param id="1" name="Value">BarraVida.Width</param>
                 </action>
-                <action disabled="1" id="0" name="Set spraying" sid="9079125817710479" type="Thusters">
+                <action id="0" name="Set spraying" sid="9079125817710479" type="Thusters">
                     <param id="0" name="State">0</param>
                 </action>
                 <action behavior="Pin" id="0" name="Pin to object" sid="5171609692878818" type="Smoke">
@@ -65,6 +71,13 @@
                 </action>
                 <action id="-15" name="Set visible" sid="338205002438729" type="Astronaut_Halo_">
                     <param id="0" name="Visibility">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="1824650867278286" type="Thusters">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action id="0" name="Set spraying" sid="4590450388820669" type="Smoke">
+                    <param id="0" name="State">0</param>
                 </action>
             </actions>
         </event-block>
@@ -215,6 +228,19 @@
                 </event-block>
                 <event-group description="" sid="8230929351219207" title="Fire_Animation">
                     <sub-events>
+                        <event-block sid="4167744239327268">
+                            <conditions>
+                                <condition id="4" name="On finished" sid="8050065975012128" type="Fire">
+                                    <param id="0" name="Animation">&quot;Default&quot;</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="4" name="Set animation" sid="9072146251697214" type="Fire">
+                                    <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                    <param id="1" name="From">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
                         <event-block sid="5970970332487002">
                             <conditions>
                                 <condition id="12" name="Has Nth touch" sid="7820940089277115" type="Touch">
@@ -224,6 +250,12 @@
                             <actions>
                                 <action id="-15" name="Set visible" sid="1345501436769311" type="Fire">
                                     <param id="0" name="Visibility">1</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="8605256733970943" type="Smoke">
+                                    <param id="0" name="State">1</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="9296832686937696" type="Thusters">
+                                    <param id="0" name="State">0</param>
                                 </action>
                             </actions>
                             <sub-events>
@@ -249,40 +281,21 @@
                                 </event-block>
                                 <event-block sid="2647822450337495">
                                     <conditions>
-                                        <condition id="-22" name="Else" sid="4814067124404504" type="System" />
+                                        <condition id="2" inverted="1" name="Is playing" sid="33415904090994" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default_Reverse&quot;</param>
+                                        </condition>
+                                        <condition id="2" inverted="1" name="Is playing" sid="4135389380615317" type="Fire">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                        </condition>
                                     </conditions>
                                     <actions>
                                         <action id="4" name="Set animation" sid="5019262399230166" type="Fire">
                                             <param id="0" name="Animation">&quot;Default&quot;</param>
                                             <param id="1" name="From">1</param>
                                         </action>
-                                        <action id="-9" name="Set value" sid="3183957314980234" type="System">
-                                            <param id="0" name="Variable">Frame</param>
-                                            <param id="1" name="Value">0</param>
-                                        </action>
                                     </actions>
                                 </event-block>
                             </sub-events>
-                        </event-block>
-                        <event-block sid="4167744239327268">
-                            <conditions>
-                                <condition id="4" name="On finished" sid="8050065975012128" type="Fire">
-                                    <param id="0" name="Animation">&quot;Default&quot;</param>
-                                </condition>
-                                <condition id="3" name="Compare frame" sid="9450973842705369" type="Fire">
-                                    <param id="0" name="Comparison">0</param>
-                                    <param id="1" name="Number">12</param>
-                                </condition>
-                                <condition id="12" name="Has Nth touch" sid="3162301835059929" type="Touch">
-                                    <param id="0" name="Touch number">1</param>
-                                </condition>
-                            </conditions>
-                            <actions>
-                                <action id="4" name="Set animation" sid="9072146251697214" type="Fire">
-                                    <param id="0" name="Animation">&quot;Loop&quot;</param>
-                                    <param id="1" name="From">1</param>
-                                </action>
-                            </actions>
                         </event-block>
                         <event-block sid="7774116983390537">
                             <conditions>
@@ -297,6 +310,9 @@
                                 </action>
                                 <action id="5" name="Set frame" sid="649531904417904" type="Fire">
                                     <param id="0" name="Frame number">Frame</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="7628332852861849" type="Smoke">
+                                    <param id="0" name="State">0</param>
                                 </action>
                             </actions>
                             <sub-events>
