@@ -31,6 +31,8 @@
     </used-behaviors>
     <used-effects>
         <effect author="Scirra" id="colorblend">Color</effect>
+        <effect author="Scirra" id="hsladjust">Adjust HSL</effect>
+        <effect author="Scirra" id="setcolor">Set color</effect>
     </used-effects>
     <configurations>
         <configuration exporter-descname="HTML5" exporter-id="html5" name="HTML5" />
@@ -146,7 +148,7 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7108623179366887" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Landing_Platform.png">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Diseño 3D\Proyectos\Repositiorios\Rescue Lander\trunk\RecueLanderSp\Art\Landing_Platform.png">
                         <collision-poly>
                             <point x="0.0961538" y="0.296875" />
                             <point x="0.830128" y="0.296875" />
@@ -850,11 +852,11 @@
             </behaviors>
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="6966253332688779" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.501916" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Montañas back.png">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.502591" original-source="C:\Diseño 3D\Proyectos\Repositiorios\Rescue Lander\trunk\RecueLanderSp\Art\UI\Montañas back.png">
                         <collision-poly>
-                            <point x="0.925694" y="0.363946" />
-                            <point x="1" y="0.5" />
-                            <point x="0.986806" y="0.935374" />
+                            <point x="0" y="1" />
+                            <point x="0.485938" y="0" />
+                            <point x="1" y="1" />
                         </collision-poly>
                     </frame>
                 </animation>
@@ -867,7 +869,13 @@
             </instance-variables>
             <animation-folder>
                 <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2068157216401665" speed="0">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Astronaut_Ico_Empty.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Diseño 3D\Proyectos\Repositiorios\Rescue Lander\trunk\RecueLanderSp\Art\UI\Astronaut_Icodesaturated.png">
+                        <collision-poly>
+                            <point x="0.484375" y="0" />
+                            <point x="1" y="1" />
+                            <point x="0" y="1" />
+                        </collision-poly>
+                    </frame>
                     <frame duration="1" hotspotX="0.5" hotspotY="0.474576" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Source code\Art\UI\Astronaut_Ico.png">
                         <collision-poly>
                             <point x="0.075" y="0.186441" />
@@ -887,15 +895,11 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="360167045343326" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.501916" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Source code\Art\UI\Montañas back_2.png">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.502591" original-source="C:\Diseño 3D\Proyectos\Repositiorios\Rescue Lander\trunk\RecueLanderSp\Art\UI\Montañas back_2.png">
                         <collision-poly>
-                            <point x="0.113194" y="0.554422" />
-                            <point x="0.5" y="0.0918367" />
-                            <point x="0.927778" y="0.353741" />
-                            <point x="1" y="0.5" />
+                            <point x="0.477778" y="0.0117722" />
                             <point x="0.9875" y="0.938776" />
                             <point x="0.0118056" y="0.942177" />
-                            <point x="0.145833" y="0.5" />
                         </collision-poly>
                     </frame>
                 </animation>
@@ -1031,8 +1035,43 @@
                 </behavior-type>
             </behaviors>
             <effects>
-                <effect-type name="Color">
-                    <effect id="colorblend" />
+                <effect-type name="SetColor">
+                    <effect id="setcolor" />
+                </effect-type>
+                <effect-type name="AdjustHSL">
+                    <effect id="hsladjust" />
+                </effect-type>
+            </effects>
+            <texture original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Thruster_smoke.png" />
+        </object-type>
+        <object-type name="Landing_Platform_Anim_" sid="719842352949336">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="2" loop="1" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7499799792876603" speed="2">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Diseño 3D\Proyectos\Repositiorios\Rescue Lander\trunk\RecueLanderSp\Art\LandingPlatform_Anim\Landing_Platform_Anim_00.png">
+                        <collision-poly>
+                            <point x="0.128906" y="0.383333" />
+                            <point x="0.878906" y="0.458333" />
+                            <point x="0.53125" y="0.575" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Diseño 3D\Proyectos\Repositiorios\Rescue Lander\trunk\RecueLanderSp\Art\LandingPlatform_Anim\Landing_Platform_Anim_00b.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Dust2" sid="7711342124247582">
+            <plugin id="Particles" />
+            <behaviors>
+                <behavior-type name="Pin" sid="9475903967601247">
+                    <behavior id="Pin" />
+                </behavior-type>
+            </behaviors>
+            <effects>
+                <effect-type name="SetColor">
+                    <effect id="setcolor" />
+                </effect-type>
+                <effect-type name="AdjustHSL">
+                    <effect id="hsladjust" />
                 </effect-type>
             </effects>
             <texture original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Lunar Lander\Art\Thruster_smoke.png" />
