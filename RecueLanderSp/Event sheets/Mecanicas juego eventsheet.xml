@@ -13,20 +13,10 @@
                 <condition id="-2" name="On start of layout" sid="8026494804483156" type="System" />
             </conditions>
             <actions>
-                <action id="5" name="Set web font" sid="3097764909427221" type="Astronautas">
-                    <param id="0" name="Family name">&quot;frostys_winterlandregular&quot;</param>
-                    <param id="1" name="CSS URL">&quot;stylesheet.css&quot;</param>
-                </action>
                 <action behavior="Pin" id="0" name="Pin to object" sid="5251412864304223" type="Fire">
                     <param id="0" name="Pin to">Nave</param>
                     <param id="1" name="Mode">0</param>
                 </action>
-<<<<<<< .mine
-                <action id="-15" name="Set visible" sid="6041972678809633" type="Fire">
-                    <param id="0" name="Visibility">0</param>
-                </action>
-=======
->>>>>>> .r16
                 <action behavior="Physics" id="12" name="Set world gravity" sid="4516249674817538" type="Nave">
                     <param id="0" name="Gravity">1.5</param>
                 </action>
@@ -69,15 +59,19 @@
                     <param id="0" name="Pin to">Astronauta</param>
                     <param id="1" name="Mode">0</param>
                 </action>
-                <action id="-15" name="Set visible" sid="338205002438729" type="Astronaut_Halo_">
-                    <param id="0" name="Visibility">0</param>
-                </action>
                 <action behavior="Pin" id="0" name="Pin to object" sid="1824650867278286" type="Thusters">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="3650303865907288" type="Fire">
                     <param id="0" name="Pin to">Nave</param>
                     <param id="1" name="Mode">0</param>
                 </action>
                 <action id="0" name="Set spraying" sid="4590450388820669" type="Smoke">
                     <param id="0" name="State">0</param>
+                </action>
+                <action id="-15" name="Set visible" sid="338205002438729" type="Astronaut_Halo_">
+                    <param id="0" name="Visibility">0</param>
                 </action>
             </actions>
         </event-block>
