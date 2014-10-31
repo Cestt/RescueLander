@@ -49,7 +49,7 @@
         <prop name="Clear background">No</prop>
         <prop name="Downscaling">Medium quality</prop>
         <prop name="Enable WebGL">On</prop>
-        <prop name="Fullscreen in browser">Letterbox scale</prop>
+        <prop name="Fullscreen in browser">Scale inner</prop>
         <prop name="Fullscreen scaling">High quality</prop>
         <prop name="Loader style">Progress bar &amp; logo</prop>
         <prop name="Orientations">Landscape</prop>
@@ -745,16 +745,12 @@
         </object-type>
         <object-type name="Play_Anim" sid="5302823561176823">
             <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="Enable" sid="2811706947407009" type="number" />
+            </instance-variables>
             <animation-folder>
                 <animation framecount="6" loop="1" name="Default" pingpong="1" repeatcount="1" repeatto="0" sid="2250060795394058" speed="12">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim00.png">
-                        <collision-poly>
-                            <point x="0" y="0.0449219" />
-                            <point x="1" y="0.046875" />
-                            <point x="1" y="0.910156" />
-                            <point x="0" y="0.908203" />
-                        </collision-poly>
-                    </frame>
+                    <frame duration="1" hotspotX="0.455285" hotspotY="0.433333" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim00.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\UI\Play_Anim\Play_Anim01.png">
                         <collision-poly>
                             <point x="0" y="0.0449219" />
@@ -802,16 +798,15 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2615993166267772" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Source code\Art\UI\Back_Arrow.png">
+                    <frame duration="1" hotspotX="0.505547" hotspotY="0.501149" original-source="C:\Users\usuario\Desktop\MANUEL\Construct\Source code\Art\UI\Back_Arrow.png">
                         <collision-poly>
-                            <point x="0.188679" y="0.269058" />
-                            <point x="0.5" y="0.217489" />
-                            <point x="0.847484" y="0.217489" />
-                            <point x="0.954403" y="0.5" />
-                            <point x="0.814465" y="0.735426" />
-                            <point x="0.5" y="0.735426" />
-                            <point x="0.149371" y="0.786996" />
-                            <point x="0.0188679" y="0.5" />
+                            <point x="0.458003" y="0.00689624" />
+                            <point x="0.505547" y="0.211494" />
+                            <point x="0.974643" y="0.239081" />
+                            <point x="0.9271" y="0.645977" />
+                            <point x="0.397781" y="0.673563" />
+                            <point x="0.320127" y="0.878161" />
+                            <point x="0.0808241" y="0.464368" />
                         </collision-poly>
                     </frame>
                 </animation>
@@ -1044,14 +1039,6 @@
                 </animation>
             </animation-folder>
         </object-type>
-        <object-type name="Gear_ico" sid="8783292874829902">
-            <plugin id="Sprite" />
-            <animation-folder>
-                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="1095614179939729" speed="5">
-                    <frame duration="1" hotspotX="0.507463" hotspotY="0.507463" original-source="C:\Diseño 3D\Proyectos\Repositiorios\Rescue Lander\trunk\RecueLanderSp\Art\UI\Gear_ico.png" />
-                </animation>
-            </animation-folder>
-        </object-type>
         <object-type name="Menu_Background_" sid="5049220046112264">
             <plugin id="Sprite" />
             <animation-folder>
@@ -1069,11 +1056,14 @@
                 </animation>
             </animation-folder>
         </object-type>
-        <object-type name="MontañasBack" sid="7464629176829746">
+        <object-type name="MontanasBack" sid="7464629176829746">
             <plugin id="Sprite" />
             <behaviors>
                 <behavior-type name="Bullet" sid="656426275440876">
                     <behavior id="Bullet" />
+                </behavior-type>
+                <behavior-type name="Wrap" sid="305720593860121">
+                    <behavior id="wrap" />
                 </behavior-type>
             </behaviors>
             <animation-folder>
@@ -1092,7 +1082,7 @@
                 </animation>
             </animation-folder>
         </object-type>
-        <object-type name="MontañasBack_" sid="590895912008351">
+        <object-type name="MontanasBack_" sid="590895912008351">
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2695192161879421" speed="5">
@@ -1219,18 +1209,8 @@
         <object-type name="Volume_on" sid="6146311535425226">
             <plugin id="Sprite" />
             <animation-folder>
-                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2555830673954606" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Volume_on.png">
-                        <collision-poly>
-                            <point x="0.5" y="0.203125" />
-                            <point x="0.75" y="0.25" />
-                            <point x="0.90625" y="0.5" />
-                            <point x="0.609375" y="0.609375" />
-                            <point x="0.5" y="0.734375" />
-                            <point x="0.359375" y="0.640625" />
-                            <point x="0.09375" y="0.5" />
-                        </collision-poly>
-                    </frame>
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2555830673954606" speed="0">
+                    <frame duration="1" hotspotX="0.491228" hotspotY="0.536585" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Volume_on.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Volume_off.png" />
                 </animation>
             </animation-folder>
@@ -1238,19 +1218,8 @@
         <object-type name="Music_on" sid="3815970765474605">
             <plugin id="Sprite" />
             <animation-folder>
-                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7970638771133854" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Music_on.png">
-                        <collision-poly>
-                            <point x="0.28125" y="0.28125" />
-                            <point x="0.5" y="0.078125" />
-                            <point x="0.828125" y="0.171875" />
-                            <point x="0.828125" y="0.5" />
-                            <point x="0.78125" y="0.78125" />
-                            <point x="0.5" y="0.78125" />
-                            <point x="0.0625" y="0.9375" />
-                            <point x="0.28125" y="0.5" />
-                        </collision-poly>
-                    </frame>
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7970638771133854" speed="0">
+                    <frame duration="1" hotspotX="0.592593" hotspotY="0.515625" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Music_on.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Music_off.png" />
                 </animation>
             </animation-folder>
@@ -1349,12 +1318,20 @@
                 <instance-variable name="Unlock" sid="9991843777877198" type="number" />
             </instance-variables>
         </family>
+        <family name="Popups" plugin-id="Sprite" sid="7064084358121659">
+            <members>
+                <member>Music_on</member>
+                <member>Pause_Menu_BackButton</member>
+                <member>Pause_Menu_Bg</member>
+                <member>Pause_Menu_ExitButton</member>
+                <member>Pause_Menu_MainMenu_Bg</member>
+                <member>Volume_on</member>
+            </members>
+        </family>
     </families>
     <layout-folder>
-        <layout>PruebasSingle.xml</layout>
-        <layout>PruebasMulti.xml</layout>
         <layout>Menu Inicial.xml</layout>
-        <layout>Nivel1.xml</layout>
+        <layout>Nivel0.xml</layout>
     </layout-folder>
     <event-folder>
         <event-sheet>Mecanicas juego eventsheet.xml</event-sheet>

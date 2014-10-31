@@ -84,6 +84,12 @@
                 <action id="-15" name="Set visible" sid="338205002438729" type="Astronaut_Halo_">
                     <param id="0" name="Visibility">0</param>
                 </action>
+                <action id="11" name="Set collisions enabled" sid="8754109471899307" type="Popups">
+                    <param id="0" name="Collisions">0</param>
+                </action>
+                <action id="-15" name="Set visible" sid="5322737466657071" type="Popups">
+                    <param id="0" name="Visibility">0</param>
+                </action>
                 <action id="5" name="Set web font" sid="1516094607372418" type="Astronautas">
                     <param id="0" name="Family name">&quot;frostys_winterlandregular&quot;</param>
                     <param id="1" name="CSS URL">&quot;stylesheet.css&quot;</param>
@@ -831,16 +837,6 @@
                                 </event-block>
                             </sub-events>
                         </event-block>
-                        <event-block sid="5316664226879695">
-                            <conditions>
-                                <condition id="-22" name="Else" sid="5833549106002613" type="System" />
-                            </conditions>
-                            <actions>
-                                <action id="0" name="Set text" sid="6003628642733685" type="Astronautas">
-                                    <param id="0" name="Text">&quot;Save Failure&quot;</param>
-                                </action>
-                            </actions>
-                        </event-block>
                     </sub-events>
                 </event-block>
                 <event-block sid="2719461528513223">
@@ -853,6 +849,10 @@
                         <action id="-14" name="Set object time scale" sid="6287140308280114" type="System">
                             <param id="0" name="Object">Nave</param>
                             <param id="1" name="Time scale">0</param>
+                        </action>
+                        <action id="0" name="Add key" sid="4729675787993045" type="Dictionary">
+                            <param id="0" name="Key">&quot;Unlocks&quot;</param>
+                            <param id="1" name="Value">Dictionary.Get(&quot;Unlocks&quot;)+1</param>
                         </action>
                     </actions>
                     <sub-events>
@@ -910,6 +910,25 @@
                                     </actions>
                                 </event-block>
                             </sub-events>
+                        </event-block>
+                        <event-block sid="2899778137381732">
+                            <conditions>
+                                <condition id="-22" name="Else" sid="3104752614545693" type="System" />
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Set text" sid="3615280686566789" type="Astronautas">
+                                    <param id="0" name="Text">&quot;Save Failure&quot;</param>
+                                </action>
+                                <action id="-15" name="Set visible" sid="8644113100694199" type="Astronautas">
+                                    <param id="0" name="Visibility">1</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="7396986786271966" type="System">
+                                    <param id="0" name="Seconds">2</param>
+                                </action>
+                                <action id="-2" name="Go to layout" sid="3952416772385164" type="System">
+                                    <param id="0" name="Layout">Menu Inicial</param>
+                                </action>
+                            </actions>
                         </event-block>
                     </sub-events>
                 </event-block>
@@ -987,6 +1006,21 @@
                         </event-block>
                     </sub-events>
                 </event-block>
+                <event-block sid="8042660657145003">
+                    <conditions>
+                        <condition id="-7" name="Compare instance variable" sid="7927070062907588" type="Nave">
+                            <param id="0" name="Instance variable">Fuel</param>
+                            <param id="1" name="Comparison">3</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Call function" sid="3379042456981485" type="Function">
+                            <param id="0" name="Name">&quot;Destroy&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
+                    </actions>
+                </event-block>
             </sub-events>
         </event-group>
         <event-block sid="3530539874702245">
@@ -999,6 +1033,146 @@
                     <param id="0" name="Time scale">1.0</param>
                 </action>
             </actions>
+        </event-block>
+        <event-block sid="577250403232665">
+            <conditions>
+                <condition id="2" name="Is in touch" sid="3409778840413447" type="Touch" />
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block sid="260103040326106">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="3501566093641747" type="Touch">
+                            <param id="0" name="Object">Pause_ico</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-15" name="Set visible" sid="3023321064820402" type="Popups">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                        <action id="11" name="Set collisions enabled" sid="7501649308029709" type="Popups">
+                            <param id="0" name="Collisions">1</param>
+                        </action>
+                        <action behavior="Physics" id="21" name="Set immovable" sid="56736430019969" type="Nave">
+                            <param id="0" name="Setting">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="7886669667044">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="422214605153056" type="Touch">
+                            <param id="0" name="Object">Pause_Menu_ExitButton</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-15" name="Set visible" sid="6997882524662742" type="Popups">
+                            <param id="0" name="Visibility">0</param>
+                        </action>
+                        <action id="11" name="Set collisions enabled" sid="7318746007911474" type="Popups">
+                            <param id="0" name="Collisions">0</param>
+                        </action>
+                        <action behavior="Physics" id="21" name="Set immovable" sid="3751855193149646" type="Nave">
+                            <param id="0" name="Setting">0</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="8921838844282382">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="8485815902758192" type="Touch">
+                            <param id="0" name="Object">Volume_on</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="9875233862885244">
+                            <conditions>
+                                <condition id="3" name="Compare frame" sid="7772481513649763" type="Volume_on">
+                                    <param id="0" name="Comparison">0</param>
+                                    <param id="1" name="Number">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="401881123018436" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="2878170197425074" type="Volume_on">
+                                    <param id="0" name="Frame number">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="472113176715015">
+                            <conditions>
+                                <condition id="3" name="Compare frame" sid="6779568058633446" type="Volume_on">
+                                    <param id="0" name="Comparison">0</param>
+                                    <param id="1" name="Number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="7799643065207943" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="156258197000959" type="Volume_on">
+                                    <param id="0" name="Frame number">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="2121754377950887">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="8728670849526358" type="Touch">
+                            <param id="0" name="Object">Music_on</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="4486143387488947">
+                            <conditions>
+                                <condition id="3" name="Compare frame" sid="3927127129063027" type="Music_on">
+                                    <param id="0" name="Comparison">0</param>
+                                    <param id="1" name="Number">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="4340634904441059" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="5015782758359145" type="Music_on">
+                                    <param id="0" name="Frame number">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="5119486444670565">
+                            <conditions>
+                                <condition id="3" name="Compare frame" sid="5753639227968992" type="Music_on">
+                                    <param id="0" name="Comparison">0</param>
+                                    <param id="1" name="Number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="7464137196738395" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="1405875788504431" type="Music_on">
+                                    <param id="0" name="Frame number">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="2438314838851629">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="5083581112591538" type="Touch">
+                            <param id="0" name="Object">Pause_Menu_BackButton</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-2" name="Go to layout" sid="7578077868455338" type="System">
+                            <param id="0" name="Layout">Menu Inicial</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
         </event-block>
     </events>
 </c2eventsheet>

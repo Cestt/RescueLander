@@ -3391,7 +3391,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		var orientation = "portrait";
 		if (this.orientations === 2)
 			orientation = "landscape";
-		if (screen["lockOrientation"])
+		if (screen["orientation"] && screen["orientation"]["lock"])
+			screen["orientation"]["lock"](orientation);
+		else if (screen["lockOrientation"])
 			screen["lockOrientation"](orientation);
 		else if (screen["webkitLockOrientation"])
 			screen["webkitLockOrientation"](orientation);
@@ -3773,7 +3775,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.start_time = Date.now();
 	};
 	var anyImageHadError = false;
-	Runtime.prototype.waitForImageLoad = function (img_)
+	Runtime.prototype.waitForImageLoad = function (img_, src_)
 	{
 		img_.onerror = function (e)
 		{
@@ -3782,6 +3784,26 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			if (console && console.error)
 				console.error("Error loading image '" + img_.src + "': ", e);
 		};
+		if (!img_.src)
+		{
+			if (typeof XAPKReader !== "undefined")
+			{
+				XAPKReader.get(src_, function (expanded_url)
+				{
+					img_.src = expanded_url;
+				}, function (e)
+				{
+					img_.c2error = true;
+					anyImageHadError = true;
+					if (console && console.error)
+						console.error("Error extracting image '" + src_ + "' from expansion file: ", e);
+				});
+			}
+			else
+			{
+				img_.src = src_;
+			}
+		}
 		this.wait_for_textures.push(img_);
 	};
 	Runtime.prototype.findWaitingTexture = function (src_)
@@ -3816,7 +3838,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			if (!filesize || filesize <= 0)
 				filesize = 50000;
 			totalsize += filesize;
-			if ((img.complete || img["loaded"]) && !img.c2error)
+			if (!!img.src && (img.complete || img["loaded"]) && !img.c2error)
 				completedsize += filesize;
 			else
 				ret = false;    // not all textures loaded
@@ -13050,6 +13072,3034 @@ cr.shaders["colorblend"] = {src: ["varying mediump vec2 vTex;",
 	crossSampling: true,
 	animated: false,
 	parameters: [] }
+cr.shaders["hsladjust"] = {src: ["varying mediump vec2 vTex;",
+"uniform lowp sampler2D samplerFront;",
+"precision mediump float;",
+"uniform float huerotate;",
+"uniform float satadjust;",
+"uniform float lumadjust;",
+"vec3 rgb_to_hsl(vec3 color)",
+"{",
+"vec3 hsl = vec3(0.0, 0.0, 0.0);",
+"float fmin = min(min(color.r, color.g), color.b);",
+"float fmax = max(max(color.r, color.g), color.b);",
+"float delta = fmax - fmin;",
+"hsl.z = (fmax + fmin) / 2.0;",
+"if (delta == 0.0)",
+"{",
+"hsl.x = 0.0;",
+"hsl.y = 0.0;",
+"}",
+"else",
+"{",
+"if (hsl.z < 0.5)",
+"hsl.y = delta / (fmax + fmin);",
+"else",
+"hsl.y = delta / (2.0 - fmax - fmin);",
+"float dR = (((fmax - color.r) / 6.0) + (delta / 2.0)) / delta;",
+"float dG = (((fmax - color.g) / 6.0) + (delta / 2.0)) / delta;",
+"float dB = (((fmax - color.b) / 6.0) + (delta / 2.0)) / delta;",
+"if (color.r == fmax)",
+"hsl.x = dB - dG;",
+"else if (color.g == fmax)",
+"hsl.x = (1.0 / 3.0) + dR - dB;",
+"else if (color.b == fmax)",
+"hsl.x = (2.0 / 3.0) + dG - dR;",
+"if (hsl.x < 0.0)",
+"hsl.x += 1.0;",
+"else if (hsl.x > 1.0)",
+"hsl.x -= 1.0;",
+"}",
+"return hsl;",
+"}",
+"float hue_to_rgb(float f1, float f2, float hue)",
+"{",
+"if (hue < 0.0)",
+"hue += 1.0;",
+"else if (hue > 1.0)",
+"hue -= 1.0;",
+"float ret;",
+"if ((6.0 * hue) < 1.0)",
+"ret = f1 + (f2 - f1) * 6.0 * hue;",
+"else if ((2.0 * hue) < 1.0)",
+"ret = f2;",
+"else if ((3.0 * hue) < 2.0)",
+"ret = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;",
+"else",
+"ret = f1;",
+"return ret;",
+"}",
+"vec3 hsl_to_rgb(vec3 hsl)",
+"{",
+"vec3 rgb = vec3(hsl.z);",
+"if (hsl.y != 0.0)",
+"{",
+"float f2;",
+"if (hsl.z < 0.5)",
+"f2 = hsl.z * (1.0 + hsl.y);",
+"else",
+"f2 = (hsl.z + hsl.y) - (hsl.y * hsl.z);",
+"float f1 = 2.0 * hsl.z - f2;",
+"rgb.r = hue_to_rgb(f1, f2, hsl.x + (1.0 / 3.0));",
+"rgb.g = hue_to_rgb(f1, f2, hsl.x);",
+"rgb.b = hue_to_rgb(f1, f2, hsl.x - (1.0 / 3.0));",
+"}",
+"return rgb;",
+"}",
+"void main(void)",
+"{",
+"vec4 front = texture2D(samplerFront, vTex);",
+"vec3 rgb = rgb_to_hsl(front.rgb) + vec3(huerotate, 0, (lumadjust - 1.0) * front.a);",
+"rgb.y *= satadjust;",
+"rgb = hsl_to_rgb(rgb);",
+"gl_FragColor = vec4(rgb, front.a);",
+"}"
+].join("\n"),
+	extendBoxHorizontal: 0,
+	extendBoxVertical: 0,
+	crossSampling: false,
+	animated: false,
+	parameters: [["huerotate", 0, 1], ["satadjust", 0, 1], ["lumadjust", 0, 1]] }
+cr.shaders["setcolor"] = {src: ["varying mediump vec2 vTex;",
+"uniform lowp sampler2D samplerFront;",
+"uniform lowp float red;",
+"uniform lowp float green;",
+"uniform lowp float blue;",
+"void main(void)",
+"{",
+"lowp float a = texture2D(samplerFront, vTex).a;",
+"gl_FragColor = vec4(vec3(red, green, blue) * a, a);",
+"}"
+].join("\n"),
+	extendBoxHorizontal: 0,
+	extendBoxVertical: 0,
+	crossSampling: false,
+	animated: false,
+	parameters: [["red", 0, 1], ["green", 0, 1], ["blue", 0, 1]] }
+;
+;
+cr.plugins_.Audio = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.Audio.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+	typeProto.onCreate = function()
+	{
+	};
+	var audRuntime = null;
+	var audInst = null;
+	var audTag = "";
+	var appPath = "";			// for PhoneGap only
+	var API_HTML5 = 0;
+	var API_WEBAUDIO = 1;
+	var API_PHONEGAP = 2;
+	var API_APPMOBI = 3;
+	var api = API_HTML5;
+	var context = null;
+	var audioBuffers = [];		// cache of buffers
+	var audioInstances = [];	// cache of instances
+	var lastAudio = null;
+	var useOgg = false;			// determined at create time
+	var timescale_mode = 0;
+	var silent = false;
+	var masterVolume = 1;
+	var listenerX = 0;
+	var listenerY = 0;
+	var panningModel = 1;		// HRTF
+	var distanceModel = 1;		// Inverse
+	var refDistance = 10;
+	var maxDistance = 10000;
+	var rolloffFactor = 1;
+	var micSource = null;
+	var micTag = "";
+	var isMusicWorkaround = false;
+	var musicPlayNextTouch = [];
+	function dbToLinear(x)
+	{
+		var v = dbToLinear_nocap(x);
+		if (v < 0)
+			v = 0;
+		if (v > 1)
+			v = 1;
+		return v;
+	};
+	function linearToDb(x)
+	{
+		if (x < 0)
+			x = 0;
+		if (x > 1)
+			x = 1;
+		return linearToDb_nocap(x);
+	};
+	function dbToLinear_nocap(x)
+	{
+		return Math.pow(10, x / 20);
+	};
+	function linearToDb_nocap(x)
+	{
+		return (Math.log(x) / Math.log(10)) * 20;
+	};
+	var effects = {};
+	function getDestinationForTag(tag)
+	{
+		tag = tag.toLowerCase();
+		if (effects.hasOwnProperty(tag))
+		{
+			if (effects[tag].length)
+				return effects[tag][0].getInputNode();
+		}
+		return context["destination"];
+	};
+	function createGain()
+	{
+		if (context["createGain"])
+			return context["createGain"]();
+		else
+			return context["createGainNode"]();
+	};
+	function createDelay(d)
+	{
+		if (context["createDelay"])
+			return context["createDelay"](d);
+		else
+			return context["createDelayNode"](d);
+	};
+	function startSource(s)
+	{
+		if (s["start"])
+			s["start"](0);
+		else
+			s["noteOn"](0);
+	};
+	function startSourceAt(s, x, d)
+	{
+		if (s["start"])
+			s["start"](0, x);
+		else
+			s["noteGrainOn"](0, x, d - x);
+	};
+	function stopSource(s)
+	{
+		try {
+			if (s["stop"])
+				s["stop"](0);
+			else
+				s["noteOff"](0);
+		}
+		catch (e) {}
+	};
+	function setAudioParam(ap, value, ramp, time)
+	{
+		if (!ap)
+			return;		// iOS is missing some parameters
+		ap["cancelScheduledValues"](0);
+		if (time === 0)
+		{
+			ap["value"] = value;
+			return;
+		}
+		var curTime = context["currentTime"];
+		time += curTime;
+		switch (ramp) {
+		case 0:		// step
+			ap["setValueAtTime"](value, time);
+			break;
+		case 1:		// linear
+			ap["setValueAtTime"](ap["value"], curTime);		// to set what to ramp from
+			ap["linearRampToValueAtTime"](value, time);
+			break;
+		case 2:		// exponential
+			ap["setValueAtTime"](ap["value"], curTime);		// to set what to ramp from
+			ap["exponentialRampToValueAtTime"](value, time);
+			break;
+		}
+	};
+	var filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "peaking", "notch", "allpass"];
+	function FilterEffect(type, freq, detune, q, gain, mix)
+	{
+		this.type = "filter";
+		this.params = [type, freq, detune, q, gain, mix];
+		this.inputNode = createGain();
+		this.wetNode = createGain();
+		this.wetNode["gain"]["value"] = mix;
+		this.dryNode = createGain();
+		this.dryNode["gain"]["value"] = 1 - mix;
+		this.filterNode = context["createBiquadFilter"]();
+		if (typeof this.filterNode["type"] === "number")
+			this.filterNode["type"] = type;
+		else
+			this.filterNode["type"] = filterTypes[type];
+		this.filterNode["frequency"]["value"] = freq;
+		if (this.filterNode["detune"])		// iOS 6 doesn't have detune yet
+			this.filterNode["detune"]["value"] = detune;
+		this.filterNode["Q"]["value"] = q;
+		this.filterNode["gain"]["value"] = gain;
+		this.inputNode["connect"](this.filterNode);
+		this.inputNode["connect"](this.dryNode);
+		this.filterNode["connect"](this.wetNode);
+	};
+	FilterEffect.prototype.connectTo = function (node)
+	{
+		this.wetNode["disconnect"]();
+		this.wetNode["connect"](node);
+		this.dryNode["disconnect"]();
+		this.dryNode["connect"](node);
+	};
+	FilterEffect.prototype.remove = function ()
+	{
+		this.inputNode["disconnect"]();
+		this.filterNode["disconnect"]();
+		this.wetNode["disconnect"]();
+		this.dryNode["disconnect"]();
+	};
+	FilterEffect.prototype.getInputNode = function ()
+	{
+		return this.inputNode;
+	};
+	FilterEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 0:		// mix
+			value = value / 100;
+			if (value < 0) value = 0;
+			if (value > 1) value = 1;
+			this.params[5] = value;
+			setAudioParam(this.wetNode["gain"], value, ramp, time);
+			setAudioParam(this.dryNode["gain"], 1 - value, ramp, time);
+			break;
+		case 1:		// filter frequency
+			this.params[1] = value;
+			setAudioParam(this.filterNode["frequency"], value, ramp, time);
+			break;
+		case 2:		// filter detune
+			this.params[2] = value;
+			setAudioParam(this.filterNode["detune"], value, ramp, time);
+			break;
+		case 3:		// filter Q
+			this.params[3] = value;
+			setAudioParam(this.filterNode["Q"], value, ramp, time);
+			break;
+		case 4:		// filter/delay gain (note value is in dB here)
+			this.params[4] = value;
+			setAudioParam(this.filterNode["gain"], value, ramp, time);
+			break;
+		}
+	};
+	function DelayEffect(delayTime, delayGain, mix)
+	{
+		this.type = "delay";
+		this.params = [delayTime, delayGain, mix];
+		this.inputNode = createGain();
+		this.wetNode = createGain();
+		this.wetNode["gain"]["value"] = mix;
+		this.dryNode = createGain();
+		this.dryNode["gain"]["value"] = 1 - mix;
+		this.mainNode = createGain();
+		this.delayNode = createDelay(delayTime);
+		this.delayNode["delayTime"]["value"] = delayTime;
+		this.delayGainNode = createGain();
+		this.delayGainNode["gain"]["value"] = delayGain;
+		this.inputNode["connect"](this.mainNode);
+		this.inputNode["connect"](this.dryNode);
+		this.mainNode["connect"](this.wetNode);
+		this.mainNode["connect"](this.delayNode);
+		this.delayNode["connect"](this.delayGainNode);
+		this.delayGainNode["connect"](this.mainNode);
+	};
+	DelayEffect.prototype.connectTo = function (node)
+	{
+		this.wetNode["disconnect"]();
+		this.wetNode["connect"](node);
+		this.dryNode["disconnect"]();
+		this.dryNode["connect"](node);
+	};
+	DelayEffect.prototype.remove = function ()
+	{
+		this.inputNode["disconnect"]();
+		this.mainNode["disconnect"]();
+		this.delayNode["disconnect"]();
+		this.delayGainNode["disconnect"]();
+		this.wetNode["disconnect"]();
+		this.dryNode["disconnect"]();
+	};
+	DelayEffect.prototype.getInputNode = function ()
+	{
+		return this.inputNode;
+	};
+	DelayEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 0:		// mix
+			value = value / 100;
+			if (value < 0) value = 0;
+			if (value > 1) value = 1;
+			this.params[2] = value;
+			setAudioParam(this.wetNode["gain"], value, ramp, time);
+			setAudioParam(this.dryNode["gain"], 1 - value, ramp, time);
+			break;
+		case 4:		// filter/delay gain (note value is passed in dB but needs to be linear here)
+			this.params[1] = dbToLinear(value);
+			setAudioParam(this.delayGainNode["gain"], dbToLinear(value), ramp, time);
+			break;
+		case 5:		// delay time
+			this.params[0] = value;
+			setAudioParam(this.delayNode["delayTime"], value, ramp, time);
+			break;
+		}
+	};
+	function ConvolveEffect(buffer, normalize, mix, src)
+	{
+		this.type = "convolve";
+		this.params = [normalize, mix, src];
+		this.inputNode = createGain();
+		this.wetNode = createGain();
+		this.wetNode["gain"]["value"] = mix;
+		this.dryNode = createGain();
+		this.dryNode["gain"]["value"] = 1 - mix;
+		this.convolveNode = context["createConvolver"]();
+		if (buffer)
+		{
+			this.convolveNode["normalize"] = normalize;
+			this.convolveNode["buffer"] = buffer;
+		}
+		this.inputNode["connect"](this.convolveNode);
+		this.inputNode["connect"](this.dryNode);
+		this.convolveNode["connect"](this.wetNode);
+	};
+	ConvolveEffect.prototype.connectTo = function (node)
+	{
+		this.wetNode["disconnect"]();
+		this.wetNode["connect"](node);
+		this.dryNode["disconnect"]();
+		this.dryNode["connect"](node);
+	};
+	ConvolveEffect.prototype.remove = function ()
+	{
+		this.inputNode["disconnect"]();
+		this.convolveNode["disconnect"]();
+		this.wetNode["disconnect"]();
+		this.dryNode["disconnect"]();
+	};
+	ConvolveEffect.prototype.getInputNode = function ()
+	{
+		return this.inputNode;
+	};
+	ConvolveEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 0:		// mix
+			value = value / 100;
+			if (value < 0) value = 0;
+			if (value > 1) value = 1;
+			this.params[1] = value;
+			setAudioParam(this.wetNode["gain"], value, ramp, time);
+			setAudioParam(this.dryNode["gain"], 1 - value, ramp, time);
+			break;
+		}
+	};
+	function FlangerEffect(delay, modulation, freq, feedback, mix)
+	{
+		this.type = "flanger";
+		this.params = [delay, modulation, freq, feedback, mix];
+		this.inputNode = createGain();
+		this.dryNode = createGain();
+		this.dryNode["gain"]["value"] = 1 - (mix / 2);
+		this.wetNode = createGain();
+		this.wetNode["gain"]["value"] = mix / 2;
+		this.feedbackNode = createGain();
+		this.feedbackNode["gain"]["value"] = feedback;
+		this.delayNode = createDelay(delay + modulation);
+		this.delayNode["delayTime"]["value"] = delay;
+		this.oscNode = context["createOscillator"]();
+		this.oscNode["frequency"]["value"] = freq;
+		this.oscGainNode = createGain();
+		this.oscGainNode["gain"]["value"] = modulation;
+		this.inputNode["connect"](this.delayNode);
+		this.inputNode["connect"](this.dryNode);
+		this.delayNode["connect"](this.wetNode);
+		this.delayNode["connect"](this.feedbackNode);
+		this.feedbackNode["connect"](this.delayNode);
+		this.oscNode["connect"](this.oscGainNode);
+		this.oscGainNode["connect"](this.delayNode["delayTime"]);
+		startSource(this.oscNode);
+	};
+	FlangerEffect.prototype.connectTo = function (node)
+	{
+		this.dryNode["disconnect"]();
+		this.dryNode["connect"](node);
+		this.wetNode["disconnect"]();
+		this.wetNode["connect"](node);
+	};
+	FlangerEffect.prototype.remove = function ()
+	{
+		this.inputNode["disconnect"]();
+		this.delayNode["disconnect"]();
+		this.oscNode["disconnect"]();
+		this.oscGainNode["disconnect"]();
+		this.dryNode["disconnect"]();
+		this.wetNode["disconnect"]();
+		this.feedbackNode["disconnect"]();
+	};
+	FlangerEffect.prototype.getInputNode = function ()
+	{
+		return this.inputNode;
+	};
+	FlangerEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 0:		// mix
+			value = value / 100;
+			if (value < 0) value = 0;
+			if (value > 1) value = 1;
+			this.params[4] = value;
+			setAudioParam(this.wetNode["gain"], value / 2, ramp, time);
+			setAudioParam(this.dryNode["gain"], 1 - (value / 2), ramp, time);
+			break;
+		case 6:		// modulation
+			this.params[1] = value / 1000;
+			setAudioParam(this.oscGainNode["gain"], value / 1000, ramp, time);
+			break;
+		case 7:		// modulation frequency
+			this.params[2] = value;
+			setAudioParam(this.oscNode["frequency"], value, ramp, time);
+			break;
+		case 8:		// feedback
+			this.params[3] = value / 100;
+			setAudioParam(this.feedbackNode["gain"], value / 100, ramp, time);
+			break;
+		}
+	};
+	function PhaserEffect(freq, detune, q, modulation, modfreq, mix)
+	{
+		this.type = "phaser";
+		this.params = [freq, detune, q, modulation, modfreq, mix];
+		this.inputNode = createGain();
+		this.dryNode = createGain();
+		this.dryNode["gain"]["value"] = 1 - (mix / 2);
+		this.wetNode = createGain();
+		this.wetNode["gain"]["value"] = mix / 2;
+		this.filterNode = context["createBiquadFilter"]();
+		if (typeof this.filterNode["type"] === "number")
+			this.filterNode["type"] = 7;	// all-pass
+		else
+			this.filterNode["type"] = "allpass";
+		this.filterNode["frequency"]["value"] = freq;
+		if (this.filterNode["detune"])		// iOS 6 doesn't have detune yet
+			this.filterNode["detune"]["value"] = detune;
+		this.filterNode["Q"]["value"] = q;
+		this.oscNode = context["createOscillator"]();
+		this.oscNode["frequency"]["value"] = modfreq;
+		this.oscGainNode = createGain();
+		this.oscGainNode["gain"]["value"] = modulation;
+		this.inputNode["connect"](this.filterNode);
+		this.inputNode["connect"](this.dryNode);
+		this.filterNode["connect"](this.wetNode);
+		this.oscNode["connect"](this.oscGainNode);
+		this.oscGainNode["connect"](this.filterNode["frequency"]);
+		startSource(this.oscNode);
+	};
+	PhaserEffect.prototype.connectTo = function (node)
+	{
+		this.dryNode["disconnect"]();
+		this.dryNode["connect"](node);
+		this.wetNode["disconnect"]();
+		this.wetNode["connect"](node);
+	};
+	PhaserEffect.prototype.remove = function ()
+	{
+		this.inputNode["disconnect"]();
+		this.filterNode["disconnect"]();
+		this.oscNode["disconnect"]();
+		this.oscGainNode["disconnect"]();
+		this.dryNode["disconnect"]();
+		this.wetNode["disconnect"]();
+	};
+	PhaserEffect.prototype.getInputNode = function ()
+	{
+		return this.inputNode;
+	};
+	PhaserEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 0:		// mix
+			value = value / 100;
+			if (value < 0) value = 0;
+			if (value > 1) value = 1;
+			this.params[5] = value;
+			setAudioParam(this.wetNode["gain"], value / 2, ramp, time);
+			setAudioParam(this.dryNode["gain"], 1 - (value / 2), ramp, time);
+			break;
+		case 1:		// filter frequency
+			this.params[0] = value;
+			setAudioParam(this.filterNode["frequency"], value, ramp, time);
+			break;
+		case 2:		// filter detune
+			this.params[1] = value;
+			setAudioParam(this.filterNode["detune"], value, ramp, time);
+			break;
+		case 3:		// filter Q
+			this.params[2] = value;
+			setAudioParam(this.filterNode["Q"], value, ramp, time);
+			break;
+		case 6:		// modulation
+			this.params[3] = value;
+			setAudioParam(this.oscGainNode["gain"], value, ramp, time);
+			break;
+		case 7:		// modulation frequency
+			this.params[4] = value;
+			setAudioParam(this.oscNode["frequency"], value, ramp, time);
+			break;
+		}
+	};
+	function GainEffect(g)
+	{
+		this.type = "gain";
+		this.params = [g];
+		this.node = createGain();
+		this.node["gain"]["value"] = g;
+	};
+	GainEffect.prototype.connectTo = function (node_)
+	{
+		this.node["disconnect"]();
+		this.node["connect"](node_);
+	};
+	GainEffect.prototype.remove = function ()
+	{
+		this.node["disconnect"]();
+	};
+	GainEffect.prototype.getInputNode = function ()
+	{
+		return this.node;
+	};
+	GainEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 4:		// gain
+			this.params[0] = dbToLinear(value);
+			setAudioParam(this.node["gain"], dbToLinear(value), ramp, time);
+			break;
+		}
+	};
+	function TremoloEffect(freq, mix)
+	{
+		this.type = "tremolo";
+		this.params = [freq, mix];
+		this.node = createGain();
+		this.node["gain"]["value"] = 1 - (mix / 2);
+		this.oscNode = context["createOscillator"]();
+		this.oscNode["frequency"]["value"] = freq;
+		this.oscGainNode = createGain();
+		this.oscGainNode["gain"]["value"] = mix / 2;
+		this.oscNode["connect"](this.oscGainNode);
+		this.oscGainNode["connect"](this.node["gain"]);
+		startSource(this.oscNode);
+	};
+	TremoloEffect.prototype.connectTo = function (node_)
+	{
+		this.node["disconnect"]();
+		this.node["connect"](node_);
+	};
+	TremoloEffect.prototype.remove = function ()
+	{
+		this.oscNode["disconnect"]();
+		this.oscGainNode["disconnect"]();
+		this.node["disconnect"]();
+	};
+	TremoloEffect.prototype.getInputNode = function ()
+	{
+		return this.node;
+	};
+	TremoloEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 0:		// mix
+			value = value / 100;
+			if (value < 0) value = 0;
+			if (value > 1) value = 1;
+			this.params[1] = value;
+			setAudioParam(this.node["gain"]["value"], 1 - (value / 2), ramp, time);
+			setAudioParam(this.oscGainNode["gain"]["value"], value / 2, ramp, time);
+			break;
+		case 7:		// modulation frequency
+			this.params[0] = value;
+			setAudioParam(this.oscNode["frequency"], value, ramp, time);
+			break;
+		}
+	};
+	function RingModulatorEffect(freq, mix)
+	{
+		this.type = "ringmod";
+		this.params = [freq, mix];
+		this.inputNode = createGain();
+		this.wetNode = createGain();
+		this.wetNode["gain"]["value"] = mix;
+		this.dryNode = createGain();
+		this.dryNode["gain"]["value"] = 1 - mix;
+		this.ringNode = createGain();
+		this.ringNode["gain"]["value"] = 0;
+		this.oscNode = context["createOscillator"]();
+		this.oscNode["frequency"]["value"] = freq;
+		this.oscNode["connect"](this.ringNode["gain"]);
+		startSource(this.oscNode);
+		this.inputNode["connect"](this.ringNode);
+		this.inputNode["connect"](this.dryNode);
+		this.ringNode["connect"](this.wetNode);
+	};
+	RingModulatorEffect.prototype.connectTo = function (node_)
+	{
+		this.wetNode["disconnect"]();
+		this.wetNode["connect"](node_);
+		this.dryNode["disconnect"]();
+		this.dryNode["connect"](node_);
+	};
+	RingModulatorEffect.prototype.remove = function ()
+	{
+		this.oscNode["disconnect"]();
+		this.ringNode["disconnect"]();
+		this.inputNode["disconnect"]();
+		this.wetNode["disconnect"]();
+		this.dryNode["disconnect"]();
+	};
+	RingModulatorEffect.prototype.getInputNode = function ()
+	{
+		return this.inputNode;
+	};
+	RingModulatorEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 0:		// mix
+			value = value / 100;
+			if (value < 0) value = 0;
+			if (value > 1) value = 1;
+			this.params[1] = value;
+			setAudioParam(this.wetNode["gain"], value, ramp, time);
+			setAudioParam(this.dryNode["gain"], 1 - value, ramp, time);
+			break;
+		case 7:		// modulation frequency
+			this.params[0] = value;
+			setAudioParam(this.oscNode["frequency"], value, ramp, time);
+			break;
+		}
+	};
+	function DistortionEffect(threshold, headroom, drive, makeupgain, mix)
+	{
+		this.type = "distortion";
+		this.params = [threshold, headroom, drive, makeupgain, mix];
+		this.inputNode = createGain();
+		this.preGain = createGain();
+		this.postGain = createGain();
+		this.setDrive(drive, dbToLinear_nocap(makeupgain));
+		this.wetNode = createGain();
+		this.wetNode["gain"]["value"] = mix;
+		this.dryNode = createGain();
+		this.dryNode["gain"]["value"] = 1 - mix;
+		this.waveShaper = context["createWaveShaper"]();
+		this.curve = new Float32Array(65536);
+		this.generateColortouchCurve(threshold, headroom);
+		this.waveShaper.curve = this.curve;
+		this.inputNode["connect"](this.preGain);
+		this.inputNode["connect"](this.dryNode);
+		this.preGain["connect"](this.waveShaper);
+		this.waveShaper["connect"](this.postGain);
+		this.postGain["connect"](this.wetNode);
+	};
+	DistortionEffect.prototype.setDrive = function (drive, makeupgain)
+	{
+		if (drive < 0.01)
+			drive = 0.01;
+		this.preGain["gain"]["value"] = drive;
+		this.postGain["gain"]["value"] = Math.pow(1 / drive, 0.6) * makeupgain;
+	};
+	function e4(x, k)
+	{
+		return 1.0 - Math.exp(-k * x);
+	}
+	DistortionEffect.prototype.shape = function (x, linearThreshold, linearHeadroom)
+	{
+		var maximum = 1.05 * linearHeadroom * linearThreshold;
+		var kk = (maximum - linearThreshold);
+		var sign = x < 0 ? -1 : +1;
+		var absx = x < 0 ? -x : x;
+		var shapedInput = absx < linearThreshold ? absx : linearThreshold + kk * e4(absx - linearThreshold, 1.0 / kk);
+		shapedInput *= sign;
+		return shapedInput;
+	};
+	DistortionEffect.prototype.generateColortouchCurve = function (threshold, headroom)
+	{
+		var linearThreshold = dbToLinear_nocap(threshold);
+		var linearHeadroom = dbToLinear_nocap(headroom);
+		var n = 65536;
+		var n2 = n / 2;
+		var x = 0;
+		for (var i = 0; i < n2; ++i) {
+			x = i / n2;
+			x = this.shape(x, linearThreshold, linearHeadroom);
+			this.curve[n2 + i] = x;
+			this.curve[n2 - i - 1] = -x;
+		}
+	};
+	DistortionEffect.prototype.connectTo = function (node)
+	{
+		this.wetNode["disconnect"]();
+		this.wetNode["connect"](node);
+		this.dryNode["disconnect"]();
+		this.dryNode["connect"](node);
+	};
+	DistortionEffect.prototype.remove = function ()
+	{
+		this.inputNode["disconnect"]();
+		this.preGain["disconnect"]();
+		this.waveShaper["disconnect"]();
+		this.postGain["disconnect"]();
+		this.wetNode["disconnect"]();
+		this.dryNode["disconnect"]();
+	};
+	DistortionEffect.prototype.getInputNode = function ()
+	{
+		return this.inputNode;
+	};
+	DistortionEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+		switch (param) {
+		case 0:		// mix
+			value = value / 100;
+			if (value < 0) value = 0;
+			if (value > 1) value = 1;
+			this.params[4] = value;
+			setAudioParam(this.wetNode["gain"], value, ramp, time);
+			setAudioParam(this.dryNode["gain"], 1 - value, ramp, time);
+			break;
+		}
+	};
+	function CompressorEffect(threshold, knee, ratio, attack, release)
+	{
+		this.type = "compressor";
+		this.params = [threshold, knee, ratio, attack, release];
+		this.node = context["createDynamicsCompressor"]();
+		try {
+			this.node["threshold"]["value"] = threshold;
+			this.node["knee"]["value"] = knee;
+			this.node["ratio"]["value"] = ratio;
+			this.node["attack"]["value"] = attack;
+			this.node["release"]["value"] = release;
+		}
+		catch (e) {}
+	};
+	CompressorEffect.prototype.connectTo = function (node_)
+	{
+		this.node["disconnect"]();
+		this.node["connect"](node_);
+	};
+	CompressorEffect.prototype.remove = function ()
+	{
+		this.node["disconnect"]();
+	};
+	CompressorEffect.prototype.getInputNode = function ()
+	{
+		return this.node;
+	};
+	CompressorEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+	};
+	function AnalyserEffect(fftSize, smoothing)
+	{
+		this.type = "analyser";
+		this.params = [fftSize, smoothing];
+		this.node = context["createAnalyser"]();
+		this.node["fftSize"] = fftSize;
+		this.node["smoothingTimeConstant"] = smoothing;
+		this.freqBins = new Float32Array(this.node["frequencyBinCount"]);
+		this.signal = new Uint8Array(fftSize);
+		this.peak = 0;
+		this.rms = 0;
+	};
+	AnalyserEffect.prototype.tick = function ()
+	{
+		this.node["getFloatFrequencyData"](this.freqBins);
+		this.node["getByteTimeDomainData"](this.signal);
+		var fftSize = this.node["fftSize"];
+		var i = 0;
+		this.peak = 0;
+		var rmsSquaredSum = 0;
+		var s = 0;
+		for ( ; i < fftSize; i++)
+		{
+			s = (this.signal[i] - 128) / 128;
+			if (s < 0)
+				s = -s;
+			if (this.peak < s)
+				this.peak = s;
+			rmsSquaredSum += s * s;
+		}
+		this.peak = linearToDb(this.peak);
+		this.rms = linearToDb(Math.sqrt(rmsSquaredSum / fftSize));
+	};
+	AnalyserEffect.prototype.connectTo = function (node_)
+	{
+		this.node["disconnect"]();
+		this.node["connect"](node_);
+	};
+	AnalyserEffect.prototype.remove = function ()
+	{
+		this.node["disconnect"]();
+	};
+	AnalyserEffect.prototype.getInputNode = function ()
+	{
+		return this.node;
+	};
+	AnalyserEffect.prototype.setParam = function(param, value, ramp, time)
+	{
+	};
+	var OT_POS_SAMPLES = 4;
+	function ObjectTracker()
+	{
+		this.obj = null;
+		this.loadUid = 0;
+		this.speeds = [];
+		this.lastX = 0;
+		this.lastY = 0;
+		this.moveAngle = 0;
+	};
+	ObjectTracker.prototype.setObject = function (obj_)
+	{
+		this.obj = obj_;
+		if (this.obj)
+		{
+			this.lastX = this.obj.x;
+			this.lastY = this.obj.y;
+		}
+		this.speeds.length = 0;
+	};
+	ObjectTracker.prototype.hasObject = function ()
+	{
+		return !!this.obj;
+	};
+	ObjectTracker.prototype.tick = function (dt)
+	{
+		if (!this.obj || dt === 0)
+			return;
+		this.moveAngle = cr.angleTo(this.lastX, this.lastY, this.obj.x, this.obj.y);
+		var s = cr.distanceTo(this.lastX, this.lastY, this.obj.x, this.obj.y) / dt;
+		if (this.speeds.length < OT_POS_SAMPLES)
+			this.speeds.push(s);
+		else
+		{
+			this.speeds.shift();
+			this.speeds.push(s);
+		}
+		this.lastX = this.obj.x;
+		this.lastY = this.obj.y;
+	};
+	ObjectTracker.prototype.getSpeed = function ()
+	{
+		if (!this.speeds.length)
+			return 0;
+		var i, len, sum = 0;
+		for (i = 0, len = this.speeds.length; i < len; i++)
+		{
+			sum += this.speeds[i];
+		}
+		return sum / this.speeds.length;
+	};
+	ObjectTracker.prototype.getVelocityX = function ()
+	{
+		return Math.cos(this.moveAngle) * this.getSpeed();
+	};
+	ObjectTracker.prototype.getVelocityY = function ()
+	{
+		return Math.sin(this.moveAngle) * this.getSpeed();
+	};
+	var iOShadtouch = false;	// has had touch input on iOS to work around web audio API muting
+	function C2AudioBuffer(src_, is_music)
+	{
+		this.src = src_;
+		this.myapi = api;
+		this.is_music = is_music;
+		this.added_end_listener = false;
+		var self = this;
+		this.outNode = null;
+		this.mediaSourceNode = null;
+		this.panWhenReady = [];		// for web audio API positioned sounds
+		this.seekWhenReady = 0;
+		this.pauseWhenReady = false;
+		this.supportWebAudioAPI = false;
+		this.failedToLoad = false;
+		this.wasEverReady = false;	// if a buffer is ever marked as ready, it's permanently considered ready after then.
+		if (api === API_WEBAUDIO && is_music)
+		{
+			this.myapi = API_HTML5;
+			this.outNode = createGain();
+		}
+		this.bufferObject = null;			// actual audio object
+		this.audioData = null;				// web audio api: ajax request result (compressed audio that needs decoding)
+		var request;
+		switch (this.myapi) {
+		case API_HTML5:
+			this.bufferObject = new Audio();
+			this.bufferObject.addEventListener("canplaythrough", function () {
+				self.wasEverReady = true;	// update loaded state so preload is considered complete
+			});
+			if (api === API_WEBAUDIO && context["createMediaElementSource"] && !/wiiu/i.test(navigator.userAgent))
+			{
+				this.supportWebAudioAPI = true;		// can be routed through web audio api
+				this.bufferObject.addEventListener("canplay", function ()
+				{
+					if (!self.mediaSourceNode)		// protect against this event firing twice
+					{
+						self.mediaSourceNode = context["createMediaElementSource"](self.bufferObject);
+						self.mediaSourceNode["connect"](self.outNode);
+					}
+				});
+			}
+			this.bufferObject.autoplay = false;	// this is only a source buffer, not an instance
+			this.bufferObject.preload = "auto";
+			this.bufferObject.src = src_;
+			break;
+		case API_WEBAUDIO:
+			request = new XMLHttpRequest();
+			request.open("GET", src_, true);
+			request.responseType = "arraybuffer";
+			request.onload = function () {
+				self.audioData = request.response;
+				self.decodeAudioBuffer();
+			};
+			request.onerror = function () {
+				self.failedToLoad = true;
+			};
+			request.send();
+			break;
+		case API_PHONEGAP:
+			this.bufferObject = true;
+			break;
+		case API_APPMOBI:
+			this.bufferObject = true;
+			break;
+		}
+	};
+	C2AudioBuffer.prototype.decodeAudioBuffer = function ()
+	{
+		if (this.bufferObject || !this.audioData)
+			return;		// audio already decoded or AJAX request not yet complete
+		var self = this;
+		if (context["decodeAudioData"])
+		{
+			context["decodeAudioData"](this.audioData, function (buffer) {
+					self.bufferObject = buffer;
+					self.audioData = null;		// clear AJAX response to allow GC and save memory, only need the bufferObject now
+					var p, i, len, a;
+					if (!cr.is_undefined(self.playTagWhenReady) && !silent)
+					{
+						if (self.panWhenReady.length)
+						{
+							for (i = 0, len = self.panWhenReady.length; i < len; i++)
+							{
+								p = self.panWhenReady[i];
+								a = new C2AudioInstance(self, p.thistag);
+								a.setPannerEnabled(true);
+								if (typeof p.objUid !== "undefined")
+								{
+									p.obj = audRuntime.getObjectByUID(p.objUid);
+									if (!p.obj)
+										continue;
+								}
+								if (p.obj)
+								{
+									var px = cr.rotatePtAround(p.obj.x, p.obj.y, -p.obj.layer.getAngle(), listenerX, listenerY, true);
+									var py = cr.rotatePtAround(p.obj.x, p.obj.y, -p.obj.layer.getAngle(), listenerX, listenerY, false);
+									a.setPan(px, py, cr.to_degrees(p.obj.angle - p.obj.layer.getAngle()), p.ia, p.oa, p.og);
+									a.setObject(p.obj);
+								}
+								else
+								{
+									a.setPan(p.x, p.y, p.a, p.ia, p.oa, p.og);
+								}
+								a.play(self.loopWhenReady, self.volumeWhenReady, self.seekWhenReady);
+								if (self.pauseWhenReady)
+									a.pause();
+								audioInstances.push(a);
+							}
+							self.panWhenReady.length = 0;
+						}
+						else
+						{
+							a = new C2AudioInstance(self, self.playTagWhenReady);
+							a.play(self.loopWhenReady, self.volumeWhenReady, self.seekWhenReady);
+							if (self.pauseWhenReady)
+								a.pause();
+							audioInstances.push(a);
+						}
+					}
+					else if (!cr.is_undefined(self.convolveWhenReady))
+					{
+						var convolveNode = self.convolveWhenReady.convolveNode;
+						convolveNode["normalize"] = self.normalizeWhenReady;
+						convolveNode["buffer"] = buffer;
+					}
+			}, function (e) {
+				self.failedToLoad = true;
+			});
+		}
+		else
+		{
+			this.bufferObject = context["createBuffer"](this.audioData, false);
+			this.audioData = null;		// clear AJAX response to allow GC and save memory, only need the bufferObject now
+			if (!cr.is_undefined(this.playTagWhenReady) && !silent)
+			{
+				var a = new C2AudioInstance(this, this.playTagWhenReady);
+				a.play(this.loopWhenReady, this.volumeWhenReady, this.seekWhenReady);
+				if (this.pauseWhenReady)
+					a.pause();
+				audioInstances.push(a);
+			}
+			else if (!cr.is_undefined(this.convolveWhenReady))
+			{
+				var convolveNode = this.convolveWhenReady.convolveNode;
+				convolveNode["normalize"] = this.normalizeWhenReady;
+				convolveNode["buffer"] = this.bufferObject;
+			}
+		}
+	};
+	C2AudioBuffer.prototype.isLoaded = function ()
+	{
+		switch (this.myapi) {
+		case API_HTML5:
+			var ret = this.bufferObject["readyState"] >= 4;	// HAVE_ENOUGH_DATA
+			if (ret)
+				this.wasEverReady = true;
+			return ret || this.wasEverReady;
+		case API_WEBAUDIO:
+			return !!this.audioData || !!this.bufferObject;
+		case API_PHONEGAP:
+			return true;
+		case API_APPMOBI:
+			return true;
+		}
+		return false;
+	};
+	C2AudioBuffer.prototype.isLoadedAndDecoded = function ()
+	{
+		switch (this.myapi) {
+		case API_HTML5:
+			return this.isLoaded();		// no distinction between loaded and decoded in HTML5 audio, just rely on ready state
+		case API_WEBAUDIO:
+			return !!this.bufferObject;
+		case API_PHONEGAP:
+			return true;
+		case API_APPMOBI:
+			return true;
+		}
+		return false;
+	};
+	C2AudioBuffer.prototype.hasFailedToLoad = function ()
+	{
+		switch (this.myapi) {
+		case API_HTML5:
+			return !!this.bufferObject["error"];
+		case API_WEBAUDIO:
+			return this.failedToLoad;
+		}
+		return false;
+	};
+	function C2AudioInstance(buffer_, tag_)
+	{
+		var self = this;
+		this.tag = tag_;
+		this.fresh = true;
+		this.stopped = true;
+		this.src = buffer_.src;
+		this.buffer = buffer_;
+		this.myapi = api;
+		this.is_music = buffer_.is_music;
+		this.playbackRate = 1;
+		this.pgended = true;			// for PhoneGap only: ended flag
+		this.resume_me = false;			// make sure resumes when leaving suspend
+		this.is_paused = false;
+		this.resume_position = 0;		// for web audio api to resume from correct playback position
+		this.looping = false;
+		this.is_muted = false;
+		this.is_silent = false;
+		this.volume = 1;
+		this.isTimescaled = ((timescale_mode === 1 && !this.is_music) || timescale_mode === 2);
+		this.mutevol = 1;
+		this.startTime = (this.isTimescaled ? audRuntime.kahanTime.sum : audRuntime.wallTime.sum);
+		this.gainNode = null;
+		this.pannerNode = null;
+		this.pannerEnabled = false;
+		this.objectTracker = null;
+		this.panX = 0;
+		this.panY = 0;
+		this.panAngle = 0;
+		this.panConeInner = 0;
+		this.panConeOuter = 0;
+		this.panConeOuterGain = 0;
+		this.instanceObject = null;
+		var add_end_listener = false;
+		if (this.myapi === API_WEBAUDIO && this.buffer.myapi === API_HTML5 && !this.buffer.supportWebAudioAPI)
+			this.myapi = API_HTML5;
+		switch (this.myapi) {
+		case API_HTML5:
+			if (this.is_music)
+			{
+				this.instanceObject = buffer_.bufferObject;
+				add_end_listener = !buffer_.added_end_listener;
+				buffer_.added_end_listener = true;
+			}
+			else
+			{
+				this.instanceObject = new Audio();
+				this.instanceObject.autoplay = false;
+				this.instanceObject.src = buffer_.bufferObject.src;
+				add_end_listener = true;
+			}
+			if (add_end_listener)
+			{
+				this.instanceObject.addEventListener('ended', function () {
+						audTag = self.tag;
+						self.stopped = true;
+						audRuntime.trigger(cr.plugins_.Audio.prototype.cnds.OnEnded, audInst);
+				});
+			}
+			break;
+		case API_WEBAUDIO:
+			this.gainNode = createGain();
+			this.gainNode["connect"](getDestinationForTag(tag_));
+			if (this.buffer.myapi === API_WEBAUDIO)
+			{
+				if (buffer_.bufferObject)
+				{
+					this.instanceObject = context["createBufferSource"]();
+					this.instanceObject["buffer"] = buffer_.bufferObject;
+					this.instanceObject["connect"](this.gainNode);
+				}
+			}
+			else
+			{
+				this.instanceObject = this.buffer.bufferObject;		// reference the audio element
+				this.buffer.outNode["connect"](this.gainNode);
+			}
+			break;
+		case API_PHONEGAP:
+			this.instanceObject = new window["Media"](appPath + this.src, null, null, function (status) {
+					if (status === window["Media"]["MEDIA_STOPPED"])
+					{
+						self.pgended = true;
+						self.stopped = true;
+						audTag = self.tag;
+						audRuntime.trigger(cr.plugins_.Audio.prototype.cnds.OnEnded, audInst);
+					}
+			});
+			break;
+		case API_APPMOBI:
+			this.instanceObject = true;
+			break;
+		}
+	};
+	C2AudioInstance.prototype.hasEnded = function ()
+	{
+		var time;
+		switch (this.myapi) {
+		case API_HTML5:
+			return this.instanceObject.ended;
+		case API_WEBAUDIO:
+			if (this.buffer.myapi === API_WEBAUDIO)
+			{
+				if (!this.fresh && !this.stopped && this.instanceObject["loop"])
+					return false;
+				if (this.is_paused)
+					return false;
+				if (this.isTimescaled)
+					time = audRuntime.kahanTime.sum;
+				else
+					time = audRuntime.wallTime.sum;
+				return (time - this.startTime) > this.buffer.bufferObject["duration"];
+			}
+			else
+				return this.instanceObject.ended;
+		case API_PHONEGAP:
+			return this.pgended;
+		case API_APPMOBI:
+			true;	// recycling an AppMobi sound does not matter because it will just do another throwaway playSound
+		}
+		return true;
+	};
+	C2AudioInstance.prototype.canBeRecycled = function ()
+	{
+		if (this.fresh || this.stopped)
+			return true;		// not yet used or is not playing
+		return this.hasEnded();
+	};
+	C2AudioInstance.prototype.setPannerEnabled = function (enable_)
+	{
+		if (api !== API_WEBAUDIO)
+			return;
+		if (!this.pannerEnabled && enable_)
+		{
+			if (!this.gainNode)
+				return;
+			if (!this.pannerNode)
+			{
+				this.pannerNode = context["createPanner"]();
+				if (typeof this.pannerNode["panningModel"] === "number")
+					this.pannerNode["panningModel"] = panningModel;
+				else
+					this.pannerNode["panningModel"] = ["equalpower", "HRTF", "soundfield"][panningModel];
+				if (typeof this.pannerNode["distanceModel"] === "number")
+					this.pannerNode["distanceModel"] = distanceModel;
+				else
+					this.pannerNode["distanceModel"] = ["linear", "inverse", "exponential"][distanceModel];
+				this.pannerNode["refDistance"] = refDistance;
+				this.pannerNode["maxDistance"] = maxDistance;
+				this.pannerNode["rolloffFactor"] = rolloffFactor;
+			}
+			this.gainNode["disconnect"]();
+			this.gainNode["connect"](this.pannerNode);
+			this.pannerNode["connect"](getDestinationForTag(this.tag));
+			this.pannerEnabled = true;
+		}
+		else if (this.pannerEnabled && !enable_)
+		{
+			if (!this.gainNode)
+				return;
+			this.pannerNode["disconnect"]();
+			this.gainNode["disconnect"]();
+			this.gainNode["connect"](getDestinationForTag(this.tag));
+			this.pannerEnabled = false;
+		}
+	};
+	C2AudioInstance.prototype.setPan = function (x, y, angle, innerangle, outerangle, outergain)
+	{
+		if (!this.pannerEnabled || api !== API_WEBAUDIO)
+			return;
+		this.pannerNode["setPosition"](x, y, 0);
+		this.pannerNode["setOrientation"](Math.cos(cr.to_radians(angle)), Math.sin(cr.to_radians(angle)), 0);
+		this.pannerNode["coneInnerAngle"] = innerangle;
+		this.pannerNode["coneOuterAngle"] = outerangle;
+		this.pannerNode["coneOuterGain"] = outergain;
+		this.panX = x;
+		this.panY = y;
+		this.panAngle = angle;
+		this.panConeInner = innerangle;
+		this.panConeOuter = outerangle;
+		this.panConeOuterGain = outergain;
+	};
+	C2AudioInstance.prototype.setObject = function (o)
+	{
+		if (!this.pannerEnabled || api !== API_WEBAUDIO)
+			return;
+		if (!this.objectTracker)
+			this.objectTracker = new ObjectTracker();
+		this.objectTracker.setObject(o);
+	};
+	C2AudioInstance.prototype.tick = function (dt)
+	{
+		if (!this.pannerEnabled || api !== API_WEBAUDIO || !this.objectTracker || !this.objectTracker.hasObject() || !this.isPlaying())
+		{
+			return;
+		}
+		this.objectTracker.tick(dt);
+		var inst = this.objectTracker.obj;
+		var px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
+		var py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
+		this.pannerNode["setPosition"](px, py, 0);
+		var a = 0;
+		if (typeof this.objectTracker.obj.angle !== "undefined")
+		{
+			a = inst.angle - inst.layer.getAngle();
+			this.pannerNode["setOrientation"](Math.cos(a), Math.sin(a), 0);
+		}
+		px = cr.rotatePtAround(this.objectTracker.getVelocityX(), this.objectTracker.getVelocityY(), -inst.layer.getAngle(), 0, 0, true);
+		py = cr.rotatePtAround(this.objectTracker.getVelocityX(), this.objectTracker.getVelocityY(), -inst.layer.getAngle(), 0, 0, false);
+		this.pannerNode["setVelocity"](px, py, 0);
+	};
+	C2AudioInstance.prototype.play = function (looping, vol, fromPosition)
+	{
+		var instobj = this.instanceObject;
+		this.looping = looping;
+		this.volume = vol;
+		var seekPos = fromPosition || 0;
+		switch (this.myapi) {
+		case API_HTML5:
+			if (instobj.playbackRate !== 1.0)
+				instobj.playbackRate = 1.0;
+			if (instobj.volume !== vol * masterVolume)
+				instobj.volume = vol * masterVolume;
+			if (instobj.loop !== looping)
+				instobj.loop = looping;
+			if (instobj.muted)
+				instobj.muted = false;
+			if (instobj.currentTime !== seekPos)
+			{
+				try {
+					instobj.currentTime = seekPos;
+				}
+				catch (err)
+				{
+;
+				}
+			}
+			if (this.is_music && isMusicWorkaround && !audRuntime.isInUserInputEvent)
+				musicPlayNextTouch.push(this);
+			else
+			{
+				try {
+					this.instanceObject.play();
+				}
+				catch (e) {		// sometimes throws on WP8.1... try not to kill the app
+					if (console && console.log)
+						console.log("[C2] WARNING: exception trying to play audio '" + this.buffer.src + "': ", e);
+				}
+			}
+			break;
+		case API_WEBAUDIO:
+			this.muted = false;
+			this.mutevol = 1;
+			if (this.buffer.myapi === API_WEBAUDIO)
+			{
+				if (!this.fresh)
+				{
+					this.instanceObject = context["createBufferSource"]();
+					this.instanceObject["buffer"] = this.buffer.bufferObject;
+					this.instanceObject["connect"](this.gainNode);
+				}
+				this.instanceObject.loop = looping;
+				this.gainNode["gain"]["value"] = vol * masterVolume;
+				if (seekPos === 0)
+					startSource(this.instanceObject);
+				else
+					startSourceAt(this.instanceObject, seekPos, this.getDuration());
+			}
+			else
+			{
+				if (instobj.playbackRate !== 1.0)
+					instobj.playbackRate = 1.0;
+				if (instobj.loop !== looping)
+					instobj.loop = looping;
+				this.gainNode["gain"]["value"] = vol * masterVolume;
+				if (instobj.currentTime !== seekPos)
+				{
+					try {
+						instobj.currentTime = seekPos;
+					}
+					catch (err)
+					{
+;
+					}
+				}
+				if (this.is_music && isMusicWorkaround && !audRuntime.isInUserInputEvent)
+					musicPlayNextTouch.push(this);
+				else
+					instobj.play();
+			}
+			break;
+		case API_PHONEGAP:
+			if ((!this.fresh && this.stopped) || seekPos !== 0)
+				instobj["seekTo"](seekPos);
+			instobj["play"]();
+			this.pgended = false;
+			break;
+		case API_APPMOBI:
+			if (audRuntime.isDirectCanvas)
+				AppMobi["context"]["playSound"](this.src, looping);
+			else
+				AppMobi["player"]["playSound"](this.src, looping);
+			break;
+		}
+		this.playbackRate = 1;
+		this.startTime = (this.isTimescaled ? audRuntime.kahanTime.sum : audRuntime.wallTime.sum) - seekPos;
+		this.fresh = false;
+		this.stopped = false;
+		this.is_paused = false;
+	};
+	C2AudioInstance.prototype.stop = function ()
+	{
+		switch (this.myapi) {
+		case API_HTML5:
+			if (!this.instanceObject.paused)
+				this.instanceObject.pause();
+			break;
+		case API_WEBAUDIO:
+			if (this.buffer.myapi === API_WEBAUDIO)
+				stopSource(this.instanceObject);
+			else
+			{
+				if (!this.instanceObject.paused)
+					this.instanceObject.pause();
+			}
+			break;
+		case API_PHONEGAP:
+			this.instanceObject["stop"]();
+			break;
+		case API_APPMOBI:
+			if (audRuntime.isDirectCanvas)
+				AppMobi["context"]["stopSound"](this.src);
+			break;
+		}
+		this.stopped = true;
+		this.is_paused = false;
+	};
+	C2AudioInstance.prototype.pause = function ()
+	{
+		if (this.fresh || this.stopped || this.hasEnded() || this.is_paused)
+			return;
+		switch (this.myapi) {
+		case API_HTML5:
+			if (!this.instanceObject.paused)
+				this.instanceObject.pause();
+			break;
+		case API_WEBAUDIO:
+			if (this.buffer.myapi === API_WEBAUDIO)
+			{
+				this.resume_position = this.getPlaybackTime();
+				if (this.looping)
+					this.resume_position = this.resume_position % this.getDuration();
+				stopSource(this.instanceObject);
+			}
+			else
+			{
+				if (!this.instanceObject.paused)
+					this.instanceObject.pause();
+			}
+			break;
+		case API_PHONEGAP:
+			this.instanceObject["pause"]();
+			break;
+		case API_APPMOBI:
+			if (audRuntime.isDirectCanvas)
+				AppMobi["context"]["stopSound"](this.src);
+			break;
+		}
+		this.is_paused = true;
+	};
+	C2AudioInstance.prototype.resume = function ()
+	{
+		if (this.fresh || this.stopped || this.hasEnded() || !this.is_paused)
+			return;
+		switch (this.myapi) {
+		case API_HTML5:
+			this.instanceObject.play();
+			break;
+		case API_WEBAUDIO:
+			if (this.buffer.myapi === API_WEBAUDIO)
+			{
+				this.instanceObject = context["createBufferSource"]();
+				this.instanceObject["buffer"] = this.buffer.bufferObject;
+				this.instanceObject["connect"](this.gainNode);
+				this.instanceObject.loop = this.looping;
+				this.gainNode["gain"]["value"] = masterVolume * this.volume * this.mutevol;
+				this.startTime = (this.isTimescaled ? audRuntime.kahanTime.sum : audRuntime.wallTime.sum) - this.resume_position;
+				startSourceAt(this.instanceObject, this.resume_position, this.getDuration());
+			}
+			else
+			{
+				this.instanceObject.play();
+			}
+			break;
+		case API_PHONEGAP:
+			this.instanceObject["play"]();
+			break;
+		case API_APPMOBI:
+			if (audRuntime.isDirectCanvas)
+				AppMobi["context"]["resumeSound"](this.src);
+			break;
+		}
+		this.is_paused = false;
+	};
+	C2AudioInstance.prototype.seek = function (pos)
+	{
+		if (this.fresh || this.stopped || this.hasEnded())
+			return;
+		switch (this.myapi) {
+		case API_HTML5:
+			try {
+				this.instanceObject.currentTime = pos;
+			}
+			catch (e) {}
+			break;
+		case API_WEBAUDIO:
+			if (this.buffer.myapi === API_WEBAUDIO)
+			{
+				if (this.is_paused)
+					this.resume_position = pos;
+				else
+				{
+					this.pause();
+					this.resume_position = pos;
+					this.resume();
+				}
+			}
+			else
+			{
+				try {
+					this.instanceObject.currentTime = pos;
+				}
+				catch (e) {}
+			}
+			break;
+		case API_PHONEGAP:
+			break;
+		case API_APPMOBI:
+			if (audRuntime.isDirectCanvas)
+				AppMobi["context"]["seekSound"](this.src, pos);
+			break;
+		}
+	};
+	C2AudioInstance.prototype.reconnect = function (toNode)
+	{
+		if (this.myapi !== API_WEBAUDIO)
+			return;
+		if (this.pannerEnabled)
+		{
+			this.pannerNode["disconnect"]();
+			this.pannerNode["connect"](toNode);
+		}
+		else
+		{
+			this.gainNode["disconnect"]();
+			this.gainNode["connect"](toNode);
+		}
+	};
+	C2AudioInstance.prototype.getDuration = function ()
+	{
+		switch (this.myapi) {
+		case API_HTML5:
+			if (typeof this.instanceObject.duration !== "undefined")
+				return this.instanceObject.duration;
+			else
+				return 0;
+		case API_WEBAUDIO:
+			return this.buffer.bufferObject["duration"];
+		case API_PHONEGAP:
+			return this.instanceObject["getDuration"]();
+		case API_APPMOBI:
+			if (audRuntime.isDirectCanvas)
+				return AppMobi["context"]["getDurationSound"](this.src);
+			else
+				return 0;
+		}
+		return 0;
+	};
+	C2AudioInstance.prototype.getPlaybackTime = function ()
+	{
+		var duration = this.getDuration();
+		var ret = 0;
+		switch (this.myapi) {
+		case API_HTML5:
+			if (typeof this.instanceObject.currentTime !== "undefined")
+				ret = this.instanceObject.currentTime;
+			break;
+		case API_WEBAUDIO:
+			if (this.buffer.myapi === API_WEBAUDIO)
+			{
+				if (this.is_paused)
+					return this.resume_position;
+				else
+					ret = (this.isTimescaled ? audRuntime.kahanTime.sum : audRuntime.wallTime.sum) - this.startTime;
+			}
+			else if (typeof this.instanceObject.currentTime !== "undefined")
+				ret = this.instanceObject.currentTime;
+			break;
+		case API_PHONEGAP:
+			break;
+		case API_APPMOBI:
+			if (audRuntime.isDirectCanvas)
+				ret = AppMobi["context"]["getPlaybackTimeSound"](this.src);
+			break;
+		}
+		if (!this.looping && ret > duration)
+			ret = duration;
+		return ret;
+	};
+	C2AudioInstance.prototype.isPlaying = function ()
+	{
+		return !this.is_paused && !this.fresh && !this.stopped && !this.hasEnded();
+	};
+	C2AudioInstance.prototype.setVolume = function (v)
+	{
+		this.volume = v;
+		this.updateVolume();
+	};
+	C2AudioInstance.prototype.updateVolume = function ()
+	{
+		var volToSet = this.volume * masterVolume;
+		switch (this.myapi) {
+		case API_HTML5:
+			if (this.instanceObject.volume && this.instanceObject.volume !== volToSet)
+				this.instanceObject.volume = volToSet;
+			break;
+		case API_WEBAUDIO:
+			this.gainNode["gain"]["value"] = volToSet * this.mutevol;
+			break;
+		case API_PHONEGAP:
+			break;
+		case API_APPMOBI:
+			break;
+		}
+	};
+	C2AudioInstance.prototype.getVolume = function ()
+	{
+		return this.volume;
+	};
+	C2AudioInstance.prototype.doSetMuted = function (m)
+	{
+		switch (this.myapi) {
+		case API_HTML5:
+			if (this.instanceObject.muted !== !!m)
+				this.instanceObject.muted = !!m;
+			break;
+		case API_WEBAUDIO:
+			this.mutevol = (m ? 0 : 1);
+			this.gainNode["gain"]["value"] = masterVolume * this.volume * this.mutevol;
+			break;
+		case API_PHONEGAP:
+			break;
+		case API_APPMOBI:
+			break;
+		}
+	};
+	C2AudioInstance.prototype.setMuted = function (m)
+	{
+		this.is_muted = !!m;
+		this.doSetMuted(this.is_muted || this.is_silent);
+	};
+	C2AudioInstance.prototype.setSilent = function (m)
+	{
+		this.is_silent = !!m;
+		this.doSetMuted(this.is_muted || this.is_silent);
+	};
+	C2AudioInstance.prototype.setLooping = function (l)
+	{
+		this.looping = l;
+		switch (this.myapi) {
+		case API_HTML5:
+			if (this.instanceObject.loop !== !!l)
+				this.instanceObject.loop = !!l;
+			break;
+		case API_WEBAUDIO:
+			if (this.instanceObject.loop !== !!l)
+				this.instanceObject.loop = !!l;
+			break;
+		case API_PHONEGAP:
+			break;
+		case API_APPMOBI:
+			if (audRuntime.isDirectCanvas)
+				AppMobi["context"]["setLoopingSound"](this.src, l);
+			break;
+		}
+	};
+	C2AudioInstance.prototype.setPlaybackRate = function (r)
+	{
+		this.playbackRate = r;
+		this.updatePlaybackRate();
+	};
+	C2AudioInstance.prototype.updatePlaybackRate = function ()
+	{
+		var r = this.playbackRate;
+		if (this.isTimescaled)
+			r *= audRuntime.timescale;
+		switch (this.myapi) {
+		case API_HTML5:
+			if (this.instanceObject.playbackRate !== r)
+				this.instanceObject.playbackRate = r;
+			break;
+		case API_WEBAUDIO:
+			if (this.buffer.myapi === API_WEBAUDIO)
+			{
+				if (this.instanceObject["playbackRate"]["value"] !== r)
+					this.instanceObject["playbackRate"]["value"] = r;
+			}
+			else
+			{
+				if (this.instanceObject.playbackRate !== r)
+					this.instanceObject.playbackRate = r;
+			}
+			break;
+		case API_PHONEGAP:
+			break;
+		case API_APPMOBI:
+			break;
+		}
+	};
+	C2AudioInstance.prototype.setSuspended = function (s)
+	{
+		switch (this.myapi) {
+		case API_HTML5:
+			if (s)
+			{
+				if (this.isPlaying())
+				{
+					this.instanceObject["pause"]();
+					this.resume_me = true;
+				}
+				else
+					this.resume_me = false;
+			}
+			else
+			{
+				if (this.resume_me)
+					this.instanceObject["play"]();
+			}
+			break;
+		case API_WEBAUDIO:
+			if (s)
+			{
+				if (this.isPlaying())
+				{
+					if (this.buffer.myapi === API_WEBAUDIO)
+					{
+						this.resume_position = this.getPlaybackTime();
+						if (this.looping)
+							this.resume_position = this.resume_position % this.getDuration();
+						stopSource(this.instanceObject);
+					}
+					else
+						this.instanceObject["pause"]();
+					this.resume_me = true;
+				}
+				else
+					this.resume_me = false;
+			}
+			else
+			{
+				if (this.resume_me)
+				{
+					if (this.buffer.myapi === API_WEBAUDIO)
+					{
+						this.instanceObject = context["createBufferSource"]();
+						this.instanceObject["buffer"] = this.buffer.bufferObject;
+						this.instanceObject["connect"](this.gainNode);
+						this.instanceObject.loop = this.looping;
+						this.gainNode["gain"]["value"] = masterVolume * this.volume * this.mutevol;
+						this.startTime = (this.isTimescaled ? audRuntime.kahanTime.sum : audRuntime.wallTime.sum) - this.resume_position;
+						startSourceAt(this.instanceObject, this.resume_position, this.getDuration());
+					}
+					else
+					{
+						this.instanceObject["play"]();
+					}
+				}
+			}
+			break;
+		case API_PHONEGAP:
+			if (s)
+			{
+				if (this.isPlaying())
+				{
+					this.instanceObject["pause"]();
+					this.resume_me = true;
+				}
+				else
+					this.resume_me = false;
+			}
+			else
+			{
+				if (this.resume_me)
+					this.instanceObject["play"]();
+			}
+			break;
+		case API_APPMOBI:
+			break;
+		}
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+		audRuntime = this.runtime;
+		audInst = this;
+		this.listenerTracker = null;
+		this.listenerZ = -600;
+		if ((this.runtime.isiOS || (this.runtime.isAndroid && (this.runtime.isChrome || this.runtime.isAndroidStockBrowser))) && !this.runtime.isCrosswalk && !this.runtime.isDomFree)
+		{
+			isMusicWorkaround = true;
+		}
+		context = null;
+		if (typeof AudioContext !== "undefined")
+		{
+			api = API_WEBAUDIO;
+			context = new AudioContext();
+		}
+		else if (typeof webkitAudioContext !== "undefined")
+		{
+			api = API_WEBAUDIO;
+			context = new webkitAudioContext();
+		}
+		if ((this.runtime.isiOS && api === API_WEBAUDIO) || isMusicWorkaround)
+		{
+			document.addEventListener("touchstart", function ()
+			{
+				var i, len, m;
+				if (!iOShadtouch && context)
+				{
+					var buffer = context["createBuffer"](1, 1, 22050);
+					var source = context["createBufferSource"]();
+					source["buffer"] = buffer;
+					source["connect"](context["destination"]);
+					startSource(source);
+					iOShadtouch = true;
+				}
+				if (isMusicWorkaround)
+				{
+					if (!silent)
+					{
+						for (i = 0, len = musicPlayNextTouch.length; i < len; ++i)
+						{
+							m = musicPlayNextTouch[i];
+							if (!m.stopped && !m.is_paused)
+								m.instanceObject.play();
+						}
+					}
+					musicPlayNextTouch.length = 0;
+				}
+			}, true);
+		}
+		if (api !== API_WEBAUDIO)
+		{
+			if (this.runtime.isPhoneGap && typeof window["Media"] !== "undefined")
+				api = API_PHONEGAP;
+			else if (this.runtime.isAppMobi)
+				api = API_APPMOBI;
+		}
+		if (api === API_PHONEGAP)
+		{
+			appPath = location.href;
+			var i = appPath.lastIndexOf("/");
+			if (i > -1)
+				appPath = appPath.substr(0, i + 1);
+			appPath = appPath.replace("file://", "");
+		}
+		if (this.runtime.isSafari && this.runtime.isWindows && typeof Audio === "undefined")
+		{
+			alert("It looks like you're using Safari for Windows without Quicktime.  Audio cannot be played until Quicktime is installed.");
+			this.runtime.DestroyInstance(this);
+		}
+		else
+		{
+			if (this.runtime.isDirectCanvas)
+				useOgg = this.runtime.isAndroid;		// AAC on iOS, OGG on Android
+			else
+			{
+				try {
+					useOgg = !!(new Audio().canPlayType('audio/ogg; codecs="vorbis"'));
+				}
+				catch (e)
+				{
+					useOgg = false;
+				}
+			}
+			switch (api) {
+			case API_HTML5:
+;
+				break;
+			case API_WEBAUDIO:
+;
+				break;
+			case API_PHONEGAP:
+;
+				break;
+			case API_APPMOBI:
+;
+				break;
+			default:
+;
+			}
+			this.runtime.tickMe(this);
+		}
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	instanceProto.onCreate = function ()
+	{
+		this.runtime.audioInstance = this;
+		timescale_mode = this.properties[0];	// 0 = off, 1 = sounds only, 2 = all
+		this.saveload = this.properties[1];		// 0 = all, 1 = sounds only, 2 = music only, 3 = none
+		this.playinbackground = (this.properties[2] !== 0);
+		panningModel = this.properties[3];		// 0 = equalpower, 1 = hrtf, 3 = soundfield
+		distanceModel = this.properties[4];		// 0 = linear, 1 = inverse, 2 = exponential
+		this.listenerZ = -this.properties[5];
+		refDistance = this.properties[6];
+		maxDistance = this.properties[7];
+		rolloffFactor = this.properties[8];
+		this.listenerTracker = new ObjectTracker();
+		if (api === API_WEBAUDIO)
+		{
+			context["listener"]["speedOfSound"] = this.properties[9];
+			context["listener"]["dopplerFactor"] = this.properties[10];
+			context["listener"]["setPosition"](this.runtime.draw_width / 2, this.runtime.draw_height / 2, this.listenerZ);
+			context["listener"]["setOrientation"](0, 0, 1, 0, -1, 0);
+			window["c2OnAudioMicStream"] = function (localMediaStream, tag)
+			{
+				if (micSource)
+					micSource["disconnect"]();
+				micTag = tag.toLowerCase();
+				micSource = context["createMediaStreamSource"](localMediaStream);
+				micSource["connect"](getDestinationForTag(micTag));
+			};
+		}
+		this.runtime.addSuspendCallback(function(s)
+		{
+			audInst.onSuspend(s);
+		});
+		var self = this;
+		this.runtime.addDestroyCallback(function (inst)
+		{
+			self.onInstanceDestroyed(inst);
+		});
+	};
+	instanceProto.onInstanceDestroyed = function (inst)
+	{
+		var i, len, a;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+		{
+			a = audioInstances[i];
+			if (a.objectTracker)
+			{
+				if (a.objectTracker.obj === inst)
+				{
+					a.objectTracker.obj = null;
+					if (a.pannerEnabled && a.isPlaying() && a.looping)
+						a.stop();
+				}
+			}
+		}
+		if (this.listenerTracker.obj === inst)
+			this.listenerTracker.obj = null;
+	};
+	instanceProto.saveToJSON = function ()
+	{
+		var o = {
+			"silent": silent,
+			"masterVolume": masterVolume,
+			"listenerZ": this.listenerZ,
+			"listenerUid": this.listenerTracker.hasObject() ? this.listenerTracker.obj.uid : -1,
+			"playing": [],
+			"effects": {}
+		};
+		var playingarr = o["playing"];
+		var i, len, a, d, p, panobj, playbackTime;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+		{
+			a = audioInstances[i];
+			if (!a.isPlaying())
+				continue;				// no need to save stopped sounds
+			if (this.saveload === 3)	// not saving/loading any sounds/music
+				continue;
+			if (a.is_music && this.saveload === 1)	// not saving/loading music
+				continue;
+			if (!a.is_music && this.saveload === 2)	// not saving/loading sound
+				continue;
+			playbackTime = a.getPlaybackTime();
+			if (a.looping)
+				playbackTime = playbackTime % a.getDuration();
+			d = {
+				"tag": a.tag,
+				"buffersrc": a.buffer.src,
+				"is_music": a.is_music,
+				"playbackTime": playbackTime,
+				"volume": a.volume,
+				"looping": a.looping,
+				"muted": a.is_muted,
+				"playbackRate": a.playbackRate,
+				"paused": a.is_paused,
+				"resume_position": a.resume_position
+			};
+			if (a.pannerEnabled)
+			{
+				d["pan"] = {};
+				panobj = d["pan"];
+				if (a.objectTracker && a.objectTracker.hasObject())
+				{
+					panobj["objUid"] = a.objectTracker.obj.uid;
+				}
+				else
+				{
+					panobj["x"] = a.panX;
+					panobj["y"] = a.panY;
+					panobj["a"] = a.panAngle;
+				}
+				panobj["ia"] = a.panConeInner;
+				panobj["oa"] = a.panConeOuter;
+				panobj["og"] = a.panConeOuterGain;
+			}
+			playingarr.push(d);
+		}
+		var fxobj = o["effects"];
+		var fxarr;
+		for (p in effects)
+		{
+			if (effects.hasOwnProperty(p))
+			{
+				fxarr = [];
+				for (i = 0, len = effects[p].length; i < len; i++)
+				{
+					fxarr.push({ "type": effects[p][i].type, "params": effects[p][i].params });
+				}
+				fxobj[p] = fxarr;
+			}
+		}
+		return o;
+	};
+	var objectTrackerUidsToLoad = [];
+	instanceProto.loadFromJSON = function (o)
+	{
+		var setSilent = o["silent"];
+		masterVolume = o["masterVolume"];
+		this.listenerZ = o["listenerZ"];
+		this.listenerTracker.setObject(null);
+		var listenerUid = o["listenerUid"];
+		if (listenerUid !== -1)
+		{
+			this.listenerTracker.loadUid = listenerUid;
+			objectTrackerUidsToLoad.push(this.listenerTracker);
+		}
+		var playingarr = o["playing"];
+		var i, len, d, src, is_music, tag, playbackTime, looping, vol, b, a, p, pan, panObjUid;
+		if (this.saveload !== 3)
+		{
+			for (i = 0, len = audioInstances.length; i < len; i++)
+			{
+				a = audioInstances[i];
+				if (a.is_music && this.saveload === 1)
+					continue;		// only saving/loading sound: leave music playing
+				if (!a.is_music && this.saveload === 2)
+					continue;		// only saving/loading music: leave sound playing
+				a.stop();
+			}
+		}
+		var fxarr, fxtype, fxparams, fx;
+		for (p in effects)
+		{
+			if (effects.hasOwnProperty(p))
+			{
+				for (i = 0, len = effects[p].length; i < len; i++)
+					effects[p][i].remove();
+			}
+		}
+		cr.wipe(effects);
+		for (p in o["effects"])
+		{
+			if (o["effects"].hasOwnProperty(p))
+			{
+				fxarr = o["effects"][p];
+				for (i = 0, len = fxarr.length; i < len; i++)
+				{
+					fxtype = fxarr[i]["type"];
+					fxparams = fxarr[i]["params"];
+					switch (fxtype) {
+					case "filter":
+						addEffectForTag(p, new FilterEffect(fxparams[0], fxparams[1], fxparams[2], fxparams[3], fxparams[4], fxparams[5]));
+						break;
+					case "delay":
+						addEffectForTag(p, new DelayEffect(fxparams[0], fxparams[1], fxparams[2]));
+						break;
+					case "convolve":
+						src = fxparams[2];
+						b = this.getAudioBuffer(src, false);
+						if (b.bufferObject)
+						{
+							fx = new ConvolveEffect(b.bufferObject, fxparams[0], fxparams[1], src);
+						}
+						else
+						{
+							fx = new ConvolveEffect(null, fxparams[0], fxparams[1], src);
+							b.normalizeWhenReady = fxparams[0];
+							b.convolveWhenReady = fx;
+						}
+						addEffectForTag(p, fx);
+						break;
+					case "flanger":
+						addEffectForTag(p, new FlangerEffect(fxparams[0], fxparams[1], fxparams[2], fxparams[3], fxparams[4]));
+						break;
+					case "phaser":
+						addEffectForTag(p, new PhaserEffect(fxparams[0], fxparams[1], fxparams[2], fxparams[3], fxparams[4], fxparams[5]));
+						break;
+					case "gain":
+						addEffectForTag(p, new GainEffect(fxparams[0]));
+						break;
+					case "tremolo":
+						addEffectForTag(p, new TremoloEffect(fxparams[0], fxparams[1]));
+						break;
+					case "ringmod":
+						addEffectForTag(p, new RingModulatorEffect(fxparams[0], fxparams[1]));
+						break;
+					case "distortion":
+						addEffectForTag(p, new DistortionEffect(fxparams[0], fxparams[1], fxparams[2], fxparams[3], fxparams[4]));
+						break;
+					case "compressor":
+						addEffectForTag(p, new CompressorEffect(fxparams[0], fxparams[1], fxparams[2], fxparams[3], fxparams[4]));
+						break;
+					case "analyser":
+						addEffectForTag(p, new AnalyserEffect(fxparams[0], fxparams[1]));
+						break;
+					}
+				}
+			}
+		}
+		for (i = 0, len = playingarr.length; i < len; i++)
+		{
+			if (this.saveload === 3)	// not saving/loading any sounds/music
+				continue;
+			d = playingarr[i];
+			src = d["buffersrc"];
+			is_music = d["is_music"];
+			tag = d["tag"];
+			playbackTime = d["playbackTime"];
+			looping = d["looping"];
+			vol = d["volume"];
+			pan = d["pan"];
+			panObjUid = (pan && pan.hasOwnProperty("objUid")) ? pan["objUid"] : -1;
+			if (is_music && this.saveload === 1)	// not saving/loading music
+				continue;
+			if (!is_music && this.saveload === 2)	// not saving/loading sound
+				continue;
+			a = this.getAudioInstance(src, tag, is_music, looping, vol);
+			if (!a)
+			{
+				b = this.getAudioBuffer(src, is_music);
+				b.seekWhenReady = playbackTime;
+				b.pauseWhenReady = d["paused"];
+				if (pan)
+				{
+					if (panObjUid !== -1)
+					{
+						b.panWhenReady.push({ objUid: panObjUid, ia: pan["ia"], oa: pan["oa"], og: pan["og"], thistag: tag });
+					}
+					else
+					{
+						b.panWhenReady.push({ x: pan["x"], y: pan["y"], a: pan["a"], ia: pan["ia"], oa: pan["oa"], og: pan["og"], thistag: tag });
+					}
+				}
+				continue;
+			}
+			a.resume_position = d["resume_position"];
+			a.setPannerEnabled(!!pan);
+			a.play(looping, vol, playbackTime);
+			a.updatePlaybackRate();
+			a.updateVolume();
+			a.doSetMuted(a.is_muted || a.is_silent);
+			if (d["paused"])
+				a.pause();
+			if (d["muted"])
+				a.setMuted(true);
+			a.doSetMuted(a.is_muted || a.is_silent);
+			if (pan)
+			{
+				if (panObjUid !== -1)
+				{
+					a.objectTracker = a.objectTracker || new ObjectTracker();
+					a.objectTracker.loadUid = panObjUid;
+					objectTrackerUidsToLoad.push(a.objectTracker);
+				}
+				else
+				{
+					a.setPan(pan["x"], pan["y"], pan["a"], pan["ia"], pan["oa"], pan["og"]);
+				}
+			}
+		}
+		if (setSilent && !silent)			// setting silent
+		{
+			for (i = 0, len = audioInstances.length; i < len; i++)
+				audioInstances[i].setSilent(true);
+			silent = true;
+		}
+		else if (!setSilent && silent)		// setting not silent
+		{
+			for (i = 0, len = audioInstances.length; i < len; i++)
+				audioInstances[i].setSilent(false);
+			silent = false;
+		}
+	};
+	instanceProto.afterLoad = function ()
+	{
+		var i, len, ot, inst;
+		for (i = 0, len = objectTrackerUidsToLoad.length; i < len; i++)
+		{
+			ot = objectTrackerUidsToLoad[i];
+			inst = this.runtime.getObjectByUID(ot.loadUid);
+			ot.setObject(inst);
+			ot.loadUid = -1;
+			if (inst)
+			{
+				listenerX = inst.x;
+				listenerY = inst.y;
+			}
+		}
+		objectTrackerUidsToLoad.length = 0;
+	};
+	instanceProto.onSuspend = function (s)
+	{
+		if (this.playinbackground)
+			return;
+		var i, len;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+			audioInstances[i].setSuspended(s);
+	};
+	instanceProto.tick = function ()
+	{
+		var dt = this.runtime.dt;
+		var i, len, a;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+		{
+			a = audioInstances[i];
+			a.tick(dt);
+			if (a.myapi !== API_HTML5 && a.myapi !== API_APPMOBI)
+			{
+				if (!a.fresh && !a.stopped && a.hasEnded())
+				{
+					a.stopped = true;
+					audTag = a.tag;
+					audRuntime.trigger(cr.plugins_.Audio.prototype.cnds.OnEnded, audInst);
+				}
+			}
+			if (timescale_mode !== 0)
+				a.updatePlaybackRate();
+		}
+		var p, arr, f;
+		for (p in effects)
+		{
+			if (effects.hasOwnProperty(p))
+			{
+				arr = effects[p];
+				for (i = 0, len = arr.length; i < len; i++)
+				{
+					f = arr[i];
+					if (f.tick)
+						f.tick();
+				}
+			}
+		}
+		if (api === API_WEBAUDIO && this.listenerTracker.hasObject())
+		{
+			this.listenerTracker.tick(dt);
+			listenerX = this.listenerTracker.obj.x;
+			listenerY = this.listenerTracker.obj.y;
+			context["listener"]["setPosition"](this.listenerTracker.obj.x, this.listenerTracker.obj.y, this.listenerZ);
+			context["listener"]["setVelocity"](this.listenerTracker.getVelocityX(), this.listenerTracker.getVelocityY(), 0);
+		}
+	};
+	var preload_list = [];
+	instanceProto.setPreloadList = function (arr)
+	{
+		var i, len, p, filename, size, isOgg;
+		var total_size = 0;
+		for (i = 0, len = arr.length; i < len; ++i)
+		{
+			p = arr[i];
+			filename = p[0];
+			size = p[1] * 2;
+			isOgg = (filename.length > 4 && filename.substr(filename.length - 4) === ".ogg");
+			if ((isOgg && useOgg) || (!isOgg && !useOgg))
+			{
+				preload_list.push({
+					filename: filename,
+					size: size,
+					obj: null
+				});
+				total_size += size;
+			}
+		}
+		return total_size;
+	};
+	instanceProto.startPreloads = function ()
+	{
+		var i, len, p, src;
+		for (i = 0, len = preload_list.length; i < len; ++i)
+		{
+			p = preload_list[i];
+			src = this.runtime.files_subfolder + p.filename;
+			p.obj = this.getAudioBuffer(src, false);
+		}
+	};
+	instanceProto.getPreloadedSize = function ()
+	{
+		var completed = 0;
+		var i, len, p;
+		for (i = 0, len = preload_list.length; i < len; ++i)
+		{
+			p = preload_list[i];
+			if (p.obj.isLoadedAndDecoded() || p.obj.hasFailedToLoad() || this.runtime.isDomFree || this.runtime.isAndroidStockBrowser)
+			{
+				completed += p.size;
+			}
+			else if (p.obj.isLoaded())	// downloaded but not decoded: only happens in Web Audio API, count as half-way progress
+			{
+				completed += Math.floor(p.size / 2);
+			}
+		};
+		return completed;
+	};
+	instanceProto.getAudioBuffer = function (src_, is_music)
+	{
+		var i, len, a, ret = null, j, k, lenj, ai;
+		for (i = 0, len = audioBuffers.length; i < len; i++)
+		{
+			a = audioBuffers[i];
+			if (a.src === src_)
+			{
+				ret = a;
+				break;
+			}
+		}
+		if (!ret)
+		{
+			ret = new C2AudioBuffer(src_, is_music);
+			audioBuffers.push(ret);
+		}
+		return ret;
+	};
+	instanceProto.getAudioInstance = function (src_, tag, is_music, looping, vol)
+	{
+		var i, len, a;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+		{
+			a = audioInstances[i];
+			if (a.src === src_ && (a.canBeRecycled() || is_music))
+			{
+				a.tag = tag;
+				return a;
+			}
+		}
+		var b = this.getAudioBuffer(src_, is_music);
+		if (!b.bufferObject)
+		{
+			if (tag !== "<preload>")
+			{
+				b.playTagWhenReady = tag;
+				b.loopWhenReady = looping;
+				b.volumeWhenReady = vol;
+			}
+			return null;
+		}
+		a = new C2AudioInstance(b, tag);
+		audioInstances.push(a);
+		return a;
+	};
+	var taggedAudio = [];
+	function SortByIsPlaying(a, b)
+	{
+		var an = a.isPlaying() ? 1 : 0;
+		var bn = b.isPlaying() ? 1 : 0;
+		if (an === bn)
+			return 0;
+		else if (an < bn)
+			return 1;
+		else
+			return -1;
+	};
+	function getAudioByTag(tag, sort_by_playing)
+	{
+		taggedAudio.length = 0;
+		if (!tag.length)
+		{
+			if (!lastAudio || lastAudio.hasEnded())
+				return;
+			else
+			{
+				taggedAudio.length = 1;
+				taggedAudio[0] = lastAudio;
+				return;
+			}
+		}
+		var i, len, a;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+		{
+			a = audioInstances[i];
+			if (cr.equals_nocase(tag, a.tag))
+				taggedAudio.push(a);
+		}
+		if (sort_by_playing)
+			taggedAudio.sort(SortByIsPlaying);
+	};
+	function reconnectEffects(tag)
+	{
+		var i, len, arr, n, toNode = context["destination"];
+		if (effects.hasOwnProperty(tag))
+		{
+			arr = effects[tag];
+			if (arr.length)
+			{
+				toNode = arr[0].getInputNode();
+				for (i = 0, len = arr.length; i < len; i++)
+				{
+					n = arr[i];
+					if (i + 1 === len)
+						n.connectTo(context["destination"]);
+					else
+						n.connectTo(arr[i + 1].getInputNode());
+				}
+			}
+		}
+		getAudioByTag(tag);
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+			taggedAudio[i].reconnect(toNode);
+		if (micSource && micTag === tag)
+		{
+			micSource["disconnect"]();
+			micSource["connect"](toNode);
+		}
+	};
+	function addEffectForTag(tag, fx)
+	{
+		if (!effects.hasOwnProperty(tag))
+			effects[tag] = [fx];
+		else
+			effects[tag].push(fx);
+		reconnectEffects(tag);
+	};
+	function Cnds() {};
+	Cnds.prototype.OnEnded = function (t)
+	{
+		return cr.equals_nocase(audTag, t);
+	};
+	Cnds.prototype.PreloadsComplete = function ()
+	{
+		var i, len;
+		for (i = 0, len = audioBuffers.length; i < len; i++)
+		{
+			if (!audioBuffers[i].isLoadedAndDecoded() && !audioBuffers[i].hasFailedToLoad())
+				return false;
+		}
+		return true;
+	};
+	Cnds.prototype.AdvancedAudioSupported = function ()
+	{
+		return api === API_WEBAUDIO;
+	};
+	Cnds.prototype.IsSilent = function ()
+	{
+		return silent;
+	};
+	Cnds.prototype.IsAnyPlaying = function ()
+	{
+		var i, len;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+		{
+			if (audioInstances[i].isPlaying())
+				return true;
+		}
+		return false;
+	};
+	Cnds.prototype.IsTagPlaying = function (tag)
+	{
+		getAudioByTag(tag);
+		var i, len;
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+		{
+			if (taggedAudio[i].isPlaying())
+				return true;
+		}
+		return false;
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+	Acts.prototype.Play = function (file, looping, vol, tag)
+	{
+		if (silent)
+			return;
+		var v = dbToLinear(vol);
+		var is_music = file[1];
+		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
+		if (!lastAudio)
+			return;
+		lastAudio.setPannerEnabled(false);
+		lastAudio.play(looping!==0, v);
+	};
+	Acts.prototype.PlayAtPosition = function (file, looping, vol, x_, y_, angle_, innerangle_, outerangle_, outergain_, tag)
+	{
+		if (silent)
+			return;
+		var v = dbToLinear(vol);
+		var is_music = file[1];
+		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
+		if (!lastAudio)
+		{
+			var b = this.getAudioBuffer(src, is_music);
+			b.panWhenReady.push({ x: x_, y: y_, a: angle_, ia: innerangle_, oa: outerangle_, og: dbToLinear(outergain_), thistag: tag });
+			return;
+		}
+		lastAudio.setPannerEnabled(true);
+		lastAudio.setPan(x_, y_, angle_, innerangle_, outerangle_, dbToLinear(outergain_));
+		lastAudio.play(looping!==0, v);
+	};
+	Acts.prototype.PlayAtObject = function (file, looping, vol, obj, innerangle, outerangle, outergain, tag)
+	{
+		if (silent || !obj)
+			return;
+		var inst = obj.getFirstPicked();
+		if (!inst)
+			return;
+		var v = dbToLinear(vol);
+		var is_music = file[1];
+		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
+		if (!lastAudio)
+		{
+			var b = this.getAudioBuffer(src, is_music);
+			b.panWhenReady.push({ obj: inst, ia: innerangle, oa: outerangle, og: dbToLinear(outergain), thistag: tag });
+			return;
+		}
+		lastAudio.setPannerEnabled(true);
+		var px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
+		var py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
+		lastAudio.setPan(px, py, cr.to_degrees(inst.angle - inst.layer.getAngle()), innerangle, outerangle, dbToLinear(outergain));
+		lastAudio.setObject(inst);
+		lastAudio.play(looping!==0, v);
+	};
+	Acts.prototype.PlayByName = function (folder, filename, looping, vol, tag)
+	{
+		if (silent)
+			return;
+		var v = dbToLinear(vol);
+		var is_music = (folder === 1);
+		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
+		if (!lastAudio)
+			return;
+		lastAudio.setPannerEnabled(false);
+		lastAudio.play(looping!==0, v);
+	};
+	Acts.prototype.PlayAtPositionByName = function (folder, filename, looping, vol, x_, y_, angle_, innerangle_, outerangle_, outergain_, tag)
+	{
+		if (silent)
+			return;
+		var v = dbToLinear(vol);
+		var is_music = (folder === 1);
+		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
+		if (!lastAudio)
+		{
+			var b = this.getAudioBuffer(src, is_music);
+			b.panWhenReady.push({ x: x_, y: y_, a: angle_, ia: innerangle_, oa: outerangle_, og: dbToLinear(outergain_), thistag: tag });
+			return;
+		}
+		lastAudio.setPannerEnabled(true);
+		lastAudio.setPan(x_, y_, angle_, innerangle_, outerangle_, dbToLinear(outergain_));
+		lastAudio.play(looping!==0, v);
+	};
+	Acts.prototype.PlayAtObjectByName = function (folder, filename, looping, vol, obj, innerangle, outerangle, outergain, tag)
+	{
+		if (silent || !obj)
+			return;
+		var inst = obj.getFirstPicked();
+		if (!inst)
+			return;
+		var v = dbToLinear(vol);
+		var is_music = (folder === 1);
+		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
+		if (!lastAudio)
+		{
+			var b = this.getAudioBuffer(src, is_music);
+			b.panWhenReady.push({ obj: inst, ia: innerangle, oa: outerangle, og: dbToLinear(outergain), thistag: tag });
+			return;
+		}
+		lastAudio.setPannerEnabled(true);
+		var px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
+		var py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
+		lastAudio.setPan(px, py, cr.to_degrees(inst.angle - inst.layer.getAngle()), innerangle, outerangle, dbToLinear(outergain));
+		lastAudio.setObject(inst);
+		lastAudio.play(looping!==0, v);
+	};
+	Acts.prototype.SetLooping = function (tag, looping)
+	{
+		getAudioByTag(tag);
+		var i, len;
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+			taggedAudio[i].setLooping(looping === 0);
+	};
+	Acts.prototype.SetMuted = function (tag, muted)
+	{
+		getAudioByTag(tag);
+		var i, len;
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+			taggedAudio[i].setMuted(muted === 0);
+	};
+	Acts.prototype.SetVolume = function (tag, vol)
+	{
+		getAudioByTag(tag);
+		var v = dbToLinear(vol);
+		var i, len;
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+			taggedAudio[i].setVolume(v);
+	};
+	Acts.prototype.Preload = function (file)
+	{
+		if (silent)
+			return;
+		var is_music = file[1];
+		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		if (api === API_APPMOBI)
+		{
+			if (this.runtime.isDirectCanvas)
+				AppMobi["context"]["loadSound"](src);
+			else
+				AppMobi["player"]["loadSound"](src);
+			return;
+		}
+		else if (api === API_PHONEGAP)
+		{
+			return;
+		}
+		this.getAudioInstance(src, "<preload>", is_music, false);
+	};
+	Acts.prototype.PreloadByName = function (folder, filename)
+	{
+		if (silent)
+			return;
+		var is_music = (folder === 1);
+		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		if (api === API_APPMOBI)
+		{
+			if (this.runtime.isDirectCanvas)
+				AppMobi["context"]["loadSound"](src);
+			else
+				AppMobi["player"]["loadSound"](src);
+			return;
+		}
+		else if (api === API_PHONEGAP)
+		{
+			return;
+		}
+		this.getAudioInstance(src, "<preload>", is_music, false);
+	};
+	Acts.prototype.SetPlaybackRate = function (tag, rate)
+	{
+		getAudioByTag(tag);
+		if (rate < 0.0)
+			rate = 0;
+		var i, len;
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+			taggedAudio[i].setPlaybackRate(rate);
+	};
+	Acts.prototype.Stop = function (tag)
+	{
+		getAudioByTag(tag);
+		var i, len;
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+			taggedAudio[i].stop();
+	};
+	Acts.prototype.StopAll = function ()
+	{
+		var i, len;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+			audioInstances[i].stop();
+	};
+	Acts.prototype.SetPaused = function (tag, state)
+	{
+		getAudioByTag(tag);
+		var i, len;
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+		{
+			if (state === 0)
+				taggedAudio[i].pause();
+			else
+				taggedAudio[i].resume();
+		}
+	};
+	Acts.prototype.Seek = function (tag, pos)
+	{
+		getAudioByTag(tag);
+		var i, len;
+		for (i = 0, len = taggedAudio.length; i < len; i++)
+		{
+			taggedAudio[i].seek(pos);
+		}
+	};
+	Acts.prototype.SetSilent = function (s)
+	{
+		var i, len;
+		if (s === 2)					// toggling
+			s = (silent ? 1 : 0);		// choose opposite state
+		if (s === 0 && !silent)			// setting silent
+		{
+			for (i = 0, len = audioInstances.length; i < len; i++)
+				audioInstances[i].setSilent(true);
+			silent = true;
+		}
+		else if (s === 1 && silent)		// setting not silent
+		{
+			for (i = 0, len = audioInstances.length; i < len; i++)
+				audioInstances[i].setSilent(false);
+			silent = false;
+		}
+	};
+	Acts.prototype.SetMasterVolume = function (vol)
+	{
+		masterVolume = dbToLinear(vol);
+		var i, len;
+		for (i = 0, len = audioInstances.length; i < len; i++)
+			audioInstances[i].updateVolume();
+	};
+	Acts.prototype.AddFilterEffect = function (tag, type, freq, detune, q, gain, mix)
+	{
+		if (api !== API_WEBAUDIO || type < 0 || type >= filterTypes.length || !context["createBiquadFilter"])
+			return;
+		tag = tag.toLowerCase();
+		mix = mix / 100;
+		if (mix < 0) mix = 0;
+		if (mix > 1) mix = 1;
+		addEffectForTag(tag, new FilterEffect(type, freq, detune, q, gain, mix));
+	};
+	Acts.prototype.AddDelayEffect = function (tag, delay, gain, mix)
+	{
+		if (api !== API_WEBAUDIO)
+			return;
+		tag = tag.toLowerCase();
+		mix = mix / 100;
+		if (mix < 0) mix = 0;
+		if (mix > 1) mix = 1;
+		addEffectForTag(tag, new DelayEffect(delay, dbToLinear(gain), mix));
+	};
+	Acts.prototype.AddFlangerEffect = function (tag, delay, modulation, freq, feedback, mix)
+	{
+		if (api !== API_WEBAUDIO || !context["createOscillator"])
+			return;
+		tag = tag.toLowerCase();
+		mix = mix / 100;
+		if (mix < 0) mix = 0;
+		if (mix > 1) mix = 1;
+		addEffectForTag(tag, new FlangerEffect(delay / 1000, modulation / 1000, freq, feedback / 100, mix));
+	};
+	Acts.prototype.AddPhaserEffect = function (tag, freq, detune, q, mod, modfreq, mix)
+	{
+		if (api !== API_WEBAUDIO || !context["createOscillator"])
+			return;
+		tag = tag.toLowerCase();
+		mix = mix / 100;
+		if (mix < 0) mix = 0;
+		if (mix > 1) mix = 1;
+		addEffectForTag(tag, new PhaserEffect(freq, detune, q, mod, modfreq, mix));
+	};
+	Acts.prototype.AddConvolutionEffect = function (tag, file, norm, mix)
+	{
+		if (api !== API_WEBAUDIO || !context["createConvolver"])
+			return;
+		var doNormalize = (norm === 0);
+		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		var b = this.getAudioBuffer(src, false);
+		tag = tag.toLowerCase();
+		mix = mix / 100;
+		if (mix < 0) mix = 0;
+		if (mix > 1) mix = 1;
+		var fx;
+		if (b.bufferObject)
+		{
+			fx = new ConvolveEffect(b.bufferObject, doNormalize, mix, src);
+		}
+		else
+		{
+			fx = new ConvolveEffect(null, doNormalize, mix, src);
+			b.normalizeWhenReady = doNormalize;
+			b.convolveWhenReady = fx;
+		}
+		addEffectForTag(tag, fx);
+	};
+	Acts.prototype.AddGainEffect = function (tag, g)
+	{
+		if (api !== API_WEBAUDIO)
+			return;
+		tag = tag.toLowerCase();
+		addEffectForTag(tag, new GainEffect(dbToLinear(g)));
+	};
+	Acts.prototype.AddMuteEffect = function (tag)
+	{
+		if (api !== API_WEBAUDIO)
+			return;
+		tag = tag.toLowerCase();
+		addEffectForTag(tag, new GainEffect(0));	// re-use gain effect with 0 gain
+	};
+	Acts.prototype.AddTremoloEffect = function (tag, freq, mix)
+	{
+		if (api !== API_WEBAUDIO || !context["createOscillator"])
+			return;
+		tag = tag.toLowerCase();
+		mix = mix / 100;
+		if (mix < 0) mix = 0;
+		if (mix > 1) mix = 1;
+		addEffectForTag(tag, new TremoloEffect(freq, mix));
+	};
+	Acts.prototype.AddRingModEffect = function (tag, freq, mix)
+	{
+		if (api !== API_WEBAUDIO || !context["createOscillator"])
+			return;
+		tag = tag.toLowerCase();
+		mix = mix / 100;
+		if (mix < 0) mix = 0;
+		if (mix > 1) mix = 1;
+		addEffectForTag(tag, new RingModulatorEffect(freq, mix));
+	};
+	Acts.prototype.AddDistortionEffect = function (tag, threshold, headroom, drive, makeupgain, mix)
+	{
+		if (api !== API_WEBAUDIO || !context["createWaveShaper"])
+			return;
+		tag = tag.toLowerCase();
+		mix = mix / 100;
+		if (mix < 0) mix = 0;
+		if (mix > 1) mix = 1;
+		addEffectForTag(tag, new DistortionEffect(threshold, headroom, drive, makeupgain, mix));
+	};
+	Acts.prototype.AddCompressorEffect = function (tag, threshold, knee, ratio, attack, release)
+	{
+		if (api !== API_WEBAUDIO || !context["createDynamicsCompressor"])
+			return;
+		tag = tag.toLowerCase();
+		addEffectForTag(tag, new CompressorEffect(threshold, knee, ratio, attack / 1000, release / 1000));
+	};
+	Acts.prototype.AddAnalyserEffect = function (tag, fftSize, smoothing)
+	{
+		if (api !== API_WEBAUDIO)
+			return;
+		tag = tag.toLowerCase();
+		addEffectForTag(tag, new AnalyserEffect(fftSize, smoothing));
+	};
+	Acts.prototype.RemoveEffects = function (tag)
+	{
+		if (api !== API_WEBAUDIO)
+			return;
+		tag = tag.toLowerCase();
+		var i, len, arr;
+		if (effects.hasOwnProperty(tag))
+		{
+			arr = effects[tag];
+			if (arr.length)
+			{
+				for (i = 0, len = arr.length; i < len; i++)
+					arr[i].remove();
+				arr.length = 0;
+				reconnectEffects(tag);
+			}
+		}
+	};
+	Acts.prototype.SetEffectParameter = function (tag, index, param, value, ramp, time)
+	{
+		if (api !== API_WEBAUDIO)
+			return;
+		tag = tag.toLowerCase();
+		index = Math.floor(index);
+		var arr;
+		if (!effects.hasOwnProperty(tag))
+			return;
+		arr = effects[tag];
+		if (index < 0 || index >= arr.length)
+			return;
+		arr[index].setParam(param, value, ramp, time);
+	};
+	Acts.prototype.SetListenerObject = function (obj_)
+	{
+		if (!obj_ || api !== API_WEBAUDIO)
+			return;
+		var inst = obj_.getFirstPicked();
+		if (!inst)
+			return;
+		this.listenerTracker.setObject(inst);
+		listenerX = inst.x;
+		listenerY = inst.y;
+	};
+	Acts.prototype.SetListenerZ = function (z)
+	{
+		this.listenerZ = z;
+	};
+	pluginProto.acts = new Acts();
+	function Exps() {};
+	Exps.prototype.Duration = function (ret, tag)
+	{
+		getAudioByTag(tag, true);
+		if (taggedAudio.length)
+			ret.set_float(taggedAudio[0].getDuration());
+		else
+			ret.set_float(0);
+	};
+	Exps.prototype.PlaybackTime = function (ret, tag)
+	{
+		getAudioByTag(tag, true);
+		if (taggedAudio.length)
+			ret.set_float(taggedAudio[0].getPlaybackTime());
+		else
+			ret.set_float(0);
+	};
+	Exps.prototype.Volume = function (ret, tag)
+	{
+		getAudioByTag(tag, true);
+		if (taggedAudio.length)
+		{
+			var v = taggedAudio[0].getVolume();
+			ret.set_float(linearToDb(v));
+		}
+		else
+			ret.set_float(0);
+	};
+	Exps.prototype.MasterVolume = function (ret)
+	{
+		ret.set_float(masterVolume);
+	};
+	Exps.prototype.EffectCount = function (ret, tag)
+	{
+		tag = tag.toLowerCase();
+		var arr = null;
+		if (effects.hasOwnProperty(tag))
+			arr = effects[tag];
+		ret.set_int(arr ? arr.length : 0);
+	};
+	function getAnalyser(tag, index)
+	{
+		var arr = null;
+		if (effects.hasOwnProperty(tag))
+			arr = effects[tag];
+		if (arr && index >= 0 && index < arr.length && arr[index].freqBins)
+			return arr[index];
+		else
+			return null;
+	};
+	Exps.prototype.AnalyserFreqBinCount = function (ret, tag, index)
+	{
+		tag = tag.toLowerCase();
+		index = Math.floor(index);
+		var analyser = getAnalyser(tag, index);
+		ret.set_int(analyser ? analyser.node["frequencyBinCount"] : 0);
+	};
+	Exps.prototype.AnalyserFreqBinAt = function (ret, tag, index, bin)
+	{
+		tag = tag.toLowerCase();
+		index = Math.floor(index);
+		bin = Math.floor(bin);
+		var analyser = getAnalyser(tag, index);
+		if (!analyser)
+			ret.set_float(0);
+		else if (bin < 0 || bin >= analyser.node["frequencyBinCount"])
+			ret.set_float(0);
+		else
+			ret.set_float(analyser.freqBins[bin]);
+	};
+	Exps.prototype.AnalyserPeakLevel = function (ret, tag, index)
+	{
+		tag = tag.toLowerCase();
+		index = Math.floor(index);
+		var analyser = getAnalyser(tag, index);
+		if (analyser)
+			ret.set_float(analyser.peak);
+		else
+			ret.set_float(0);
+	};
+	Exps.prototype.AnalyserRMSLevel = function (ret, tag, index)
+	{
+		tag = tag.toLowerCase();
+		index = Math.floor(index);
+		var analyser = getAnalyser(tag, index);
+		if (analyser)
+			ret.set_float(analyser.rms);
+		else
+			ret.set_float(0);
+	};
+	pluginProto.exps = new Exps();
+}());
 ;
 ;
 cr.plugins_.Browser = function(runtime)
@@ -13151,6 +16201,23 @@ cr.plugins_.Browser = function(runtime)
 		});
 		this.is_arcade = (typeof window["is_scirra_arcade"] !== "undefined");
 	};
+	var batteryManager = null;
+	var loadedBatteryManager = false;
+	function maybeLoadBatteryManager()
+	{
+		if (loadedBatteryManager)
+			return;
+		if (!navigator["getBattery"])
+			return;
+		var promise = navigator["getBattery"]();
+		loadedBatteryManager = true;
+		if (promise)
+		{
+			promise.then(function (manager) {
+				batteryManager = manager;
+			});
+		}
+	};
 	function Cnds() {};
 	Cnds.prototype.CookiesEnabled = function()
 	{
@@ -13220,14 +16287,27 @@ cr.plugins_.Browser = function(runtime)
 		var connection = navigator["connection"] || navigator["mozConnection"] || navigator["webkitConnection"];
 		if (!connection)
 			return false;
-		return connection["metered"];
+		return !!connection["metered"];
 	};
 	Cnds.prototype.IsCharging = function ()
 	{
 		var battery = navigator["battery"] || navigator["mozBattery"] || navigator["webkitBattery"];
-		if (!battery)
-			return true;
-		return battery["charging"];
+		if (battery)
+		{
+			return !!battery["charging"]
+		}
+		else
+		{
+			maybeLoadBatteryManager();
+			if (batteryManager)
+			{
+				return !!batteryManager["charging"];
+			}
+			else
+			{
+				return true;		// if unknown, default to charging (powered)
+			}
+		}
 	};
 	Cnds.prototype.IsPortraitLandscape = function (p)
 	{
@@ -13529,7 +16609,9 @@ cr.plugins_.Browser = function(runtime)
 			return;
 		this.runtime.autoLockOrientation = false;
 		var orientation = orientations[o];
-		if (screen["lockOrientation"])
+		if (screen["orientation"] && screen["orientation"]["lock"])
+			screen["orientation"]["lock"](orientation);
+		else if (screen["lockOrientation"])
 			screen["lockOrientation"](orientation);
 		else if (screen["webkitLockOrientation"])
 			screen["webkitLockOrientation"](orientation);
@@ -13541,7 +16623,9 @@ cr.plugins_.Browser = function(runtime)
 	Acts.prototype.UnlockOrientation = function ()
 	{
 		this.runtime.autoLockOrientation = false;
-		if (screen["unlockOrientation"])
+		if (screen["orientation"] && screen["orientation"]["unlock"])
+			screen["orientation"]["unlock"]();
+		else if (screen["unlockOrientation"])
 			screen["unlockOrientation"]();
 		else if (screen["webkitUnlockOrientation"])
 			screen["webkitUnlockOrientation"]();
@@ -13640,23 +16724,64 @@ cr.plugins_.Browser = function(runtime)
 		if (!connection)
 			ret.set_float(Number.POSITIVE_INFINITY);
 		else
-			ret.set_float(connection["bandwidth"]);
+		{
+			if (typeof connection["bandwidth"] !== "undefined")
+				ret.set_float(connection["bandwidth"]);
+			else if (typeof connection["downlinkMax"] !== "undefined")
+				ret.set_float(connection["downlinkMax"]);
+			else
+				ret.set_float(Number.POSITIVE_INFINITY);
+		}
+	};
+	Exps.prototype.ConnectionType = function (ret)
+	{
+		var connection = navigator["connection"] || navigator["mozConnection"] || navigator["webkitConnection"];
+		if (!connection)
+			ret.set_string("unknown");
+		else
+		{
+			ret.set_string(connection["type"] || "unknown");
+		}
 	};
 	Exps.prototype.BatteryLevel = function (ret)
 	{
 		var battery = navigator["battery"] || navigator["mozBattery"] || navigator["webkitBattery"];
-		if (!battery)
-			ret.set_float(1);
-		else
+		if (battery)
+		{
 			ret.set_float(battery["level"]);
+		}
+		else
+		{
+			maybeLoadBatteryManager();
+			if (batteryManager)
+			{
+				ret.set_float(batteryManager["level"]);
+			}
+			else
+			{
+				ret.set_float(1);		// not supported/unknown: assume charged
+			}
+		}
 	};
 	Exps.prototype.BatteryTimeLeft = function (ret)
 	{
 		var battery = navigator["battery"] || navigator["mozBattery"] || navigator["webkitBattery"];
-		if (!battery)
-			ret.set_float(Number.POSITIVE_INFINITY);
-		else
+		if (battery)
+		{
 			ret.set_float(battery["dischargingTime"]);
+		}
+		else
+		{
+			maybeLoadBatteryManager();
+			if (batteryManager)
+			{
+				ret.set_float(batteryManager["dischargingTime"]);
+			}
+			else
+			{
+				ret.set_float(Number.POSITIVE_INFINITY);		// not supported/unknown: assume infinite time left
+			}
+		}
 	};
 	Exps.prototype.ExecJS = function (ret, js_)
 	{
@@ -14312,11 +17437,9 @@ cr.plugins_.Particles = function(runtime)
 		if (this.is_family)
 			return;
 		this.texture_img = new Image();
-		this.texture_img["idtkLoadDisposed"] = true;
-		this.texture_img.src = this.texture_file;
 		this.texture_img.cr_filesize = this.texture_filesize;
 		this.webGL_texture = null;
-		this.runtime.waitForImageLoad(this.texture_img);
+		this.runtime.waitForImageLoad(this.texture_img, this.texture_file);
 	};
 	typeProto.onLostWebGLContext = function ()
 	{
@@ -14963,12 +18086,10 @@ cr.plugins_.Sprite = function(runtime)
 				else
 				{
 					frameobj.texture_img = new Image();
-					frameobj.texture_img["idtkLoadDisposed"] = true;
-					frameobj.texture_img.src = frame[0];
 					frameobj.texture_img.cr_src = frame[0];
 					frameobj.texture_img.cr_filesize = frame[1];
 					frameobj.texture_img.c2webGL_texture = null;
-					this.runtime.waitForImageLoad(frameobj.texture_img);
+					this.runtime.waitForImageLoad(frameobj.texture_img, frame[0]);
 				}
 				cr.seal(frameobj);
 				animobj.frames.push(frameobj);
@@ -18093,6 +21214,203 @@ cr.plugins_.WebStorage = function(runtime)
 	};
 	pluginProto.exps = new Exps();
 }());
+/* Copyright (c) 2014 Intel Corporation. All rights reserved.
+* Use of this source code is governed by a MIT-style license that can be
+* found in the LICENSE file.
+*/
+;
+;
+cr.plugins_.admob = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.admob.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+	typeProto.onCreate = function()
+	{
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	var isSupported = false;
+	instanceProto.onCreate = function()
+	{
+		if (!window["admob"])
+		{
+			cr.logexport("[Construct 2] com.cranberrygame.phonegap.plugin.ad.admob plugin is required to show Admob ads on Crosswalk/PhoneGap; other platforms are not supported");
+			return;
+		}
+		isSupported = true;
+		this.AdMob = window["admob"];
+		var overlap = (this.properties[0] !== 0);
+		var isTesting = (this.properties[1] !== 0);
+		this.androidBannerId = this.properties[2];
+		this.androidInterstitialId = this.properties[3];
+		this.iosBannerId = this.properties[4];
+		this.iosInterstitialId = this.properties[5];
+		this.wp8BannerId = this.properties[6];
+		this.wp8InterstitialId = this.properties[7];
+		if (this.runtime.isAndroid)
+		{
+			this.bannerId = this.androidBannerId;
+			this.interstitialId = this.androidInterstitialId;
+		}
+		else if (this.runtime.isiOS)
+		{
+			this.bannerId = this.iosBannerId;
+			this.interstitialId = this.iosInterstitialId;
+		}
+		else if (this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81)
+		{
+			this.bannerId = this.wp8BannerId;
+			this.interstitialId = this.wp8InterstitialId;
+		}
+		else
+		{
+			this.bannerId = "";
+			this.interstitialId = "";
+		}
+		this.isShowingBannerAd = false;
+		this.isShowingInterstitial = false;
+		this.AdMob["setUp"](this.bannerId, this.interstitialId, overlap, isTesting);
+		var self = this;
+		this.AdMob["onFullScreenAdLoaded"] = function ()
+		{
+			self.runtime.trigger(cr.plugins_.admob.prototype.cnds.OnInterstitialReceived, self);
+		};
+		this.AdMob["onFullScreenAdShown"] = function ()
+		{
+			self.isShowingInterstitial = true;
+			self.runtime.trigger(cr.plugins_.admob.prototype.cnds.OnInterstitialPresented, self);
+		};
+		this.AdMob["onFullScreenAdClosed"] = function ()
+		{
+			self.isShowingInterstitial = false;
+			self.runtime.trigger(cr.plugins_.admob.prototype.cnds.OnInterstitialDismissed, self);
+		};
+		this.AdMob["onBannerAdPreloaded"] = function ()
+		{
+			self.runtime.trigger(cr.plugins_.admob.prototype.cnds.OnBannerAdReceived, self);
+		};
+	};
+	function indexToAdSize(i)
+	{
+		switch (i) {
+		case 0:		return "SMART_BANNER";
+		case 1:		return "BANNER";
+		case 2:		return "MEDIUM_RECTANGLE";
+		case 3:		return "FULL_BANNER";
+		case 4:		return "LEADERBOARD";
+		case 5:		return "SKYSCRAPER";
+		}
+		return "SMART_BANNER";
+	};
+	function indexToAdPosition(i)
+	{
+		switch (i) {
+		case 0:		return "top-left";
+		case 1:		return "top-center";
+		case 2:		return "top-right";
+		case 3:		return "left";
+		case 4:		return "center";
+		case 5:		return "right";
+		case 6:		return "bottom-left";
+		case 7:		return "bottom-center";
+		case 8:		return "bottom-right";
+		}
+		return "bottom-center";
+	};
+	function Cnds() {};
+	Cnds.prototype.IsShowingBanner = function()
+	{
+		return this.isShowingBannerAd;
+	};
+	Cnds.prototype.IsShowingInterstitial = function()
+	{
+		return this.isShowingInterstitial;
+	};
+	Cnds.prototype.OnInterstitialReceived = function()
+	{
+		return true;
+	};
+	Cnds.prototype.OnInterstitialPresented = function()
+	{
+		return true;
+	};
+	Cnds.prototype.OnInterstitialDismissed = function()
+	{
+		return true;
+	};
+	Cnds.prototype.OnBannerAdReceived = function()
+	{
+		return true;
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+	Acts.prototype.ShowBanner = function (pos_, size_)
+	{
+		if (!isSupported)
+			return;
+		this.AdMob["showBannerAd"](indexToAdPosition(pos_), indexToAdSize(size_));
+		this.isShowingBannerAd = true;
+	};
+	Acts.prototype.AutoShowInterstitial = function ()
+	{
+		if (!isSupported)
+			return;
+		this.AdMob["showFullScreenAd"]();
+	};
+	Acts.prototype.PreloadInterstitial = function ()
+	{
+		if (!isSupported)
+			return;
+		this.AdMob["preloadFullScreenAd"]();
+	};
+	Acts.prototype.ShowInterstitial = function ()
+	{
+		if (!isSupported)
+			return;
+		this.AdMob["showFullScreenAd"]();
+	};
+	Acts.prototype.HideBanner = function ()
+	{
+		if (!isSupported)
+			return;
+		this.AdMob["hideBannerAd"]();
+		this.isShowingBannerAd = false;
+	};
+	Acts.prototype.ReloadInterstitial = function ()
+	{
+		if (!isSupported)
+			return;
+		this.AdMob["reloadFullScreenAd"]();
+	};
+	Acts.prototype.ReloadInterstitial = function ()
+	{
+		if (!isSupported)
+			return;
+		this.AdMob["reloadFullScreenAd"]();
+	};
+	Acts.prototype.ReloadBanner = function ()
+	{
+		if (!isSupported)
+			return;
+		this.AdMob["reloadBannerAd"]();
+	};
+	pluginProto.acts = new Acts();
+	function Exps() {};
+	pluginProto.exps = new Exps();
+}());
 ;
 ;
 cr.behaviors.Bullet = function(runtime)
@@ -20734,8 +24052,20 @@ cr.getProjectModel = function() { return [
 	"Menu Inicial",
 	[
 	[
-		cr.plugins_.Dictionary,
+		cr.plugins_.admob,
+		true,
 		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
+	]
+,	[
+		cr.plugins_.Audio,
+		true,
 		false,
 		false,
 		false,
@@ -20758,7 +24088,31 @@ cr.getProjectModel = function() { return [
 		false
 	]
 ,	[
+		cr.plugins_.Dictionary,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
+	]
+,	[
 		cr.plugins_.Function,
+		true,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
+	]
+,	[
+		cr.plugins_.Keyboard,
 		true,
 		false,
 		false,
@@ -20782,15 +24136,15 @@ cr.getProjectModel = function() { return [
 		true
 	]
 ,	[
-		cr.plugins_.Keyboard,
+		cr.plugins_.Sprite,
+		false,
 		true,
-		false,
-		false,
-		false,
-		false,
-		false,
-		false,
-		false,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
 		false
 	]
 ,	[
@@ -20815,18 +24169,6 @@ cr.getProjectModel = function() { return [
 		false,
 		false,
 		false,
-		false
-	]
-,	[
-		cr.plugins_.Sprite,
-		false,
-		true,
-		true,
-		true,
-		true,
-		true,
-		true,
-		true,
 		false
 	]
 ,	[
@@ -20861,7 +24203,7 @@ cr.getProjectModel = function() { return [
 			false,
 			4336136637786321,
 			[
-				["images/nave-sheet0.png", 46975, 0, 0, 256, 256, 1, 0.5, 0.50390625,[["Imagepoint 1", 0.4921875, 0.2265625],["Imagepoint 2", 0.5, 0.76953125]],[-0.3832679986953735,-0.3813382387161255,-0.1789880096912384,-0.383283257484436,-0.02524599432945252,-0.243206262588501,0.2957199811935425,-0.2364112436771393,0.390625,-0.1631272435188294,0.4884189963340759,-0.00390625,0.390625,0.154350757598877,0.2723730206489563,0.2325287461280823,-0.02523401379585266,0.2315027713775635,-0.1828790009021759,0.377416729927063,-0.3832679986953735,0.3793547749519348,-0.2779220044612885,0.1780237555503845,-0.4804686903953552,0.3067687749862671,-0.4804686903953552,0.1755907535552979,-0.3828119933605194,0.176264762878418,-0.3828119933605194,-0.1824532449245453,-0.4804686903953552,-0.183749258518219,-0.4804686903953552,-0.32302525639534,-0.2817060053348541,-0.1855622529983521],0]
+				["assets/nave-sheet0.png", 46988, 0, 0, 256, 256, 1, 0.5, 0.50390625,[["Imagepoint 1", 0.4921875, 0.2265625],["Imagepoint 2", 0.5, 0.76953125]],[-0.3832679986953735,-0.3813382387161255,-0.1789880096912384,-0.383283257484436,-0.02524599432945252,-0.243206262588501,0.2957199811935425,-0.2364112436771393,0.390625,-0.1631272435188294,0.4884189963340759,-0.00390625,0.390625,0.154350757598877,0.2723730206489563,0.2325287461280823,-0.02523401379585266,0.2315027713775635,-0.1828790009021759,0.377416729927063,-0.3832679986953735,0.3793547749519348,-0.2779220044612885,0.1780237555503845,-0.4804686903953552,0.3067687749862671,-0.4804686903953552,0.1755907535552979,-0.3828119933605194,0.176264762878418,-0.3828119933605194,-0.1824532449245453,-0.4804686903953552,-0.183749258518219,-0.4804686903953552,-0.32302525639534,-0.2817060053348541,-0.1855622529983521],0]
 			]
 			]
 		],
@@ -20929,9 +24271,9 @@ cr.getProjectModel = function() { return [
 			false,
 			7752627690515721,
 			[
-				["images/barravida-sheet0.png", 2533, 1, 1, 133, 11, 1, 0, 0.5454545617103577,[],[],0],
-				["images/barravida-sheet0.png", 2533, 1, 14, 133, 11, 1, 0, 0.5454545617103577,[],[],0],
-				["images/barravida-sheet0.png", 2533, 1, 27, 133, 11, 1, 0, 0.5454545617103577,[],[],0]
+				["assets/barravida-sheet0.png", 2556, 1, 1, 133, 11, 1, 0, 0.5454545617103577,[],[],0],
+				["assets/barravida-sheet0.png", 2556, 1, 14, 133, 11, 1, 0, 0.5454545617103577,[],[],0],
+				["assets/barravida-sheet0.png", 2556, 1, 27, 133, 11, 1, 0, 0.5454545617103577,[],[],0]
 			]
 			]
 		],
@@ -20961,7 +24303,7 @@ cr.getProjectModel = function() { return [
 			false,
 			50901460962269,
 			[
-				["images/barrafuel-sheet0.png", 703, 0, 0, 133, 11, 1, 0, 0.5454545617103577,[],[],0]
+				["assets/barrafuel-sheet0.png", 703, 0, 0, 133, 11, 1, 0, 0.5454545617103577,[],[],0]
 			]
 			]
 		],
@@ -21009,7 +24351,7 @@ cr.getProjectModel = function() { return [
 			false,
 			7108623179366887,
 			[
-				["images/plataforma-sheet0.png", 21195, 0, 0, 312, 64, 1, 0.5, 0.5,[],[-0.4038462042808533,-0.203125,0.330128014087677,-0.203125,0.2580130100250244,0.484375,-0.3165059983730316,0.484375],0]
+				["assets/plataforma-sheet0.png", 15408, 0, 0, 318, 64, 1, 0.5, 0.5,[],[-0.4038462042808533,-0.203125,0.330128014087677,-0.203125,0.2580130100250244,0.484375,-0.3165059983730316,0.484375],0]
 			]
 			]
 		],
@@ -21091,7 +24433,7 @@ cr.getProjectModel = function() { return [
 			false,
 			8595776474009768,
 			[
-				["images/nave2-sheet0.png", 147942, 0, 0, 512, 512, 1, 0.501953125, 0.501953125,[["Imagepoint 1", 0.51953125, 0.234375],["Imagepoint 2", 0.51171875, 0.7578125]],[-0.3847651183605194,-0.3886721134185791,-0.158203125,-0.3906251192092896,-0.017578125,-0.2441401183605194,0.2519528865814209,-0.2558591365814209,0.3984378576278687,-0.1562501192092896,0.498046875,-0.001953125,0.4023438692092896,0.1582028865814209,0.2597658634185791,0.2402348518371582,-0.03125011920928955,0.2363278865814209,-0.1621091365814209,0.373046875,-0.3886721134185791,0.373046875,-0.2815611362457275,0.2691518664360046,-0.3853881359100342,0.2277568578720093,-0.4836657345294952,0.3168408870697022,-0.484909325838089,0.1668858528137207,-0.401459127664566,0.1560368537902832,-0.398621141910553,0.0874638557434082,-0.4085695147514343,-0.0887451171875,-0.4146120250225067,-0.1829221248626709,-0.4987795054912567,-0.1755371391773224,-0.4916993379592896,-0.3100581169128418,-0.3994141221046448,-0.2587891221046448,-0.2773441076278687,-0.2734371423721314],0]
+				["assets/nave2-sheet0.png", 147955, 0, 0, 512, 512, 1, 0.501953125, 0.501953125,[["Imagepoint 1", 0.51953125, 0.234375],["Imagepoint 2", 0.51171875, 0.7578125]],[-0.3847651183605194,-0.3886721134185791,-0.158203125,-0.3906251192092896,-0.017578125,-0.2441401183605194,0.2519528865814209,-0.2558591365814209,0.3984378576278687,-0.1562501192092896,0.498046875,-0.001953125,0.4023438692092896,0.1582028865814209,0.2597658634185791,0.2402348518371582,-0.03125011920928955,0.2363278865814209,-0.1621091365814209,0.373046875,-0.3886721134185791,0.373046875,-0.2815611362457275,0.2691518664360046,-0.3853881359100342,0.2277568578720093,-0.4836657345294952,0.3168408870697022,-0.484909325838089,0.1668858528137207,-0.401459127664566,0.1560368537902832,-0.398621141910553,0.0874638557434082,-0.4085695147514343,-0.0887451171875,-0.4146120250225067,-0.1829221248626709,-0.4987795054912567,-0.1755371391773224,-0.4916993379592896,-0.3100581169128418,-0.3994141221046448,-0.2587891221046448,-0.2773441076278687,-0.2734371423721314],0]
 			]
 			]
 		],
@@ -21136,7 +24478,7 @@ cr.getProjectModel = function() { return [
 			false,
 			8352111306054927,
 			[
-				["images/nivels-sheet0.png", 113029, 0, 0, 252, 333, 1, 0.5, 0.5015015006065369,[],[-0.4246031939983368,-0.4444443881511688,0,-0.5015015006065369,0.4285709857940674,-0.4474473893642426,0.4960319995880127,-0.003003507852554321,0.4285709857940674,0.444444477558136,0,0.4984984993934631,-0.4246031939983368,0.4414414763450623,-0.5,-0.003003507852554321],0]
+				["assets/nivels-sheet0.png", 113042, 0, 0, 252, 333, 1, 0.5, 0.5015015006065369,[],[-0.4246031939983368,-0.4444443881511688,0,-0.5015015006065369,0.4285709857940674,-0.4474473893642426,0.4960319995880127,-0.003003507852554321,0.4285709857940674,0.444444477558136,0,0.4984984993934631,-0.4246031939983368,0.4414414763450623,-0.5,-0.003003507852554321],0]
 			]
 			]
 		],
@@ -21201,7 +24543,7 @@ cr.getProjectModel = function() { return [
 			false,
 			1640802197201724,
 			[
-				["images/fondo-sheet0.png", 340360, 0, 0, 1280, 720, 1, 0.5, 0.5,[],[],0]
+				["assets/fondo-sheet0.png", 286528, 0, 0, 1280, 720, 1, 0.5, 0.5,[],[0.5,0.5,-0.5,0.5,-0.5,-0.5,0.5,-0.5],0]
 			]
 			]
 		],
@@ -21231,13 +24573,13 @@ cr.getProjectModel = function() { return [
 			true,
 			1663146104823686,
 			[
-				["images/astronauta-sheet0.png", 54917, 1, 1, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
-				["images/astronauta-sheet0.png", 54917, 131, 1, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
-				["images/astronauta-sheet0.png", 54917, 261, 1, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
-				["images/astronauta-sheet0.png", 54917, 1, 131, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
-				["images/astronauta-sheet0.png", 54917, 131, 131, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
-				["images/astronauta-sheet0.png", 54917, 261, 131, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
-				["images/astronauta-sheet0.png", 54917, 1, 261, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0]
+				["assets/astronauta-sheet0.png", 54917, 1, 1, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
+				["assets/astronauta-sheet0.png", 54917, 131, 1, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
+				["assets/astronauta-sheet0.png", 54917, 261, 1, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
+				["assets/astronauta-sheet0.png", 54917, 1, 131, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
+				["assets/astronauta-sheet0.png", 54917, 131, 131, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
+				["assets/astronauta-sheet0.png", 54917, 261, 131, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0],
+				["assets/astronauta-sheet0.png", 54917, 1, 261, 128, 128, 1, 0.5, 0.5,[],[-0.2363280057907105,-0.3632810115814209,0.234375,-0.3632810115814209,0.3378909826278687,0.25,0.1640629768371582,0.46875,-0.1679689884185791,0.46875,-0.3427730202674866,0.25],0]
 			]
 			]
 		],
@@ -21267,7 +24609,7 @@ cr.getProjectModel = function() { return [
 			false,
 			2904581272103842,
 			[
-				["images/lander-sheet0.png", 168, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],3]
+				["assets/lander-sheet0.png", 168, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],3]
 			]
 			]
 		],
@@ -21320,7 +24662,7 @@ cr.getProjectModel = function() { return [
 			false,
 			2833243826399895,
 			[
-				["images/barrabase-sheet0.png", 457, 0, 0, 133, 11, 1, 0.5037593841552734, 0.5454545617103577,[],[],0]
+				["assets/barrabase-sheet0.png", 457, 0, 0, 133, 11, 1, 0.5037593841552734, 0.5454545617103577,[],[],0]
 			]
 			]
 		],
@@ -21339,7 +24681,7 @@ cr.getProjectModel = function() { return [
 		[1378911123636939],
 		1,
 		0,
-		["images/thusters.png", 1160, 0],
+		["assets/thusters.png", 1160, 0],
 		null,
 		[
 		[
@@ -21372,7 +24714,7 @@ cr.getProjectModel = function() { return [
 			false,
 			7203012049242542,
 			[
-				["images/ventana-sheet0.png", 2943, 0, 0, 45, 44, 1, 0.5111111402511597, 0.5,[],[-0.3520201444625855,0.3444439768791199,-0.5111111402511597,0.01111102104187012,-0.3520201444625855,-0.3444440066814423,-0.01111114025115967,-0.4777778089046478,0.3297978639602661,-0.3444440066814423,0.466161847114563,0.01111102104187012,0.3297978639602661,0.3444439768791199,-0.01111114025115967,0.4777780175209045],0]
+				["assets/ventana-sheet0.png", 2956, 0, 0, 45, 44, 1, 0.5111111402511597, 0.5,[],[-0.3520201444625855,0.3444439768791199,-0.5111111402511597,0.01111102104187012,-0.3520201444625855,-0.3444440066814423,-0.01111114025115967,-0.4777778089046478,0.3297978639602661,-0.3444440066814423,0.466161847114563,0.01111102104187012,0.3297978639602661,0.3444439768791199,-0.01111114025115967,0.4777780175209045],0]
 			]
 			]
 		],
@@ -21407,7 +24749,7 @@ cr.getProjectModel = function() { return [
 			false,
 			1061748371116579,
 			[
-				["images/minimap-sheet0.png", 14502, 0, 0, 250, 250, 1, 0, 0,[],[],0]
+				["assets/minimap-sheet0.png", 7647, 0, 0, 256, 72, 1, 0, 0,[],[],0]
 			]
 			]
 		],
@@ -21437,7 +24779,7 @@ cr.getProjectModel = function() { return [
 			false,
 			6065852816884908,
 			[
-				["images/navemini-sheet0.png", 3778, 0, 0, 64, 64, 1, 0.5, 0.5,[],[],0]
+				["assets/navemini-sheet0.png", 3791, 0, 0, 64, 64, 1, 0.5, 0.5,[],[],0]
 			]
 			]
 		],
@@ -21472,19 +24814,19 @@ cr.getProjectModel = function() { return [
 			false,
 			3964271936932577,
 			[
-				["images/fire-sheet0.png", 44376, 1, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 110, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 219, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 328, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 1, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 110, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 219, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 328, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet1.png", 7047, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0]
+				["assets/fire-sheet0.png", 44408, 1, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 110, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 219, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 328, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 1, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 110, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 219, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 328, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet1.png", 7060, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0]
 			]
 			]
 ,			[
@@ -21496,11 +24838,11 @@ cr.getProjectModel = function() { return [
 			true,
 			6420172470090328,
 			[
-				["images/fire-sheet1.png", 7047, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
-				["images/fire-sheet0.png", 44376, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
-				["images/fire-sheet0.png", 44376, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
-				["images/fire-sheet0.png", 44376, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
-				["images/fire-sheet0.png", 44376, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0]
+				["assets/fire-sheet1.png", 7060, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
+				["assets/fire-sheet0.png", 44408, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
+				["assets/fire-sheet0.png", 44408, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
+				["assets/fire-sheet0.png", 44408, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0],
+				["assets/fire-sheet0.png", 44408, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,0.07760614156723023,0.9921879768371582],0]
 			]
 			]
 ,			[
@@ -21512,19 +24854,19 @@ cr.getProjectModel = function() { return [
 			false,
 			6510790409974259,
 			[
-				["images/fire-sheet1.png", 7047, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 328, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 219, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 110, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 1, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 328, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 219, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 110, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
-				["images/fire-sheet0.png", 44376, 1, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0]
+				["assets/fire-sheet1.png", 7060, 0, 0, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 328, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 219, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 110, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 1, 261, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 328, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 219, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 110, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 1, 131, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 328, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 219, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 110, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0],
+				["assets/fire-sheet0.png", 44408, 1, 1, 107, 128, 1, 0.5046728849411011, 0,[],[-0.5046728849411011,0,0.4953271150588989,0,-0.009345889091491699,1],0]
 			]
 			]
 		],
@@ -21548,7 +24890,7 @@ cr.getProjectModel = function() { return [
 		[],
 		1,
 		1,
-		["images/thusters.png", 1160, 0],
+		["assets/thusters.png", 1160, 0],
 		null,
 		[
 		[
@@ -21581,12 +24923,12 @@ cr.getProjectModel = function() { return [
 			false,
 			2834389541164703,
 			[
-				["images/astronaut_halo_-sheet0.png", 9306, 1, 1, 128, 128, 1, 0.5, 0.5,[],[],0],
-				["images/astronaut_halo_-sheet0.png", 9306, 131, 1, 128, 128, 1, 0.5, 0.5,[],[],0],
-				["images/astronaut_halo_-sheet0.png", 9306, 261, 1, 128, 128, 1, 0.5, 0.5,[],[],0],
-				["images/astronaut_halo_-sheet0.png", 9306, 1, 131, 128, 128, 1, 0.5, 0.5,[],[],0],
-				["images/astronaut_halo_-sheet0.png", 9306, 131, 131, 128, 128, 1, 0.5, 0.5,[],[],0],
-				["images/astronaut_halo_-sheet0.png", 9306, 261, 131, 128, 128, 1, 0.5, 0.5,[],[],0]
+				["assets/astronaut_halo_-sheet0.png", 9119, 1, 1, 128, 128, 1, 0.5, 0.5,[],[],0],
+				["assets/astronaut_halo_-sheet0.png", 9119, 131, 1, 128, 128, 1, 0.5, 0.5,[],[],0],
+				["assets/astronaut_halo_-sheet0.png", 9119, 261, 1, 128, 128, 1, 0.5, 0.5,[],[],0],
+				["assets/astronaut_halo_-sheet0.png", 9119, 1, 131, 128, 128, 1, 0.5, 0.5,[],[],0],
+				["assets/astronaut_halo_-sheet0.png", 9119, 131, 131, 128, 128, 1, 0.5, 0.5,[],[],0],
+				["assets/astronaut_halo_-sheet0.png", 9119, 261, 131, 128, 128, 1, 0.5, 0.5,[],[],0]
 			]
 			]
 		],
@@ -21621,7 +24963,7 @@ cr.getProjectModel = function() { return [
 			false,
 			5492102496990154,
 			[
-				["images/suelomenu-sheet0.png", 273673, 0, 0, 1925, 439, 1, 0.5002597570419312, 0.5011389255523682,[],[],0]
+				["assets/suelomenu-sheet0.png", 133134, 0, 0, 1280, 128, 1, 0.5, 0.5,[],[-0.487500011920929,-0.375,0,-0.109375,0.4609379768371582,-0.109375,0.5,0,0.5,0.5,-0.5,0.5],0]
 			]
 			]
 		],
@@ -21683,7 +25025,7 @@ cr.getProjectModel = function() { return [
 			false,
 			7690084848796365,
 			[
-				["images/lander-sheet0.png", 168, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],3]
+				["assets/lander-sheet0.png", 168, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],3]
 			]
 			]
 		],
@@ -21718,7 +25060,7 @@ cr.getProjectModel = function() { return [
 			false,
 			5001687112919388,
 			[
-				["images/lander-sheet0.png", 168, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],3]
+				["assets/lander-sheet0.png", 168, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],3]
 			]
 			]
 		],
@@ -21734,7 +25076,7 @@ cr.getProjectModel = function() { return [
 		"t29",
 		cr.plugins_.Sprite,
 		false,
-		[],
+		[2811706947407009],
 		0,
 		0,
 		null,
@@ -21748,12 +25090,12 @@ cr.getProjectModel = function() { return [
 			true,
 			2250060795394058,
 			[
-				["images/play_anim-sheet0.png", 55102, 1, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 55102, 403, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 55102, 1, 403, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet0.png", 55102, 403, 403, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet1.png", 36977, 1, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
-				["images/play_anim-sheet1.png", 36977, 403, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0]
+				["assets/play_anim-sheet0.png", 71847, 1, 805, 246, 180, 1, 0.4552845656871796, 0.4333333373069763,[],[],0],
+				["assets/play_anim-sheet0.png", 71847, 1, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["assets/play_anim-sheet0.png", 71847, 403, 1, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["assets/play_anim-sheet0.png", 71847, 1, 403, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["assets/play_anim-sheet0.png", 71847, 403, 403, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0],
+				["assets/play_anim-sheet1.png", 16926, 0, 0, 400, 400, 1, 0.5, 0.5,[],[-0.5,-0.4550780951976776,0.5,-0.453125,0.5,0.4101560115814209,-0.5,0.4082030057907105],0]
 			]
 			]
 		],
@@ -21783,7 +25125,7 @@ cr.getProjectModel = function() { return [
 			false,
 			2615993166267772,
 			[
-				["images/botonback-sheet0.png", 36134, 0, 0, 636, 446, 1, 0.5, 0.5,[],[-0.3113210201263428,-0.2309420108795166,0,-0.2825109958648682,0.3474839925765991,-0.2825109958648682,0.4544029831886292,0,0.3144649863243103,0.2354260087013245,0,0.2354260087013245,-0.3506290018558502,0.2869960069656372,-0.4811320900917053,0],0]
+				["assets/botonback-sheet0.png", 36163, 0, 0, 631, 435, 1, 0.5055467486381531, 0.5011494159698486,[],[-0.0475437343120575,-0.4942531883716583,2.384185791015625e-007,-0.2896554172039032,0.4690962433815002,-0.2620684206485748,0.4215531945228577,0.1448276042938232,-0.1077657341957092,0.1724135875701904,-0.1854197382926941,0.3770115971565247,-0.4247226417064667,-0.0367814302444458],0]
 			]
 			]
 		],
@@ -21813,8 +25155,8 @@ cr.getProjectModel = function() { return [
 			false,
 			7643775129692437,
 			[
-				["images/estrellas-sheet0.png", 19514, 0, 0, 300, 300, 1, 0.5, 0.5,[],[-0.1599999964237213,-0.1599999964237213,0,-0.4799999892711639,0.1600000262260437,-0.1599999964237213,0.4066669940948486,0,0.2966669797897339,0.2966669797897339,-0.2866669893264771,0.2866669893264771,-0.3966670036315918,0],0],
-				["images/estrellas-sheet1.png", 36573, 0, 0, 300, 300, 1, 0.5, 0.5,[],[-0.1599999964237213,-0.1599999964237213,0,-0.4799999892711639,0.1600000262260437,-0.1599999964237213,0.4033330082893372,0,0.2966669797897339,0.2966669797897339,-0.2866669893264771,0.2866669893264771,-0.3966670036315918,0],0]
+				["assets/estrellas-sheet0.png", 19527, 0, 0, 300, 300, 1, 0.5, 0.5,[],[-0.1599999964237213,-0.1599999964237213,0,-0.4799999892711639,0.1600000262260437,-0.1599999964237213,0.4066669940948486,0,0.2966669797897339,0.2966669797897339,-0.2866669893264771,0.2866669893264771,-0.3966670036315918,0],0],
+				["assets/estrellas-sheet1.png", 36586, 0, 0, 300, 300, 1, 0.5, 0.5,[],[-0.1599999964237213,-0.1599999964237213,0,-0.4799999892711639,0.1600000262260437,-0.1599999964237213,0.4033330082893372,0,0.2966669797897339,0.2966669797897339,-0.2866669893264771,0.2866669893264771,-0.3966670036315918,0],0]
 			]
 			]
 		],
@@ -21828,46 +25170,6 @@ cr.getProjectModel = function() { return [
 	]
 ,	[
 		"t32",
-		cr.plugins_.Sprite,
-		false,
-		[],
-		2,
-		0,
-		null,
-		[
-			[
-			"Default",
-			5,
-			false,
-			1,
-			0,
-			false,
-			6966253332688779,
-			[
-				["images/fondointermedio-sheet0.png", 11741, 0, 0, 1280, 261, 1, 0.5, 0.5019156932830811,[],[0.4256939888000488,-0.1379697024822235,0.5,-0.001915693283081055,0.4868059754371643,0.4334583282470703],0]
-			]
-			]
-		],
-		[
-		[
-			"Wrap",
-			cr.behaviors.wrap,
-			4821981246351813
-		]
-,		[
-			"Bullet",
-			cr.behaviors.Bullet,
-			2975558578985666
-		]
-		],
-		false,
-		false,
-		3825500751458409,
-		[],
-		null
-	]
-,	[
-		"t33",
 		cr.plugins_.Sprite,
 		false,
 		[217698631076899],
@@ -21884,8 +25186,8 @@ cr.getProjectModel = function() { return [
 			false,
 			2068157216401665,
 			[
-				["images/astronautarecoger-sheet0.png", 7293, 1, 1, 64, 64, 1, 0.5, 0.5,[],[],0],
-				["images/astronautarecoger-sheet0.png", 7293, 67, 1, 40, 59, 1, 0.5, 0.4745762646198273,[],[-0.425000011920929,-0.2881352603435516,0,-0.4406779706478119,0.425000011920929,-0.2881352603435516,0.2749999761581421,-2.682209014892578e-007,0.425000011920929,0.2881357371807098,0,0.3220337331295013,-0.449999988079071,0.3050847351551056,-0.2750000059604645,-2.682209014892578e-007],0]
+				["assets/astronautarecoger-sheet0.png", 7483, 1, 1, 64, 64, 1, 0.5, 0.5,[],[-0.015625,-0.5,0.5,0.5,-0.5,0.5],0],
+				["assets/astronautarecoger-sheet0.png", 7483, 67, 1, 40, 59, 1, 0.5, 0.4745762646198273,[],[-0.425000011920929,-0.2881352603435516,0,-0.4406779706478119,0.425000011920929,-0.2881352603435516,0.2749999761581421,-2.682209014892578e-007,0.425000011920929,0.2881357371807098,0,0.3220337331295013,-0.449999988079071,0.3050847351551056,-0.2750000059604645,-2.682209014892578e-007],0]
 			]
 			]
 		],
@@ -21894,6 +25196,36 @@ cr.getProjectModel = function() { return [
 		false,
 		false,
 		7867206898187388,
+		[],
+		null
+	]
+,	[
+		"t33",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			5640904707145291,
+			[
+				["assets/navevida-sheet0.png", 47754, 0, 0, 256, 256, 1, 0.5, 0.5,[],[-0.3710939884185791,0.3710939884185791,-0.2617189884185791,0,-0.2460939884185791,-0.2460939884185791,0,-0.484375,0.2460939884185791,-0.2460939884185791,0.2578129768371582,0,0.3710939884185791,0.3710939884185791,0,0.390625],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		8457996891343301,
 		[],
 		null
 	]
@@ -21913,9 +25245,9 @@ cr.getProjectModel = function() { return [
 			1,
 			0,
 			false,
-			360167045343326,
+			7811598897195073,
 			[
-				["images/fondoatras-sheet0.png", 19612, 0, 0, 1280, 261, 1, 0.5, 0.5019156932830811,[],[-0.3868060111999512,0.05250632762908936,0,-0.4100790023803711,0.4277780055999756,-0.1481747031211853,0.5,-0.001915693283081055,0.4874999523162842,0.4368603229522705,-0.4881944060325623,0.4402613043785095,-0.3541669845581055,-0.001915693283081055],0]
+				["assets/barrilfuel-sheet0.png", 425, 0, 0, 53, 66, 1, 0.5094339847564697, 0.5,[],[],0]
 			]
 			]
 		],
@@ -21923,7 +25255,7 @@ cr.getProjectModel = function() { return [
 		],
 		false,
 		false,
-		4371542226462658,
+		8577819973104161,
 		[],
 		null
 	]
@@ -21938,14 +25270,17 @@ cr.getProjectModel = function() { return [
 		[
 			[
 			"Default",
-			5,
+			0,
 			false,
 			1,
 			0,
 			false,
-			5640904707145291,
+			9272950651177398,
 			[
-				["images/navevida-sheet0.png", 47741, 0, 0, 256, 256, 1, 0.5, 0.5,[],[-0.3710939884185791,0.3710939884185791,-0.2617189884185791,0,-0.2460939884185791,-0.2460939884185791,0,-0.484375,0.2460939884185791,-0.2460939884185791,0.2578129768371582,0,0.3710939884185791,0.3710939884185791,0,0.390625],0]
+				["assets/suelolvl0-sheet0.png", 201123, 649, 1, 321, 720, 1, 0.5015576481819153, 0.5,[],[-0.5015576481819153,0.2680559754371643,-0.006230652332305908,0.2708330154418945,0.07632434368133545,0.2958329916000366,0.1269473433494568,0.35555499792099,0.1553743481636047,0.4131940007209778,0.2069713473320007,0.446179986000061,0.2732673287391663,0.4571179747581482,0.4984423518180847,0.4570310115814209,0.495327353477478,0.4986109733581543,-0.5015576481819153,0.5],0],
+				["assets/suelolvl0-sheet0.png", 201123, 1, 1, 322, 720, 1, 0.5, 0.5,[],[-0.5,0.4597219824790955,0.3524839878082275,0.4625000357627869,0.4122670292854309,0.4048609733581543,0.4638980031013489,0.2142360210418701,0.4968940019607544,0.1222230195999146,0.4968940019607544,0.4986109733581543,-0.4968944191932678,0.4986109733581543],0],
+				["assets/suelolvl0-sheet0.png", 201123, 325, 1, 322, 720, 1, 0.5, 0.5,[],[0.1537269949913025,-0.2083329856395721,0.2593169808387756,-0.2190969884395599,0.4580749869346619,-0.2145830094814301,0.49378901720047,-0.1944440007209778,0.4968940019607544,0.4986109733581543,-0.4968944191932678,0.4986109733581543,-0.4813665151596069,0.06885898113250732,-0.369297981262207,-0.01644998788833618,-0.3317639827728272,-0.03289899230003357,-0.2318519949913025,-0.05746498703956604,-0.01960399746894836,-0.07048600912094116,0.001164019107818604,-0.07569500803947449,0.0675470232963562,-0.1652779877185822],0],
+				["assets/suelolvl0-sheet1.png", 74037, 0, 0, 321, 720, 1, 0.5015576481819153, 0.5,[],[-0.4992212057113648,-0.1982640027999878,-0.4688472449779511,0.2746520042419434,-0.4454829394817352,0.3180559873580933,-0.352803647518158,0.3374999761581421,-0.2550616264343262,0.3395839929580689,-0.1784456372261047,0.3279520273208618,-0.1205216348171234,0.309374988079071,0.2504873275756836,0.0546879768371582,0.2973623275756836,0.03706598281860352,0.4984423518180847,0.03611099720001221,0.4984423518180847,0.5,-0.4984423816204071,0.4986109733581543],0]
 			]
 			]
 		],
@@ -21953,7 +25288,7 @@ cr.getProjectModel = function() { return [
 		],
 		false,
 		false,
-		8457996891343301,
+		6189722945326923,
 		[],
 		null
 	]
@@ -21973,102 +25308,9 @@ cr.getProjectModel = function() { return [
 			1,
 			0,
 			false,
-			7811598897195073,
-			[
-				["images/barrilfuel-sheet0.png", 425, 0, 0, 53, 66, 1, 0.5094339847564697, 0.5,[],[],0]
-			]
-			]
-		],
-		[
-		],
-		false,
-		false,
-		8577819973104161,
-		[],
-		null
-	]
-,	[
-		"t37",
-		cr.plugins_.Sprite,
-		false,
-		[],
-		0,
-		0,
-		null,
-		[
-			[
-			"Default",
-			5,
-			false,
-			1,
-			0,
-			false,
-			7205877517577386,
-			[
-				["images/degradadofondo-sheet0.png", 185481, 0, 0, 1280, 720, 1, 0.5, 0.5,[],[],0]
-			]
-			]
-		],
-		[
-		],
-		false,
-		false,
-		2866289257801522,
-		[],
-		null
-	]
-,	[
-		"t38",
-		cr.plugins_.Sprite,
-		false,
-		[],
-		0,
-		0,
-		null,
-		[
-			[
-			"Default",
-			0,
-			false,
-			1,
-			0,
-			false,
-			9272950651177398,
-			[
-				["images/suelolvl0-sheet0.png", 200787, 649, 1, 321, 720, 1, 0.5015576481819153, 0.5,[],[-0.5015576481819153,0.2680559754371643,-0.006230652332305908,0.2708330154418945,0.07632434368133545,0.2958329916000366,0.1269473433494568,0.35555499792099,0.1553743481636047,0.4131940007209778,0.2069713473320007,0.446179986000061,0.2732673287391663,0.4571179747581482,0.4984423518180847,0.4570310115814209,0.495327353477478,0.4986109733581543,-0.5015576481819153,0.5],0],
-				["images/suelolvl0-sheet0.png", 200787, 1, 1, 322, 720, 1, 0.5, 0.5,[],[-0.5,0.4597219824790955,0.3524839878082275,0.4625000357627869,0.4122670292854309,0.4048609733581543,0.4638980031013489,0.2142360210418701,0.4968940019607544,0.1222230195999146,0.4968940019607544,0.4986109733581543,-0.4968944191932678,0.4986109733581543],0],
-				["images/suelolvl0-sheet0.png", 200787, 325, 1, 322, 720, 1, 0.5, 0.5,[],[0.1537269949913025,-0.2083329856395721,0.2593169808387756,-0.2190969884395599,0.4580749869346619,-0.2145830094814301,0.49378901720047,-0.1944440007209778,0.4968940019607544,0.4986109733581543,-0.4968944191932678,0.4986109733581543,-0.4813665151596069,0.06885898113250732,-0.369297981262207,-0.01644998788833618,-0.3317639827728272,-0.03289899230003357,-0.2318519949913025,-0.05746498703956604,-0.01960399746894836,-0.07048600912094116,0.001164019107818604,-0.07569500803947449,0.0675470232963562,-0.1652779877185822],0],
-				["images/suelolvl0-sheet1.png", 74024, 0, 0, 321, 720, 1, 0.5015576481819153, 0.5,[],[-0.4992212057113648,-0.1982640027999878,-0.4688472449779511,0.2746520042419434,-0.4454829394817352,0.3180559873580933,-0.352803647518158,0.3374999761581421,-0.2550616264343262,0.3395839929580689,-0.1784456372261047,0.3279520273208618,-0.1205216348171234,0.309374988079071,0.2504873275756836,0.0546879768371582,0.2973623275756836,0.03706598281860352,0.4984423518180847,0.03611099720001221,0.4984423518180847,0.5,-0.4984423816204071,0.4986109733581543],0]
-			]
-			]
-		],
-		[
-		],
-		false,
-		false,
-		6189722945326923,
-		[],
-		null
-	]
-,	[
-		"t39",
-		cr.plugins_.Sprite,
-		false,
-		[],
-		0,
-		0,
-		null,
-		[
-			[
-			"Default",
-			5,
-			false,
-			1,
-			0,
-			false,
 			5816253646611964,
 			[
-				["images/logo-sheet0.png", 71193, 0, 0, 466, 362, 1, 0.5, 0.5,[],[-0.04222199320793152,0.1058819890022278,0,-0.4794118106365204,0.1466670036315918,-0.03235301375389099,0.4222220182418823,0,0.4488890171051025,0.4323530197143555,0,0.4970589876174927,-0.448888897895813,0.4323530197143555,-0.4222221970558167,0],0]
+				["assets/logo-sheet0.png", 71206, 0, 0, 466, 362, 1, 0.5, 0.5,[],[-0.04222199320793152,0.1058819890022278,0,-0.4794118106365204,0.1466670036315918,-0.03235301375389099,0.4222220182418823,0,0.4488890171051025,0.4323530197143555,0,0.4970589876174927,-0.448888897895813,0.4323530197143555,-0.4222221970558167,0],0]
 			]
 			]
 		],
@@ -22081,7 +25323,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t40",
+		"t37",
 		cr.plugins_.Dictionary,
 		false,
 		[],
@@ -22098,13 +25340,13 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t41",
+		"t38",
 		cr.plugins_.Particles,
 		false,
-		[],
+		[269252632543512],
 		1,
-		1,
-		["images/thusters.png", 1160, 0],
+		2,
+		["assets/thusters.png", 1160, 0],
 		null,
 		[
 		[
@@ -22116,11 +25358,638 @@ cr.getProjectModel = function() { return [
 		false,
 		false,
 		4667522524022772,
-		[["colorblend", "Color"]],
+		[["setcolor", "SetColor"],["hsladjust", "AdjustHSL"]],
+		null
+	]
+,	[
+		"t39",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			2,
+			true,
+			1,
+			0,
+			false,
+			7499799792876603,
+			[
+				["assets/landing_platform_anim_-sheet0.png", 4367, 1, 1, 128, 30, 1, 0.5, 0.5,[],[-0.3710939884185791,-0.1166670024394989,0.3789060115814209,-0.04166701436042786,0.03125,0.07499998807907105],0],
+				["assets/landing_platform_anim_-sheet0.png", 4367, 1, 33, 128, 30, 1, 0.5, 0.5,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		719842352949336,
+		[],
+		null
+	]
+,	[
+		"t40",
+		cr.plugins_.Sprite,
+		false,
+		[2251845099591609],
+		1,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			3617999894437391,
+			[
+				["assets/lander-sheet0.png", 168, 0, 0, 250, 250, 1, 0.5, 0.5,[],[],3]
+			]
+			]
+		],
+		[
+		[
+			"Pin",
+			cr.behaviors.Pin,
+			8323226586647038
+		]
+		],
+		false,
+		false,
+		305296964602867,
+		[],
+		null
+	]
+,	[
+		"t41",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			9724504425799633,
+			[
+				["assets/menu_background_-sheet0.png", 532658, 1, 1, 1280, 720, 1, 0.5, 0.5,[],[],0],
+				["assets/menu_background_-sheet0.png", 532658, 1, 723, 1280, 720, 1, 0.5, 0.5,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		5049220046112264,
+		[],
 		null
 	]
 ,	[
 		"t42",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			5261164276445288,
+			[
+				["assets/menu_background_-sheet0.png", 532658, 1, 723, 1280, 720, 1, 0.5, 0.5,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		8716896966442782,
+		[],
+		null
+	]
+,	[
+		"t43",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		2,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			5198940819779519,
+			[
+				["assets/montanasback-sheet0.png", 4570, 0, 0, 1280, 193, 1, 0.5, 0.5025906562805176,[],[-0.4234375059604645,0.005181372165679932,0,-0.4870466589927673,0.408594012260437,0.1036273241043091,0.385155975818634,-0.005181670188903809,0.5,0.4974093437194824,-0.5,0.4974093437194824,-0.4203124940395355,-0.005181670188903809],0]
+			]
+			]
+		],
+		[
+		[
+			"Bullet",
+			cr.behaviors.Bullet,
+			656426275440876
+		]
+,		[
+			"Wrap",
+			cr.behaviors.wrap,
+			305720593860121
+		]
+		],
+		false,
+		false,
+		7464629176829746,
+		[],
+		null
+	]
+,	[
+		"t44",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			2695192161879421,
+			[
+				["assets/montanasback_-sheet0.png", 3896, 0, 0, 1280, 193, 1, 0.5, 0.5025906562805176,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		590895912008351,
+		[],
+		null
+	]
+,	[
+		"t45",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			5671691819837439,
+			[
+				["assets/about_button2-sheet0.png", 8696, 0, 0, 216, 87, 1, 0.5, 0.5057471394538879,[],[-0.4127907156944275,-0.3002681434154511,0,-0.2591721415519714,0.4360470175743103,-0.3550621271133423,0.4069769978523254,0.27507483959198,-0.4825581014156342,0.4531568884849548],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		5643574644214212,
+		[],
+		null
+	]
+,	[
+		"t46",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			7237479349222394,
+			[
+				["assets/gear_ico2-sheet0.png", 5995, 0, 0, 67, 67, 1, 0.5074626803398132, 0.5074626803398132,[],[-0.3582086861133575,-0.3582086861133575,-0.01492568850517273,-0.4925372898578644,0.3283582925796509,-0.3432836830615997,0.46268630027771,-0.01492568850517273,0.3283582925796509,0.3283582925796509,-0.01492568850517273,0.46268630027771,-0.3432836830615997,0.3283582925796509,-0.4925372898578644,-0.01492568850517273],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		6277018697759009,
+		[],
+		null
+	]
+,	[
+		"t47",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			648088111694156,
+			[
+				["assets/social_media_icons2-sheet0.png", 17099, 0, 0, 60, 346, 1, 0.5, 0.5,[],[-0.449999988079071,-0.4913294911384583,0.449999988079071,-0.4913294911384583,0.449999988079071,0.4913290143013001,-0.449999988079071,0.4913290143013001],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		3094556226933572,
+		[],
+		null
+	]
+,	[
+		"t48",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			935861241568972,
+			[
+				["assets/fondo2-sheet0.png", 287767, 0, 0, 1280, 720, 1, 0.5, 0.5,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		8116990452121909,
+		[],
+		null
+	]
+,	[
+		"t49",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			7982576188362995,
+			[
+				["assets/pause_menu_bg-sheet0.png", 46435, 0, 0, 598, 468, 1, 0.5, 0.5,[],[-0.4682273864746094,-0.4594016969203949,0,-0.4871794879436493,0.4899669885635376,-0.4871794879436493,0.4648829698562622,0.455128014087677,0,0.5,-0.4732441008090973,0.4658120274543762,-0.5,0],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		5280294076850828,
+		[],
+		null
+	]
+,	[
+		"t50",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			7693118584272735,
+			[
+				["assets/pause_menu_backbutton-sheet0.png", 22157, 1, 1, 293, 88, 1, 0.5017064809799194, 0.5,[],[-0.4706719815731049,-0.3902440071105957,-0.001706480979919434,-0.4878048896789551,0.4672595262527466,-0.3902440071105957,0.4948455095291138,0,0.4707075357437134,0.4024389982223511,-0.001706480979919434,0.5,-0.4741202890872955,0.4024389982223511,-0.4982582032680512,0],0],
+				["assets/pause_menu_backbutton-sheet0.png", 22157, 1, 91, 293, 88, 1, 0.5017064809799194, 0.5,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		7579165794682482,
+		[],
+		null
+	]
+,	[
+		"t51",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			4808366194156245,
+			[
+				["assets/pause_menu_exitbutton-sheet0.png", 3828, 0, 0, 73, 74, 1, 0.5068492889404297, 0.5,[],[-0.4246574938297272,-0.4189189076423645,-0.0136982798576355,-0.5,0.4109587073326111,-0.4189189076423645,0.4931507110595703,0,0.4109587073326111,0.4189190268516541,-0.0136982798576355,0.5,-0.4246574938297272,0.4189190268516541,-0.4931506812572479,0],0],
+				["assets/pause_menu_exitbutton-sheet1.png", 3810, 0, 0, 73, 74, 1, 0.5068492889404297, 0.5,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		7486429120462072,
+		[],
+		null
+	]
+,	[
+		"t52",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			0,
+			false,
+			1,
+			0,
+			false,
+			2555830673954606,
+			[
+				["assets/volume_on-sheet0.png", 1990, 67, 1, 57, 41, 1, 0.4912280738353729, 0.5365853905677795,[],[],0],
+				["assets/volume_on-sheet0.png", 1990, 1, 1, 64, 64, 1, 0.5, 0.5,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		6146311535425226,
+		[],
+		null
+	]
+,	[
+		"t53",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			0,
+			false,
+			1,
+			0,
+			false,
+			7970638771133854,
+			[
+				["assets/music_on-sheet0.png", 3369, 67, 1, 54, 64, 1, 0.5925925970077515, 0.515625,[],[],0],
+				["assets/music_on-sheet0.png", 3369, 1, 1, 64, 64, 1, 0.5, 0.5,[],[],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		3815970765474605,
+		[],
+		null
+	]
+,	[
+		"t54",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			7806913120951489,
+			[
+				["assets/pause_ico-sheet0.png", 465, 0, 0, 64, 64, 1, 0.5, 0.5,[],[-0.421875,-0.421875,0.421875,-0.421875,0.46875,0,0.4374999403953552,0.4374999403953552,-0.4375,0.4374999403953552,-0.46875,0],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		8440470633302384,
+		[],
+		null
+	]
+,	[
+		"t55",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			5958999420495898,
+			[
+				["assets/pause_menu_mainmenu_bg-sheet0.png", 38873, 0, 0, 598, 377, 1, 0.5, 0.5013262629508972,[],[-0.454849511384964,-0.4297082722187042,0,-0.4907161593437195,0.4899669885635376,-0.4854111671447754,0.4799330234527588,-0.002652257680892944,0.444815993309021,0.4111407399177551,0,0.4827587604522705,-0.4531773030757904,0.4244027137756348,-0.4949832856655121,-0.002652257680892944],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		6593197795916856,
+		[],
+		null
+	]
+,	[
+		"t56",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			9151780036153304,
+			[
+				["assets/mid_paralax_b-sheet0.png", 11027, 0, 0, 2667, 657, 1, 0.5001874566078186, 0.5007610321044922,[],[-0.4000754654407501,-0.09436804056167603,-0.0003744661808013916,-0.3835620284080505,0.418072521686554,-0.1689500212669373,0.4998125433921814,-0.001522034406661987,0.4998125433921814,0.4992389678955078,-0.5001874566078186,0.4992389678955078,-0.5001874566078186,-0.001522034406661987],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		8621329429380687,
+		[],
+		null
+	]
+,	[
+		"t57",
+		cr.plugins_.Sprite,
+		false,
+		[],
+		0,
+		0,
+		null,
+		[
+			[
+			"Default",
+			5,
+			false,
+			1,
+			0,
+			false,
+			7269562909672648,
+			[
+				["assets/mid_paralax_a-sheet0.png", 7664, 0, 0, 2667, 684, 1, 0.5001874566078186, 0.5,[],[-0.4255717396736145,-0.2090640068054199,-0.0003744661808013916,-0.09795299172401428,0.44919353723526,-0.3026320040225983,0.4998125433921814,0,0.4998125433921814,0.5,-0.5001874566078186,0.5,-0.5001874566078186,0],0]
+			]
+			]
+		],
+		[
+		],
+		false,
+		false,
+		9032896769027081,
+		[],
+		null
+	]
+,	[
+		"t58",
+		cr.plugins_.Audio,
+		false,
+		[],
+		0,
+		0,
+		null,
+		null,
+		[
+		],
+		false,
+		false,
+		2897467917114936,
+		[],
+		null
+		,[0,0,0,1,1,600,600,10000,1,5000,1]
+	]
+,	[
+		"t59",
+		cr.plugins_.admob,
+		false,
+		[],
+		0,
+		0,
+		null,
+		null,
+		[
+		],
+		false,
+		false,
+		7059347010085989,
+		[],
+		null
+		,[1,1,"","ca-app-pub-5272281823516789/8534755951","","","",""]
+	]
+,	[
+		"t60",
 		cr.plugins_.Sprite,
 		true,
 		[],
@@ -22142,7 +26011,7 @@ cr.getProjectModel = function() { return [
 		null
 	]
 ,	[
-		"t43",
+		"t61",
 		cr.plugins_.Sprite,
 		true,
 		[1495758126771824,9991843777877198],
@@ -22158,460 +26027,34 @@ cr.getProjectModel = function() { return [
 		[],
 		null
 	]
-	],
-	[
-		[42,5,38]
-,		[43,10]
-	],
-	[
-	[
-		"PruebasSingle",
-		1280,
-		1024,
-		false,
-		"Mecanicas juego eventsheet",
-		2760745877349201,
-		[
-		[
-			"Fondo",
-			0,
-			9259098796331153,
-			true,
-			[255, 255, 255],
-			false,
-			1,
-			1,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			],
-			[			]
-		]
-,		[
-			"Particulas",
-			1,
-			3162834071815674,
-			true,
-			[255, 255, 255],
-			true,
-			1,
-			1,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			],
-			[			]
-		]
-,		[
-			"Nave",
-			2,
-			126695364612426,
-			true,
-			[255, 255, 255],
-			true,
-			1,
-			1,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			[
-				[1142.5, 898.5, 0, 91, 119, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				5,
-				9,
-				[
-				],
-				[
-				[
-					1,
-					0,
-					0,
-					1,
-					0.5,
-					0.2,
-					0,
-					0.01,
-					0,
-					1
-				]
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[249.2894592285156, 176.0528717041016, 0, 80.14985656738281, 80.14985656738281, 0, -1.570796370506287, 1, 0.5, 0.50390625, 0, 0, []],
-				0,
-				1,
-				[
-					[200],
-					[200],
-					[0],
-					[0],
-					[0]
-				],
-				[
-				[
-					0,
-					0,
-					0,
-					0.35,
-					0.75,
-					0,
-					0,
-					1,
-					0,
-					1
-				],
-				[
-					1
-				],
-				[
-					1
-				],
-				[
-				]
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-			],
-			[			]
-		]
-,		[
-			"UI",
-			3,
-			1834209486832591,
-			true,
-			[255, 255, 255],
-			true,
-			0,
-			0,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			[
-				[530, 62, 0, 560, 31, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
-				2,
-				4,
-				[
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[24, 62, 0, 560, 31, 0, 0, 1, 0.1171428561210632, 0.5080000162124634, 0, 0, []],
-				3,
-				5,
-				[
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[258, 39, 0, 32, 46, 0, 0, 1, 0, 0, 0, 0, []],
-				6,
-				10,
-				[
-				],
-				[
-				],
-				[
-					"0",
-					0,
-					"bold 20pt Arial",
-					"rgb(0,0,0)",
-					1,
-					1,
-					0,
-					0,
-					0
-				]
-			]
-			],
-			[			]
-		]
-		],
-		[
-		],
-		[]
-	]
 ,	[
-		"PruebasMulti",
-		1280,
-		1024,
-		false,
+		"t62",
+		cr.plugins_.Sprite,
+		true,
+		[],
+		0,
+		0,
 		null,
-		6060435902370908,
-		[
-		[
-			"Fondo",
-			0,
-			1173357484400878,
-			true,
-			[255, 255, 255],
-			false,
-			1,
-			1,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			],
-			[			]
-		]
-,		[
-			"Particulas",
-			1,
-			4900698211903801,
-			true,
-			[255, 255, 255],
-			true,
-			1,
-			1,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			],
-			[			]
-		]
-,		[
-			"Nave",
-			2,
-			3002435765703521,
-			true,
-			[255, 255, 255],
-			true,
-			1,
-			1,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			[
-				[621, 870, 0, 120, 120, 0, -1.570796489715576, 1, 0.5, 0.50390625, 0, 0, []],
-				0,
-				17,
-				[
-					[200],
-					[200],
-					[0],
-					[0],
-					[0]
-				],
-				[
-				[
-					0,
-					0,
-					0,
-					0.35,
-					0.75,
-					0,
-					0,
-					1,
-					0,
-					1
-				],
-				[
-					1
-				],
-				[
-					1
-				],
-				[
-				]
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[1142.5, 898.5, 0, 91, 119, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				5,
-				20,
-				[
-				],
-				[
-				[
-					1,
-					0,
-					0,
-					1,
-					0.5,
-					0.2,
-					0,
-					0.01,
-					0,
-					1
-				]
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[768, 871, 0, 120, 120, 0, -1.570796489715576, 1, 0.501953125, 0.501953125, 0, 0, []],
-				9,
-				28,
-				[
-					[200],
-					[1],
-					[0]
-				],
-				[
-				[
-					0,
-					0,
-					0,
-					0.5,
-					0.5,
-					0,
-					0,
-					0.2,
-					0,
-					1
-				],
-				[
-					1
-				],
-				[
-					1
-				]
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-			],
-			[			]
-		]
-,		[
-			"UI",
-			3,
-			6085176755588532,
-			true,
-			[255, 255, 255],
-			true,
-			0,
-			0,
-			1,
-			false,
-			1,
-			0,
-			0,
-			[
-			[
-				[530, 62, 0, 200, 31, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
-				2,
-				21,
-				[
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[24, 62, 0, 200, 31, 0, 0, 1, 0.1171428561210632, 0.5080000162124634, 0, 0, []],
-				3,
-				22,
-				[
-					[0]
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[258, 39, 0, 32, 46, 0, 0, 1, 0, 0, 0, 0, []],
-				6,
-				23,
-				[
-				],
-				[
-				],
-				[
-					"0",
-					0,
-					"bold 20pt Arial",
-					"rgb(0,0,0)",
-					1,
-					1,
-					0,
-					0,
-					0
-				]
-			]
-			],
-			[			]
-		]
-		],
+		null,
 		[
 		],
-		[]
+		false,
+		false,
+		7064084358121659,
+		[],
+		null
 	]
-,	[
+	],
+	[
+		[60,5,35]
+,		[61,10]
+,		[62,53,50,49,51,55,52]
+	],
+	[
+	[
 		"Menu Inicial",
-		1920,
-		600,
+		1728,
+		468,
 		false,
 		"Menu Inicial event sheet",
 		785563438126359,
@@ -22632,8 +26075,23 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[388, 220, 0, 776.0564575195313, 436.5317687988281, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				13,
+				[432, 234, 0, 864, 468, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				41,
+				44,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[1296, 234, 5.99999978589949e-008, 864, 468, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				42,
 				55,
 				[
 				],
@@ -22647,8 +26105,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1937, 220, 0, 776.0560302734375, 436.5320129394531, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
+				[1296, 356.3169860839844, 5.99999978589949e-008, 864, 125.7929992675781, 0, 0, 1, 0.5, 0.5025906562805176, 0, 0, []],
+				44,
 				103,
 				[
 				],
@@ -22662,63 +26120,22 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1163, 220, 0, 776.0560302734375, 436.5320129394531, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				37,
-				56,
-				[
-				],
-				[
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[1371.800048828125, 360, 0, 1707.555541992188, 261, 0, 0, 1, 0.5, 0.5019156932830811, 0, 0, []],
-				32,
-				95,
-				[
-				],
-				[
-				[
-					0
-				],
-				[
-					20,
-					0,
-					0,
-					0,
-					1,
-					1
-				]
-				],
-				[
-					0,
-					"Default",
-					0,
-					1
-				]
-			]
-,			[
-				[-335.5, 360, 0, -1707.555541992188, 261, 0, 0, 1, 0.5, 0.5019156932830811, 0, 0, []],
-				32,
+				[-432, 375.2980041503906, 5.99999978589949e-008, 864, 125.556022644043, 0, 0, 1, 0.5, 0.5025906562805176, 0, 0, []],
+				43,
 				96,
 				[
 				],
 				[
 				[
-					0
-				],
-				[
-					20,
+					15,
 					0,
 					0,
 					0,
 					1,
 					1
+				],
+				[
+					0
 				]
 				],
 				[
@@ -22729,8 +26146,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[962.333251953125, 337, 0, 1916, 261, 0, 0, 1, 0.5, 0.5019156932830811, 0, 0, []],
-				34,
+				[432, 356.2319946289063, 5.99999978589949e-008, 864, 125.7926406860352, 0, 0, 1, 0.5, 0.5025906562805176, 0, 0, []],
+				44,
 				100,
 				[
 				],
@@ -22744,7 +26161,59 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[961, 553, 0, 2591.34619140625, 434.2021789550781, 0, 0, 1, 0.5002597570419312, 0.5011389255523682, 0, 0, []],
+				[432, 375.2980041503906, 5.99999978589949e-008, 864, 125.556022644043, 0, 0, 1, 0.5, 0.5025906562805176, 0, 0, []],
+				43,
+				56,
+				[
+				],
+				[
+				[
+					15,
+					0,
+					0,
+					0,
+					0,
+					1
+				],
+				[
+					0
+				]
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[1296, 375, 0, 864, 125.556022644043, 0, 0, 1, 0.5, 0.5025906562805176, 0, 0, []],
+				43,
+				36,
+				[
+				],
+				[
+				[
+					15,
+					0,
+					0,
+					0,
+					0,
+					1
+				],
+				[
+					0
+				]
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[-432, 426.3349914550781, 5.99999978589949e-008, 864, 83.27032470703125, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				25,
 				54,
 				[
@@ -22754,7 +26223,7 @@ cr.getProjectModel = function() { return [
 					0
 				],
 				[
-					40,
+					30,
 					0,
 					0,
 					0,
@@ -22770,7 +26239,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[-962, 553, 0, 2591.34619140625, 434.2021789550781, 0, 0, 1, 0.5002597570419312, 0.5011389255523682, 0, 0, []],
+				[432, 426.3349914550781, 5.99999978589949e-008, 864, 83.27032470703125, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				25,
 				69,
 				[
@@ -22780,7 +26249,33 @@ cr.getProjectModel = function() { return [
 					0
 				],
 				[
-					40,
+					30,
+					0,
+					0,
+					0,
+					1,
+					1
+				]
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[1296, 426, 0, 864, 83.27032470703125, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				25,
+				95,
+				[
+				],
+				[
+				[
+					0
+				],
+				[
+					30,
 					0,
 					0,
 					0,
@@ -22814,7 +26309,7 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[396.3861999511719, 224.3704376220703, 0, 317.7140502929688, 111.9865417480469, 0, 0, 0, 0.5, 0.5, 0, 0, []],
+				[258.239013671875, 146.1351013183594, 5.99999978589949e-008, 206.6886901855469, 72.852783203125, 0, 0, 0, 0.5, 0.5, 0, 0, []],
 				26,
 				11,
 				[
@@ -22836,7 +26331,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[947.3314819335938, 133.9794158935547, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
+				[948.7308349609375, 119.1158599853516, 5.99999978589949e-008, 116.063606262207, 115.4034271240234, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
 				10,
 				60,
 				[
@@ -22853,7 +26348,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1142.369750976563, 135.6324310302734, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
+				[1153.877197265625, 119.1158752441406, 5.99999978589949e-008, 116.063606262207, 115.4034271240234, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
 				10,
 				61,
 				[
@@ -22870,7 +26365,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1320.053588867188, 134.8056182861328, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
+				[1358.022705078125, 119.1158752441406, 5.99999978589949e-008, 116.063606262207, 115.4034271240234, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
 				10,
 				62,
 				[
@@ -22887,7 +26382,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1469.638305664063, 135.6324462890625, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
+				[1563.168701171875, 119.1158752441406, 5.99999978589949e-008, 116.063606262207, 115.4034271240234, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
 				10,
 				63,
 				[
@@ -22904,7 +26399,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[944.0140380859375, 287.4591064453125, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
+				[948.7308349609375, 293.2398071289063, 5.99999978589949e-008, 116.063606262207, 115.4034271240234, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
 				10,
 				64,
 				[
@@ -22921,7 +26416,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1128.3125, 285.8060913085938, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
+				[1153.877197265625, 293.2398071289063, 5.99999978589949e-008, 116.063606262207, 115.4034271240234, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
 				10,
 				65,
 				[
@@ -22938,7 +26433,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1317.564331054688, 288.2859191894531, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
+				[1358.022705078125, 293.2398071289063, 5.99999978589949e-008, 116.063606262207, 115.4034271240234, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
 				10,
 				66,
 				[
@@ -22955,7 +26450,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1467.97705078125, 288.2859191894531, 0, 88.2449951171875, 101.3233413696289, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
+				[1563.168701171875, 293.2398071289063, 5.99999978589949e-008, 116.063606262207, 115.4034271240234, 0, 0, 1, 0.5, 0.5015015006065369, 0, 0, []],
 				10,
 				67,
 				[
@@ -22972,7 +26467,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[896, 441, 0, 58.19596862792969, 40.81038284301758, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[922, 438, 0, 47.64957427978516, 32.8487548828125, 0, 0, 1, 0.5055467486381531, 0.5011494159698486, 0, 0, []],
 				30,
 				45,
 				[
@@ -22987,15 +26482,61 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[415, 333, 0, 147.6231842041016, 147.6231842041016, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[432, 234, 5.99999978589949e-008, 136.5959014892578, 99.94820404052734, 0, 0, 1, 0.4552845656871796, 0.4333333373069763, 0, 0, []],
 				29,
 				70,
+				[
+					[0]
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[808.5802001953125, 441.6119079589844, 0, 85.83375549316406, 34.57192230224609, 0, 0, 1, 0.5, 0.5057471394538879, 0, 0, []],
+				45,
+				106,
 				[
 				],
 				[
 				],
 				[
 					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[816, 46, 0, 43.58681488037109, 43.58680725097656, 0, 0, 1, 0.5074626803398132, 0.5074626803398132, 0, 0, []],
+				46,
+				108,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[26.07357597351074, 84.09092712402344, 5.99999978589949e-008, 24.88647270202637, 143.511962890625, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				47,
+				109,
+				[
+				],
+				[
+				],
+				[
+					1,
 					"Default",
 					0,
 					1
@@ -23020,7 +26561,7 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[916, 176, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[915.7074584960938, 166.1493377685547, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				71,
 				[
@@ -23037,7 +26578,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[946, 162, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[950.732421875, 150.1379241943359, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				72,
 				[
@@ -23054,7 +26595,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[975, 175, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[982.7552490234375, 166.1493377685547, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				73,
 				[
@@ -23071,7 +26612,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1111, 176, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1120.853637695313, 166.1493835449219, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				74,
 				[
@@ -23088,7 +26629,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1141, 162, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1154.8779296875, 150.1379547119141, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				75,
 				[
@@ -23105,7 +26646,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1170, 175, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1187.9013671875, 166.1493835449219, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				76,
 				[
@@ -23122,7 +26663,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1289, 176, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1324.9990234375, 166.1493835449219, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				77,
 				[
@@ -23139,7 +26680,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1319, 162, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1359.023559570313, 150.1379547119141, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				78,
 				[
@@ -23156,7 +26697,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1348, 175, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1392.046997070313, 166.1493835449219, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				79,
 				[
@@ -23173,7 +26714,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1439, 178, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1529.144653320313, 166.1493835449219, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				80,
 				[
@@ -23190,7 +26731,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1469, 164, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1563.168701171875, 150.1379547119141, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				81,
 				[
@@ -23207,7 +26748,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1498, 177, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1596.1923828125, 166.1493835449219, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				82,
 				[
@@ -23224,7 +26765,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[916, 323, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[915.7074584960938, 342.2747192382813, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				83,
 				[
@@ -23241,7 +26782,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[946, 309, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[950.732421875, 326.2633056640625, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				84,
 				[
@@ -23258,7 +26799,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[975, 322, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[982.7552490234375, 342.2747192382813, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				85,
 				[
@@ -23275,7 +26816,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1099, 323, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1120.853637695313, 342.2747192382813, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				86,
 				[
@@ -23292,7 +26833,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1129, 309, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1154.8779296875, 326.2633056640625, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				87,
 				[
@@ -23309,7 +26850,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1158, 322, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1187.9013671875, 342.2747192382813, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				88,
 				[
@@ -23326,7 +26867,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1288, 323, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1324.9990234375, 342.2747192382813, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				89,
 				[
@@ -23343,7 +26884,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1318, 309, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1359.023559570313, 326.2633056640625, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				90,
 				[
@@ -23360,7 +26901,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1347, 322, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1392.046997070313, 342.2747192382813, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				91,
 				[
@@ -23377,7 +26918,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1438, 323, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1530.145263671875, 342.2747192382813, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				92,
 				[
@@ -23394,7 +26935,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1468, 309, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1564.169555664063, 326.2633056640625, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				93,
 				[
@@ -23411,7 +26952,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1497, 322, 0, 33.58571243286133, 33.58571243286133, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1597.192993164063, 342.2747192382813, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				31,
 				94,
 				[
@@ -23428,9 +26969,86 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[412, 162, 0, 285.2479858398438, 170.1610412597656, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				39,
+				[432, 86, 5.99999978589949e-008, 224.2706451416016, 133.7857971191406, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				36,
 				0,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[1154.8779296875, 150.1379547119141, 5.99999978589949e-008, 38.25285720825195, 38.25285339355469, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				31,
+				107,
+				[
+					[1],
+					[1]
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[449, 225, 0, 486.8377990722656, 306.9194946289063, 0, 0, 1, 0.5, 0.5013262629508972, 0, 0, []],
+				55,
+				116,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[357, 168, 0, 70.72786712646484, 50.87442779541016, 0, 0, 1, 0.4912280738353729, 0.5365853905677795, 0, 0, []],
+				52,
+				117,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[351, 274, 0, 58.96086883544922, 64, 0, 0, 1, 0.5925925970077515, 0.515625, 0, 0, []],
+				53,
+				118,
+				[
+				],
+				[
+				],
+				[
+					1,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[663.1211547851563, 101.3141326904297, 0, 59.18406295776367, 59.99480056762695, 0, 0, 1, 0.5068492889404297, 0.5, 0, 0, []],
+				51,
+				119,
 				[
 				],
 				[
@@ -23461,7 +27079,7 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[400.8123779296875, 269.3315734863281, 0, 250, 250, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[260.2403869628906, 175.1557769775391, 5.99999978589949e-008, 162.6373443603516, 162.6373291015625, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				27,
 				58,
 				[
@@ -23479,7 +27097,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1228.81201171875, 269.3320007324219, 0, 250, 250, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[1324, 175, 0, 162.6373443603516, 162.6373291015625, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				28,
 				68,
 				[
@@ -23495,7 +27113,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[393, 269, 0, 250, 250, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[255.2368316650391, 175.1557769775391, 5.99999978589949e-008, 162.6373443603516, 162.6373291015625, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				28,
 				57,
 				[
@@ -23517,7 +27135,7 @@ cr.getProjectModel = function() { return [
 		[
 			[
 				null,
-				40,
+				37,
 				13,
 				[
 				],
@@ -23530,8 +27148,8 @@ cr.getProjectModel = function() { return [
 		[]
 	]
 ,	[
-		"Nivel1",
-		1920,
+		"Nivel0",
+		3840,
 		1080,
 		false,
 		"Mecanicas juego eventsheet",
@@ -23553,9 +27171,84 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[962.5, 544, 0, 1921, 1080, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[960, 540, 0, 1920, 1080, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				13,
 				32,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[2880, 540, 0, 1920, 1080, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				42,
+				30,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[960, 796, 0, 1920, 572, 0, 0, 0.699999988079071, 0.5001874566078186, 0.5007610321044922, 0, 0, []],
+				56,
+				3,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[2880, 796, 0, 1920, 572, 0, 0, 0.699999988079071, 0.5001874566078186, 0.5, 0, 0, []],
+				57,
+				120,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[-960, 796, 0, 1920, 572, 0, 0, 0.699999988079071, 0.5001874566078186, 0.5, 0, 0, []],
+				57,
+				121,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[4800, 796, 0, 1920, 572, 0, 0, 0.699999988079071, 0.5001874566078186, 0.5007610321044922, 0, 0, []],
+				56,
+				122,
 				[
 				],
 				[
@@ -23586,8 +27279,8 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[237.9341888427734, 540.2770385742188, 0, 474.3905334472656, 1078.661376953125, 0, 0, 1, 0.5015576481819153, 0.5, 0, 0, []],
-				38,
+				[244, 540, 0, 480, 1080, 0, 0, 1, 0.5015576481819153, 0.5, 0, 0, []],
+				35,
 				34,
 				[
 				],
@@ -23613,8 +27306,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[706.289794921875, 540.066162109375, 0, 474.3909912109375, 1078.661010742188, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				38,
+				[720, 540, 0, 480, 1080, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				35,
 				59,
 				[
 				],
@@ -23640,8 +27333,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1173, 561, 0, 474.3909912109375, 1078.661010742188, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				38,
+				[1196, 540, 0, 480, 1080, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				35,
 				104,
 				[
 				],
@@ -23667,9 +27360,117 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[1663.875366210938, 555, 0, 520, 1079, 0, 0, 1, 0.5015576481819153, 0.5, 0, 0, []],
-				38,
+				[1680, 540, 0, 480, 1080, 0, 0, 1, 0.5015576481819153, 0.5, 0, 0, []],
+				35,
 				105,
+				[
+				],
+				[
+				[
+					1,
+					0,
+					0,
+					1,
+					0.5,
+					0.2,
+					0,
+					0.01,
+					0,
+					1
+				]
+				],
+				[
+					0,
+					"Default",
+					3,
+					1
+				]
+			]
+,			[
+				[2160, 540, 0, 480, 1080, 0, 0, 1, 0.5015576481819153, 0.5, 0, 0, []],
+				35,
+				25,
+				[
+				],
+				[
+				[
+					1,
+					0,
+					0,
+					1,
+					0.5,
+					0.2,
+					0,
+					0.01,
+					0,
+					1
+				]
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[2640, 540, 0, 480, 1080, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				35,
+				26,
+				[
+				],
+				[
+				[
+					1,
+					0,
+					0,
+					1,
+					0.5,
+					0.2,
+					0,
+					0.01,
+					0,
+					1
+				]
+				],
+				[
+					0,
+					"Default",
+					1,
+					1
+				]
+			]
+,			[
+				[3120, 540, 0, 480, 1080, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				35,
+				27,
+				[
+				],
+				[
+				[
+					1,
+					0,
+					0,
+					1,
+					0.5,
+					0.2,
+					0,
+					0.01,
+					0,
+					1
+				]
+				],
+				[
+					0,
+					"Default",
+					2,
+					1
+				]
+			]
+,			[
+				[3600, 540, 0, 480, 1080, 0, 0, 1, 0.5015576481819153, 0.5, 0, 0, []],
+				35,
+				29,
 				[
 				],
 				[
@@ -23712,7 +27513,7 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[613, 1012, 0, 260.8674621582031, 51.98445510864258, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[613, 1012, 0, 256.2414855957031, 50.09916305541992, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				5,
 				40,
 				[
@@ -23730,6 +27531,21 @@ cr.getProjectModel = function() { return [
 					0,
 					1
 				]
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[605.0311279296875, 997.4592895507813, 0, 197.94775390625, 46.39400482177734, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				39,
+				2,
+				[
+				],
+				[
 				],
 				[
 					0,
@@ -23757,7 +27573,7 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[578.1168823242188, 959.9300537109375, 0, 128, 128, 0, 3.036872863769531, 1, 0, 0.5, 0, 0, []],
+				[578.1168823242188, 959.0081787109375, 0, 128, 128, 0, 3.036872863769531, 1, 0, 0.5, 0, 0, []],
 				18,
 				47,
 				[
@@ -23768,21 +27584,21 @@ cr.getProjectModel = function() { return [
 				]
 				],
 				[
-					100,
-					30,
+					60,
+					25,
 					0,
-					70,
-					2.5,
-					100,
-					0,
-					0,
+					80,
+					3,
+					80,
 					0,
 					0,
+					2,
 					0,
 					0,
-					-150,
 					0,
 					0,
+					0,
+					6,
 					0,
 					0,
 					0,
@@ -23790,7 +27606,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[615.3287353515625, 960.0850830078125, 0, 128, 128, 0, 0.08217111974954605, 1, 0, 0.5, 0, 0, []],
+				[615.3287353515625, 959.1632080078125, 0, 128, 128, 0, 0.08217111974954605, 1, 0, 0.5, 0, 0, []],
 				18,
 				46,
 				[
@@ -23801,21 +27617,21 @@ cr.getProjectModel = function() { return [
 				]
 				],
 				[
-					100,
-					30,
+					60,
+					25,
 					0,
-					70,
-					2.5,
-					100,
-					0,
-					0,
+					80,
+					3,
+					80,
 					0,
 					0,
+					2,
 					0,
 					0,
-					-150,
 					0,
 					0,
+					0,
+					6,
 					0,
 					0,
 					0,
@@ -23845,8 +27661,8 @@ cr.getProjectModel = function() { return [
 					15,
 					0,
 					0,
-					-65,
 					0,
+					-65,
 					20,
 					400,
 					0,
@@ -23929,7 +27745,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[596.75439453125, 993.2100219726563, 0, 27.61607170104981, 33.03604888916016, 0, 0, 1, 0.5046728849411011, 0, 0, 0, []],
+				[597.1853637695313, 993.2100219726563, 0, 27.61607170104981, 33.03604888916016, 0, 0, 1, 0.5046728849411011, 0, 0, 0, []],
 				22,
 				51,
 				[
@@ -23940,7 +27756,7 @@ cr.getProjectModel = function() { return [
 				]
 				],
 				[
-					0,
+					1,
 					"Default",
 					0,
 					0
@@ -23964,33 +27780,103 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[663.0148315429688, 1114.091186523438, 0, 128, 128, 0, 0, 1, 0, 0.5, 0, 0, [[]]],
-				41,
+				[612.0430908203125, 998.2242431640625, 0, 128, 128, 0, -0.0872664600610733, 1, 0, 0.5, 0, 0, [[0.9, 0.55, 0.3], [0, 0.5, 1]]],
+				38,
 				12,
 				[
+					[1]
 				],
 				[
 				[
 				]
 				],
 				[
-					50,
+					18,
+					30,
+					0,
 					60,
+					16,
+					65,
+					30,
+					10,
+					5,
 					0,
-					200,
-					32,
-					100,
+					10,
+					10,
+					-10,
+					-30,
+					0,
+					1000,
 					0,
 					0,
+					1.55
+				]
+			]
+,			[
+				[583.5287475585938, 998.5321655273438, 0, 128, 128, 0, -3.054326295852661, 1, 0, 0.5, 0, 0, [[0.9, 0.55, 0.3], [0, 0.5, 1]]],
+				38,
+				16,
+				[
+					[0]
+				],
+				[
+				[
+				]
+				],
+				[
+					18,
+					30,
+					0,
+					60,
+					16,
+					65,
+					30,
+					10,
+					5,
+					0,
+					10,
+					10,
+					-10,
+					-30,
+					0,
+					1000,
 					0,
 					0,
+					1.55
+				]
+			]
+,			[
+				[616.1350708007813, 1000.231140136719, 0, 13.7260217666626, 4.575218677520752, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				40,
+				18,
+				[
+					[1]
+				],
+				[
+				[
+				]
+				],
+				[
 					0,
+					"Default",
 					0,
-					-150,
+					1
+				]
+			]
+,			[
+				[577.1828002929688, 999.9711303710938, 0, 13.05792045593262, 3.609740734100342, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				40,
+				24,
+				[
+					[0]
+				],
+				[
+				[
+				]
+				],
+				[
 					0,
-					0,
-					800,
-					0,
+					"Default",
 					0,
 					1
 				]
@@ -24014,7 +27900,7 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[74, 816, 0, 35, 35, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[419, 1019, 0, 35, 35, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				14,
 				8,
 				[
@@ -24077,7 +27963,7 @@ cr.getProjectModel = function() { return [
 			0,
 			[
 			[
-				[376.5483703613281, 215.470703125, 0, 185.1803588867188, 53.69103240966797, 0, 0, 1, 0, 0, 0, 0, []],
+				[331.5483703613281, 215.470703125, 0, 185.1803588867188, 53.69103240966797, 0, 0, 1, 0, 0, 0, 0, []],
 				6,
 				38,
 				[
@@ -24086,7 +27972,7 @@ cr.getProjectModel = function() { return [
 				],
 				[
 					"0",
-					0,
+					1,
 					"20pt Frosty's Winterland",
 					"rgb(255,255,255)",
 					1,
@@ -24097,7 +27983,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[184.8375091552734, 106.8629455566406, 0, 237.6548614501953, 21.98123931884766, 0, 0, 1, 0.5037593841552734, 0.5454545617103577, 0, 0, []],
+				[185, 78, 0, 237.6548614501953, 21.98123931884766, 0, 0, 1, 0.5037593841552734, 0.5454545617103577, 0, 0, []],
 				17,
 				43,
 				[
@@ -24112,7 +27998,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[185.8375091552734, 63.74536895751953, 0, 237.6548614501953, 21.98123931884766, 0, 0, 1, 0.5037593841552734, 0.5454545617103577, 0, 0, []],
+				[186, 35, 0, 237.6548614501953, 21.98123931884766, 0, 0, 1, 0.5037593841552734, 0.5454545617103577, 0, 0, []],
 				17,
 				7,
 				[
@@ -24127,7 +28013,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[66.83378601074219, 107.4130325317383, 0, 224.8386840820313, 17.43403434753418, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
+				[67, 79, 0, 224.8386840820313, 17.43403434753418, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
 				3,
 				37,
 				[
@@ -24143,7 +28029,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[689.927001953125, 42.57065582275391, 0, 158.9769897460938, 89.424560546875, 0, 0, 1, 0, 0, 0, 0, []],
+				[495, 19, 0, 289.0497131347656, 72.26242828369141, 0, 0, 1, 0, 0, 0, 0, []],
 				20,
 				49,
 				[
@@ -24158,7 +28044,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[727.561767578125, 73.91286468505859, 0, 6.848195552825928, 6.848195552825928, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				[658, 52, 0, 6.848195552825928, 6.848195552825928, 0, 0, 1, 0.5, 0.5, 0, 0, []],
 				21,
 				50,
 				[
@@ -24176,8 +28062,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[354.28369140625, 66.15394592285156, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				33,
+				[338, 37, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				32,
 				97,
 				[
 					[1]
@@ -24192,8 +28078,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[411.7628173828125, 65.18421173095703, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				33,
+				[391, 37, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				32,
 				98,
 				[
 					[2]
@@ -24208,8 +28094,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[463.4993286132813, 64.67757415771484, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				33,
+				[443, 37, 0, 38.75680923461914, 38.75680923461914, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				32,
 				99,
 				[
 					[3]
@@ -24224,8 +28110,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[39.30105590820313, 63.85847091674805, 0, 31.16128730773926, 31.16128730773926, 0, 0, 1, 0.5, 0.5, 0, 0, []],
-				35,
+				[39, 35, 0, 31.16128730773926, 31.16128730773926, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				33,
 				101,
 				[
 				],
@@ -24239,8 +28125,8 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[40.84002685546875, 107.33740234375, 0, 22.07414817810059, 27.48855781555176, 0, 0, 1, 0.5094339847564697, 0.5, 0, 0, []],
-				36,
+				[41, 78, 0, 22.07414817810059, 27.48855781555176, 0, 0, 1, 0.5094339847564697, 0.5, 0, 0, []],
+				34,
 				102,
 				[
 				],
@@ -24254,7 +28140,7 @@ cr.getProjectModel = function() { return [
 				]
 			]
 ,			[
-				[67.81571960449219, 64.74536895751953, 0, 226.3077087402344, 17.20660209655762, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
+				[68, 36, 0, 226.3077087402344, 17.20660209655762, 0, 0, 1, 0, 0.5454545617103577, 0, 0, []],
 				2,
 				14,
 				[
@@ -24267,6 +28153,116 @@ cr.getProjectModel = function() { return [
 					"Default",
 					0,
 					1
+				]
+			]
+,			[
+				[426, 233, 0, 440.5905151367188, 344.8099670410156, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				49,
+				110,
+				[
+				],
+				[
+				],
+				[
+					1,
+					"Default",
+					0,
+					0
+				]
+			]
+,			[
+				[423.0420227050781, 341.2504577636719, 0, 215.5546417236328, 64.73995971679688, 0, 0, 1, 0.5017064809799194, 0.5, 0, 0, []],
+				50,
+				111,
+				[
+				],
+				[
+				],
+				[
+					1,
+					"Default",
+					0,
+					0
+				]
+			]
+,			[
+				[620.4210205078125, 87.59475708007813, 0, 54.4112434387207, 55.15660095214844, 0, 0, 1, 0.5068492889404297, 0.5, 0, 0, []],
+				51,
+				112,
+				[
+				],
+				[
+				],
+				[
+					1,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[344.1935424804688, 152.6109924316406, 0, 70.72786712646484, 50.87442779541016, 0, 0, 1, 0.4912280738353729, 0.5365853905677795, 0, 0, []],
+				52,
+				114,
+				[
+				],
+				[
+				],
+				[
+					1,
+					"Default",
+					0,
+					0
+				]
+			]
+,			[
+				[340.857421875, 249.3589172363281, 0, 58.96086883544922, 64, 0, 0, 1, 0.5925925970077515, 0.515625, 0, 0, []],
+				53,
+				113,
+				[
+				],
+				[
+				],
+				[
+					1,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[822.79052734375, 55.02311706542969, 0, 44.39182281494141, 44.39182281494141, 0, 0, 1, 0.5, 0.5, 0, 0, []],
+				54,
+				115,
+				[
+				],
+				[
+				],
+				[
+					0,
+					"Default",
+					0,
+					1
+				]
+			]
+,			[
+				[303.4103698730469, -112.5948257446289, 0, 185.1803588867188, 53.69103240966797, 0, 0, 1, 0, 0, 0, 0, []],
+				6,
+				123,
+				[
+				],
+				[
+				],
+				[
+					"0",
+					0,
+					"20pt Frosty's Winterland",
+					"rgb(255,255,255)",
+					1,
+					1,
+					0,
+					0,
+					0
 				]
 			]
 			],
@@ -24283,6 +28279,13 @@ cr.getProjectModel = function() { return [
 		"Mecanicas juego eventsheet",
 		[
 		[
+			1,
+			"Menu",
+			0,
+			0,
+false,false,8966427284528966,false
+		]
+,		[
 			1,
 			"AstroRecogidos",
 			0,
@@ -24338,59 +28341,6 @@ false,false,9952824070825181,false
 			],
 			[
 			[
-				6,
-				cr.plugins_.Text.prototype.acts.SetWebFont,
-				null,
-				3097764909427221,
-				false
-				,[
-				[
-					1,
-					[
-						2,
-						"frostys_winterlandregular"
-					]
-				]
-,				[
-					1,
-					[
-						2,
-						"stylesheet.css"
-					]
-				]
-				]
-			]
-,			[
-				22,
-				cr.behaviors.Pin.prototype.acts.Pin,
-				"Pin",
-				5251412864304223,
-				false
-				,[
-				[
-					4,
-					0
-				]
-,				[
-					3,
-					0
-				]
-				]
-			]
-,			[
-				22,
-				cr.plugins_.Sprite.prototype.acts.SetVisible,
-				null,
-				6041972678809633,
-				false
-				,[
-				[
-					3,
-					0
-				]
-				]
-			]
-,			[
 				0,
 				cr.behaviors.Physics.prototype.acts.SetWorldGravity,
 				"Physics",
@@ -24415,28 +28365,11 @@ false,false,9952824070825181,false
 				,[
 				[
 					4,
-					42
+					60
 				]
 ,				[
 					3,
 					1
-				]
-				]
-			]
-,			[
-				15,
-				cr.behaviors.Pin.prototype.acts.Pin,
-				"Pin",
-				4517315430271638,
-				false
-				,[
-				[
-					4,
-					0
-				]
-,				[
-					3,
-					0
 				]
 				]
 			]
@@ -24546,6 +28479,40 @@ false,false,9952824070825181,false
 				]
 			]
 ,			[
+				22,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				5251412864304223,
+				false
+				,[
+				[
+					4,
+					0
+				]
+,				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				15,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				4517315430271638,
+				false
+				,[
+				[
+					4,
+					0
+				]
+,				[
+					3,
+					0
+				]
+				]
+			]
+,			[
 				23,
 				cr.behaviors.Pin.prototype.acts.Pin,
 				"Pin",
@@ -24597,23 +28564,61 @@ false,false,9952824070825181,false
 				]
 			]
 ,			[
-				24,
-				cr.plugins_.Sprite.prototype.acts.SetVisible,
-				null,
-				338205002438729,
+				18,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				1824650867278286,
 				false
 				,[
 				[
+					4,
+					0
+				]
+,				[
 					3,
 					0
 				]
 				]
 			]
 ,			[
-				18,
+				22,
 				cr.behaviors.Pin.prototype.acts.Pin,
 				"Pin",
-				1824650867278286,
+				3650303865907288,
+				false
+				,[
+				[
+					4,
+					0
+				]
+,				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				38,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				2415373190978476,
+				false
+				,[
+				[
+					4,
+					0
+				]
+,				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				40,
+				cr.behaviors.Pin.prototype.acts.Pin,
+				"Pin",
+				157539929966043,
 				false
 				,[
 				[
@@ -24636,6 +28641,188 @@ false,false,9952824070825181,false
 				[
 					3,
 					0
+				]
+				]
+			]
+,			[
+				38,
+				cr.plugins_.Particles.prototype.acts.SetSpraying,
+				null,
+				7056587727559671,
+				false
+				,[
+				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				24,
+				cr.plugins_.Sprite.prototype.acts.SetVisible,
+				null,
+				338205002438729,
+				false
+				,[
+				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				62,
+				cr.plugins_.Sprite.prototype.acts.SetCollisions,
+				null,
+				8754109471899307,
+				false
+				,[
+				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				62,
+				cr.plugins_.Sprite.prototype.acts.SetVisible,
+				null,
+				5322737466657071,
+				false
+				,[
+				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				6,
+				cr.plugins_.Text.prototype.acts.SetWebFont,
+				null,
+				1516094607372418,
+				false
+				,[
+				[
+					1,
+					[
+						2,
+						"frostys_winterlandregular"
+					]
+				]
+,				[
+					1,
+					[
+						2,
+						"stylesheet.css"
+					]
+				]
+				]
+			]
+,			[
+				58,
+				cr.plugins_.Audio.prototype.acts.Play,
+				null,
+				44174214394391,
+				false
+				,[
+				[
+					2,
+					["m_sica_rescue",true]
+				]
+,				[
+					3,
+					1
+				]
+,				[
+					0,
+					[
+						0,
+						0
+					]
+				]
+,				[
+					1,
+					[
+						2,
+						"Musica"
+					]
+				]
+				]
+			]
+			]
+			,[
+			[
+				0,
+				null,
+				false,
+				null,
+				5009435748636948,
+				[
+				[
+					37,
+					cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+					null,
+					0,
+					false,
+					false,
+					false,
+					2588709153306666,
+					false
+					,[
+					[
+						1,
+						[
+							2,
+							"Musica"
+						]
+					]
+,					[
+						8,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+				],
+				[
+				[
+					58,
+					cr.plugins_.Audio.prototype.acts.Stop,
+					null,
+					36774649018519,
+					false
+					,[
+					[
+						1,
+						[
+							2,
+							"Musica"
+						]
+					]
+					]
+				]
+,				[
+					53,
+					cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+					null,
+					3201982896366526,
+					false
+					,[
+					[
+						0,
+						[
+							0,
+							1
+						]
+					]
+					]
 				]
 				]
 			]
@@ -24856,6 +29043,79 @@ false,false,9952824070825181,false
 						]
 						]
 					]
+,					[
+						0,
+						null,
+						false,
+						null,
+						5055766414110596,
+						[
+						[
+							37,
+							cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+							null,
+							0,
+							false,
+							false,
+							false,
+							1078255538573805,
+							false
+							,[
+							[
+								1,
+								[
+									2,
+									"Sonidos"
+								]
+							]
+,							[
+								8,
+								0
+							]
+,							[
+								7,
+								[
+									0,
+									0
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							58,
+							cr.plugins_.Audio.prototype.acts.Play,
+							null,
+							8029852440214511,
+							false
+							,[
+							[
+								2,
+								["thruster",false]
+							]
+,							[
+								3,
+								1
+							]
+,							[
+								0,
+								[
+									0,
+									0
+								]
+							]
+,							[
+								1,
+								[
+									2,
+									"Thruster"
+								]
+							]
+							]
+						]
+						]
+					]
 					]
 				]
 ,				[
@@ -24966,9 +29226,113 @@ false,false,9952824070825181,false
 						]
 						]
 					]
+,					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Play,
+						null,
+						3416158489038034,
+						false
+						,[
+						[
+							2,
+							["thruster",false]
+						]
+,						[
+							3,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+,						[
+							1,
+							[
+								2,
+								"Thruster"
+							]
+						]
+						]
+					]
 					]
 					,[
 					[
+						0,
+						null,
+						false,
+						null,
+						8941844942132883,
+						[
+						[
+							37,
+							cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+							null,
+							0,
+							false,
+							false,
+							false,
+							7390285939933918,
+							false
+							,[
+							[
+								1,
+								[
+									2,
+									"Sonidos"
+								]
+							]
+,							[
+								8,
+								0
+							]
+,							[
+								7,
+								[
+									0,
+									0
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							58,
+							cr.plugins_.Audio.prototype.acts.Play,
+							null,
+							4711278111233846,
+							false
+							,[
+							[
+								2,
+								["thruster",false]
+							]
+,							[
+								3,
+								1
+							]
+,							[
+								0,
+								[
+									0,
+									0
+								]
+							]
+,							[
+								1,
+								[
+									2,
+									"Thruster"
+								]
+							]
+							]
+						]
+						]
+					]
+,					[
 						0,
 						null,
 						false,
@@ -25025,7 +29389,7 @@ false,false,9952824070825181,false
 ,				[
 					0,
 					null,
-					false,
+					true,
 					null,
 					7009987568062134,
 					[
@@ -25049,6 +29413,26 @@ false,false,9952824070825181,false
 						]
 						]
 					]
+,					[
+						4,
+						cr.plugins_.Touch.prototype.cnds.OnNthTouchStart,
+						null,
+						1,
+						false,
+						false,
+						false,
+						1676548684484452,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
 					],
 					[
 					[
@@ -25061,6 +29445,22 @@ false,false,9952824070825181,false
 						[
 							3,
 							0
+						]
+						]
+					]
+,					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Stop,
+						null,
+						6627127166361362,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Thruster"
+							]
 						]
 						]
 					]
@@ -25507,6 +29907,79 @@ false,false,9952824070825181,false
 					]
 					,[
 					[
+						0,
+						null,
+						false,
+						null,
+						7384142156620227,
+						[
+						[
+							37,
+							cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+							null,
+							0,
+							false,
+							false,
+							false,
+							2745649699590573,
+							false
+							,[
+							[
+								1,
+								[
+									2,
+									"Sonidos"
+								]
+							]
+,							[
+								8,
+								0
+							]
+,							[
+								7,
+								[
+									0,
+									0
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							58,
+							cr.plugins_.Audio.prototype.acts.Play,
+							null,
+							3171332396987228,
+							false
+							,[
+							[
+								2,
+								["fire",false]
+							]
+,							[
+								3,
+								1
+							]
+,							[
+								0,
+								[
+									0,
+									0
+								]
+							]
+,							[
+								1,
+								[
+									2,
+									"Fire"
+								]
+							]
+							]
+						]
+						]
+					]
+,					[
 						0,
 						null,
 						false,
@@ -25985,6 +30458,589 @@ false,false,9952824070825181,false
 						]
 						]
 					]
+,					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Stop,
+						null,
+						9804601491191979,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Fire"
+							]
+						]
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				8735386814667156,
+				[
+				[
+					-1,
+					cr.system_object.prototype.cnds.IsMobile,
+					null,
+					0,
+					false,
+					true,
+					false,
+					2666947157019383,
+					false
+				]
+				],
+				[
+				]
+				,[
+				[
+					0,
+					null,
+					false,
+					null,
+					5420177936960762,
+					[
+					[
+						1,
+						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+						null,
+						0,
+						false,
+						false,
+						false,
+						3977861557607429,
+						false
+						,[
+						[
+							9,
+							68
+						]
+						]
+					]
+,					[
+						18,
+						cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
+						null,
+						0,
+						false,
+						false,
+						false,
+						2286876583941076,
+						false
+						,[
+						[
+							10,
+							0
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						0,
+						cr.behaviors.Physics.prototype.acts.ApplyTorque,
+						"Physics",
+						3220498387793756,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								25
+							]
+						]
+						]
+					]
+,					[
+						18,
+						cr.plugins_.Particles.prototype.acts.SetSpraying,
+						null,
+						8367693967176727,
+						false
+						,[
+						[
+							3,
+							1
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					2485880781875148,
+					[
+					[
+						1,
+						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+						null,
+						0,
+						false,
+						true,
+						false,
+						5918083267591773,
+						false
+						,[
+						[
+							9,
+							68
+						]
+						]
+					]
+,					[
+						18,
+						cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
+						null,
+						0,
+						false,
+						false,
+						false,
+						7538741157110366,
+						false
+						,[
+						[
+							10,
+							0
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						18,
+						cr.plugins_.Particles.prototype.acts.SetSpraying,
+						null,
+						5002295071005174,
+						false
+						,[
+						[
+							3,
+							0
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					4631994307586731,
+					[
+					[
+						1,
+						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+						null,
+						0,
+						false,
+						false,
+						false,
+						8449251836495506,
+						false
+						,[
+						[
+							9,
+							65
+						]
+						]
+					]
+,					[
+						18,
+						cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
+						null,
+						0,
+						false,
+						false,
+						false,
+						7032553335283457,
+						false
+						,[
+						[
+							10,
+							0
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						0,
+						cr.behaviors.Physics.prototype.acts.ApplyTorque,
+						"Physics",
+						783233779002571,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								-25
+							]
+						]
+						]
+					]
+,					[
+						18,
+						cr.plugins_.Particles.prototype.acts.SetSpraying,
+						null,
+						9697617693559487,
+						false
+						,[
+						[
+							3,
+							1
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					4480429429725751,
+					[
+					[
+						1,
+						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+						null,
+						0,
+						false,
+						true,
+						false,
+						1369120253861873,
+						false
+						,[
+						[
+							9,
+							65
+						]
+						]
+					]
+,					[
+						18,
+						cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
+						null,
+						0,
+						false,
+						false,
+						false,
+						9277705555615742,
+						false
+						,[
+						[
+							10,
+							0
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						18,
+						cr.plugins_.Particles.prototype.acts.SetSpraying,
+						null,
+						7029521595226889,
+						false
+						,[
+						[
+							3,
+							0
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					9814472976817034,
+					[
+					[
+						1,
+						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+						null,
+						0,
+						false,
+						false,
+						false,
+						1552652537852058,
+						false
+						,[
+						[
+							9,
+							32
+						]
+						]
+					]
+,					[
+						0,
+						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+						null,
+						0,
+						false,
+						false,
+						false,
+						3661336872380029,
+						false
+						,[
+						[
+							10,
+							1
+						]
+,						[
+							8,
+							4
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						0,
+						cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
+						"Physics",
+						2751941271312929,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.8
+							]
+						]
+,						[
+							0,
+							[
+								20,
+								0,
+								cr.plugins_.Sprite.prototype.exps.Angle,
+								false,
+								null
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						0,
+						cr.behaviors.Physics.prototype.acts.ApplyForceAtAngle,
+						"Physics",
+						1618369368610855,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.8
+							]
+						]
+,						[
+							0,
+							[
+								20,
+								0,
+								cr.plugins_.Sprite.prototype.exps.Angle,
+								false,
+								null
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								2
+							]
+						]
+						]
+					]
+,					[
+						0,
+						cr.plugins_.Sprite.prototype.acts.SubInstanceVar,
+						null,
+						7823498878405285,
+						false
+						,[
+						[
+							10,
+							1
+						]
+,						[
+							7,
+							[
+								1,
+								0.1
+							]
+						]
+						]
+					]
+,					[
+						3,
+						cr.plugins_.Sprite.prototype.acts.SetWidth,
+						null,
+						4731451365855858,
+						false
+						,[
+						[
+							0,
+							[
+								7,
+								[
+									6,
+									[
+										21,
+										3,
+										false,
+										null
+										,0
+									]
+									,[
+										21,
+										0,
+										false,
+										null
+										,1
+									]
+								]
+								,[
+									21,
+									0,
+									false,
+									null
+									,3
+								]
+							]
+						]
+						]
+					]
+,					[
+						23,
+						cr.plugins_.Particles.prototype.acts.SetSpraying,
+						null,
+						957278450563233,
+						false
+						,[
+						[
+							3,
+							1
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					3772285639118718,
+					[
+					[
+						1,
+						cr.plugins_.Keyboard.prototype.cnds.IsKeyDown,
+						null,
+						0,
+						false,
+						true,
+						false,
+						8109841781981339,
+						false
+						,[
+						[
+							9,
+							32
+						]
+						]
+					]
+					],
+					[
+					[
+						23,
+						cr.plugins_.Particles.prototype.acts.SetSpraying,
+						null,
+						5210034194570725,
+						false
+						,[
+						[
+							3,
+							0
+						]
+						]
+					]
 					]
 				]
 				]
@@ -26093,7 +31149,7 @@ false,false,9952824070825181,false
 					,[
 					[
 						4,
-						42
+						60
 					]
 					]
 				]
@@ -26235,6 +31291,37 @@ false,false,9952824070825181,false
 									null
 									,4
 								]
+							]
+						]
+						]
+					]
+,					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Play,
+						null,
+						7269752436014014,
+						false
+						,[
+						[
+							2,
+							["golpe",false]
+						]
+,						[
+							3,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+,						[
+							1,
+							[
+								2,
+								"Golpe"
 							]
 						]
 						]
@@ -26416,6 +31503,34 @@ false,false,9952824070825181,false
 						]
 						]
 					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					2039641943189878,
+					[
+					[
+						40,
+						cr.plugins_.Sprite.prototype.cnds.IsOverlapping,
+						null,
+						0,
+						false,
+						false,
+						false,
+						1089271906160947,
+						false
+						,[
+						[
+							4,
+							60
+						]
+						]
+					]
+					],
+					[
 					]
 				]
 				]
@@ -26995,6 +32110,81 @@ false,false,4806698590460405,false
 					]
 				]
 				]
+				,[
+				[
+					0,
+					null,
+					false,
+					null,
+					9391350887251755,
+					[
+					[
+						37,
+						cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+						null,
+						0,
+						false,
+						false,
+						false,
+						9368123517203115,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Sonidos"
+							]
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Play,
+						null,
+						3389865931056933,
+						false
+						,[
+						[
+							2,
+							["coger_astronauta",false]
+						]
+,						[
+							3,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+,						[
+							1,
+							[
+								2,
+								"Coger"
+							]
+						]
+						]
+					]
+					]
+				]
+				]
 			]
 ,			[
 				0,
@@ -27194,12 +32384,12 @@ false,false,4806698590460405,false
 						,[
 						[
 							4,
-							33
+							32
 						]
 						]
 					]
 ,					[
-						33,
+						32,
 						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
 						null,
 						0,
@@ -27229,7 +32419,7 @@ false,false,4806698590460405,false
 					],
 					[
 					[
-						33,
+						32,
 						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
 						null,
 						3215287190457354,
@@ -27388,10 +32578,83 @@ false,false,4806698590460405,false
 					null,
 					false,
 					null,
+					8519822113869168,
+					[
+					[
+						37,
+						cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+						null,
+						0,
+						false,
+						false,
+						false,
+						6068190321169925,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Sonidos"
+							]
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Play,
+						null,
+						2177464479410765,
+						false
+						,[
+						[
+							2,
+							["explosionnave",false]
+						]
+,						[
+							3,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+,						[
+							1,
+							[
+								2,
+								"Explosion"
+							]
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
 					6997645235361842,
 					[
 					[
-						40,
+						37,
 						cr.plugins_.Dictionary.prototype.cnds.HasKey,
 						null,
 						0,
@@ -27465,7 +32728,7 @@ false,false,4806698590460405,false
 						8184141724275724,
 						[
 						[
-							40,
+							37,
 							cr.plugins_.Dictionary.prototype.cnds.CompareValue,
 							null,
 							0,
@@ -27519,7 +32782,7 @@ false,false,4806698590460405,false
 						],
 						[
 						[
-							40,
+							37,
 							cr.plugins_.Dictionary.prototype.acts.AddKey,
 							null,
 							4638772795844354,
@@ -27580,7 +32843,7 @@ false,false,4806698590460405,false
 								7,
 								[
 									20,
-									40,
+									37,
 									cr.plugins_.Dictionary.prototype.exps.AsJSON,
 									true,
 									null
@@ -27672,44 +32935,6 @@ false,false,4806698590460405,false
 					]
 					]
 				]
-,				[
-					0,
-					null,
-					false,
-					null,
-					5316664226879695,
-					[
-					[
-						-1,
-						cr.system_object.prototype.cnds.Else,
-						null,
-						0,
-						false,
-						false,
-						false,
-						5833549106002613,
-						false
-					]
-					],
-					[
-					[
-						6,
-						cr.plugins_.Text.prototype.acts.SetText,
-						null,
-						6003628642733685,
-						false
-						,[
-						[
-							7,
-							[
-								2,
-								"Save Failure"
-							]
-						]
-						]
-					]
-					]
-				]
 				]
 			]
 ,			[
@@ -27761,6 +32986,45 @@ false,false,4806698590460405,false
 					]
 					]
 				]
+,				[
+					37,
+					cr.plugins_.Dictionary.prototype.acts.AddKey,
+					null,
+					4729675787993045,
+					false
+					,[
+					[
+						1,
+						[
+							2,
+							"Unlocks"
+						]
+					]
+,					[
+						7,
+						[
+							4,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.Get,
+								false,
+								null
+								,[
+[
+									2,
+									"Unlocks"
+								]
+								]
+							]
+							,[
+								0,
+								1
+							]
+						]
+					]
+					]
+				]
 				]
 				,[
 				[
@@ -27771,7 +33035,7 @@ false,false,4806698590460405,false
 					4725987352597471,
 					[
 					[
-						40,
+						37,
 						cr.plugins_.Dictionary.prototype.cnds.HasKey,
 						null,
 						0,
@@ -27842,10 +33106,83 @@ false,false,4806698590460405,false
 						null,
 						false,
 						null,
+						5445924325433081,
+						[
+						[
+							37,
+							cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+							null,
+							0,
+							false,
+							false,
+							false,
+							7595542586557603,
+							false
+							,[
+							[
+								1,
+								[
+									2,
+									"Sonidos"
+								]
+							]
+,							[
+								8,
+								0
+							]
+,							[
+								7,
+								[
+									0,
+									0
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							58,
+							cr.plugins_.Audio.prototype.acts.Play,
+							null,
+							3032944837289206,
+							false
+							,[
+							[
+								2,
+								["win",false]
+							]
+,							[
+								3,
+								0
+							]
+,							[
+								0,
+								[
+									0,
+									0
+								]
+							]
+,							[
+								1,
+								[
+									2,
+									"Win"
+								]
+							]
+							]
+						]
+						]
+					]
+,					[
+						0,
+						null,
+						false,
+						null,
 						7547813537576669,
 						[
 						[
-							40,
+							37,
 							cr.plugins_.Dictionary.prototype.cnds.CompareValue,
 							null,
 							0,
@@ -27899,7 +33236,7 @@ false,false,4806698590460405,false
 						],
 						[
 						[
-							40,
+							37,
 							cr.plugins_.Dictionary.prototype.acts.AddKey,
 							null,
 							3720092271624693,
@@ -27960,7 +33297,7 @@ false,false,4806698590460405,false
 								7,
 								[
 									20,
-									40,
+									37,
 									cr.plugins_.Dictionary.prototype.exps.AsJSON,
 									true,
 									null
@@ -28052,6 +33389,418 @@ false,false,4806698590460405,false
 					]
 					]
 				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					2899778137381732,
+					[
+					[
+						-1,
+						cr.system_object.prototype.cnds.Else,
+						null,
+						0,
+						false,
+						false,
+						false,
+						3104752614545693,
+						false
+					]
+					],
+					[
+					[
+						6,
+						cr.plugins_.Text.prototype.acts.SetText,
+						null,
+						3615280686566789,
+						false
+						,[
+						[
+							7,
+							[
+								2,
+								"Save Failure"
+							]
+						]
+						]
+					]
+,					[
+						6,
+						cr.plugins_.Text.prototype.acts.SetVisible,
+						null,
+						8644113100694199,
+						false
+						,[
+						[
+							3,
+							1
+						]
+						]
+					]
+,					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						7396986786271966,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								2
+							]
+						]
+						]
+					]
+,					[
+						-1,
+						cr.system_object.prototype.acts.GoToLayout,
+						null,
+						3952416772385164,
+						false
+						,[
+						[
+							6,
+							"Menu Inicial"
+						]
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				2101791594196427,
+				[
+				[
+					40,
+					cr.plugins_.Sprite.prototype.cnds.OnCollision,
+					null,
+					0,
+					false,
+					false,
+					true,
+					5200659359850434,
+					false
+					,[
+					[
+						4,
+						60
+					]
+					]
+				]
+				],
+				[
+				]
+				,[
+				[
+					0,
+					null,
+					false,
+					null,
+					3955081452659377,
+					[
+					[
+						40,
+						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+						null,
+						0,
+						false,
+						false,
+						false,
+						6668423032270311,
+						false
+						,[
+						[
+							10,
+							0
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					]
+					,[
+					[
+						0,
+						null,
+						false,
+						null,
+						2009953636522922,
+						[
+						[
+							38,
+							cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
+							null,
+							0,
+							false,
+							false,
+							false,
+							4113781482512095,
+							false
+							,[
+							[
+								10,
+								0
+							]
+,							[
+								8,
+								0
+							]
+,							[
+								7,
+								[
+									0,
+									0
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							38,
+							cr.plugins_.Particles.prototype.acts.SetSpraying,
+							null,
+							5703990754232147,
+							false
+							,[
+							[
+								3,
+								1
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.Wait,
+							null,
+							3562909916252256,
+							false
+							,[
+							[
+								0,
+								[
+									1,
+									0.2
+								]
+							]
+							]
+						]
+,						[
+							38,
+							cr.plugins_.Particles.prototype.acts.SetSpraying,
+							null,
+							1539593366368657,
+							false
+							,[
+							[
+								3,
+								0
+							]
+							]
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					4273748554833135,
+					[
+					[
+						40,
+						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+						null,
+						0,
+						false,
+						false,
+						false,
+						1266269883084522,
+						false
+						,[
+						[
+							10,
+							0
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					]
+					,[
+					[
+						0,
+						null,
+						false,
+						null,
+						2405953665352262,
+						[
+						[
+							38,
+							cr.plugins_.Particles.prototype.cnds.CompareInstanceVar,
+							null,
+							0,
+							false,
+							false,
+							false,
+							2302286499802976,
+							false
+							,[
+							[
+								10,
+								0
+							]
+,							[
+								8,
+								0
+							]
+,							[
+								7,
+								[
+									0,
+									1
+								]
+							]
+							]
+						]
+						],
+						[
+						[
+							38,
+							cr.plugins_.Particles.prototype.acts.SetSpraying,
+							null,
+							2212354755150382,
+							false
+							,[
+							[
+								3,
+								1
+							]
+							]
+						]
+,						[
+							-1,
+							cr.system_object.prototype.acts.Wait,
+							null,
+							5130160902810002,
+							false
+							,[
+							[
+								0,
+								[
+									1,
+									0.2
+								]
+							]
+							]
+						]
+,						[
+							38,
+							cr.plugins_.Particles.prototype.acts.SetSpraying,
+							null,
+							627738285805218,
+							false
+							,[
+							[
+								3,
+								0
+							]
+							]
+						]
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				8042660657145003,
+				[
+				[
+					0,
+					cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					7927070062907588,
+					false
+					,[
+					[
+						10,
+						1
+					]
+,					[
+						8,
+						3
+					]
+,					[
+						7,
+						[
+							0,
+							0
+						]
+					]
+					]
+				]
+				],
+				[
+				[
+					16,
+					cr.plugins_.Function.prototype.acts.CallFunction,
+					null,
+					3379042456981485,
+					false
+					,[
+					[
+						1,
+						[
+							2,
+							"Destroy"
+						]
+					]
+,					[
+						13,
+					]
+					]
+				]
 				]
 			]
 			]
@@ -28101,6 +33850,928 @@ false,false,4806698590460405,false
 			]
 			]
 		]
+,		[
+			0,
+			null,
+			false,
+			null,
+			577250403232665,
+			[
+			[
+				4,
+				cr.plugins_.Touch.prototype.cnds.IsInTouch,
+				null,
+				0,
+				false,
+				false,
+				false,
+				3409778840413447,
+				false
+			]
+			],
+			[
+			]
+			,[
+			[
+				0,
+				null,
+				false,
+				null,
+				260103040326106,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTapGestureObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					3501566093641747,
+					false
+					,[
+					[
+						4,
+						54
+					]
+					]
+				]
+				],
+				[
+				[
+					62,
+					cr.plugins_.Sprite.prototype.acts.SetVisible,
+					null,
+					3023321064820402,
+					false
+					,[
+					[
+						3,
+						1
+					]
+					]
+				]
+,				[
+					62,
+					cr.plugins_.Sprite.prototype.acts.SetCollisions,
+					null,
+					7501649308029709,
+					false
+					,[
+					[
+						3,
+						1
+					]
+					]
+				]
+,				[
+					0,
+					cr.behaviors.Physics.prototype.acts.SetImmovable,
+					"Physics",
+					56736430019969,
+					false
+					,[
+					[
+						3,
+						1
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.acts.SetVar,
+					null,
+					2022319802938387,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				7886669667044,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					422214605153056,
+					false
+					,[
+					[
+						4,
+						51
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.cnds.CompareVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					3061425173591426,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						8,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+				],
+				[
+				[
+					62,
+					cr.plugins_.Sprite.prototype.acts.SetVisible,
+					null,
+					6997882524662742,
+					false
+					,[
+					[
+						3,
+						0
+					]
+					]
+				]
+,				[
+					62,
+					cr.plugins_.Sprite.prototype.acts.SetCollisions,
+					null,
+					7318746007911474,
+					false
+					,[
+					[
+						3,
+						0
+					]
+					]
+				]
+,				[
+					0,
+					cr.behaviors.Physics.prototype.acts.SetImmovable,
+					"Physics",
+					3751855193149646,
+					false
+					,[
+					[
+						3,
+						0
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.acts.SetVar,
+					null,
+					2345484689058811,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						7,
+						[
+							0,
+							0
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				2438314838851629,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					5083581112591538,
+					false
+					,[
+					[
+						4,
+						50
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.cnds.CompareVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					7015903495499239,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						8,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+				],
+				[
+				[
+					-1,
+					cr.system_object.prototype.acts.GoToLayout,
+					null,
+					7578077868455338,
+					false
+					,[
+					[
+						6,
+						"Menu Inicial"
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				6650291366722183,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					4191338691274577,
+					false
+					,[
+					[
+						4,
+						52
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.cnds.CompareVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					5836710796079216,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						8,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+				],
+				[
+				]
+				,[
+				[
+					0,
+					null,
+					false,
+					null,
+					3541682218109879,
+					[
+					[
+						52,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
+						null,
+						0,
+						false,
+						false,
+						false,
+						3745722074227463,
+						false
+						,[
+						[
+							8,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						5373934993336928,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.1
+							]
+						]
+						]
+					]
+,					[
+						52,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						2500014315972769,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						7003313949062236,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Sonidos"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						11,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						null,
+						5660772956912565,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Data"
+							]
+						]
+,						[
+							7,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
+								null
+							]
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					7010213282475042,
+					[
+					[
+						52,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
+						null,
+						0,
+						false,
+						false,
+						false,
+						3498974868305784,
+						false
+						,[
+						[
+							8,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						7735971278326948,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.1
+							]
+						]
+						]
+					]
+,					[
+						52,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						5390943178066617,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						3706314485017576,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Sonidos"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						11,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						null,
+						3652167515034415,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Data"
+							]
+						]
+,						[
+							7,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
+								null
+							]
+						]
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				5959695901270885,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					5091007080584471,
+					false
+					,[
+					[
+						4,
+						53
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.cnds.CompareVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					9144460226451105,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						8,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+				],
+				[
+				]
+				,[
+				[
+					0,
+					null,
+					false,
+					null,
+					2929871927027886,
+					[
+					[
+						53,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
+						null,
+						0,
+						false,
+						false,
+						false,
+						2963783005505177,
+						false
+						,[
+						[
+							8,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						40746017214663,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.1
+							]
+						]
+						]
+					]
+,					[
+						53,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						3206037907231549,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Stop,
+						null,
+						3399417343832121,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						3918209194147837,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						11,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						null,
+						174170414787968,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Data"
+							]
+						]
+,						[
+							7,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
+								null
+							]
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					4333289977697478,
+					[
+					[
+						53,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
+						null,
+						0,
+						false,
+						false,
+						false,
+						4269158012839471,
+						false
+						,[
+						[
+							8,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						1294968328596157,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.1
+							]
+						]
+						]
+					]
+,					[
+						53,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						7265854398330361,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Play,
+						null,
+						3289173101981996,
+						false
+						,[
+						[
+							2,
+							["m_sica_rescue",true]
+						]
+,						[
+							3,
+							1
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+,						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						2511281863801574,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						11,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						null,
+						6576098231853958,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Data"
+							]
+						]
+,						[
+							7,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
+								null
+							]
+						]
+						]
+					]
+					]
+				]
+				]
+			]
+			]
+		]
 		]
 	]
 ,	[
@@ -28140,6 +34811,70 @@ false,false,7912363636648281,false
 			]
 			],
 			[
+			[
+				62,
+				cr.plugins_.Sprite.prototype.acts.SetCollisions,
+				null,
+				1846208555085665,
+				false
+				,[
+				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				62,
+				cr.plugins_.Sprite.prototype.acts.SetVisible,
+				null,
+				1694300916983675,
+				false
+				,[
+				[
+					3,
+					0
+				]
+				]
+			]
+,			[
+				58,
+				cr.plugins_.Audio.prototype.acts.Play,
+				null,
+				2153412497517185,
+				false
+				,[
+				[
+					2,
+					["m_sica_rescue",true]
+				]
+,				[
+					3,
+					1
+				]
+,				[
+					0,
+					[
+						0,
+						0
+					]
+				]
+,				[
+					1,
+					[
+						2,
+						"Musica"
+					]
+				]
+				]
+			]
+,			[
+				59,
+				cr.plugins_.admob.prototype.acts.PreloadInterstitial,
+				null,
+				8571985148026946,
+				false
+			]
 			]
 			,[
 			[
@@ -28172,14 +34907,14 @@ false,false,7912363636648281,false
 				],
 				[
 				[
-					40,
+					37,
 					cr.plugins_.Dictionary.prototype.acts.Clear,
 					null,
 					1562441184657998,
 					false
 				]
 ,				[
-					40,
+					37,
 					cr.plugins_.Dictionary.prototype.acts.JSONLoad,
 					null,
 					3325328449907809,
@@ -28225,13 +34960,13 @@ false,false,7912363636648281,false
 						,[
 						[
 							4,
-							43
+							61
 						]
 ,						[
 							7,
 							[
 								21,
-								43,
+								61,
 								false,
 								null
 								,0
@@ -28255,7 +34990,7 @@ false,false,7912363636648281,false
 						9671009933134291,
 						[
 						[
-							43,
+							61,
 							cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
 							null,
 							0,
@@ -28277,7 +35012,7 @@ false,false,7912363636648281,false
 								7,
 								[
 									20,
-									40,
+									37,
 									cr.plugins_.Dictionary.prototype.exps.Get,
 									false,
 									null
@@ -28294,7 +35029,7 @@ false,false,7912363636648281,false
 						],
 						[
 						[
-							43,
+							61,
 							cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
 							null,
 							6041993810543557,
@@ -28373,7 +35108,7 @@ false,false,7912363636648281,false
 								7,
 								[
 									20,
-									40,
+									37,
 									cr.plugins_.Dictionary.prototype.exps.Get,
 									false,
 									null
@@ -28417,6 +35152,80 @@ false,false,7912363636648281,false
 									1
 								]
 							]
+							]
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					7780663038665686,
+					[
+					[
+						37,
+						cr.plugins_.Dictionary.prototype.cnds.CompareValue,
+						null,
+						0,
+						false,
+						false,
+						false,
+						186876845475307,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Stop,
+						null,
+						7646748224976342,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+						]
+					]
+,					[
+						53,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						5541223397414796,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								1
 							]
 						]
 						]
@@ -28500,7 +35309,7 @@ false,false,7912363636648281,false
 					],
 					[
 					[
-						40,
+						37,
 						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						4179939331630957,
@@ -28537,7 +35346,7 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						40,
+						37,
 						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						3947183739223803,
@@ -28574,7 +35383,7 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						40,
+						37,
 						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						898948557212883,
@@ -28611,7 +35420,7 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						40,
+						37,
 						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						5393296409926423,
@@ -28634,7 +35443,7 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						40,
+						37,
 						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						9309813253324207,
@@ -28657,7 +35466,7 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
-						40,
+						37,
 						cr.plugins_.Dictionary.prototype.acts.AddKey,
 						null,
 						108435200685045,
@@ -28680,6 +35489,52 @@ false,false,7912363636648281,false
 						]
 					]
 ,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						9146930767525798,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						6274966849796113,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Sonidos"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
 						11,
 						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
 						null,
@@ -28697,7 +35552,7 @@ false,false,7912363636648281,false
 							7,
 							[
 								20,
-								40,
+								37,
 								cr.plugins_.Dictionary.prototype.exps.AsJSON,
 								true,
 								null
@@ -28738,6 +35593,338 @@ false,false,7912363636648281,false
 				null,
 				false,
 				null,
+				7639831160758416,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					4164892212893185,
+					false
+					,[
+					[
+						4,
+						51
+					]
+					]
+				]
+				],
+				[
+				[
+					62,
+					cr.plugins_.Sprite.prototype.acts.SetVisible,
+					null,
+					6883817288152463,
+					false
+					,[
+					[
+						3,
+						0
+					]
+					]
+				]
+,				[
+					62,
+					cr.plugins_.Sprite.prototype.acts.SetCollisions,
+					null,
+					9530602055387789,
+					false
+					,[
+					[
+						3,
+						0
+					]
+					]
+				]
+,				[
+					61,
+					cr.plugins_.Sprite.prototype.acts.SetCollisions,
+					null,
+					682059277637464,
+					false
+					,[
+					[
+						3,
+						1
+					]
+					]
+				]
+,				[
+					29,
+					cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
+					null,
+					6006122504299337,
+					false
+					,[
+					[
+						10,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							0
+						]
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.acts.SetVar,
+					null,
+					33869620258106,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						7,
+						[
+							0,
+							0
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				2037495550162642,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					8985783675894245,
+					false
+					,[
+					[
+						4,
+						46
+					]
+					]
+				]
+				],
+				[
+				[
+					62,
+					cr.plugins_.Sprite.prototype.acts.SetVisible,
+					null,
+					2460453943906717,
+					false
+					,[
+					[
+						3,
+						1
+					]
+					]
+				]
+,				[
+					62,
+					cr.plugins_.Sprite.prototype.acts.SetCollisions,
+					null,
+					1574897781946489,
+					false
+					,[
+					[
+						3,
+						1
+					]
+					]
+				]
+,				[
+					61,
+					cr.plugins_.Sprite.prototype.acts.SetCollisions,
+					null,
+					4885255677152488,
+					false
+					,[
+					[
+						3,
+						0
+					]
+					]
+				]
+,				[
+					29,
+					cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
+					null,
+					4038512718133519,
+					false
+					,[
+					[
+						10,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.acts.SetVar,
+					null,
+					7004915706842896,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				1106708344864953,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTapGestureObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					6068793700922213,
+					false
+					,[
+					[
+						4,
+						61
+					]
+					]
+				]
+				],
+				[
+				]
+				,[
+				[
+					0,
+					null,
+					false,
+					null,
+					6605273863964258,
+					[
+					[
+						61,
+						cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+						null,
+						0,
+						false,
+						false,
+						false,
+						841521022685722,
+						false
+						,[
+						[
+							10,
+							1
+						]
+,						[
+							8,
+							0
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.SetVar,
+						null,
+						6250701975710315,
+						false
+						,[
+						[
+							11,
+							"NivelActual"
+						]
+,						[
+							7,
+							[
+								21,
+								10,
+								false,
+								null
+								,0
+							]
+						]
+						]
+					]
+,					[
+						-1,
+						cr.system_object.prototype.acts.GoToLayoutByName,
+						null,
+						6294416974229457,
+						false
+						,[
+						[
+							1,
+							[
+								10,
+								[
+									2,
+									"Nivel"
+								]
+								,[
+									21,
+									61,
+									false,
+									null
+									,0
+								]
+							]
+						]
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
 				7667049290629447,
 				[
 				[
@@ -28754,6 +35941,34 @@ false,false,7912363636648281,false
 					[
 						4,
 						29
+					]
+					]
+				]
+,				[
+					29,
+					cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					7422827198681846,
+					false
+					,[
+					[
+						10,
+						0
+					]
+,					[
+						8,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							0
+						]
 					]
 					]
 				]
@@ -28829,6 +36044,34 @@ false,false,7912363636648281,false
 					]
 					]
 				]
+,				[
+					-1,
+					cr.system_object.prototype.cnds.CompareVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					2397163307212843,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						8,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							0
+						]
+					]
+					]
+				]
 				],
 				[
 				[
@@ -28853,57 +36096,44 @@ false,false,7912363636648281,false
 				]
 				]
 			]
-			]
-		]
-,		[
-			0,
-			null,
-			false,
-			null,
-			1106708344864953,
-			[
-			[
-				4,
-				cr.plugins_.Touch.prototype.cnds.OnTapGestureObject,
-				null,
-				1,
-				false,
-				false,
-				false,
-				6068793700922213,
-				false
-				,[
-				[
-					4,
-					43
-				]
-				]
-			]
-			],
-			[
-			]
-			,[
-			[
+,			[
 				0,
 				null,
 				false,
 				null,
-				6605273863964258,
+				5953008711934827,
 				[
 				[
-					43,
-					cr.plugins_.Sprite.prototype.cnds.CompareInstanceVar,
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					3928610314791093,
+					false
+					,[
+					[
+						4,
+						52
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.cnds.CompareVar,
 					null,
 					0,
 					false,
 					false,
 					false,
-					841521022685722,
+					5285441478512535,
 					false
 					,[
 					[
-						10,
-						1
+						11,
+						"Menu"
 					]
 ,					[
 						8,
@@ -28920,39 +36150,574 @@ false,false,7912363636648281,false
 				]
 				],
 				[
+				]
+				,[
 				[
-					-1,
-					cr.system_object.prototype.acts.SetVar,
+					0,
 					null,
-					6250701975710315,
-					false
-					,[
+					false,
+					null,
+					9228089993263656,
 					[
-						11,
-						"NivelActual"
+					[
+						52,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
+						null,
+						0,
+						false,
+						false,
+						false,
+						261865279574145,
+						false
+						,[
+						[
+							8,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						4809908107794562,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.1
+							]
+						]
+						]
 					]
 ,					[
-						7,
+						52,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						6796406418459862,
+						false
+						,[
 						[
-							21,
-							10,
-							false,
-							null
-							,0
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						4259112724911625,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Sonidos"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						11,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						null,
+						2774584829533637,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Data"
+							]
+						]
+,						[
+							7,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
+								null
+							]
+						]
 						]
 					]
 					]
 				]
 ,				[
-					-1,
-					cr.system_object.prototype.acts.GoToLayout,
+					0,
 					null,
-					6294416974229457,
+					false,
+					null,
+					3813730414929631,
+					[
+					[
+						52,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
+						null,
+						0,
+						false,
+						false,
+						false,
+						7077682291442473,
+						false
+						,[
+						[
+							8,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						2675115760228069,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.1
+							]
+						]
+						]
+					]
+,					[
+						52,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						9374287623411254,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						7778401830523204,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Sonidos"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						11,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						null,
+						3433153408950887,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Data"
+							]
+						]
+,						[
+							7,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
+								null
+							]
+						]
+						]
+					]
+					]
+				]
+				]
+			]
+,			[
+				0,
+				null,
+				false,
+				null,
+				6396701615353665,
+				[
+				[
+					4,
+					cr.plugins_.Touch.prototype.cnds.OnTouchObject,
+					null,
+					1,
+					false,
+					false,
+					false,
+					1306651540012678,
 					false
 					,[
 					[
-						6,
-						"Nivel1"
+						4,
+						53
+					]
+					]
+				]
+,				[
+					-1,
+					cr.system_object.prototype.cnds.CompareVar,
+					null,
+					0,
+					false,
+					false,
+					false,
+					2692197293613462,
+					false
+					,[
+					[
+						11,
+						"Menu"
+					]
+,					[
+						8,
+						0
+					]
+,					[
+						7,
+						[
+							0,
+							1
+						]
+					]
+					]
+				]
+				],
+				[
+				]
+				,[
+				[
+					0,
+					null,
+					false,
+					null,
+					1969317959626371,
+					[
+					[
+						53,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
+						null,
+						0,
+						false,
+						false,
+						false,
+						8766214438753443,
+						false
+						,[
+						[
+							8,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						6042231738516769,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.1
+							]
+						]
+						]
+					]
+,					[
+						53,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						3497122908406878,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Stop,
+						null,
+						9586057112698708,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						9103009309875733,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+,					[
+						11,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						null,
+						6384864329734464,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Data"
+							]
+						]
+,						[
+							7,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
+								null
+							]
+						]
+						]
+					]
+					]
+				]
+,				[
+					0,
+					null,
+					false,
+					null,
+					2677010800211877,
+					[
+					[
+						53,
+						cr.plugins_.Sprite.prototype.cnds.CompareFrame,
+						null,
+						0,
+						false,
+						false,
+						false,
+						1757328283325135,
+						false
+						,[
+						[
+							8,
+							0
+						]
+,						[
+							0,
+							[
+								0,
+								1
+							]
+						]
+						]
+					]
+					],
+					[
+					[
+						-1,
+						cr.system_object.prototype.acts.Wait,
+						null,
+						4324388176928798,
+						false
+						,[
+						[
+							0,
+							[
+								1,
+								0.1
+							]
+						]
+						]
+					]
+,					[
+						53,
+						cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+						null,
+						558906317153472,
+						false
+						,[
+						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						58,
+						cr.plugins_.Audio.prototype.acts.Play,
+						null,
+						1725469911459214,
+						false
+						,[
+						[
+							2,
+							["m_sica_rescue",true]
+						]
+,						[
+							3,
+							1
+						]
+,						[
+							0,
+							[
+								0,
+								0
+							]
+						]
+,						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+						]
+					]
+,					[
+						37,
+						cr.plugins_.Dictionary.prototype.acts.AddKey,
+						null,
+						4955324351188387,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Musica"
+							]
+						]
+,						[
+							7,
+							[
+								0,
+								0
+							]
+						]
+						]
+					]
+,					[
+						11,
+						cr.plugins_.WebStorage.prototype.acts.StoreLocal,
+						null,
+						6484634040347387,
+						false
+						,[
+						[
+							1,
+							[
+								2,
+								"Data"
+							]
+						]
+,						[
+							7,
+							[
+								20,
+								37,
+								cr.plugins_.Dictionary.prototype.exps.AsJSON,
+								true,
+								null
+							]
+						]
+						]
 					]
 					]
 				]
@@ -29434,6 +37199,35 @@ false,false,7912363636648281,false
 			]
 			]
 		]
+,		[
+			0,
+			null,
+			false,
+			null,
+			5758575155799378,
+			[
+			[
+				59,
+				cr.plugins_.admob.prototype.cnds.OnInterstitialReceived,
+				null,
+				1,
+				false,
+				false,
+				false,
+				8480482331498615,
+				false
+			]
+			],
+			[
+			[
+				59,
+				cr.plugins_.admob.prototype.acts.ShowInterstitial,
+				null,
+				4163161089880168,
+				false
+			]
+			]
+		]
 		]
 	]
 ,	[
@@ -29773,11 +37567,17 @@ false,false,9412570492063021,false
 	]
 	],
 	[
+		["thruster.ogg", 48970],
+		["fire.ogg", 267590],
+		["coger_astronauta.ogg", 5601],
+		["explosionnave.ogg", 23961],
+		["win.ogg", 123380],
+		["golpe.ogg", 12203]
 	],
-	"media/",
+	"assets/",
 	false,
 	864,
-	486,
+	468,
 	2,
 	true,
 	true,
@@ -29787,7 +37587,7 @@ false,false,9412570492063021,false
 	false,
 	0,
 	2,
-	106,
+	124,
 	false,
 	true,
 	1,
