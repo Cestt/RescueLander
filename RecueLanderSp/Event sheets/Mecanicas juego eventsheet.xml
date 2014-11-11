@@ -1,0 +1,1543 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Mecanicas juego eventsheet</name>
+    <events>
+        <variable constant="0" name="Menu" sid="8966427284528966" static="0" type="number">0</variable>
+        <variable constant="0" name="AstroRecogidos" sid="2489586144042513" static="0" type="number">0</variable>
+        <variable constant="0" name="Frame" sid="1814426570517499" static="0" type="number">0</variable>
+        <variable constant="0" name="Puntuacion" sid="3016561379347421" static="0" type="number">200</variable>
+        <variable constant="0" name="PosicionX" sid="9952824070825181" static="0" type="number">0</variable>
+        <event-block sid="1107866180208361">
+            <conditions>
+                <condition id="-2" name="On start of layout" sid="8026494804483156" type="System" />
+            </conditions>
+            <actions>
+                <action behavior="Physics" id="12" name="Set world gravity" sid="4516249674817538" type="Nave">
+                    <param id="0" name="Gravity">1.5</param>
+                </action>
+                <action behavior="Physics" id="23" name="Enable/disable collisions" sid="3322753197487977" type="Nave">
+                    <param id="0" name="Object">Colisionar</param>
+                    <param id="1" name="State">1</param>
+                </action>
+                <action id="-10" name="Set value" sid="5614992555514654" type="Nave">
+                    <param id="0" name="Instance variable">FuelInicial</param>
+                    <param id="1" name="Value">Nave.Fuel</param>
+                </action>
+                <action id="-10" name="Set value" sid="7215557250510471" type="Nave">
+                    <param id="0" name="Instance variable">VidaInicial</param>
+                    <param id="1" name="Value">Nave.Vida</param>
+                </action>
+                <action behavior="Physics" id="13" name="Set stepping mode" sid="8947264805491836" type="Nave">
+                    <param id="0" name="Mode">1</param>
+                </action>
+                <action id="-10" name="Set value" sid="8587464027201877" type="BarraFuel">
+                    <param id="0" name="Instance variable">WidthInicial</param>
+                    <param id="1" name="Value">BarraFuel.Width</param>
+                </action>
+                <action id="-10" name="Set value" sid="5978502895640512" type="BarraVida">
+                    <param id="0" name="Instance variable">WidthInic</param>
+                    <param id="1" name="Value">BarraVida.Width</param>
+                </action>
+                <action id="0" name="Set spraying" sid="9079125817710479" type="Thusters">
+                    <param id="0" name="State">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="5251412864304223" type="Fire">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="4517315430271638" type="Lander">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="5171609692878818" type="Smoke">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="3314343056711039" type="Ventana">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">1</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="259971113499809" type="Astronaut_Halo_">
+                    <param id="0" name="Pin to">Astronauta</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="1824650867278286" type="Thusters">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="3650303865907288" type="Fire">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="2415373190978476" type="Dust">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="157539929966043" type="Patas">
+                    <param id="0" name="Pin to">Nave</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+                <action id="0" name="Set spraying" sid="4590450388820669" type="Smoke">
+                    <param id="0" name="State">0</param>
+                </action>
+                <action id="0" name="Set spraying" sid="7056587727559671" type="Dust">
+                    <param id="0" name="State">0</param>
+                </action>
+                <action id="-15" name="Set visible" sid="338205002438729" type="Astronaut_Halo_">
+                    <param id="0" name="Visibility">0</param>
+                </action>
+                <action id="11" name="Set collisions enabled" sid="8754109471899307" type="Popups">
+                    <param id="0" name="Collisions">0</param>
+                </action>
+                <action id="-15" name="Set visible" sid="5322737466657071" type="Popups">
+                    <param id="0" name="Visibility">0</param>
+                </action>
+                <action id="5" name="Set web font" sid="1516094607372418" type="Astronautas">
+                    <param id="0" name="Family name">&quot;frostys_winterlandregular&quot;</param>
+                    <param id="1" name="CSS URL">&quot;stylesheet.css&quot;</param>
+                </action>
+                <action id="0" name="Play" sid="44174214394391" type="Audio">
+                    <param id="0" name="Audio file">M_sica_Rescue</param>
+                    <param id="2" name="Loop">1</param>
+                    <param id="3" name="Volume">0</param>
+                    <param id="1" name="Tag (optional)">&quot;Musica&quot;</param>
+                </action>
+                <action behavior="Physics" id="13" name="Set stepping mode" sid="3808832486891419" type="Nave">
+                    <param id="0" name="Mode">1</param>
+                </action>
+                <action id="-15" name="Set visible" sid="6797363002319732" type="Thruster_anim">
+                    <param id="0" name="Visibility">0</param>
+                </action>
+                <action behavior="Pin" id="0" name="Pin to object" sid="4584086049480156" type="Zoomer">
+                    <param id="0" name="Pin to">Hook</param>
+                    <param id="1" name="Mode">0</param>
+                </action>
+            </actions>
+            <sub-events>
+                <event-block sid="5009435748636948">
+                    <conditions>
+                        <condition id="0" name="Compare value" sid="2588709153306666" type="Dictionary">
+                            <param id="0" name="Key">&quot;Musica&quot;</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="6" name="Stop" sid="36774649018519" type="Audio">
+                            <param id="0" name="Tag">&quot;Musica&quot;</param>
+                        </action>
+                        <action id="5" name="Set frame" sid="3201982896366526" type="Music_on">
+                            <param id="0" name="Frame number">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-group description="" sid="4407733757147299" title="Movement">
+            <sub-events>
+                <event-block sid="1201713447601503">
+                    <conditions>
+                        <condition id="2" name="Is in touch" sid="5085002282307453" type="Touch" />
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="827231968863908">
+                            <conditions>
+                                <condition id="-8" name="Compare two values" sid="8180396428320483" type="System">
+                                    <param id="0" name="First value">Touch.X-ViewportLeft(&quot;Naves&quot;)</param>
+                                    <param id="1" name="Comparison">2</param>
+                                    <param id="2" name="Second value">ViewportRight(&quot;Naves&quot;)-Touch.X</param>
+                                </condition>
+                                <condition id="12" inverted="1" name="Has Nth touch" sid="6274240761578638" type="Touch">
+                                    <param id="0" name="Touch number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action behavior="Physics" id="6" name="Apply torque" sid="2152253530850813" type="Nave">
+                                    <param id="0" name="Torque">-25</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block sid="9533771932042015">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="2332992121762718" type="Thruster_anim">
+                                            <param id="0" name="Instance variable">Thust</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="9889752264659323" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Init&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="6044720017059246">
+                                    <conditions>
+                                        <condition id="4" name="On finished" sid="806180202171706" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Init&quot;</param>
+                                        </condition>
+                                        <condition id="-7" name="Compare instance variable" sid="3259369539444808" type="Thruster_anim">
+                                            <param id="0" name="Instance variable">Thust</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="1664163456317533" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="5055766414110596">
+                                    <conditions>
+                                        <condition id="0" name="Compare value" sid="1078255538573805" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions />
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block sid="2827459444666555">
+                            <conditions>
+                                <condition id="-8" name="Compare two values" sid="8769442241675817" type="System">
+                                    <param id="0" name="First value">ViewportRight(&quot;Naves&quot;)-Touch.X</param>
+                                    <param id="1" name="Comparison">2</param>
+                                    <param id="2" name="Second value">Touch.X-ViewportLeft(&quot;Naves&quot;)</param>
+                                </condition>
+                                <condition id="12" inverted="1" name="Has Nth touch" sid="6179421390122842" type="Touch">
+                                    <param id="0" name="Touch number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action behavior="Physics" id="6" name="Apply torque" sid="5509142905492879" type="Nave">
+                                    <param id="0" name="Torque">25</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block sid="7466844973155632">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="5600429933697538" type="Thruster_anim">
+                                            <param id="0" name="Instance variable">Thust</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="789374966299484" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Init&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="5734199037022344">
+                                    <conditions>
+                                        <condition id="4" name="On finished" sid="2556054419761911" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Init&quot;</param>
+                                        </condition>
+                                        <condition id="-7" name="Compare instance variable" sid="8944788539662828" type="Thruster_anim">
+                                            <param id="0" name="Instance variable">Thust</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="5652213056863328" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="8941844942132883">
+                                    <conditions>
+                                        <condition id="0" name="Compare value" sid="7390285939933918" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions />
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block any="1" sid="7009987568062134">
+                            <conditions>
+                                <condition id="11" name="On Nth touch end" sid="902658554269459" type="Touch">
+                                    <param id="0" name="Touch number">0</param>
+                                </condition>
+                                <condition id="10" name="On Nth touch start" sid="1676548684484452" type="Touch">
+                                    <param id="0" name="Touch number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="8920372786379861" type="Thruster_anim">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="8568195495393901">
+                    <conditions>
+                        <condition id="12" name="Has Nth touch" sid="716507643226378" type="Touch">
+                            <param id="0" name="Touch number">1</param>
+                        </condition>
+                        <condition id="-7" name="Compare instance variable" sid="7158207857250221" type="Nave">
+                            <param id="0" name="Instance variable">Fuel</param>
+                            <param id="1" name="Comparison">4</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Physics" id="2" name="Apply force at angle" sid="2372120195329576" type="Nave">
+                            <param id="0" name="Force">0.8</param>
+                            <param id="1" name="Angle">Nave.Angle</param>
+                            <param id="2" name="Image point">1</param>
+                        </action>
+                        <action behavior="Physics" id="2" name="Apply force at angle" sid="4706900813740487" type="Nave">
+                            <param id="0" name="Force">0.8</param>
+                            <param id="1" name="Angle">Nave.Angle</param>
+                            <param id="2" name="Image point">2</param>
+                        </action>
+                        <action id="-12" name="Subtract from" sid="6870048553731022" type="Nave">
+                            <param id="0" name="Instance variable">Fuel</param>
+                            <param id="1" name="Value">0.1</param>
+                        </action>
+                        <action id="-5" name="Set width" sid="5832080808641206" type="BarraFuel">
+                            <param id="0" name="Width">(BarraFuel.WidthInicial*Nave.Fuel)/Nave.FuelInicial</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="999119399351282">
+                    <conditions>
+                        <condition behavior="Physics" id="2" name="Compare angular velocity" sid="1676616502810519" type="Nave">
+                            <param id="0" name="Comparison">4</param>
+                            <param id="1" name="Value">60</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Physics" id="9" name="Set angular velocity" sid="2544376829336309" type="Nave">
+                            <param id="0" name="Angular velocity">60</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="5137928511547035">
+                    <conditions>
+                        <condition behavior="Physics" id="2" name="Compare angular velocity" sid="613724135724753" type="Nave">
+                            <param id="0" name="Comparison">2</param>
+                            <param id="1" name="Value">-60</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Physics" id="9" name="Set angular velocity" sid="9333986200264382" type="Nave">
+                            <param id="0" name="Angular velocity">-60</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-group description="" sid="8230929351219207" title="Fire_Animation">
+                    <sub-events>
+                        <event-block sid="4167744239327268">
+                            <conditions>
+                                <condition id="4" name="On finished" sid="8050065975012128" type="Fire">
+                                    <param id="0" name="Animation">&quot;Default&quot;</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="4" name="Set animation" sid="9072146251697214" type="Fire">
+                                    <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                    <param id="1" name="From">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="5970970332487002">
+                            <conditions>
+                                <condition id="12" name="Has Nth touch" sid="7820940089277115" type="Touch">
+                                    <param id="0" name="Touch number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="1345501436769311" type="Fire">
+                                    <param id="0" name="Visibility">1</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="8605256733970943" type="Smoke">
+                                    <param id="0" name="State">1</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="9296832686937696" type="Thusters">
+                                    <param id="0" name="State">0</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block sid="7384142156620227">
+                                    <conditions>
+                                        <condition id="0" name="Compare value" sid="2745649699590573" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Play" sid="3171332396987228" type="Audio">
+                                            <param id="0" name="Audio file">Fire</param>
+                                            <param id="2" name="Loop">1</param>
+                                            <param id="3" name="Volume">0</param>
+                                            <param id="1" name="Tag (optional)">&quot;Fire&quot;</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="69058935592229">
+                                    <conditions>
+                                        <condition id="2" name="Is playing" sid="7871208665001231" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default_Reverse&quot;</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-9" name="Set value" sid="527434914328535" type="System">
+                                            <param id="0" name="Variable">Frame</param>
+                                            <param id="1" name="Value">Fire.AnimationFrame</param>
+                                        </action>
+                                        <action id="4" name="Set animation" sid="4493672839239442" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                        <action id="5" name="Set frame" sid="9269822122747439" type="Fire">
+                                            <param id="0" name="Frame number">Fire.AnimationFrameCount-Frame</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="2647822450337495">
+                                    <conditions>
+                                        <condition id="2" inverted="1" name="Is playing" sid="33415904090994" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default_Reverse&quot;</param>
+                                        </condition>
+                                        <condition id="2" inverted="1" name="Is playing" sid="4135389380615317" type="Fire">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="5019262399230166" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block sid="7774116983390537">
+                            <conditions>
+                                <condition id="11" name="On Nth touch end" sid="2226065910311376" type="Touch">
+                                    <param id="0" name="Touch number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="4" name="Set animation" sid="3899677718688961" type="Fire">
+                                    <param id="0" name="Animation">&quot;Default_Reverse&quot;</param>
+                                    <param id="1" name="From">1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="649531904417904" type="Fire">
+                                    <param id="0" name="Frame number">Frame</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="7628332852861849" type="Smoke">
+                                    <param id="0" name="State">0</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block sid="5329799050085284">
+                                    <conditions>
+                                        <condition id="2" name="Is playing" sid="9550847123547455" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default&quot;</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-9" name="Set value" sid="3079397739285015" type="System">
+                                            <param id="0" name="Variable">Frame</param>
+                                            <param id="1" name="Value">Fire.AnimationFrame</param>
+                                        </action>
+                                        <action id="4" name="Set animation" sid="8155303938583595" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                        <action id="5" name="Set frame" sid="4512743190551045" type="Fire">
+                                            <param id="0" name="Frame number">Fire.AnimationFrameCount-Frame</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="1157538122867241">
+                                    <conditions>
+                                        <condition id="-22" name="Else" sid="9880818588808775" type="System" />
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="2960736078337862" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default_Reverse&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                        <action id="-9" name="Set value" sid="817789990509017" type="System">
+                                            <param id="0" name="Variable">Frame</param>
+                                            <param id="1" name="Value">0</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block sid="1922159717593474">
+                            <conditions>
+                                <condition id="4" name="On finished" sid="6072959535032012" type="Fire">
+                                    <param id="0" name="Animation">&quot;Default_Reverse&quot;</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="7360591781406265" type="Fire">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                                <action id="4" name="Set animation" sid="4157939116503026" type="Fire">
+                                    <param id="0" name="Animation">&quot;Default&quot;</param>
+                                    <param id="1" name="From">1</param>
+                                </action>
+                                <action id="6" name="Stop" sid="9804601491191979" type="Audio">
+                                    <param id="0" name="Tag">&quot;Fire&quot;</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-group>
+                <event-block sid="8735386814667156">
+                    <conditions>
+                        <condition id="-20" inverted="1" name="Is on mobile device" sid="2666947157019383" type="System" />
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="5420177936960762">
+                            <conditions>
+                                <condition id="2" name="Key is down" sid="3977861557607429" type="Keyboard">
+                                    <param id="0" name="Key">68 (D)</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action behavior="Physics" id="6" name="Apply torque" sid="3220498387793756" type="Nave">
+                                    <param id="0" name="Torque">25</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="8367693967176727" type="Thusters">
+                                    <param id="0" name="State">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="2485880781875148">
+                            <conditions>
+                                <condition id="2" inverted="1" name="Key is down" sid="5918083267591773" type="Keyboard">
+                                    <param id="0" name="Key">68 (D)</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="7538741157110366" type="Thusters">
+                                    <param id="0" name="Instance variable">Thuster</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Set spraying" sid="5002295071005174" type="Thusters">
+                                    <param id="0" name="State">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="4631994307586731">
+                            <conditions>
+                                <condition id="2" name="Key is down" sid="8449251836495506" type="Keyboard">
+                                    <param id="0" name="Key">65 (A)</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action behavior="Physics" id="6" name="Apply torque" sid="783233779002571" type="Nave">
+                                    <param id="0" name="Torque">-25</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="9697617693559487" type="Thusters">
+                                    <param id="0" name="State">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="4480429429725751">
+                            <conditions>
+                                <condition id="2" inverted="1" name="Key is down" sid="1369120253861873" type="Keyboard">
+                                    <param id="0" name="Key">65 (A)</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="9277705555615742" type="Thusters">
+                                    <param id="0" name="Instance variable">Thuster</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Set spraying" sid="7029521595226889" type="Thusters">
+                                    <param id="0" name="State">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="9814472976817034">
+                            <conditions>
+                                <condition id="2" name="Key is down" sid="1552652537852058" type="Keyboard">
+                                    <param id="0" name="Key">32 (Barra Espaciadora)</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="3661336872380029" type="Nave">
+                                    <param id="0" name="Instance variable">Fuel</param>
+                                    <param id="1" name="Comparison">4</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action behavior="Physics" id="2" name="Apply force at angle" sid="2751941271312929" type="Nave">
+                                    <param id="0" name="Force">0.8</param>
+                                    <param id="1" name="Angle">Nave.Angle</param>
+                                    <param id="2" name="Image point">1</param>
+                                </action>
+                                <action behavior="Physics" id="2" name="Apply force at angle" sid="1618369368610855" type="Nave">
+                                    <param id="0" name="Force">0.8</param>
+                                    <param id="1" name="Angle">Nave.Angle</param>
+                                    <param id="2" name="Image point">2</param>
+                                </action>
+                                <action id="-12" name="Subtract from" sid="7823498878405285" type="Nave">
+                                    <param id="0" name="Instance variable">Fuel</param>
+                                    <param id="1" name="Value">0.1</param>
+                                </action>
+                                <action id="-5" name="Set width" sid="4731451365855858" type="BarraFuel">
+                                    <param id="0" name="Width">(BarraFuel.WidthInicial*Nave.Fuel)/Nave.FuelInicial</param>
+                                </action>
+                                <action id="0" name="Set spraying" sid="957278450563233" type="Smoke">
+                                    <param id="0" name="State">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="3772285639118718">
+                            <conditions>
+                                <condition id="2" inverted="1" name="Key is down" sid="8109841781981339" type="Keyboard">
+                                    <param id="0" name="Key">32 (Barra Espaciadora)</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Set spraying" sid="5210034194570725" type="Smoke">
+                                    <param id="0" name="State">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="6150904589996595">
+                    <conditions>
+                        <condition behavior="Physics" id="2" name="Compare angular velocity" sid="7471504134002845" type="Nave">
+                            <param id="0" name="Comparison">4</param>
+                            <param id="1" name="Value">60</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Physics" id="9" name="Set angular velocity" sid="5984685841489653" type="Nave">
+                            <param id="0" name="Angular velocity">60</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-group>
+        <event-group description="" sid="5223497153340266" title="Damage">
+            <sub-events>
+                <event-block sid="1557259072272202">
+                    <conditions>
+                        <condition id="0" name="On collision with another object" sid="1637900420331754" type="Nave">
+                            <param id="0" name="Object">Colisionar</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="6720789023134656">
+                            <conditions>
+                                <condition behavior="Physics" id="1" name="Compare velocity" sid="1514513662312945" type="Nave">
+                                    <param id="0" name="Which">2</param>
+                                    <param id="1" name="Comparison">5</param>
+                                    <param id="2" name="Value">80</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-12" name="Subtract from" sid="4400624606558345" type="Nave">
+                                    <param id="0" name="Instance variable">Vida</param>
+                                    <param id="1" name="Value">sqrt((Nave.Physics.VelocityX^2)+(Nave.Physics.VelocityY^2))-80</param>
+                                </action>
+                                <action id="-5" name="Set width" sid="6378696249164194" type="BarraVida">
+                                    <param id="0" name="Width">(BarraVida.WidthInic*Nave.Vida)/Nave.VidaInicial</param>
+                                </action>
+                                <action id="0" name="Play" sid="7269752436014014" type="Audio">
+                                    <param id="0" name="Audio file">Golpe</param>
+                                    <param id="2" name="Loop">0</param>
+                                    <param id="3" name="Volume">0</param>
+                                    <param id="1" name="Tag (optional)">&quot;Golpe&quot;</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block sid="9600199171731645">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="5733439188696288" type="Nave">
+                                            <param id="0" name="Instance variable">Vida</param>
+                                            <param id="1" name="Comparison">2</param>
+                                            <param id="2" name="Value">(Nave.VidaInicial*2)/3</param>
+                                        </condition>
+                                        <condition id="-7" name="Compare instance variable" sid="9939176932219131" type="Nave">
+                                            <param id="0" name="Instance variable">Vida</param>
+                                            <param id="1" name="Comparison">4</param>
+                                            <param id="2" name="Value">Nave.VidaInicial/3</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="5" name="Set frame" sid="7746346802096372" type="BarraVida">
+                                            <param id="0" name="Frame number">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="5283751512500677">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="4376975287828286" type="Nave">
+                                            <param id="0" name="Instance variable">Vida</param>
+                                            <param id="1" name="Comparison">2</param>
+                                            <param id="2" name="Value">Nave.VidaInicial/3</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="5" name="Set frame" sid="7902161477172325" type="BarraVida">
+                                            <param id="0" name="Frame number">2</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="8161716748724636">
+                                    <conditions>
+                                        <condition id="0" name="Compare value" sid="2064935985531499" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Play" sid="4368953970279613" type="Audio">
+                                            <param id="0" name="Audio file">Golpe</param>
+                                            <param id="2" name="Loop">0</param>
+                                            <param id="3" name="Volume">0</param>
+                                            <param id="1" name="Tag (optional)">&quot;Golpe&quot;</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block sid="2039641943189878">
+                            <conditions>
+                                <condition id="1" name="Is overlapping another object" sid="1089271906160947" type="Patas">
+                                    <param id="0" name="Object">Colisionar</param>
+                                </condition>
+                            </conditions>
+                            <actions />
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="9293082847290431">
+                    <conditions>
+                        <condition id="-7" name="Compare instance variable" sid="9287974049128028" type="Nave">
+                            <param id="0" name="Instance variable">Vida</param>
+                            <param id="1" name="Comparison">3</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Call function" sid="1253886387554793" type="Function">
+                            <param id="0" name="Name">&quot;Destroy&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-group>
+        <event-group description="" sid="9190425557021235" title="UI">
+            <sub-events>
+                <event-block sid="7587542171841609">
+                    <conditions>
+                        <condition id="-5" name="Compare width" sid="3775951543414409" type="BarraVida">
+                            <param id="0" name="Comparison">3</param>
+                            <param id="1" name="Width">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-5" name="Set width" sid="3695633317074305" type="BarraVida">
+                            <param id="0" name="Width">0</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-group description="" sid="8289257134003288" title="Minimap">
+                    <sub-events>
+                        <variable constant="0" name="Xporciento" sid="2392646469545778" static="0" type="number">0</variable>
+                        <variable constant="0" name="Yporciento" sid="4806698590460405" static="0" type="number">0</variable>
+                        <event-block sid="5432121736253531">
+                            <conditions>
+                                <condition id="-6" name="Every X seconds" sid="8929435975733911" type="System">
+                                    <param id="0" name="Interval (seconds)">dt</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-9" name="Set value" sid="8855998443788237" type="System">
+                                    <param id="0" name="Variable">Xporciento</param>
+                                    <param id="1" name="Value">floor((100*Nave.X)/LayoutHeight)</param>
+                                </action>
+                                <action id="-9" name="Set value" sid="6512484512009515" type="System">
+                                    <param id="0" name="Variable">Yporciento</param>
+                                    <param id="1" name="Value">floor((100*Nave.Y)/LayoutWidth)</param>
+                                </action>
+                                <action id="-3" name="Set position" sid="7605720088058965" type="NaveMini">
+                                    <param id="0" name="X">Minimap.X+((Minimap.Height*Xporciento)/100) </param>
+                                    <param id="1" name="Y">Minimap.Y+((Minimap.Width*Yporciento)/100)</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-group>
+            </sub-events>
+        </event-group>
+        <event-group description="" sid="9909909198274003" title="Mecanicas">
+            <sub-events>
+                <event-block sid="5705242047448976">
+                    <conditions>
+                        <condition behavior="Physics" id="1" name="Compare velocity" sid="2142770980258125" type="Nave">
+                            <param id="0" name="Which">2</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
+                        <condition behavior="Physics" id="2" name="Compare angular velocity" sid="473599480537609" type="Nave">
+                            <param id="0" name="Comparison">0</param>
+                            <param id="1" name="Value">0</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="9230786251950484">
+                            <conditions>
+                                <condition id="-11" name="For Each" sid="8080334435023958" type="System">
+                                    <param id="0" name="Object">Astronauta</param>
+                                </condition>
+                            </conditions>
+                            <actions />
+                            <sub-events>
+                                <event-block sid="1242359202129788">
+                                    <conditions>
+                                        <condition id="-8" name="Compare two values" sid="8646470656914753" type="System">
+                                            <param id="0" name="First value">distance(Nave.X,Nave.Y,Astronauta.X,Astronauta.Y)</param>
+                                            <param id="1" name="Comparison">3</param>
+                                            <param id="2" name="Second value">125</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-11" name="Add to" sid="8824554554056488" type="Nave">
+                                            <param id="0" name="Instance variable">Astronautas</param>
+                                            <param id="1" name="Value">1</param>
+                                        </action>
+                                        <action id="0" name="Set text" sid="8359317392716192" type="Astronautas">
+                                            <param id="0" name="Text">Nave.Astronautas</param>
+                                        </action>
+                                        <action id="-9" name="Destroy" sid="8258938211964617" type="Astronauta" />
+                                        <action id="-15" name="Set visible" sid="292534106562837" type="Astronaut_Halo_">
+                                            <param id="0" name="Visibility">1</param>
+                                        </action>
+                                        <action id="3" name="Start" sid="312665656142467" type="Astronaut_Halo_">
+                                            <param id="0" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block sid="9391350887251755">
+                            <conditions>
+                                <condition id="0" name="Compare value" sid="9368123517203115" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Play" sid="3389865931056933" type="Audio">
+                                    <param id="0" name="Audio file">Coger_Astronauta</param>
+                                    <param id="2" name="Loop">0</param>
+                                    <param id="3" name="Volume">0</param>
+                                    <param id="1" name="Tag (optional)">&quot;Coger&quot;</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="6436239080176009">
+                    <conditions>
+                        <condition id="3" name="Compare frame" sid="8248346721517362" type="Astronaut_Halo_">
+                            <param id="0" name="Comparison">5</param>
+                            <param id="1" name="Number">5</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-15" name="Set visible" sid="1406508965213679" type="Astronaut_Halo_">
+                            <param id="0" name="Visibility">0</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="4811956082994492">
+                    <conditions>
+                        <condition id="1" name="Is overlapping another object" sid="3564801228624625" type="Lander">
+                            <param id="0" name="Object">Plataforma</param>
+                        </condition>
+                        <condition behavior="Physics" id="1" name="Compare velocity" sid="4380643106007117" type="Nave">
+                            <param id="0" name="Which">2</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
+                        <condition behavior="Physics" id="2" name="Compare angular velocity" sid="4847987796256525" type="Nave">
+                            <param id="0" name="Comparison">0</param>
+                            <param id="1" name="Value">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="5039193948944828" type="System">
+                            <param id="0" name="Variable">AstroRecogidos</param>
+                            <param id="1" name="Value">Nave.Astronautas+AstroRecogidos</param>
+                        </action>
+                        <action id="-10" name="Set value" sid="7856214867894825" type="Nave">
+                            <param id="0" name="Instance variable">Astronautas</param>
+                            <param id="1" name="Value">0</param>
+                        </action>
+                    </actions>
+                    <sub-events>
+                        <event-block sid="1054844823687287">
+                            <conditions>
+                                <condition id="-11" name="For Each" sid="938533193350257" type="System">
+                                    <param id="0" name="Object">AstronautaRecoger</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="606618173825984" type="AstronautaRecoger">
+                                    <param id="0" name="Instance variable">Astro</param>
+                                    <param id="1" name="Comparison">3</param>
+                                    <param id="2" name="Value">AstroRecogidos</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="5" name="Set frame" sid="3215287190457354" type="AstronautaRecoger">
+                                    <param id="0" name="Frame number">1</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block sid="4026013418185767">
+                                    <conditions>
+                                        <condition id="-14" name="Compare variable" sid="6864524294848476" type="System">
+                                            <param id="0" name="Variable">AstroRecogidos</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">3</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-16" name="Wait" sid="53004996849762" type="System">
+                                            <param id="0" name="Seconds">0.5</param>
+                                        </action>
+                                        <action id="0" name="Call function" sid="8343752515842053" type="Function">
+                                            <param id="0" name="Name">&quot;Victory&quot;</param>
+                                            <param id="1" name="Parameter {n}"></param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="1609594754431371">
+                    <conditions>
+                        <condition id="0" name="On function" sid="2519250277385425" type="Function">
+                            <param id="0" name="Name">&quot;Destroy&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Destroy" sid="8859818684352667" type="Nave" />
+                        <action id="-9" name="Destroy" sid="8884157788035447" type="Ventana" />
+                        <action id="-9" name="Destroy" sid="5327242424040615" type="Fire" />
+                        <action id="-9" name="Destroy" sid="1324162133289632" type="Thusters" />
+                        <action id="-10" name="Add to" sid="8211532106959693" type="System">
+                            <param id="0" name="Variable">Inters</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                        <action id="-15" name="Set visible" sid="2748124126088383" type="Lose">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                    </actions>
+                    <sub-events>
+                        <event-block sid="8519822113869168">
+                            <conditions>
+                                <condition id="0" name="Compare value" sid="6068190321169925" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Play" sid="2177464479410765" type="Audio">
+                                    <param id="0" name="Audio file">ExplosionNave</param>
+                                    <param id="2" name="Loop">0</param>
+                                    <param id="3" name="Volume">0</param>
+                                    <param id="1" name="Tag (optional)">&quot;Explosion&quot;</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="6997645235361842">
+                            <conditions>
+                                <condition id="3" name="Has key" sid="6265737337179174" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Set text" sid="3626811016501799" type="Astronautas">
+                                    <param id="0" name="Text">&quot;YOU LOSE&quot;</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block sid="8184141724275724">
+                                    <conditions>
+                                        <condition id="0" name="Compare value" sid="5372069905168854" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
+                                            <param id="1" name="Comparison">2</param>
+                                            <param id="2" name="Value">AstroRecogidos-1</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Add key" sid="4638772795844354" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
+                                            <param id="1" name="Value">AstroRecogidos-1</param>
+                                        </action>
+                                        <action id="0" name="Set local value" sid="887526230840372" type="WebStorage">
+                                            <param id="0" name="Key">&quot;Data&quot;</param>
+                                            <param id="1" name="Value">Dictionary.AsJSON</param>
+                                        </action>
+                                        <action id="-16" name="Wait" sid="3437839547932507" type="System">
+                                            <param id="0" name="Seconds">2</param>
+                                        </action>
+                                        <action id="-2" name="Go to layout" sid="2642271017443494" type="System">
+                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="888423667764981">
+                                    <conditions>
+                                        <condition id="-22" name="Else" sid="7660016097288803" type="System" />
+                                    </conditions>
+                                    <actions>
+                                        <action id="-16" name="Wait" sid="3751825805842022" type="System">
+                                            <param id="0" name="Seconds">2</param>
+                                        </action>
+                                        <action id="-2" name="Go to layout" sid="1132960766636714" type="System">
+                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block sid="6085531321669056">
+                            <conditions>
+                                <condition id="-22" name="Else" sid="4402995531815709" type="System" />
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Set text" sid="7815026250850298" type="Astronautas">
+                                    <param id="0" name="Text">&quot;Save Failure&quot;</param>
+                                </action>
+                                <action id="-15" name="Set visible" sid="7849655603125199" type="Astronautas">
+                                    <param id="0" name="Visibility">1</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="9364199304974716" type="System">
+                                    <param id="0" name="Seconds">2</param>
+                                </action>
+                                <action id="-2" name="Go to layout" sid="3897909196970509" type="System">
+                                    <param id="0" name="Layout">Menu Inicial</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="2719461528513223">
+                    <conditions>
+                        <condition id="0" name="On function" sid="6437457511648128" type="Function">
+                            <param id="0" name="Name">&quot;Victory&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Physics" id="21" name="Set immovable" sid="9076134458655583" type="Nave">
+                            <param id="0" name="Setting">1</param>
+                        </action>
+                        <action id="0" name="Add key" sid="4729675787993045" type="Dictionary">
+                            <param id="0" name="Key">&quot;Unlocks&quot;</param>
+                            <param id="1" name="Value">Dictionary.Get(&quot;Unlocks&quot;)+1</param>
+                        </action>
+                        <action id="-10" name="Add to" sid="1225456341988918" type="System">
+                            <param id="0" name="Variable">Inters</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                        <action id="-15" name="Set visible" sid="7854240064912389" type="Win">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                    </actions>
+                    <sub-events>
+                        <event-block sid="4725987352597471">
+                            <conditions>
+                                <condition id="3" name="Has key" sid="4527278128678354" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Set text" sid="8046412878309827" type="Astronautas">
+                                    <param id="0" name="Text">&quot;YOU WIN&quot;</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block sid="5445924325433081">
+                                    <conditions>
+                                        <condition id="0" name="Compare value" sid="7595542586557603" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Play" sid="3032944837289206" type="Audio">
+                                            <param id="0" name="Audio file">WIN</param>
+                                            <param id="2" name="Loop">0</param>
+                                            <param id="3" name="Volume">0</param>
+                                            <param id="1" name="Tag (optional)">&quot;Win&quot;</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="7547813537576669">
+                                    <conditions>
+                                        <condition id="0" name="Compare value" sid="281690675727477" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
+                                            <param id="1" name="Comparison">2</param>
+                                            <param id="2" name="Value">AstroRecogidos-1</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Add key" sid="3720092271624693" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
+                                            <param id="1" name="Value">AstroRecogidos-1</param>
+                                        </action>
+                                        <action id="0" name="Set local value" sid="9144476331737252" type="WebStorage">
+                                            <param id="0" name="Key">&quot;Data&quot;</param>
+                                            <param id="1" name="Value">Dictionary.AsJSON</param>
+                                        </action>
+                                        <action id="-16" name="Wait" sid="101463243168618" type="System">
+                                            <param id="0" name="Seconds">2</param>
+                                        </action>
+                                        <action id="-2" name="Go to layout" sid="5977496063619681" type="System">
+                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="4409372003221423">
+                                    <conditions>
+                                        <condition id="-22" name="Else" sid="438209567319113" type="System" />
+                                    </conditions>
+                                    <actions>
+                                        <action id="-16" name="Wait" sid="7616358520031343" type="System">
+                                            <param id="0" name="Seconds">2</param>
+                                        </action>
+                                        <action id="-2" name="Go to layout" sid="1754674385233901" type="System">
+                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block sid="2899778137381732">
+                            <conditions>
+                                <condition id="-22" name="Else" sid="3104752614545693" type="System" />
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Set text" sid="3615280686566789" type="Astronautas">
+                                    <param id="0" name="Text">&quot;Save Failure&quot;</param>
+                                </action>
+                                <action id="-15" name="Set visible" sid="8644113100694199" type="Astronautas">
+                                    <param id="0" name="Visibility">1</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="7396986786271966" type="System">
+                                    <param id="0" name="Seconds">2</param>
+                                </action>
+                                <action id="-2" name="Go to layout" sid="3952416772385164" type="System">
+                                    <param id="0" name="Layout">Menu Inicial</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="2101791594196427">
+                    <conditions>
+                        <condition id="0" name="On collision with another object" sid="5200659359850434" type="Patas">
+                            <param id="0" name="Object">Colisionar</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="3955081452659377">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="6668423032270311" type="Patas">
+                                    <param id="0" name="Instance variable">Pata</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions />
+                            <sub-events>
+                                <event-block sid="2009953636522922">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="4113781482512095" type="Dust">
+                                            <param id="0" name="Instance variable">Dusts</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Set spraying" sid="5703990754232147" type="Dust">
+                                            <param id="0" name="State">1</param>
+                                        </action>
+                                        <action id="-16" name="Wait" sid="3562909916252256" type="System">
+                                            <param id="0" name="Seconds">0.2</param>
+                                        </action>
+                                        <action id="0" name="Set spraying" sid="1539593366368657" type="Dust">
+                                            <param id="0" name="State">0</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block sid="4273748554833135">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="1266269883084522" type="Patas">
+                                    <param id="0" name="Instance variable">Pata</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions />
+                            <sub-events>
+                                <event-block sid="2405953665352262">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="2302286499802976" type="Dust">
+                                            <param id="0" name="Instance variable">Dusts</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">1</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Set spraying" sid="2212354755150382" type="Dust">
+                                            <param id="0" name="State">1</param>
+                                        </action>
+                                        <action id="-16" name="Wait" sid="5130160902810002" type="System">
+                                            <param id="0" name="Seconds">0.2</param>
+                                        </action>
+                                        <action id="0" name="Set spraying" sid="627738285805218" type="Dust">
+                                            <param id="0" name="State">0</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="8042660657145003">
+                    <conditions>
+                        <condition id="-7" name="Compare instance variable" sid="7927070062907588" type="Nave">
+                            <param id="0" name="Instance variable">Fuel</param>
+                            <param id="1" name="Comparison">3</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Call function" sid="3379042456981485" type="Function">
+                            <param id="0" name="Name">&quot;Destroy&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-group>
+        <event-block sid="3530539874702245">
+            <conditions>
+                <condition id="-3" name="On end of layout" sid="9116143756201327" type="System" />
+            </conditions>
+            <actions>
+                <action id="-21" name="Reset global variables" sid="2672555809714128" type="System" />
+                <action behavior="Physics" id="21" name="Set immovable" sid="28333374630278" type="Nave">
+                    <param id="0" name="Setting">0</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="577250403232665">
+            <conditions>
+                <condition id="2" name="Is in touch" sid="3409778840413447" type="Touch" />
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block sid="260103040326106">
+                    <conditions>
+                        <condition id="17" name="On tap object" sid="3501566093641747" type="Touch">
+                            <param id="0" name="Object">Pause_ico</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-15" name="Set visible" sid="3023321064820402" type="Popups">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                        <action id="11" name="Set collisions enabled" sid="7501649308029709" type="Popups">
+                            <param id="0" name="Collisions">1</param>
+                        </action>
+                        <action behavior="Physics" id="21" name="Set immovable" sid="56736430019969" type="Nave">
+                            <param id="0" name="Setting">1</param>
+                        </action>
+                        <action id="-9" name="Set value" sid="2022319802938387" type="System">
+                            <param id="0" name="Variable">Menu</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="7886669667044">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="422214605153056" type="Touch">
+                            <param id="0" name="Object">Pause_Menu_ExitButton</param>
+                        </condition>
+                        <condition id="-14" name="Compare variable" sid="3061425173591426" type="System">
+                            <param id="0" name="Variable">Menu</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="5" name="Set frame" sid="2055880860480648" type="Pause_Menu_ExitButton">
+                            <param id="0" name="Frame number">0</param>
+                        </action>
+                        <action id="-16" name="Wait" sid="9842830859861022" type="System">
+                            <param id="0" name="Seconds">0.3</param>
+                        </action>
+                        <action id="5" name="Set frame" sid="6846891733639676" type="Pause_Menu_ExitButton">
+                            <param id="0" name="Frame number">1</param>
+                        </action>
+                        <action id="-15" name="Set visible" sid="6997882524662742" type="Popups">
+                            <param id="0" name="Visibility">0</param>
+                        </action>
+                        <action id="11" name="Set collisions enabled" sid="7318746007911474" type="Popups">
+                            <param id="0" name="Collisions">0</param>
+                        </action>
+                        <action behavior="Physics" id="21" name="Set immovable" sid="3751855193149646" type="Nave">
+                            <param id="0" name="Setting">0</param>
+                        </action>
+                        <action id="-9" name="Set value" sid="2345484689058811" type="System">
+                            <param id="0" name="Variable">Menu</param>
+                            <param id="1" name="Value">0</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="2438314838851629">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="5083581112591538" type="Touch">
+                            <param id="0" name="Object">Pause_Menu_BackButton</param>
+                        </condition>
+                        <condition id="-14" name="Compare variable" sid="7015903495499239" type="System">
+                            <param id="0" name="Variable">Menu</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-2" name="Go to layout" sid="7578077868455338" type="System">
+                            <param id="0" name="Layout">Menu Inicial</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="6650291366722183">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="4191338691274577" type="Touch">
+                            <param id="0" name="Object">Volume_on</param>
+                        </condition>
+                        <condition id="-14" name="Compare variable" sid="5836710796079216" type="System">
+                            <param id="0" name="Variable">Menu</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="3541682218109879">
+                            <conditions>
+                                <condition id="3" name="Compare frame" sid="3745722074227463" type="Volume_on">
+                                    <param id="0" name="Comparison">0</param>
+                                    <param id="1" name="Number">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="5373934993336928" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="2500014315972769" type="Volume_on">
+                                    <param id="0" name="Frame number">1</param>
+                                </action>
+                                <action id="0" name="Add key" sid="7003313949062236" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                    <param id="1" name="Value">1</param>
+                                </action>
+                                <action id="0" name="Set local value" sid="5660772956912565" type="WebStorage">
+                                    <param id="0" name="Key">&quot;Data&quot;</param>
+                                    <param id="1" name="Value">Dictionary.AsJSON</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="7010213282475042">
+                            <conditions>
+                                <condition id="3" name="Compare frame" sid="3498974868305784" type="Volume_on">
+                                    <param id="0" name="Comparison">0</param>
+                                    <param id="1" name="Number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="7735971278326948" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="5390943178066617" type="Volume_on">
+                                    <param id="0" name="Frame number">0</param>
+                                </action>
+                                <action id="0" name="Add key" sid="3706314485017576" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                    <param id="1" name="Value">0</param>
+                                </action>
+                                <action id="0" name="Set local value" sid="3652167515034415" type="WebStorage">
+                                    <param id="0" name="Key">&quot;Data&quot;</param>
+                                    <param id="1" name="Value">Dictionary.AsJSON</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="5959695901270885">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="5091007080584471" type="Touch">
+                            <param id="0" name="Object">Music_on</param>
+                        </condition>
+                        <condition id="-14" name="Compare variable" sid="9144460226451105" type="System">
+                            <param id="0" name="Variable">Menu</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="2929871927027886">
+                            <conditions>
+                                <condition id="3" name="Compare frame" sid="2963783005505177" type="Music_on">
+                                    <param id="0" name="Comparison">0</param>
+                                    <param id="1" name="Number">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="40746017214663" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="3206037907231549" type="Music_on">
+                                    <param id="0" name="Frame number">1</param>
+                                </action>
+                                <action id="6" name="Stop" sid="3399417343832121" type="Audio">
+                                    <param id="0" name="Tag">&quot;Musica&quot;</param>
+                                </action>
+                                <action id="0" name="Add key" sid="3918209194147837" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Musica&quot;</param>
+                                    <param id="1" name="Value">1</param>
+                                </action>
+                                <action id="0" name="Set local value" sid="174170414787968" type="WebStorage">
+                                    <param id="0" name="Key">&quot;Data&quot;</param>
+                                    <param id="1" name="Value">Dictionary.AsJSON</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="4333289977697478">
+                            <conditions>
+                                <condition id="3" name="Compare frame" sid="4269158012839471" type="Music_on">
+                                    <param id="0" name="Comparison">0</param>
+                                    <param id="1" name="Number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="1294968328596157" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="7265854398330361" type="Music_on">
+                                    <param id="0" name="Frame number">0</param>
+                                </action>
+                                <action id="0" name="Play" sid="3289173101981996" type="Audio">
+                                    <param id="0" name="Audio file">M_sica_Rescue</param>
+                                    <param id="2" name="Loop">1</param>
+                                    <param id="3" name="Volume">0</param>
+                                    <param id="1" name="Tag (optional)">&quot;Musica&quot;</param>
+                                </action>
+                                <action id="0" name="Add key" sid="2511281863801574" type="Dictionary">
+                                    <param id="0" name="Key">&quot;Musica&quot;</param>
+                                    <param id="1" name="Value">0</param>
+                                </action>
+                                <action id="0" name="Set local value" sid="6576098231853958" type="WebStorage">
+                                    <param id="0" name="Key">&quot;Data&quot;</param>
+                                    <param id="1" name="Value">Dictionary.AsJSON</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-group description="" sid="708646044207152" title="Zoom">
+            <sub-events>
+                <event-block sid="3038897963219722">
+                    <conditions>
+                        <condition id="-6" name="Every X seconds" sid="291908637104048" type="System">
+                            <param id="0" name="Interval (seconds)">dt</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-5" name="Scroll to X" sid="7340756761271954" type="System">
+                            <param id="0" name="X">Nave.X</param>
+                        </action>
+                        <action id="-6" name="Scroll to Y" sid="1570651496144596" type="System">
+                            <param id="0" name="Y">Nave.Y</param>
+                        </action>
+                        <action id="-4" name="Set position to another object" sid="3360245972703824" type="Hook">
+                            <param id="0" name="Object">Nave</param>
+                            <param id="1" name="Image point (optional)">0</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="6283977258378468">
+                    <conditions>
+                        <condition id="1" name="Is overlapping another object" sid="7670946605263347" type="Zoomer">
+                            <param id="0" name="Object">Colisionar</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-20" name="Set layout scale" sid="786462557081059" type="System">
+                            <param id="0" name="Scale">1</param>
+                        </action>
+                        <action id="-17" name="Set layer scale" sid="1611728202163985" type="System">
+                            <param id="0" name="Layer">5</param>
+                            <param id="1" name="Scale">1.0</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="4248255355687745">
+                    <conditions>
+                        <condition id="-22" name="Else" sid="553358121956848" type="System" />
+                    </conditions>
+                    <actions>
+                        <action id="-20" name="Set layout scale" sid="3188859156998634" type="System">
+                            <param id="0" name="Scale">0.5</param>
+                        </action>
+                        <action id="-17" name="Set layer scale" sid="2831922431583502" type="System">
+                            <param id="0" name="Layer">5</param>
+                            <param id="1" name="Scale">2</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-group>
+    </events>
+</c2eventsheet>
