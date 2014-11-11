@@ -749,6 +749,33 @@
                         </action>
                     </actions>
                 </event-block>
+                <event-block sid="3313046053541377">
+                    <conditions>
+                        <condition id="0" name="On collision with another object" sid="4298958115327147" type="Nave">
+                            <param id="0" name="Object">Colisionar</param>
+                        </condition>
+                        <condition id="1" inverted="1" name="Is overlapping another object" sid="8982535467236154" type="Patas">
+                            <param id="0" name="Object">Colisionar</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="6349540275495638">
+                            <conditions>
+                                <condition id="-13" name="Is between angles" sid="2037078552901303" type="Nave">
+                                    <param id="0" name="First angle">0</param>
+                                    <param id="1" name="Second angle">180</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Call function" sid="2914214115579943" type="Function">
+                                    <param id="0" name="Name">&quot;Destroy&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
             </sub-events>
         </event-group>
         <event-group description="" sid="9190425557021235" title="UI">
@@ -787,9 +814,42 @@
                                 </action>
                                 <action id="-3" name="Set position" sid="7605720088058965" type="NaveMini">
                                     <param id="0" name="X">Minimap.X+((Minimap.Height*Xporciento)/100) </param>
-                                    <param id="1" name="Y">Minimap.Y+((Minimap.Width*Yporciento)/100)</param>
+                                    <param id="1" name="Y">(Minimap.Y+2)+((Minimap.Width*Yporciento)/100)</param>
                                 </action>
                             </actions>
+                        </event-block>
+                        <event-block sid="7350533911470241">
+                            <conditions>
+                                <condition id="-2" name="On start of layout" sid="4362071693191469" type="System" />
+                            </conditions>
+                            <actions />
+                            <sub-events>
+                                <variable constant="0" name="Xporciento2" sid="6374123536721361" static="0" type="number">0</variable>
+                                <variable constant="0" name="Yporciento2" sid="3093642870760892" static="0" type="number">0</variable>
+                                <event-block sid="8959648153624973">
+                                    <conditions>
+                                        <condition id="-11" name="For Each" sid="6206559900251521" type="System">
+                                            <param id="0" name="Object">Astronauta</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-9" name="Set value" sid="3912744964629281" type="System">
+                                            <param id="0" name="Variable">Xporciento2</param>
+                                            <param id="1" name="Value">floor((100*Astronauta.X)/LayoutHeight)</param>
+                                        </action>
+                                        <action id="-9" name="Set value" sid="8376285748616249" type="System">
+                                            <param id="0" name="Variable">Yporciento2</param>
+                                            <param id="1" name="Value">floor((100*Astronauta.Y)/Layoutwidth)</param>
+                                        </action>
+                                        <action id="-3" name="Create object" sid="7051907754240634" type="System">
+                                            <param id="0" name="Object to create">AstroMini</param>
+                                            <param id="1" name="Layer">5</param>
+                                            <param id="2" name="X">(Minimap.X+11.49)+((Minimap.Height*Xporciento2)/100) </param>
+                                            <param id="3" name="Y">(Minimap.Y+2.5)+((Minimap.Width*Yporciento2)/100)</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
                         </event-block>
                     </sub-events>
                 </event-group>
