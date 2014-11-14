@@ -132,6 +132,21 @@
                         </action>
                     </actions>
                 </event-block>
+                <event-block sid="1742048804492895">
+                    <conditions>
+                        <condition id="-11" name="For Each" sid="9529168262907526" type="System">
+                            <param id="0" name="Object">Astronauta</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Spawn another object" sid="479503220231647" type="Astronauta">
+                            <param id="0" name="Object">Astronaut_Area</param>
+                            <param id="1" name="Layer">2</param>
+                            <param id="2" name="Image point">1</param>
+                        </action>
+                        <action id="-25" name="Move to bottom" sid="747431410140518" type="Astronaut_Area" />
+                    </actions>
+                </event-block>
             </sub-events>
         </event-block>
         <event-group description="" sid="4407733757147299" title="Movement">
@@ -847,6 +862,10 @@
                                             <param id="2" name="X">(Minimap.X+11.49)+((Minimap.Height*Xporciento2)/100) </param>
                                             <param id="3" name="Y">(Minimap.Y+2.5)+((Minimap.Width*Yporciento2)/100)</param>
                                         </action>
+                                        <action id="-10" name="Set value" sid="1960084939020098" type="AstroMini">
+                                            <param id="0" name="Instance variable">Num</param>
+                                            <param id="1" name="Value">AStronauta.Num</param>
+                                        </action>
                                     </actions>
                                 </event-block>
                             </sub-events>
@@ -895,6 +914,12 @@
                                         <action id="0" name="Set text" sid="8359317392716192" type="Astronautas">
                                             <param id="0" name="Text">Nave.Astronautas</param>
                                         </action>
+                                        <action id="-3" name="Create object" sid="683792345985352" type="System">
+                                            <param id="0" name="Object to create">Astronaut_Halo_</param>
+                                            <param id="1" name="Layer">4</param>
+                                            <param id="2" name="X">Astronauta.X</param>
+                                            <param id="3" name="Y">Astronauta.Y</param>
+                                        </action>
                                         <action id="-9" name="Destroy" sid="8258938211964617" type="Astronauta" />
                                         <action id="-15" name="Set visible" sid="292534106562837" type="Astronaut_Halo_">
                                             <param id="0" name="Visibility">1</param>
@@ -903,6 +928,40 @@
                                             <param id="0" name="From">1</param>
                                         </action>
                                     </actions>
+                                    <sub-events>
+                                        <event-block sid="7504298912923194">
+                                            <conditions>
+                                                <condition id="1" name="Is overlapping another object" sid="5195251918446407" type="Astronauta">
+                                                    <param id="0" name="Object">Astronaut_Area</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-9" name="Destroy" sid="7373657365440394" type="Astronaut_Area" />
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="4189290804427144">
+                                            <conditions>
+                                                <condition id="-11" name="For Each" sid="4622639433892636" type="System">
+                                                    <param id="0" name="Object">AstroMini</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions />
+                                            <sub-events>
+                                                <event-block sid="5353232121719171">
+                                                    <conditions>
+                                                        <condition id="-7" name="Compare instance variable" sid="9938379573540159" type="AstroMini">
+                                                            <param id="0" name="Instance variable">Num</param>
+                                                            <param id="1" name="Comparison">0</param>
+                                                            <param id="2" name="Value">Astronauta.Num</param>
+                                                        </condition>
+                                                    </conditions>
+                                                    <actions>
+                                                        <action id="-9" name="Destroy" sid="3701408426101879" type="AstroMini" />
+                                                    </actions>
+                                                </event-block>
+                                            </sub-events>
+                                        </event-block>
+                                    </sub-events>
                                 </event-block>
                             </sub-events>
                         </event-block>
@@ -1555,12 +1614,6 @@
                         </condition>
                     </conditions>
                     <actions>
-                        <action id="-5" name="Scroll to X" sid="7340756761271954" type="System">
-                            <param id="0" name="X">Nave.X</param>
-                        </action>
-                        <action id="-6" name="Scroll to Y" sid="1570651496144596" type="System">
-                            <param id="0" name="Y">Nave.Y</param>
-                        </action>
                         <action id="-4" name="Set position to another object" sid="3360245972703824" type="Hook">
                             <param id="0" name="Object">Nave</param>
                             <param id="1" name="Image point (optional)">0</param>

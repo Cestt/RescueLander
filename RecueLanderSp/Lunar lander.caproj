@@ -51,7 +51,7 @@
         <prop name="Clear background">No</prop>
         <prop name="Downscaling">Medium quality</prop>
         <prop name="Enable WebGL">On</prop>
-        <prop name="Fullscreen in browser">Scale inner</prop>
+        <prop name="Fullscreen in browser">Scale outer</prop>
         <prop name="Fullscreen scaling">High quality</prop>
         <prop name="Loader style">Progress bar &amp; logo</prop>
         <prop name="Orientations">Landscape</prop>
@@ -81,6 +81,9 @@
                 </behavior-type>
                 <behavior-type name="Pin" sid="4066086303231675">
                     <behavior id="Pin" />
+                </behavior-type>
+                <behavior-type name="ScrollTo" sid="7629360817518946">
+                    <behavior id="scrollto" />
                 </behavior-type>
             </behaviors>
             <animation-folder>
@@ -261,9 +264,13 @@
         </object-type>
         <object-type name="Astronauta" sid="5240174173178502">
             <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="Num" sid="3455356949440405" type="number" />
+            </instance-variables>
             <animation-folder>
                 <animation framecount="7" loop="1" name="Default" pingpong="1" repeatcount="1" repeatto="0" sid="1663146104823686" speed="15">
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_01.png">
+                        <image-point name="Imagepoint 1" x="0.5" y="0.96875" />
                         <collision-poly>
                             <point x="0.263672" y="0.136719" />
                             <point x="0.734375" y="0.136719" />
@@ -274,6 +281,7 @@
                         </collision-poly>
                     </frame>
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_02.png">
+                        <image-point name="Imagepoint 1" x="0.5" y="0.96875" />
                         <collision-poly>
                             <point x="0.263672" y="0.136719" />
                             <point x="0.734375" y="0.136719" />
@@ -284,6 +292,7 @@
                         </collision-poly>
                     </frame>
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_03.png">
+                        <image-point name="Imagepoint 1" x="0.5" y="0.96875" />
                         <collision-poly>
                             <point x="0.263672" y="0.136719" />
                             <point x="0.734375" y="0.136719" />
@@ -294,6 +303,7 @@
                         </collision-poly>
                     </frame>
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_04.png">
+                        <image-point name="Imagepoint 1" x="0.5" y="0.96875" />
                         <collision-poly>
                             <point x="0.263672" y="0.136719" />
                             <point x="0.734375" y="0.136719" />
@@ -304,6 +314,7 @@
                         </collision-poly>
                     </frame>
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_05.png">
+                        <image-point name="Imagepoint 1" x="0.5" y="0.96875" />
                         <collision-poly>
                             <point x="0.263672" y="0.136719" />
                             <point x="0.734375" y="0.136719" />
@@ -314,6 +325,7 @@
                         </collision-poly>
                     </frame>
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_06.png">
+                        <image-point name="Imagepoint 1" x="0.5" y="0.96875" />
                         <collision-poly>
                             <point x="0.263672" y="0.136719" />
                             <point x="0.734375" y="0.136719" />
@@ -324,6 +336,7 @@
                         </collision-poly>
                     </frame>
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_07.png">
+                        <image-point name="Imagepoint 1" x="0.5" y="0.96875" />
                         <collision-poly>
                             <point x="0.263672" y="0.136719" />
                             <point x="0.734375" y="0.136719" />
@@ -684,13 +697,16 @@
                 </behavior-type>
             </behaviors>
             <animation-folder>
-                <animation framecount="6" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2834389541164703" speed="35">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_01.png" />
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_03.png" />
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_05.png" />
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_07.png" />
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_08.png" />
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Art\Astronaut_Anim\Astronaut_Halo_09.png" />
+                <animation framecount="9" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2834389541164703" speed="40">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_01.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_02.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_03.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_04.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_05.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_06.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_07.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_08.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Astronaut_Anim\Astronaut_Halo_09.png" />
                 </animation>
             </animation-folder>
         </object-type>
@@ -1054,7 +1070,7 @@
         <object-type name="Menu_Background_" sid="5049220046112264">
             <plugin id="Sprite" />
             <animation-folder>
-                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9724504425799633" speed="5">
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9724504425799633" speed="0">
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Menu_Background_01.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Menu_Background_02.png" />
                 </animation>
@@ -1080,7 +1096,7 @@
             </behaviors>
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="5198940819779519" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.502591" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Montañas back.png">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.502591" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\ui\Montañas back.png">
                         <collision-poly>
                             <point x="0.0765625" y="0.507772" />
                             <point x="0.5" y="0.015544" />
@@ -1098,7 +1114,17 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2695192161879421" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.502591" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Montañas back_2.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.502591" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\ui\Montañas back_2.png">
+                        <collision-poly>
+                            <point x="1" y="0.5" />
+                            <point x="0.999219" y="0.996951" />
+                            <point x="0" y="1" />
+                            <point x="0" y="0.5" />
+                            <point x="0.0867187" y="0.338415" />
+                            <point x="0.5" y="0.207317" />
+                            <point x="0.897656" y="0.39939" />
+                        </collision-poly>
+                    </frame>
                 </animation>
             </animation-folder>
         </object-type>
@@ -1181,7 +1207,7 @@
         <object-type name="Pause_Menu_BackButton" sid="7579165794682482">
             <plugin id="Sprite" />
             <animation-folder>
-                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7693118584272735" speed="5">
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7693118584272735" speed="0">
                     <frame duration="1" hotspotX="0.501706" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\UI\Pause_Menu_BackButton.png">
                         <collision-poly>
                             <point x="0.0310345" y="0.109756" />
@@ -1276,7 +1302,7 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9151780036153304" speed="5">
-                    <frame duration="1" hotspotX="0.500187" hotspotY="0.500761" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\Mid_Paralax_B.png">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\Mid_Paralax_B.png">
                         <collision-poly>
                             <point x="0.100112" y="0.406393" />
                             <point x="0.499813" y="0.117199" />
@@ -1294,7 +1320,7 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7269562909672648" speed="5">
-                    <frame duration="1" hotspotX="0.500187" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\Mid_Paralax_A.png">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\Mid_Paralax_A.png">
                         <collision-poly>
                             <point x="0.0746157" y="0.290936" />
                             <point x="0.499813" y="0.402047" />
@@ -2433,92 +2459,20 @@
             </instance-variables>
             <animation-folder>
                 <animation framecount="9" loop="1" name="Init" pingpong="0" repeatcount="1" repeatto="0" sid="1768189933187207" speed="30">
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim00.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim01.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim02.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim03.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim04.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim05.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim06.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim07.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim08.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim00.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim01.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim02.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim03.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim04.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim05.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim06.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim07.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim08.png" />
                 </animation>
                 <animation framecount="3" loop="1" name="Loop" pingpong="1" repeatcount="1" repeatto="0" sid="9944321693928781" speed="30">
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim06.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim07.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSpJavi\Art\Thruster_Anim\Thruster_anim08.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.467066" y="1" />
-                        </collision-poly>
-                    </frame>
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim06.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim07.png" />
+                    <frame duration="1" hotspotX="0.502994" hotspotY="0.5" original-source="C:\Users\Javi\Dropbox\CMI Games Desarrollo\Mars Lander\Source Code\Art\Thruster_Anim\Thruster_anim08.png" />
                 </animation>
             </animation-folder>
         </object-type>
@@ -2562,7 +2516,7 @@
                 <instance-variable name="Enable" sid="9361320317406632" type="number" />
             </instance-variables>
             <animation-folder>
-                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9099950013446839" speed="5">
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9099950013446839" speed="0">
                     <frame duration="1" hotspotX="0.502488" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Art\ui\ExitMenu_No.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Art\ui\ExitMenu_No_Pressed.png" />
                 </animation>
@@ -2587,7 +2541,7 @@
         <object-type name="NumsAma" sid="4537117158517524">
             <plugin id="Sprite" />
             <animation-folder>
-                <animation framecount="10" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9273246722955596" speed="0">
+                <animation framecount="20" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="9273246722955596" speed="0">
                     <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\usuario\Desktop\MANUEL\Art\ui\Numeros\1ama.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\usuario\Desktop\MANUEL\Art\ui\Numeros\2ama.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\usuario\Desktop\MANUEL\Art\ui\Numeros\3ama.png" />
@@ -2598,13 +2552,26 @@
                     <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\usuario\Desktop\MANUEL\Art\ui\Numeros\8ama.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\usuario\Desktop\MANUEL\Art\ui\Numeros\9ama.png" />
                     <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\usuario\Desktop\MANUEL\Art\ui\Numeros\10ama.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\1.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\2.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\3.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\4.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\5.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\6.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\7.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\8.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\9.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.501502" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\recuelanderspjavi\Art\10.png" />
                 </animation>
             </animation-folder>
         </object-type>
         <object-type name="AstroMini" sid="5776879249262689">
             <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="Num" sid="8238959450413219" type="number" />
+            </instance-variables>
             <animation-folder>
-                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2697535120025092" speed="5">
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2697535120025092" speed="0">
                     <frame duration="1" hotspotX="2.71875" hotspotY="1.3125" />
                 </animation>
             </animation-folder>
@@ -2627,6 +2594,20 @@
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="582655398762948" speed="5">
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Astronaut_Area" sid="5610594368241497">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="1315560470592342" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="1" original-source="C:\Repositorios\RescueLander\trunk\RecueLanderSp\Art\Astronaut_Area.png">
+                        <collision-poly>
+                            <point x="0.550781" y="0.5" />
+                            <point x="0.5" y="1" />
+                            <point x="0.445313" y="0.5" />
+                        </collision-poly>
+                    </frame>
                 </animation>
             </animation-folder>
         </object-type>
@@ -2713,6 +2694,7 @@
         <event-sheet>Mecanicas juego eventsheet.xml</event-sheet>
         <event-sheet>Menu Inicial event sheet.xml</event-sheet>
         <event-sheet>Scroll Tactil.xml</event-sheet>
+        <event-sheet>Positions.xml</event-sheet>
     </event-folder>
     <global-instances>
         <global-instance type="Keyboard" uid="15" />

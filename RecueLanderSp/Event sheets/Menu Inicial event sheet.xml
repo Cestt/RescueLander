@@ -3,6 +3,7 @@
     <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
     <name>Menu Inicial event sheet</name>
     <events>
+        <include>Positions</include>
         <variable constant="0" name="Inters" sid="3931989815379873" static="0" type="number">0</variable>
         <variable constant="0" name="NivelActual" sid="4245359395182717" static="0" type="number">0</variable>
         <variable constant="0" name="Multi" sid="7912363636648281" static="0" type="number">0</variable>
@@ -36,6 +37,9 @@
                         <action id="3" name="Clear" sid="1562441184657998" type="Dictionary" />
                         <action id="4" name="Load" sid="3325328449907809" type="Dictionary">
                             <param id="0" name="JSON">WebStorage.LocalValue(&quot;Data&quot;)</param>
+                        </action>
+                        <action id="5" name="Download" sid="8758499118969351" type="Dictionary">
+                            <param id="0" name="Filename">&quot;data.json&quot;</param>
                         </action>
                     </actions>
                     <sub-events>
@@ -102,6 +106,32 @@
                                 </action>
                             </actions>
                         </event-block>
+                        <event-block sid="1512704969799268">
+                            <conditions>
+                                <condition id="-24" name="For Each (ordered)" sid="1193853874100732" type="System">
+                                    <param id="0" name="Object">NumsAma</param>
+                                    <param id="1" name="Expression">0</param>
+                                    <param id="2" name="Order">0</param>
+                                </condition>
+                            </conditions>
+                            <actions />
+                            <sub-events>
+                                <event-block sid="7640753645960547">
+                                    <conditions>
+                                        <condition id="-8" name="Compare two values" sid="9341866070045378" type="System">
+                                            <param id="0" name="First value">NumsAma.AnimationFrame</param>
+                                            <param id="1" name="Comparison">4</param>
+                                            <param id="2" name="Second value">Dictionary.Get(&quot;Unlocks&quot;)</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="5" name="Set frame" sid="4864432054726561" type="NumsAma">
+                                            <param id="0" name="Frame number">NumsAma.AnimationFrame+10</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
                     </sub-events>
                 </event-block>
                 <event-block sid="9475604210845001">
@@ -162,8 +192,8 @@
                                 <event-block sid="8552889131885852">
                                     <conditions>
                                         <condition id="-24" name="For Each (ordered)" sid="5733639308095096" type="System">
-                                            <param id="0" name="Object">Niveles</param>
-                                            <param id="1" name="Expression">Niveles.Nivel</param>
+                                            <param id="0" name="Object">Nivels</param>
+                                            <param id="1" name="Expression">Nivels.Nivel</param>
                                             <param id="2" name="Order">0</param>
                                         </condition>
                                     </conditions>
@@ -171,14 +201,14 @@
                                     <sub-events>
                                         <event-block sid="2380349419362908">
                                             <conditions>
-                                                <condition id="-7" name="Compare instance variable" sid="334023887862811" type="Niveles">
+                                                <condition id="-7" name="Compare instance variable" sid="334023887862811" type="Nivels">
                                                     <param id="0" name="Instance variable">Nivel</param>
                                                     <param id="1" name="Comparison">3</param>
                                                     <param id="2" name="Value">Dictionary.Get(&quot;Unlocks&quot;)</param>
                                                 </condition>
                                             </conditions>
                                             <actions>
-                                                <action id="-10" name="Set value" sid="1393684530471446" type="Niveles">
+                                                <action id="-10" name="Set value" sid="1393684530471446" type="Nivels">
                                                     <param id="0" name="Instance variable">Unlock</param>
                                                     <param id="1" name="Value">1</param>
                                                 </action>
@@ -207,22 +237,15 @@
                                 </event-block>
                             </sub-events>
                         </event-block>
+                        <event-block sid="9245067746746117">
+                            <conditions />
+                            <actions>
+                                <action id="5" name="Download" sid="9595412614960066" type="Dictionary">
+                                    <param id="0" name="Filename">&quot;data.json&quot;</param>
+                                </action>
+                            </actions>
+                        </event-block>
                     </sub-events>
-                </event-block>
-                <event-block sid="3334688046306777">
-                    <conditions>
-                        <condition id="-14" name="Compare variable" sid="5019282461521951" type="System">
-                            <param id="0" name="Variable">Inters</param>
-                            <param id="1" name="Comparison">5</param>
-                            <param id="2" name="Value">3</param>
-                        </condition>
-                    </conditions>
-                    <actions>
-                        <action id="-9" name="Set value" sid="8104890202205247" type="System">
-                            <param id="0" name="Variable">Inters</param>
-                            <param id="1" name="Value">0</param>
-                        </action>
-                    </actions>
                 </event-block>
             </sub-events>
         </event-block>
@@ -674,11 +697,6 @@
         <event-block sid="5758575155799378">
             <conditions>
                 <condition id="2" name="On interstitial received" sid="8480482331498615" type="AdmobAds" />
-                <condition id="-14" name="Compare variable" sid="5244855190053952" type="System">
-                    <param id="0" name="Variable">Inters</param>
-                    <param id="1" name="Comparison">0</param>
-                    <param id="2" name="Value">0</param>
-                </condition>
             </conditions>
             <actions>
                 <action id="4" name="Show interstitial" sid="4163161089880168" type="AdmobAds" />
