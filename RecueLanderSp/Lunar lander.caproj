@@ -45,7 +45,7 @@
     </window-size>
     <pixel-rounding>0</pixel-rounding>
     <preview-effects>1</preview-effects>
-    <first-layout>Menu Inicial</first-layout>
+    <first-layout>Loader</first-layout>
     <use-loader-layout>1</use-loader-layout>
     <configuration-settings>
         <prop name="Clear background">No</prop>
@@ -53,7 +53,7 @@
         <prop name="Enable WebGL">On</prop>
         <prop name="Fullscreen in browser">Scale outer</prop>
         <prop name="Fullscreen scaling">High quality</prop>
-        <prop name="Loader style">Progress bar &amp; logo</prop>
+        <prop name="Loader style">Percentage text</prop>
         <prop name="Orientations">Landscape</prop>
         <prop name="Pause on unfocus">No</prop>
         <prop name="Physics engine">Box2D web</prop>
@@ -2611,6 +2611,14 @@
                 </animation>
             </animation-folder>
         </object-type>
+        <object-type name="Splash" sid="7372375077635627">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="6028917570412814" speed="5">
+                    <frame duration="1" hotspotX="0" hotspotY="0" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\Splash\splash864.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
     </object-folder>
     <families>
         <family name="Colisionar" plugin-id="Sprite" sid="4756467415239035">
@@ -2689,6 +2697,7 @@
         <layout>Nivel7.xml</layout>
         <layout>Nivel8.xml</layout>
         <layout>Nivel9.xml</layout>
+        <layout>Loader.xml</layout>
     </layout-folder>
     <event-folder>
         <event-sheet>Mecanicas juego eventsheet.xml</event-sheet>
