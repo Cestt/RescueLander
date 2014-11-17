@@ -46,7 +46,7 @@
     <pixel-rounding>0</pixel-rounding>
     <preview-effects>1</preview-effects>
     <first-layout>Loader</first-layout>
-    <use-loader-layout>1</use-loader-layout>
+    <use-loader-layout>0</use-loader-layout>
     <configuration-settings>
         <prop name="Clear background">No</prop>
         <prop name="Downscaling">Medium quality</prop>
@@ -2619,6 +2619,26 @@
                 </animation>
             </animation-folder>
         </object-type>
+        <object-type name="Load_anim" sid="9658079105905141">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="4" loop="1" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="5395764716472693" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\Loading_Anim\Loading00.png">
+                        <collision-poly>
+                            <point x="0.0234375" y="0.0857143" />
+                            <point x="0.5" y="0.714286" />
+                            <point x="0.757813" y="0.885714" />
+                            <point x="0.765625" y="0.5" />
+                            <point x="0.5" y="0.842857" />
+                            <point x="0.0429688" y="0.842857" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\Loading_Anim\Loading01.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\Loading_Anim\Loading02.png" />
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\Loading_Anim\Loading03.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
     </object-folder>
     <families>
         <family name="Colisionar" plugin-id="Sprite" sid="4756467415239035">
@@ -2704,6 +2724,7 @@
         <event-sheet>Menu Inicial event sheet.xml</event-sheet>
         <event-sheet>Scroll Tactil.xml</event-sheet>
         <event-sheet>Positions.xml</event-sheet>
+        <event-sheet>Loader.xml</event-sheet>
     </event-folder>
     <global-instances>
         <global-instance type="Keyboard" uid="15" />
