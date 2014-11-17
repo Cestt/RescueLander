@@ -3,6 +3,7 @@
     <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
     <name>Mecanicas juego eventsheet</name>
     <events>
+        <variable constant="0" name="Paused" sid="9792924109849668" static="0" type="number">0</variable>
         <variable constant="0" name="Menu" sid="8966427284528966" static="0" type="number">0</variable>
         <variable constant="0" name="AstroRecogidos" sid="2489586144042513" static="0" type="number">0</variable>
         <variable constant="0" name="Frame" sid="1814426570517499" static="0" type="number">0</variable>
@@ -187,6 +188,9 @@
                                             <param id="0" name="Animation">&quot;Init&quot;</param>
                                             <param id="1" name="From">1</param>
                                         </action>
+                                        <action id="-15" name="Set visible" sid="3568022255140319" type="Thruster_anim">
+                                            <param id="0" name="Visibility">1</param>
+                                        </action>
                                     </actions>
                                 </event-block>
                                 <event-block sid="6044720017059246">
@@ -241,13 +245,16 @@
                                         <condition id="-7" name="Compare instance variable" sid="5600429933697538" type="Thruster_anim">
                                             <param id="0" name="Instance variable">Thust</param>
                                             <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Value">0</param>
+                                            <param id="2" name="Value">1</param>
                                         </condition>
                                     </conditions>
                                     <actions>
                                         <action id="4" name="Set animation" sid="789374966299484" type="Thruster_anim">
                                             <param id="0" name="Animation">&quot;Init&quot;</param>
                                             <param id="1" name="From">1</param>
+                                        </action>
+                                        <action id="-15" name="Set visible" sid="5340951920941299" type="Thruster_anim">
+                                            <param id="0" name="Visibility">1</param>
                                         </action>
                                     </actions>
                                 </event-block>
@@ -259,7 +266,7 @@
                                         <condition id="-7" name="Compare instance variable" sid="8944788539662828" type="Thruster_anim">
                                             <param id="0" name="Instance variable">Thust</param>
                                             <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Value">0</param>
+                                            <param id="2" name="Value">1</param>
                                         </condition>
                                     </conditions>
                                     <actions>
@@ -783,9 +790,12 @@
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="0" name="Call function" sid="2914214115579943" type="Function">
-                                    <param id="0" name="Name">&quot;Destroy&quot;</param>
-                                    <param id="1" name="Parameter {n}"></param>
+                                <action id="-10" name="Set value" sid="3671439629890122" type="Nave">
+                                    <param id="0" name="Instance variable">Vida</param>
+                                    <param id="1" name="Value">0</param>
+                                </action>
+                                <action id="-5" name="Set width" sid="4108547726180023" type="BarraVida">
+                                    <param id="0" name="Width">(BarraVida.WidthInic*Nave.Vida)/Nave.VidaInicial</param>
                                 </action>
                             </actions>
                         </event-block>
@@ -929,6 +939,23 @@
                                         </action>
                                     </actions>
                                     <sub-events>
+                                        <event-block sid="9391350887251755">
+                                            <conditions>
+                                                <condition id="0" name="Compare value" sid="9368123517203115" type="Dictionary">
+                                                    <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Value">0</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="0" name="Play" sid="3389865931056933" type="Audio">
+                                                    <param id="0" name="Audio file">Coger_Astronauta</param>
+                                                    <param id="2" name="Loop">0</param>
+                                                    <param id="3" name="Volume">0</param>
+                                                    <param id="1" name="Tag (optional)">&quot;Coger&quot;</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
                                         <event-block sid="7504298912923194">
                                             <conditions>
                                                 <condition id="1" name="Is overlapping another object" sid="5195251918446407" type="Astronauta">
@@ -964,23 +991,6 @@
                                     </sub-events>
                                 </event-block>
                             </sub-events>
-                        </event-block>
-                        <event-block sid="9391350887251755">
-                            <conditions>
-                                <condition id="0" name="Compare value" sid="9368123517203115" type="Dictionary">
-                                    <param id="0" name="Key">&quot;Sonidos&quot;</param>
-                                    <param id="1" name="Comparison">0</param>
-                                    <param id="2" name="Value">0</param>
-                                </condition>
-                            </conditions>
-                            <actions>
-                                <action id="0" name="Play" sid="3389865931056933" type="Audio">
-                                    <param id="0" name="Audio file">Coger_Astronauta</param>
-                                    <param id="2" name="Loop">0</param>
-                                    <param id="3" name="Volume">0</param>
-                                    <param id="1" name="Tag (optional)">&quot;Coger&quot;</param>
-                                </action>
-                            </actions>
                         </event-block>
                     </sub-events>
                 </event-block>
@@ -1059,6 +1069,83 @@
                                     </actions>
                                 </event-block>
                             </sub-events>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="4387305620857524">
+                    <conditions>
+                        <condition id="0" name="On function" sid="6485121018328589" type="Function">
+                            <param id="0" name="Name">&quot;Pause&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="9134939485405622">
+                            <conditions>
+                                <condition id="-14" name="Compare variable" sid="2015244453632306" type="System">
+                                    <param id="0" name="Variable">Paused</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="6688292148734653" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="-15" name="Set visible" sid="6854912495188145" type="Popups">
+                                    <param id="0" name="Visibility">1</param>
+                                </action>
+                                <action id="-9" name="Set value" sid="821489382411664" type="System">
+                                    <param id="0" name="Variable">Menu</param>
+                                    <param id="1" name="Value">1</param>
+                                </action>
+                                <action id="-9" name="Set value" sid="4223316168584939" type="System">
+                                    <param id="0" name="Variable">Paused</param>
+                                    <param id="1" name="Value">1</param>
+                                </action>
+                                <action id="-14" name="Set object time scale" sid="8113604624870182" type="System">
+                                    <param id="0" name="Object">Nave</param>
+                                    <param id="1" name="Time scale">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="742663001280443">
+                            <conditions>
+                                <condition id="-14" name="Compare variable" sid="8474709230486784" type="System">
+                                    <param id="0" name="Variable">Paused</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="2124137691063332" type="System">
+                                    <param id="0" name="Seconds">0.1</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="9793406531315213" type="Pause_Menu_ExitButton">
+                                    <param id="0" name="Frame number">0</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="8852074750639873" type="System">
+                                    <param id="0" name="Seconds">0.3</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="4753761507080997" type="Pause_Menu_ExitButton">
+                                    <param id="0" name="Frame number">1</param>
+                                </action>
+                                <action id="-15" name="Set visible" sid="4467870158740537" type="Popups">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                                <action id="-14" name="Set object time scale" sid="9176756081493657" type="System">
+                                    <param id="0" name="Object">Nave</param>
+                                    <param id="1" name="Time scale">1</param>
+                                </action>
+                                <action id="-9" name="Set value" sid="6743081595835386" type="System">
+                                    <param id="0" name="Variable">Menu</param>
+                                    <param id="1" name="Value">0</param>
+                                </action>
+                                <action id="-9" name="Set value" sid="1386531266233947" type="System">
+                                    <param id="0" name="Variable">Paused</param>
+                                    <param id="1" name="Value">0</param>
+                                </action>
+                            </actions>
                         </event-block>
                     </sub-events>
                 </event-block>
@@ -1400,18 +1487,9 @@
                         </condition>
                     </conditions>
                     <actions>
-                        <action id="-15" name="Set visible" sid="3023321064820402" type="Popups">
-                            <param id="0" name="Visibility">1</param>
-                        </action>
-                        <action id="11" name="Set collisions enabled" sid="7501649308029709" type="Popups">
-                            <param id="0" name="Collisions">1</param>
-                        </action>
-                        <action behavior="Physics" id="21" name="Set immovable" sid="56736430019969" type="Nave">
-                            <param id="0" name="Setting">1</param>
-                        </action>
-                        <action id="-9" name="Set value" sid="2022319802938387" type="System">
-                            <param id="0" name="Variable">Menu</param>
-                            <param id="1" name="Value">1</param>
+                        <action id="0" name="Call function" sid="8797628168938921" type="Function">
+                            <param id="0" name="Name">&quot;Pause&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
                         </action>
                     </actions>
                 </event-block>
@@ -1427,34 +1505,16 @@
                         </condition>
                     </conditions>
                     <actions>
-                        <action id="5" name="Set frame" sid="2055880860480648" type="Pause_Menu_ExitButton">
-                            <param id="0" name="Frame number">0</param>
-                        </action>
-                        <action id="-16" name="Wait" sid="9842830859861022" type="System">
-                            <param id="0" name="Seconds">0.3</param>
-                        </action>
-                        <action id="5" name="Set frame" sid="6846891733639676" type="Pause_Menu_ExitButton">
-                            <param id="0" name="Frame number">1</param>
-                        </action>
-                        <action id="-15" name="Set visible" sid="6997882524662742" type="Popups">
-                            <param id="0" name="Visibility">0</param>
-                        </action>
-                        <action id="11" name="Set collisions enabled" sid="7318746007911474" type="Popups">
-                            <param id="0" name="Collisions">0</param>
-                        </action>
-                        <action behavior="Physics" id="21" name="Set immovable" sid="3751855193149646" type="Nave">
-                            <param id="0" name="Setting">0</param>
-                        </action>
-                        <action id="-9" name="Set value" sid="2345484689058811" type="System">
-                            <param id="0" name="Variable">Menu</param>
-                            <param id="1" name="Value">0</param>
+                        <action id="0" name="Call function" sid="6649257316625174" type="Function">
+                            <param id="0" name="Name">&quot;Pause&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
                         </action>
                     </actions>
                 </event-block>
                 <event-block sid="2438314838851629">
                     <conditions>
                         <condition id="3" name="On touched object" sid="5083581112591538" type="Touch">
-                            <param id="0" name="Object">Pause_Menu_BackButton</param>
+                            <param id="0" name="Object">Level_buton</param>
                         </condition>
                         <condition id="-14" name="Compare variable" sid="7015903495499239" type="System">
                             <param id="0" name="Variable">Menu</param>
@@ -1463,9 +1523,49 @@
                         </condition>
                     </conditions>
                     <actions>
+                        <action id="5" name="Set frame" sid="5209038335093152" type="Level_buton">
+                            <param id="0" name="Frame number">1</param>
+                        </action>
+                        <action id="-16" name="Wait" sid="2383263519777692" type="System">
+                            <param id="0" name="Seconds">0.2</param>
+                        </action>
+                        <action id="5" name="Set frame" sid="1840378354486724" type="Level_buton">
+                            <param id="0" name="Frame number">0</param>
+                        </action>
+                        <action id="-16" name="Wait" sid="9448246399455003" type="System">
+                            <param id="0" name="Seconds">0.2</param>
+                        </action>
                         <action id="-2" name="Go to layout" sid="7578077868455338" type="System">
                             <param id="0" name="Layout">Menu Inicial</param>
                         </action>
+                    </actions>
+                </event-block>
+                <event-block sid="4969733748740148">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="5588927090526311" type="Touch">
+                            <param id="0" name="Object">Retry_button</param>
+                        </condition>
+                        <condition id="-14" name="Compare variable" sid="2627080525760051" type="System">
+                            <param id="0" name="Variable">Menu</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="5" name="Set frame" sid="9614901547838332" type="Retry_button">
+                            <param id="0" name="Frame number">1</param>
+                        </action>
+                        <action id="-16" name="Wait" sid="2597405203340613" type="System">
+                            <param id="0" name="Seconds">0.2</param>
+                        </action>
+                        <action id="5" name="Set frame" sid="9874470209136132" type="Retry_button">
+                            <param id="0" name="Frame number">0</param>
+                        </action>
+                        <action id="-16" name="Wait" sid="824070791714946" type="System">
+                            <param id="0" name="Seconds">0.2</param>
+                        </action>
+                        <action id="-21" name="Reset global variables" sid="7649085198994302" type="System" />
+                        <action id="-26" name="Restart layout" sid="6227785374849874" type="System" />
                     </actions>
                 </event-block>
                 <event-block sid="6650291366722183">
@@ -1652,5 +1752,16 @@
                 </event-block>
             </sub-events>
         </event-group>
+        <event-block sid="8071941652947346">
+            <conditions>
+                <condition id="17" name="On back button" sid="1287034117280137" type="Browser" />
+            </conditions>
+            <actions>
+                <action id="0" name="Call function" sid="5870010561816543" type="Function">
+                    <param id="0" name="Name">&quot;Pause&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+            </actions>
+        </event-block>
     </events>
 </c2eventsheet>

@@ -3,6 +3,7 @@
     <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
     <name>Menu Inicial event sheet</name>
     <events>
+        <variable constant="0" name="Advanced" sid="3444669032272447" static="0" type="number">0</variable>
         <include>Positions</include>
         <variable constant="0" name="Inters" sid="3931989815379873" static="0" type="number">0</variable>
         <variable constant="0" name="NivelActual" sid="4245359395182717" static="0" type="number">0</variable>
@@ -378,7 +379,12 @@
                             <param id="2" name="Value">0</param>
                         </condition>
                     </conditions>
-                    <actions />
+                    <actions>
+                        <action id="-9" name="Set value" sid="2682442360670901" type="System">
+                            <param id="0" name="Variable">Advanced</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                    </actions>
                     <sub-events>
                         <event-block sid="4789507589820566">
                             <conditions>
@@ -441,6 +447,10 @@
                         <action id="-12" name="Set group active" sid="2559358093034499" type="System">
                             <param id="0" name="Group name">&quot;MoveBackward&quot;</param>
                             <param id="1" name="State">1</param>
+                        </action>
+                        <action id="-9" name="Set value" sid="2863422628780368" type="System">
+                            <param id="0" name="Variable">Advanced</param>
+                            <param id="1" name="Value">0</param>
                         </action>
                     </actions>
                 </event-block>
@@ -695,25 +705,52 @@
             <conditions>
                 <condition id="17" name="On back button" sid="5133935132792475" type="Browser" />
             </conditions>
-            <actions>
-                <action id="-15" name="Set visible" sid="6848955583055968" type="Exit">
-                    <param id="0" name="Visibility">1</param>
-                </action>
-                <action id="-15" name="Set visible" sid="7621071756903766" type="Yes">
-                    <param id="0" name="Visibility">1</param>
-                </action>
-                <action id="-15" name="Set visible" sid="9892461893697153" type="No">
-                    <param id="0" name="Visibility">1</param>
-                </action>
-                <action id="-10" name="Set value" sid="9026543845477123" type="Yes">
-                    <param id="0" name="Instance variable">Enable</param>
-                    <param id="1" name="Value">1</param>
-                </action>
-                <action id="-10" name="Set value" sid="896469309184433" type="No">
-                    <param id="0" name="Instance variable">Enable</param>
-                    <param id="1" name="Value">1</param>
-                </action>
-            </actions>
+            <actions />
+            <sub-events>
+                <event-block sid="1592813614626942">
+                    <conditions>
+                        <condition id="-14" name="Compare variable" sid="192557014086004" type="System">
+                            <param id="0" name="Variable">Advanced</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-15" name="Set visible" sid="6848955583055968" type="Exit">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                        <action id="-15" name="Set visible" sid="7621071756903766" type="Yes">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                        <action id="-15" name="Set visible" sid="9892461893697153" type="No">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                        <action id="-10" name="Set value" sid="9026543845477123" type="Yes">
+                            <param id="0" name="Instance variable">Enable</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                        <action id="-10" name="Set value" sid="896469309184433" type="No">
+                            <param id="0" name="Instance variable">Enable</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="9602567218624626">
+                    <conditions>
+                        <condition id="-14" name="Compare variable" sid="6198081418059348" type="System">
+                            <param id="0" name="Variable">Advanced</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-12" name="Set group active" sid="6849745285953807" type="System">
+                            <param id="0" name="Group name">&quot;MoveBackward&quot;</param>
+                            <param id="1" name="State">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
         </event-block>
         <event-block sid="5665909149216359">
             <conditions>
