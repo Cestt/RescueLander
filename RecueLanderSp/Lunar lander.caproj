@@ -51,7 +51,7 @@
         <prop name="Clear background">No</prop>
         <prop name="Downscaling">Medium quality</prop>
         <prop name="Enable WebGL">On</prop>
-        <prop name="Fullscreen in browser">Scale outer</prop>
+        <prop name="Fullscreen in browser">Letterbox scale</prop>
         <prop name="Fullscreen scaling">High quality</prop>
         <prop name="Loader style">Percentage text</prop>
         <prop name="Orientations">Landscape</prop>
@@ -1190,17 +1190,7 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7982576188362995" speed="5">
-                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\Pause_Menu_Bg.png">
-                        <collision-poly>
-                            <point x="0.0317726" y="0.0405983" />
-                            <point x="0.5" y="0.0128205" />
-                            <point x="0.989967" y="0.0128205" />
-                            <point x="0.964883" y="0.955128" />
-                            <point x="0.5" y="1" />
-                            <point x="0.0267559" y="0.965812" />
-                            <point x="0" y="0.5" />
-                        </collision-poly>
-                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\Rescue Lander\trunk\RecueLanderSp\Art\ui\Pause_Menu_Bg.png" />
                 </animation>
             </animation-folder>
         </object-type>
@@ -2678,6 +2668,26 @@
                             <point x="0.0195313" y="0.5" />
                         </collision-poly>
                     </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Help_Button" sid="2341599942090455">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2977625653957953" speed="5">
+                    <frame duration="1" hotspotX="0.515625" hotspotY="0.5" original-source="C:\Repositorios\Rescue Lander\trunk\RecueLanderSp\Art\ui\Help_Button.png">
+                        <collision-poly>
+                            <point x="0.140625" y="0.145161" />
+                            <point x="0.5" y="0" />
+                            <point x="0.859375" y="0.145161" />
+                            <point x="1" y="0.5" />
+                            <point x="0.890625" y="0.887097" />
+                            <point x="0.5" y="1" />
+                            <point x="0.109375" y="0.887097" />
+                            <point x="0" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\Rescue Lander\trunk\RecueLanderSp\Art\ui\Help_Button_Pressed.png" />
                 </animation>
             </animation-folder>
         </object-type>
