@@ -1121,14 +1121,14 @@
                                 <action id="-16" name="Wait" sid="2124137691063332" type="System">
                                     <param id="0" name="Seconds">0.1</param>
                                 </action>
-                                <action id="5" name="Set frame" sid="9793406531315213" type="Pause_Menu_ExitButton">
-                                    <param id="0" name="Frame number">0</param>
-                                </action>
-                                <action id="-16" name="Wait" sid="8852074750639873" type="System">
-                                    <param id="0" name="Seconds">0.3</param>
-                                </action>
                                 <action id="5" name="Set frame" sid="4753761507080997" type="Pause_Menu_ExitButton">
                                     <param id="0" name="Frame number">1</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="8852074750639873" type="System">
+                                    <param id="0" name="Seconds">0.2</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="9793406531315213" type="Pause_Menu_ExitButton">
+                                    <param id="0" name="Frame number">0</param>
                                 </action>
                                 <action id="-15" name="Set visible" sid="4467870158740537" type="Popups">
                                     <param id="0" name="Visibility">0</param>
@@ -1491,6 +1491,50 @@
                             <param id="0" name="Name">&quot;Pause&quot;</param>
                             <param id="1" name="Parameter {n}"></param>
                         </action>
+                    </actions>
+                </event-block>
+                <event-block sid="4208053859090835">
+                    <conditions>
+                        <condition id="17" name="On tap object" sid="4310572026273685" type="Touch">
+                            <param id="0" name="Object">Help_Button</param>
+                        </condition>
+                        <condition id="-14" name="Compare variable" sid="4063836906784021" type="System">
+                            <param id="0" name="Variable">Menu</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="5" name="Set frame" sid="4323992328089328" type="Help_Button">
+                            <param id="0" name="Frame number">1</param>
+                        </action>
+                        <action id="-16" name="Wait" sid="4827170531593631" type="System">
+                            <param id="0" name="Seconds">0.1</param>
+                        </action>
+                        <action id="5" name="Set frame" sid="8544344002574543" type="Help_Button">
+                            <param id="0" name="Frame number">0</param>
+                        </action>
+                        <action id="-3" name="Create object" sid="8019711623223999" type="System">
+                            <param id="0" name="Object to create">Tuto</param>
+                            <param id="1" name="Layer">5</param>
+                            <param id="2" name="X">ViewportLeft(5)</param>
+                            <param id="3" name="Y">ViewportTop(5)</param>
+                        </action>
+                        <action id="-24" name="Move to top" sid="3877671796722381" type="Tuto" />
+                        <action disabled="1" id="-7" name="Set size" sid="585341549678744" type="Tuto">
+                            <param id="0" name="Width">ViewportRight(5)-ViewportLeft(5)</param>
+                            <param id="1" name="Height">ViewportBottom(5)-ViewportRight(5)</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="8290105345813885">
+                    <conditions>
+                        <condition id="17" name="On tap object" sid="6084516938533192" type="Touch">
+                            <param id="0" name="Object">Tuto</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Destroy" sid="3235670367446134" type="Tuto" />
                     </actions>
                 </event-block>
                 <event-block sid="7886669667044">

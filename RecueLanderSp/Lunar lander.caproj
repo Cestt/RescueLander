@@ -2481,7 +2481,7 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="4473924526049232" speed="5">
-                    <frame duration="1" hotspotX="0.500313" hotspotY="0.500612" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Tuto.png" />
+                    <frame duration="1" hotspotX="0" hotspotY="0" original-source="C:\Users\Manuel\Dropbox\CMI Games Desarrollo\Mars Lander\Tuto.png" />
                 </animation>
             </animation-folder>
         </object-type>
@@ -2674,7 +2674,7 @@
         <object-type name="Help_Button" sid="2341599942090455">
             <plugin id="Sprite" />
             <animation-folder>
-                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2977625653957953" speed="5">
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2977625653957953" speed="0">
                     <frame duration="1" hotspotX="0.515625" hotspotY="0.5" original-source="C:\Repositorios\Rescue Lander\trunk\RecueLanderSp\Art\ui\Help_Button.png">
                         <collision-poly>
                             <point x="0.140625" y="0.145161" />
@@ -2726,6 +2726,7 @@
         </family>
         <family name="Popups" plugin-id="Sprite" sid="7064084358121659">
             <members>
+                <member>Help_Button</member>
                 <member>Level_buton</member>
                 <member>Music_on</member>
                 <member>Pause_Menu_Bg</member>
