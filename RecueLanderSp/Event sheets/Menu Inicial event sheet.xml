@@ -19,12 +19,6 @@
                 <action id="-15" name="Set visible" sid="1694300916983675" type="Popups">
                     <param id="0" name="Visibility">0</param>
                 </action>
-                <action id="0" name="Play" sid="2153412497517185" type="Audio">
-                    <param id="0" name="Audio file">M_sica_Rescue</param>
-                    <param id="2" name="Loop">1</param>
-                    <param id="3" name="Volume">0</param>
-                    <param id="1" name="Tag (optional)">&quot;Musica&quot;</param>
-                </action>
                 <action id="3" name="Preload interstitial" sid="4794831638653765" type="AdmobAds" />
             </actions>
             <sub-events>
@@ -97,13 +91,23 @@
                                 <condition id="0" name="Compare value" sid="186876845475307" type="Dictionary">
                                     <param id="0" name="Key">&quot;Musica&quot;</param>
                                     <param id="1" name="Comparison">0</param>
-                                    <param id="2" name="Value">1</param>
+                                    <param id="2" name="Value">0</param>
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="6" name="Stop" sid="7646748224976342" type="Audio">
-                                    <param id="0" name="Tag">&quot;Musica&quot;</param>
+                                <action id="0" name="Play" sid="2153412497517185" type="Audio">
+                                    <param id="0" name="Audio file">M_sica_Rescue</param>
+                                    <param id="2" name="Loop">1</param>
+                                    <param id="3" name="Volume">0</param>
+                                    <param id="1" name="Tag (optional)">&quot;Musica&quot;</param>
                                 </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="552206513506499">
+                            <conditions>
+                                <condition id="-22" name="Else" sid="8297356218898789" type="System" />
+                            </conditions>
+                            <actions>
                                 <action id="5" name="Set frame" sid="5541223397414796" type="Music_on">
                                     <param id="0" name="Frame number">1</param>
                                 </action>

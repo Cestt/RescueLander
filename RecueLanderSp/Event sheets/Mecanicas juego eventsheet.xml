@@ -156,6 +156,19 @@
                     </conditions>
                     <actions />
                     <sub-events>
+                        <event-block sid="5734199037022344">
+                            <conditions>
+                                <condition id="4" name="On finished" sid="2556054419761911" type="Thruster_anim">
+                                    <param id="0" name="Animation">&quot;Init&quot;</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="4" name="Set animation" sid="5652213056863328" type="Thruster_anim">
+                                    <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                    <param id="1" name="From">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
                         <event-block sid="827231968863908">
                             <conditions>
                                 <condition id="-8" name="Compare two values" sid="8180396428320483" type="System">
@@ -188,24 +201,6 @@
                                         </action>
                                         <action id="-15" name="Set visible" sid="3568022255140319" type="Thruster_anim">
                                             <param id="0" name="Visibility">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="6044720017059246">
-                                    <conditions>
-                                        <condition id="4" name="On finished" sid="806180202171706" type="Thruster_anim">
-                                            <param id="0" name="Animation">&quot;Init&quot;</param>
-                                        </condition>
-                                        <condition id="-7" name="Compare instance variable" sid="3259369539444808" type="Thruster_anim">
-                                            <param id="0" name="Instance variable">Thust</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Value">0</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="4" name="Set animation" sid="1664163456317533" type="Thruster_anim">
-                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
-                                            <param id="1" name="From">1</param>
                                         </action>
                                     </actions>
                                 </event-block>
@@ -253,24 +248,6 @@
                                         </action>
                                         <action id="-15" name="Set visible" sid="5340951920941299" type="Thruster_anim">
                                             <param id="0" name="Visibility">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="5734199037022344">
-                                    <conditions>
-                                        <condition id="4" name="On finished" sid="2556054419761911" type="Thruster_anim">
-                                            <param id="0" name="Animation">&quot;Init&quot;</param>
-                                        </condition>
-                                        <condition id="-7" name="Compare instance variable" sid="8944788539662828" type="Thruster_anim">
-                                            <param id="0" name="Instance variable">Thust</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Value">1</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="4" name="Set animation" sid="5652213056863328" type="Thruster_anim">
-                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
-                                            <param id="1" name="From">1</param>
                                         </action>
                                     </actions>
                                 </event-block>
@@ -656,12 +633,6 @@
                                 </action>
                                 <action id="-5" name="Set width" sid="6378696249164194" type="BarraVida">
                                     <param id="0" name="Width">(BarraVida.WidthInic*Nave.Vida)/Nave.VidaInicial</param>
-                                </action>
-                                <action id="0" name="Play" sid="7269752436014014" type="Audio">
-                                    <param id="0" name="Audio file">Golpe</param>
-                                    <param id="2" name="Loop">0</param>
-                                    <param id="3" name="Volume">0</param>
-                                    <param id="1" name="Tag (optional)">&quot;Golpe&quot;</param>
                                 </action>
                             </actions>
                             <sub-events>
@@ -1447,9 +1418,6 @@
             </conditions>
             <actions>
                 <action id="-21" name="Reset global variables" sid="2672555809714128" type="System" />
-                <action behavior="Physics" id="21" name="Set immovable" sid="28333374630278" type="Nave">
-                    <param id="0" name="Setting">0</param>
-                </action>
             </actions>
         </event-block>
         <event-block sid="577250403232665">
