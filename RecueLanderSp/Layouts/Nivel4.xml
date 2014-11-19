@@ -625,7 +625,7 @@
                         <height>38.319538116</height>
                         <depth>0</depth>
                         <hotspotX>0.5</hotspotX>
-                        <hotspotY>0.51219511</hotspotY>
+                        <hotspotY>0.519999981</hotspotY>
                         <angle>-0.135482326</angle>
                         <opacity>1</opacity>
                     </world>
@@ -648,6 +648,31 @@
             <blend-mode>0</blend-mode>
             <effect-fallback>0</effect-fallback>
             <instances>
+                <instance type="Astronaut_Halo_" uid="286">
+                    <properties>
+                        <initial-visibility>Visible</initial-visibility>
+                        <initial-animation>Default</initial-animation>
+                        <initial-frame>0</initial-frame>
+                        <collisions>Enabled</collisions>
+                    </properties>
+                    <behavior-instances>
+                        <behavior-instance type="Pin" />
+                    </behavior-instances>
+                    <blend-mode>0</blend-mode>
+                    <effect-fallback>0</effect-fallback>
+                    <world>
+                        <x>74.028175354</x>
+                        <y>816.032470703</y>
+                        <z>0</z>
+                        <width>99.517303467</width>
+                        <height>99.517303467</height>
+                        <depth>0</depth>
+                        <hotspotX>0.5</hotspotX>
+                        <hotspotY>0.5</hotspotY>
+                        <angle>0</angle>
+                        <opacity>1</opacity>
+                    </world>
+                </instance>
                 <instance type="Smoke" uid="281">
                     <properties>
                         <rate>15</rate>
@@ -681,8 +706,8 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>273.472137451</x>
-                        <y>175.241149902</y>
+                        <x>280.632293701</x>
+                        <y>175.145462036</y>
                         <z>0</z>
                         <width>128</width>
                         <height>128</height>
@@ -737,8 +762,8 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>273.472137451</x>
-                        <y>135.241149902</y>
+                        <x>280.632293701</x>
+                        <y>134.145462036</y>
                         <z>0</z>
                         <width>80.149856567</width>
                         <height>80.149856567</height>
@@ -762,8 +787,8 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>272.472137451</x>
-                        <y>182.241149902</y>
+                        <x>280.632293701</x>
+                        <y>182.145462036</y>
                         <z>0</z>
                         <width>1.559412718</width>
                         <height>1.559412718</height>
@@ -787,8 +812,8 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>273.472137451</x>
-                        <y>120.241149902</y>
+                        <x>280.632293701</x>
+                        <y>120.145462036</y>
                         <z>0</z>
                         <width>13.104208946</width>
                         <height>12.81300354</height>
@@ -815,8 +840,8 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>273.472137451</x>
-                        <y>166.241149902</y>
+                        <x>281.632293701</x>
+                        <y>166.145462036</y>
                         <z>0</z>
                         <width>27.616071701</width>
                         <height>33.036048889</height>
@@ -827,34 +852,9 @@
                         <opacity>1</opacity>
                     </world>
                 </instance>
-                <instance type="Astronaut_Halo_" uid="286">
-                    <properties>
-                        <initial-visibility>Visible</initial-visibility>
-                        <initial-animation>Default</initial-animation>
-                        <initial-frame>0</initial-frame>
-                        <collisions>Enabled</collisions>
-                    </properties>
-                    <behavior-instances>
-                        <behavior-instance type="Pin" />
-                    </behavior-instances>
-                    <blend-mode>0</blend-mode>
-                    <effect-fallback>0</effect-fallback>
-                    <world>
-                        <x>74.028175354</x>
-                        <y>816.032470703</y>
-                        <z>0</z>
-                        <width>99.517303467</width>
-                        <height>99.517303467</height>
-                        <depth>0</depth>
-                        <hotspotX>0.5</hotspotX>
-                        <hotspotY>0.5</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
-                    </world>
-                </instance>
                 <instance type="Dust" uid="287">
                     <properties>
-                        <rate>18</rate>
+                        <rate>22</rate>
                         <spray-cone>30</spray-cone>
                         <type>Continuous spray</type>
                         <initial-particle-properties></initial-particle-properties>
@@ -874,7 +874,7 @@
                         <speed-randomiser>1000</speed-randomiser>
                         <opacity-randomiser>0</opacity-randomiser>
                         <destroy-mode>Fade to invisible</destroy-mode>
-                        <timeout>1.55</timeout>
+                        <timeout>1.5</timeout>
                     </properties>
                     <instance-variables>
                         <Dusts>1</Dusts>
@@ -885,24 +885,24 @@
                     <effect-instances>
                         <effect-instance type="SetColor">
                             <parameters>
-                                <blue>0.3</blue>
-                                <green>0.55</green>
-                                <red>0.9</red>
+                                <blue>0.2</blue>
+                                <green>0.45</green>
+                                <red>0.85</red>
                             </parameters>
                         </effect-instance>
                         <effect-instance type="AdjustHSL">
                             <parameters>
                                 <hue>0</hue>
                                 <luminosity>1</luminosity>
-                                <saturation>0.5</saturation>
+                                <saturation>0.6</saturation>
                             </parameters>
                         </effect-instance>
                     </effect-instances>
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>288.472137451</x>
-                        <y>171.241149902</y>
+                        <x>295.632293701</x>
+                        <y>171.145462036</y>
                         <z>0</z>
                         <width>128</width>
                         <height>128</height>
@@ -915,7 +915,7 @@
                 </instance>
                 <instance type="Dust" uid="288">
                     <properties>
-                        <rate>18</rate>
+                        <rate>22</rate>
                         <spray-cone>30</spray-cone>
                         <type>Continuous spray</type>
                         <initial-particle-properties></initial-particle-properties>
@@ -935,7 +935,7 @@
                         <speed-randomiser>1000</speed-randomiser>
                         <opacity-randomiser>0</opacity-randomiser>
                         <destroy-mode>Fade to invisible</destroy-mode>
-                        <timeout>1.55</timeout>
+                        <timeout>1.5</timeout>
                     </properties>
                     <instance-variables>
                         <Dusts>0</Dusts>
@@ -946,24 +946,24 @@
                     <effect-instances>
                         <effect-instance type="SetColor">
                             <parameters>
-                                <blue>0.3</blue>
-                                <green>0.55</green>
-                                <red>0.9</red>
+                                <blue>0.2</blue>
+                                <green>0.45</green>
+                                <red>0.85</red>
                             </parameters>
                         </effect-instance>
                         <effect-instance type="AdjustHSL">
                             <parameters>
                                 <hue>0</hue>
                                 <luminosity>1</luminosity>
-                                <saturation>0.5</saturation>
+                                <saturation>0.6</saturation>
                             </parameters>
                         </effect-instance>
                     </effect-instances>
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>260.472137451</x>
-                        <y>171.241149902</y>
+                        <x>267.632293701</x>
+                        <y>171.145462036</y>
                         <z>0</z>
                         <width>128</width>
                         <height>128</height>
@@ -990,8 +990,8 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>292.472137451</x>
-                        <y>173.241149902</y>
+                        <x>299.632293701</x>
+                        <y>173.145462036</y>
                         <z>0</z>
                         <width>13.726021767</width>
                         <height>4.575218678</height>
@@ -1018,8 +1018,8 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>253.472137451</x>
-                        <y>173.241149902</y>
+                        <x>261.632293701</x>
+                        <y>173.145462036</y>
                         <z>0</z>
                         <width>13.057920456</width>
                         <height>3.609740734</height>
@@ -1030,7 +1030,7 @@
                         <opacity>1</opacity>
                     </world>
                 </instance>
-                <instance type="Zoomer" uid="649">
+                <instance type="Zoomer" uid="306">
                     <properties>
                         <initial-visibility>Visible</initial-visibility>
                         <initial-animation>Default</initial-animation>
@@ -1043,11 +1043,11 @@
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>274</x>
-                        <y>224</y>
+                        <x>280.748657227</x>
+                        <y>135.520217896</y>
                         <z>0</z>
-                        <width>102</width>
-                        <height>93</height>
+                        <width>150.675048828</width>
+                        <height>137.380203247</height>
                         <depth>0</depth>
                         <hotspotX>0.5</hotspotX>
                         <hotspotY>0.5</hotspotY>
@@ -1055,102 +1055,60 @@
                         <opacity>1</opacity>
                     </world>
                 </instance>
-                <instance type="Hook" uid="657">
+                <instance type="Thruster_anim" uid="379">
                     <properties>
                         <initial-visibility>Visible</initial-visibility>
                         <initial-animation>Default</initial-animation>
                         <initial-frame>0</initial-frame>
                         <collisions>Enabled</collisions>
                     </properties>
+                    <instance-variables>
+                        <Thust>0</Thust>
+                    </instance-variables>
+                    <behavior-instances>
+                        <behavior-instance type="Pin" />
+                    </behavior-instances>
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>270</x>
-                        <y>137</y>
+                        <x>317.610137939</x>
+                        <y>134.397781372</y>
                         <z>0</z>
-                        <width>1</width>
-                        <height>1</height>
+                        <width>33.554733276</width>
+                        <height>18.616287231</height>
                         <depth>0</depth>
-                        <hotspotX>0.5</hotspotX>
+                        <hotspotX>0.502994001</hotspotX>
                         <hotspotY>0.5</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
+                        <angle>0.144620582</angle>
+                        <opacity>0.400000006</opacity>
                     </world>
                 </instance>
-                <instance type="Astronautas" uid="306">
-                    <properties>
-                        <text>0</text>
-                        <initial-visibility>Invisible</initial-visibility>
-                        <font>Frosty&apos;s Winterland,-27,400,0</font>
-                        <color>255,255,255</color>
-                        <horizontal-alignment>Center</horizontal-alignment>
-                        <vertical-alignment>Center</vertical-alignment>
-                        <hotspot>Top-left</hotspot>
-                        <wrapping>Word</wrapping>
-                        <line-height>0</line-height>
-                    </properties>
-                    <blend-mode>0</blend-mode>
-                    <effect-fallback>0</effect-fallback>
-                    <world>
-                        <x>319.135925293</x>
-                        <y>226.117752075</y>
-                        <z>0</z>
-                        <width>185.180358887</width>
-                        <height>53.69103241</height>
-                        <depth>0</depth>
-                        <hotspotX>0</hotspotX>
-                        <hotspotY>0</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
-                    </world>
-                </instance>
-                <instance type="Astronautas" uid="677">
-                    <properties>
-                        <text>0</text>
-                        <initial-visibility>Invisible</initial-visibility>
-                        <font>Frosty&apos;s Winterland,-27,400,0</font>
-                        <color>255,255,255</color>
-                        <horizontal-alignment>Center</horizontal-alignment>
-                        <vertical-alignment>Center</vertical-alignment>
-                        <hotspot>Top-left</hotspot>
-                        <wrapping>Word</wrapping>
-                        <line-height>0</line-height>
-                    </properties>
-                    <blend-mode>0</blend-mode>
-                    <effect-fallback>0</effect-fallback>
-                    <world>
-                        <x>311.250030518</x>
-                        <y>204</y>
-                        <z>0</z>
-                        <width>185.180358887</width>
-                        <height>53.69103241</height>
-                        <depth>0</depth>
-                        <hotspotX>0</hotspotX>
-                        <hotspotY>0</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
-                    </world>
-                </instance>
-                <instance type="Minimap_Border" uid="701">
+                <instance type="Thruster_anim" uid="380">
                     <properties>
                         <initial-visibility>Visible</initial-visibility>
                         <initial-animation>Default</initial-animation>
                         <initial-frame>0</initial-frame>
                         <collisions>Enabled</collisions>
                     </properties>
+                    <instance-variables>
+                        <Thust>1</Thust>
+                    </instance-variables>
+                    <behavior-instances>
+                        <behavior-instance type="Pin" />
+                    </behavior-instances>
                     <blend-mode>0</blend-mode>
                     <effect-fallback>0</effect-fallback>
                     <world>
-                        <x>509.139007568</x>
-                        <y>20.926000595</y>
+                        <x>242.386260986</x>
+                        <y>133.610671997</y>
                         <z>0</z>
-                        <width>260.032562256</width>
-                        <height>76.749237061</height>
+                        <width>-33.555000305</width>
+                        <height>18.615999222</height>
                         <depth>0</depth>
-                        <hotspotX>0</hotspotX>
-                        <hotspotY>0</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
+                        <hotspotX>0.502994001</hotspotX>
+                        <hotspotY>0.5</hotspotY>
+                        <angle>-0.105693974</angle>
+                        <opacity>0.400000006</opacity>
                     </world>
                 </instance>
             </instances>
@@ -1375,6 +1333,28 @@
                         <z>0</z>
                         <width>256</width>
                         <height>72</height>
+                        <depth>0</depth>
+                        <hotspotX>0</hotspotX>
+                        <hotspotY>0</hotspotY>
+                        <angle>0</angle>
+                        <opacity>1</opacity>
+                    </world>
+                </instance>
+                <instance type="Minimap_Border" uid="701">
+                    <properties>
+                        <initial-visibility>Visible</initial-visibility>
+                        <initial-animation>Default</initial-animation>
+                        <initial-frame>0</initial-frame>
+                        <collisions>Enabled</collisions>
+                    </properties>
+                    <blend-mode>0</blend-mode>
+                    <effect-fallback>0</effect-fallback>
+                    <world>
+                        <x>509.139007568</x>
+                        <y>20.926000595</y>
+                        <z>0</z>
+                        <width>260.032562256</width>
+                        <height>76.749237061</height>
                         <depth>0</depth>
                         <hotspotX>0</hotspotX>
                         <hotspotY>0</hotspotY>
