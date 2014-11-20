@@ -42,49 +42,18 @@
                                     <param id="1" name="Expression">Nivels.Nivel</param>
                                     <param id="2" name="Order">0</param>
                                 </condition>
+                                <condition id="-7" name="Compare instance variable" sid="421592008771312" type="Nivels">
+                                    <param id="0" name="Instance variable">Nivel</param>
+                                    <param id="1" name="Comparison">3</param>
+                                    <param id="2" name="Value">int(Dictionary.Get(&quot;Unlocks&quot;))</param>
+                                </condition>
                             </conditions>
-                            <actions />
-                            <sub-events>
-                                <event-block sid="9671009933134291">
-                                    <conditions>
-                                        <condition id="-7" name="Compare instance variable" sid="421592008771312" type="Nivels">
-                                            <param id="0" name="Instance variable">Nivel</param>
-                                            <param id="1" name="Comparison">3</param>
-                                            <param id="2" name="Value">int(Dictionary.Get(&quot;Unlocks&quot;))</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="-10" name="Set value" sid="6041993810543557" type="Nivels">
-                                            <param id="0" name="Instance variable">Unlock</param>
-                                            <param id="1" name="Value">1</param>
-                                        </action>
-                                    </actions>
-                                    <sub-events>
-                                        <event-block sid="8501270960098575">
-                                            <conditions>
-                                                <condition id="-11" name="For Each" sid="3364967271998626" type="System">
-                                                    <param id="0" name="Object">Estrellas</param>
-                                                </condition>
-                                                <condition id="-7" name="Compare instance variable" sid="6689462494696332" type="Estrellas">
-                                                    <param id="0" name="Instance variable">Nivel</param>
-                                                    <param id="1" name="Comparison">0</param>
-                                                    <param id="2" name="Value">loopindex</param>
-                                                </condition>
-                                                <condition id="-7" name="Compare instance variable" sid="7392686732893965" type="Estrellas">
-                                                    <param id="0" name="Instance variable">Estrella</param>
-                                                    <param id="1" name="Comparison">3</param>
-                                                    <param id="2" name="Value">Dictionary.Get(&quot;Nivel&quot;&amp;loopindex&amp;&quot;Estrellas&quot;)</param>
-                                                </condition>
-                                            </conditions>
-                                            <actions>
-                                                <action id="5" name="Set frame" sid="6623728620376195" type="Estrellas">
-                                                    <param id="0" name="Frame number">1</param>
-                                                </action>
-                                            </actions>
-                                        </event-block>
-                                    </sub-events>
-                                </event-block>
-                            </sub-events>
+                            <actions>
+                                <action id="-10" name="Set value" sid="6041993810543557" type="Nivels">
+                                    <param id="0" name="Instance variable">Unlock</param>
+                                    <param id="1" name="Value">1</param>
+                                </action>
+                            </actions>
                         </event-block>
                         <event-block sid="7780663038665686">
                             <conditions>
@@ -125,7 +94,7 @@
                                     <conditions>
                                         <condition id="-8" name="Compare two values" sid="9341866070045378" type="System">
                                             <param id="0" name="First value">NumsAma.AnimationFrame</param>
-                                            <param id="1" name="Comparison">4</param>
+                                            <param id="1" name="Comparison">3</param>
                                             <param id="2" name="Second value">Dictionary.Get(&quot;Unlocks&quot;)</param>
                                         </condition>
                                     </conditions>
