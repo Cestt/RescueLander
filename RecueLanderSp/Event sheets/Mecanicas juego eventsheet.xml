@@ -156,19 +156,6 @@
                     </conditions>
                     <actions />
                     <sub-events>
-                        <event-block sid="5734199037022344">
-                            <conditions>
-                                <condition id="4" name="On finished" sid="2556054419761911" type="Thruster_anim">
-                                    <param id="0" name="Animation">&quot;Init&quot;</param>
-                                </condition>
-                            </conditions>
-                            <actions>
-                                <action id="4" name="Set animation" sid="5652213056863328" type="Thruster_anim">
-                                    <param id="0" name="Animation">&quot;Loop&quot;</param>
-                                    <param id="1" name="From">1</param>
-                                </action>
-                            </actions>
-                        </event-block>
                         <event-block sid="827231968863908">
                             <conditions>
                                 <condition id="-8" name="Compare two values" sid="8180396428320483" type="System">
@@ -186,12 +173,28 @@
                                 </action>
                             </actions>
                             <sub-events>
+                                <event-block sid="5734199037022344">
+                                    <conditions>
+                                        <condition id="4" name="On finished" sid="2556054419761911" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Init&quot;</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="5652213056863328" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
                                 <event-block sid="9533771932042015">
                                     <conditions>
                                         <condition id="-7" name="Compare instance variable" sid="2332992121762718" type="Thruster_anim">
                                             <param id="0" name="Instance variable">Thust</param>
                                             <param id="1" name="Comparison">0</param>
                                             <param id="2" name="Value">0</param>
+                                        </condition>
+                                        <condition id="2" inverted="1" name="Is playing" sid="3755286578118353" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
                                         </condition>
                                     </conditions>
                                     <actions>
@@ -233,12 +236,28 @@
                                 </action>
                             </actions>
                             <sub-events>
+                                <event-block sid="4320522178788168">
+                                    <conditions>
+                                        <condition id="4" name="On finished" sid="992988725738182" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Init&quot;</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="1413448734708745" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
                                 <event-block sid="7466844973155632">
                                     <conditions>
                                         <condition id="-7" name="Compare instance variable" sid="5600429933697538" type="Thruster_anim">
                                             <param id="0" name="Instance variable">Thust</param>
                                             <param id="1" name="Comparison">0</param>
                                             <param id="2" name="Value">1</param>
+                                        </condition>
+                                        <condition id="2" inverted="1" name="Is playing" sid="6217980120410593" type="Thruster_anim">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
                                         </condition>
                                     </conditions>
                                     <actions>
@@ -265,9 +284,7 @@
                         </event-block>
                         <event-block any="1" sid="7009987568062134">
                             <conditions>
-                                <condition id="11" name="On Nth touch end" sid="902658554269459" type="Touch">
-                                    <param id="0" name="Touch number">0</param>
-                                </condition>
+                                <condition id="1" name="On any touch end" sid="902658554269459" type="Touch" />
                                 <condition id="10" name="On Nth touch start" sid="1676548684484452" type="Touch">
                                     <param id="0" name="Touch number">1</param>
                                 </condition>
@@ -275,6 +292,10 @@
                             <actions>
                                 <action id="-15" name="Set visible" sid="8920372786379861" type="Thruster_anim">
                                     <param id="0" name="Visibility">0</param>
+                                </action>
+                                <action id="4" name="Set animation" sid="6917917660693882" type="Thruster_anim">
+                                    <param id="0" name="Animation">&quot;Init&quot;</param>
+                                    <param id="1" name="From">1</param>
                                 </action>
                             </actions>
                         </event-block>
