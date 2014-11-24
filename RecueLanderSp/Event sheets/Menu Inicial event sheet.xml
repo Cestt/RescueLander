@@ -33,6 +33,9 @@
                         <action id="4" name="Load" sid="3325328449907809" type="Dictionary">
                             <param id="0" name="JSON">WebStorage.LocalValue(&quot;Data&quot;)</param>
                         </action>
+                        <action id="0" name="Set text" sid="959263565375915" type="connect">
+                            <param id="0" name="Text">Dictionary.Get(&quot;Unlocks&quot;)</param>
+                        </action>
                     </actions>
                     <sub-events>
                         <event-block sid="1786224596400078">
@@ -88,6 +91,10 @@
                                             <param id="0" name="First value">NumsAma.AnimationFrame</param>
                                             <param id="1" name="Comparison">5</param>
                                             <param id="2" name="Second value">int(Dictionary.Get(&quot;Unlocks&quot;))</param>
+                                        </condition>
+                                        <condition id="3" name="Compare frame" sid="6751583034346452" type="NumsAma">
+                                            <param id="0" name="Comparison">1</param>
+                                            <param id="1" name="Number">0</param>
                                         </condition>
                                     </conditions>
                                     <actions>
@@ -183,6 +190,9 @@
                                 <action id="0" name="Set local value" sid="4809336003870329" type="WebStorage">
                                     <param id="0" name="Key">&quot;Data&quot;</param>
                                     <param id="1" name="Value">Dictionary.AsJSON</param>
+                                </action>
+                                <action id="0" name="Set text" sid="950438885612728" type="connect">
+                                    <param id="0" name="Text">Dictionary.Get(&quot;Unlocks&quot;)</param>
                                 </action>
                             </actions>
                         </event-block>
@@ -366,11 +376,6 @@
                         <condition id="17" name="On tap object" sid="6068793700922213" type="Touch">
                             <param id="0" name="Object">Niveles</param>
                         </condition>
-                        <condition id="-7" name="Compare instance variable" sid="3579877613295713" type="Niveles">
-                            <param id="0" name="Instance variable">Enable</param>
-                            <param id="1" name="Comparison">0</param>
-                            <param id="2" name="Value">1</param>
-                        </condition>
                     </conditions>
                     <actions />
                     <sub-events>
@@ -385,10 +390,10 @@
                             <actions>
                                 <action id="-9" name="Set value" sid="6250701975710315" type="System">
                                     <param id="0" name="Variable">NivelActual</param>
-                                    <param id="1" name="Value">Nivels.Nivel</param>
+                                    <param id="1" name="Value">Niveles.Nivel</param>
                                 </action>
                                 <action id="-25" name="Go to layout (by name)" sid="6294416974229457" type="System">
-                                    <param id="0" name="Layout">&quot;Nivel&quot;&amp;Niveles.Nivel</param>
+                                    <param id="0" name="Layout">&quot;Nivel&quot;&amp;NivelActual</param>
                                 </action>
                             </actions>
                         </event-block>

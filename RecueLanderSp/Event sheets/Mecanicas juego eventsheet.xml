@@ -112,6 +112,9 @@
                 <action id="-15" name="Set visible" sid="6797363002319732" type="Thruster_anim">
                     <param id="0" name="Visibility">0</param>
                 </action>
+                <action id="0" name="Set text" sid="9170220476217856" type="connect">
+                    <param id="0" name="Text">NivelActual</param>
+                </action>
             </actions>
             <sub-events>
                 <event-block sid="5009435748636948">
@@ -1279,7 +1282,7 @@
                                         <condition id="0" name="Compare value" sid="281690675727477" type="Dictionary">
                                             <param id="0" name="Key">&quot;Nivel&quot;&amp;NivelActual&amp;&quot;Estrellas&quot;</param>
                                             <param id="1" name="Comparison">2</param>
-                                            <param id="2" name="Value">AstroRecogidos</param>
+                                            <param id="2" name="Value">AstroRecogidos-1</param>
                                         </condition>
                                     </conditions>
                                     <actions>
@@ -1308,9 +1311,6 @@
                                         <condition id="-22" name="Else" sid="438209567319113" type="System" />
                                     </conditions>
                                     <actions>
-                                        <action id="-16" name="Wait" sid="7616358520031343" type="System">
-                                            <param id="0" name="Seconds">2</param>
-                                        </action>
                                         <action id="0" name="Add key" sid="6800205342919072" type="Dictionary">
                                             <param id="0" name="Key">&quot;Unlocks&quot;</param>
                                             <param id="1" name="Value">Unlock+1</param>
@@ -1318,6 +1318,9 @@
                                         <action id="0" name="Set local value" sid="9388197663573158" type="WebStorage">
                                             <param id="0" name="Key">&quot;Data&quot;</param>
                                             <param id="1" name="Value">Dictionary.AsJSON</param>
+                                        </action>
+                                        <action id="-16" name="Wait" sid="7616358520031343" type="System">
+                                            <param id="0" name="Seconds">2</param>
                                         </action>
                                         <action id="-2" name="Go to layout" sid="1754674385233901" type="System">
                                             <param id="0" name="Layout">Menu Inicial</param>
