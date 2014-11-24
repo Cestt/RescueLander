@@ -3,6 +3,7 @@
     <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
     <name>Mecanicas juego eventsheet</name>
     <events>
+        <variable constant="0" name="Finish" sid="4880758798743068" static="0" type="number">0</variable>
         <include>Positions</include>
         <variable constant="0" name="Paused" sid="9792924109849668" static="0" type="number">0</variable>
         <variable constant="0" name="Menu" sid="8966427284528966" static="0" type="number">0</variable>
@@ -143,7 +144,7 @@
                     <actions>
                         <action id="0" name="Spawn another object" sid="479503220231647" type="Astronauta">
                             <param id="0" name="Object">Astronaut_Area</param>
-                            <param id="1" name="Layer">2</param>
+                            <param id="1" name="Layer">1</param>
                             <param id="2" name="Image point">1</param>
                         </action>
                         <action id="-25" name="Move to bottom" sid="747431410140518" type="Astronaut_Area" />
@@ -868,91 +869,96 @@
                     <sub-events>
                         <event-block sid="9230786251950484">
                             <conditions>
-                                <condition id="-11" name="For Each" sid="8080334435023958" type="System">
+                                <condition id="0" name="On collision with another object" sid="8080334435023958" type="Nave">
                                     <param id="0" name="Object">Astronauta</param>
                                 </condition>
                             </conditions>
-                            <actions />
+                            <actions>
+                                <action id="-11" name="Add to" sid="8824554554056488" type="Nave">
+                                    <param id="0" name="Instance variable">Astronautas</param>
+                                    <param id="1" name="Value">1</param>
+                                </action>
+                                <action id="0" name="Set text" sid="8359317392716192" type="Astronautas">
+                                    <param id="0" name="Text">Nave.Astronautas</param>
+                                </action>
+                                <action id="-3" name="Create object" sid="683792345985352" type="System">
+                                    <param id="0" name="Object to create">Astronaut_Halo_</param>
+                                    <param id="1" name="Layer">4</param>
+                                    <param id="2" name="X">Astronauta.X</param>
+                                    <param id="3" name="Y">Astronauta.Y</param>
+                                </action>
+                                <action id="-9" name="Destroy" sid="8258938211964617" type="Astronauta" />
+                                <action id="-15" name="Set visible" sid="292534106562837" type="Astronaut_Halo_">
+                                    <param id="0" name="Visibility">1</param>
+                                </action>
+                                <action id="3" name="Start" sid="312665656142467" type="Astronaut_Halo_">
+                                    <param id="0" name="From">1</param>
+                                </action>
+                            </actions>
                             <sub-events>
-                                <event-block sid="1242359202129788">
+                                <event-block sid="1054844823687287">
                                     <conditions>
-                                        <condition id="-8" name="Compare two values" sid="8646470656914753" type="System">
-                                            <param id="0" name="First value">distance(Nave.X,Nave.Y,Astronauta.X,Astronauta.Y)</param>
+                                        <condition id="-11" name="For Each" sid="938533193350257" type="System">
+                                            <param id="0" name="Object">AstronautaRecoger</param>
+                                        </condition>
+                                        <condition id="-7" name="Compare instance variable" sid="606618173825984" type="AstronautaRecoger">
+                                            <param id="0" name="Instance variable">Astro</param>
                                             <param id="1" name="Comparison">3</param>
-                                            <param id="2" name="Second value">125</param>
+                                            <param id="2" name="Value">Nave.Astronautas</param>
                                         </condition>
                                     </conditions>
                                     <actions>
-                                        <action id="-11" name="Add to" sid="8824554554056488" type="Nave">
-                                            <param id="0" name="Instance variable">Astronautas</param>
-                                            <param id="1" name="Value">1</param>
-                                        </action>
-                                        <action id="0" name="Set text" sid="8359317392716192" type="Astronautas">
-                                            <param id="0" name="Text">Nave.Astronautas</param>
-                                        </action>
-                                        <action id="-3" name="Create object" sid="683792345985352" type="System">
-                                            <param id="0" name="Object to create">Astronaut_Halo_</param>
-                                            <param id="1" name="Layer">4</param>
-                                            <param id="2" name="X">Astronauta.X</param>
-                                            <param id="3" name="Y">Astronauta.Y</param>
-                                        </action>
-                                        <action id="-9" name="Destroy" sid="8258938211964617" type="Astronauta" />
-                                        <action id="-15" name="Set visible" sid="292534106562837" type="Astronaut_Halo_">
-                                            <param id="0" name="Visibility">1</param>
-                                        </action>
-                                        <action id="3" name="Start" sid="312665656142467" type="Astronaut_Halo_">
-                                            <param id="0" name="From">1</param>
+                                        <action id="5" name="Set frame" sid="3215287190457354" type="AstronautaRecoger">
+                                            <param id="0" name="Frame number">1</param>
                                         </action>
                                     </actions>
+                                </event-block>
+                                <event-block sid="9391350887251755">
+                                    <conditions>
+                                        <condition id="0" name="Compare value" sid="9368123517203115" type="Dictionary">
+                                            <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Play" sid="3389865931056933" type="Audio">
+                                            <param id="0" name="Audio file">Coger_Astronauta</param>
+                                            <param id="2" name="Loop">0</param>
+                                            <param id="3" name="Volume">0</param>
+                                            <param id="1" name="Tag (optional)">&quot;Coger&quot;</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="7504298912923194">
+                                    <conditions>
+                                        <condition id="1" name="Is overlapping another object" sid="5195251918446407" type="Astronauta">
+                                            <param id="0" name="Object">Astronaut_Area</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-9" name="Destroy" sid="7373657365440394" type="Astronaut_Area" />
+                                    </actions>
+                                </event-block>
+                                <event-block sid="4189290804427144">
+                                    <conditions>
+                                        <condition id="-11" name="For Each" sid="4622639433892636" type="System">
+                                            <param id="0" name="Object">AstroMini</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions />
                                     <sub-events>
-                                        <event-block sid="9391350887251755">
+                                        <event-block sid="5353232121719171">
                                             <conditions>
-                                                <condition id="0" name="Compare value" sid="9368123517203115" type="Dictionary">
-                                                    <param id="0" name="Key">&quot;Sonidos&quot;</param>
+                                                <condition id="-7" name="Compare instance variable" sid="9938379573540159" type="AstroMini">
+                                                    <param id="0" name="Instance variable">Num</param>
                                                     <param id="1" name="Comparison">0</param>
-                                                    <param id="2" name="Value">0</param>
+                                                    <param id="2" name="Value">Astronauta.Num</param>
                                                 </condition>
                                             </conditions>
                                             <actions>
-                                                <action id="0" name="Play" sid="3389865931056933" type="Audio">
-                                                    <param id="0" name="Audio file">Coger_Astronauta</param>
-                                                    <param id="2" name="Loop">0</param>
-                                                    <param id="3" name="Volume">0</param>
-                                                    <param id="1" name="Tag (optional)">&quot;Coger&quot;</param>
-                                                </action>
+                                                <action id="-9" name="Destroy" sid="3701408426101879" type="AstroMini" />
                                             </actions>
-                                        </event-block>
-                                        <event-block sid="7504298912923194">
-                                            <conditions>
-                                                <condition id="1" name="Is overlapping another object" sid="5195251918446407" type="Astronauta">
-                                                    <param id="0" name="Object">Astronaut_Area</param>
-                                                </condition>
-                                            </conditions>
-                                            <actions>
-                                                <action id="-9" name="Destroy" sid="7373657365440394" type="Astronaut_Area" />
-                                            </actions>
-                                        </event-block>
-                                        <event-block sid="4189290804427144">
-                                            <conditions>
-                                                <condition id="-11" name="For Each" sid="4622639433892636" type="System">
-                                                    <param id="0" name="Object">AstroMini</param>
-                                                </condition>
-                                            </conditions>
-                                            <actions />
-                                            <sub-events>
-                                                <event-block sid="5353232121719171">
-                                                    <conditions>
-                                                        <condition id="-7" name="Compare instance variable" sid="9938379573540159" type="AstroMini">
-                                                            <param id="0" name="Instance variable">Num</param>
-                                                            <param id="1" name="Comparison">0</param>
-                                                            <param id="2" name="Value">Astronauta.Num</param>
-                                                        </condition>
-                                                    </conditions>
-                                                    <actions>
-                                                        <action id="-9" name="Destroy" sid="3701408426101879" type="AstroMini" />
-                                                    </actions>
-                                                </event-block>
-                                            </sub-events>
                                         </event-block>
                                     </sub-events>
                                 </event-block>
@@ -991,50 +997,36 @@
                     <actions>
                         <action id="-9" name="Set value" sid="5039193948944828" type="System">
                             <param id="0" name="Variable">AstroRecogidos</param>
-                            <param id="1" name="Value">Nave.Astronautas+AstroRecogidos</param>
-                        </action>
-                        <action id="-10" name="Set value" sid="7856214867894825" type="Nave">
-                            <param id="0" name="Instance variable">Astronautas</param>
-                            <param id="1" name="Value">0</param>
+                            <param id="1" name="Value">Nave.Astronautas</param>
                         </action>
                     </actions>
                     <sub-events>
-                        <event-block sid="1054844823687287">
+                        <event-block sid="4026013418185767">
                             <conditions>
-                                <condition id="-11" name="For Each" sid="938533193350257" type="System">
-                                    <param id="0" name="Object">AstronautaRecoger</param>
+                                <condition id="-14" name="Compare variable" sid="6864524294848476" type="System">
+                                    <param id="0" name="Variable">AstroRecogidos</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">3</param>
                                 </condition>
-                                <condition id="-7" name="Compare instance variable" sid="606618173825984" type="AstronautaRecoger">
-                                    <param id="0" name="Instance variable">Astro</param>
-                                    <param id="1" name="Comparison">3</param>
-                                    <param id="2" name="Value">AstroRecogidos</param>
+                                <condition id="-14" name="Compare variable" sid="2727403861732642" type="System">
+                                    <param id="0" name="Variable">Finish</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="5" name="Set frame" sid="3215287190457354" type="AstronautaRecoger">
-                                    <param id="0" name="Frame number">1</param>
+                                <action id="-16" name="Wait" sid="53004996849762" type="System">
+                                    <param id="0" name="Seconds">0.5</param>
+                                </action>
+                                <action id="-9" name="Set value" sid="7951298501643436" type="System">
+                                    <param id="0" name="Variable">Finish</param>
+                                    <param id="1" name="Value">1</param>
+                                </action>
+                                <action id="0" name="Call function" sid="8343752515842053" type="Function">
+                                    <param id="0" name="Name">&quot;Victory&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
                                 </action>
                             </actions>
-                            <sub-events>
-                                <event-block sid="4026013418185767">
-                                    <conditions>
-                                        <condition id="-14" name="Compare variable" sid="6864524294848476" type="System">
-                                            <param id="0" name="Variable">AstroRecogidos</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Value">3</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="-16" name="Wait" sid="53004996849762" type="System">
-                                            <param id="0" name="Seconds">0.5</param>
-                                        </action>
-                                        <action id="0" name="Call function" sid="8343752515842053" type="Function">
-                                            <param id="0" name="Name">&quot;Victory&quot;</param>
-                                            <param id="1" name="Parameter {n}"></param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                            </sub-events>
                         </event-block>
                     </sub-events>
                 </event-block>
