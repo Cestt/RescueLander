@@ -3,6 +3,7 @@
     <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
     <name>Mecanicas juego eventsheet</name>
     <events>
+        <variable constant="0" name="Tolevel" sid="5813894542858223" static="0" type="number">0</variable>
         <variable constant="0" name="Finish" sid="4880758798743068" static="0" type="number">0</variable>
         <include>Positions</include>
         <variable constant="0" name="Paused" sid="9792924109849668" static="0" type="number">0</variable>
@@ -115,6 +116,10 @@
                 </action>
                 <action id="0" name="Set text" sid="9170220476217856" type="connect">
                     <param id="0" name="Text">NivelActual</param>
+                </action>
+                <action id="-10" name="Set value" sid="1380188469444066" type="Plataforma">
+                    <param id="0" name="Instance variable">End</param>
+                    <param id="1" name="Value">0</param>
                 </action>
             </actions>
             <sub-events>
@@ -1124,6 +1129,10 @@
                         <action id="-15" name="Set visible" sid="2748124126088383" type="Lose">
                             <param id="0" name="Visibility">1</param>
                         </action>
+                        <action id="-10" name="Set value" sid="8354301901899927" type="Plataforma">
+                            <param id="0" name="Instance variable">End</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
                     </actions>
                     <sub-events>
                         <event-block sid="8519822113869168">
@@ -1237,6 +1246,10 @@
                         <action id="-9" name="Set value" sid="1861836753640658" type="System">
                             <param id="0" name="Variable">Unlock</param>
                             <param id="1" name="Value">int(Dictionary.Get(&quot;Unlocks&quot;))</param>
+                        </action>
+                        <action id="-10" name="Set value" sid="4470827245820717" type="Plataforma">
+                            <param id="0" name="Instance variable">End</param>
+                            <param id="1" name="Value">1</param>
                         </action>
                     </actions>
                     <sub-events>
@@ -1440,6 +1453,34 @@
             <actions>
                 <action id="-21" name="Reset global variables" sid="2672555809714128" type="System" />
             </actions>
+            <sub-events>
+                <event-block sid="8271910447170151">
+                    <conditions>
+                        <condition id="-7" name="Compare instance variable" sid="9508043782094895" type="Plataforma">
+                            <param id="0" name="Instance variable">End</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="4391814651778656" type="System">
+                            <param id="0" name="Variable">Tolevel</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="5174991427597939">
+                    <conditions>
+                        <condition id="-22" name="Else" sid="6677748093791536" type="System" />
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="152205914045543" type="System">
+                            <param id="0" name="Variable">Tolevel</param>
+                            <param id="1" name="Value">0</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
         </event-block>
         <event-block sid="577250403232665">
             <conditions>
@@ -1534,6 +1575,10 @@
                         </condition>
                     </conditions>
                     <actions>
+                        <action id="-10" name="Set value" sid="8664211303464243" type="Plataforma">
+                            <param id="0" name="Instance variable">End</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
                         <action id="5" name="Set frame" sid="5209038335093152" type="Level_buton">
                             <param id="0" name="Frame number">1</param>
                         </action>
