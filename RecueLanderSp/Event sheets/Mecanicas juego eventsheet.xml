@@ -17,11 +17,18 @@
                 <condition id="-2" name="On start of layout" sid="8026494804483156" type="System" />
             </conditions>
             <actions>
+                <action behavior="Physics" id="13" name="Set stepping mode" sid="8947264805491836" type="Nave">
+                    <param id="0" name="Mode">1</param>
+                </action>
                 <action behavior="Physics" id="12" name="Set world gravity" sid="4516249674817538" type="Nave">
-                    <param id="0" name="Gravity">1.5</param>
+                    <param id="0" name="Gravity">3</param>
                 </action>
                 <action behavior="Physics" id="23" name="Enable/disable collisions" sid="3322753197487977" type="Nave">
                     <param id="0" name="Object">Colisionar</param>
+                    <param id="1" name="State">1</param>
+                </action>
+                <action behavior="Physics" id="23" name="Enable/disable collisions" sid="103828529194248" type="Nave">
+                    <param id="0" name="Object">Border</param>
                     <param id="1" name="State">1</param>
                 </action>
                 <action id="-10" name="Set value" sid="5614992555514654" type="Nave">
@@ -31,9 +38,6 @@
                 <action id="-10" name="Set value" sid="7215557250510471" type="Nave">
                     <param id="0" name="Instance variable">VidaInicial</param>
                     <param id="1" name="Value">Nave.Vida</param>
-                </action>
-                <action behavior="Physics" id="13" name="Set stepping mode" sid="8947264805491836" type="Nave">
-                    <param id="0" name="Mode">1</param>
                 </action>
                 <action id="-10" name="Set value" sid="8587464027201877" type="BarraFuel">
                     <param id="0" name="Instance variable">WidthInicial</param>
@@ -107,9 +111,6 @@
                     <param id="2" name="Loop">1</param>
                     <param id="3" name="Volume">0</param>
                     <param id="1" name="Tag (optional)">&quot;Musica&quot;</param>
-                </action>
-                <action behavior="Physics" id="13" name="Set stepping mode" sid="3808832486891419" type="Nave">
-                    <param id="0" name="Mode">1</param>
                 </action>
                 <action id="-15" name="Set visible" sid="6797363002319732" type="Thruster_anim">
                     <param id="0" name="Visibility">0</param>
@@ -1821,6 +1822,12 @@
                     <param id="1" name="Parameter {n}"></param>
                 </action>
             </actions>
+        </event-block>
+        <event-block sid="9544502232345146">
+            <conditions>
+                <condition id="-1" name="Every tick" sid="6064365526548651" type="System" />
+            </conditions>
+            <actions />
         </event-block>
     </events>
 </c2eventsheet>

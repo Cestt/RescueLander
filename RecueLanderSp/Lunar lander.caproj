@@ -27,7 +27,6 @@
         <behavior author="Scirra" id="Flash" version="1">Flash</behavior>
         <behavior author="Scirra" id="Physics" version="1">Physics</behavior>
         <behavior author="Scirra" id="Pin" version="1">Pin</behavior>
-        <behavior author="Scirra" id="bound" version="1">Bound to layout</behavior>
         <behavior author="Scirra" id="scrollto" version="1">Scroll To</behavior>
         <behavior author="Scirra" id="wrap" version="1">Wrap</behavior>
     </used-behaviors>
@@ -75,9 +74,6 @@
             <behaviors>
                 <behavior-type name="Physics" sid="9247090936137923">
                     <behavior id="Physics" />
-                </behavior-type>
-                <behavior-type name="BoundToLayout" sid="6482813086754199">
-                    <behavior id="bound" />
                 </behavior-type>
                 <behavior-type name="Pin" sid="4066086303231675">
                     <behavior id="Pin" />
@@ -2538,6 +2534,19 @@
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="6680686635368721" speed="5">
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Repositorios\Rescue Lander\trunk\RecueLanderSp\Art\ui\Logo.png" />
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Border" sid="6777686705714723">
+            <plugin id="Sprite" />
+            <behaviors>
+                <behavior-type name="Physics" sid="1445086461000601">
+                    <behavior id="Physics" />
+                </behavior-type>
+            </behaviors>
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="164119972995445" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
                 </animation>
             </animation-folder>
         </object-type>
