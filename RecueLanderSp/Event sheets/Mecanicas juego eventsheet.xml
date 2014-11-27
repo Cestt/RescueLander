@@ -156,6 +156,10 @@
                         <action id="-25" name="Move to bottom" sid="747431410140518" type="Astronaut_Area" />
                     </actions>
                 </event-block>
+                <event-block sid="8293848061744793">
+                    <conditions />
+                    <actions />
+                </event-block>
             </sub-events>
         </event-block>
         <event-group description="" sid="4407733757147299" title="Movement">
@@ -1255,6 +1259,9 @@
                             <param id="0" name="Instance variable">End</param>
                             <param id="1" name="Value">1</param>
                         </action>
+			<action id="-15" name="Set visible" sid="2661612280074205" type="Win_Halo">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
                     </actions>
                     <sub-events>
                         <event-block sid="4725987352597471">
@@ -1823,11 +1830,16 @@
                 </action>
             </actions>
         </event-block>
-        <event-block sid="9544502232345146">
+
+ 	<event-block sid="4840501261613381">
             <conditions>
-                <condition id="-1" name="Every tick" sid="6064365526548651" type="System" />
+                <condition id="-9" name="Is visible" sid="3847391286980063" type="Win_Halo" />
             </conditions>
-            <actions />
+            <actions>
+                <action id="-18" name="Rotate clockwise" sid="7610501159470249" type="Win_Halo">
+                    <param id="0" name="Degrees">0.2</param>
+                </action>
+            </actions>
         </event-block>
     </events>
 </c2eventsheet>
