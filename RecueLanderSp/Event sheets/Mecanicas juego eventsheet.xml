@@ -156,9 +156,20 @@
                         <action id="-25" name="Move to bottom" sid="747431410140518" type="Astronaut_Area" />
                     </actions>
                 </event-block>
-                <event-block sid="8293848061744793">
-                    <conditions />
-                    <actions />
+                <event-block sid="2477252111822307">
+                    <conditions>
+                        <condition id="-14" name="Compare variable" sid="5187755508230379" type="System">
+                            <param id="0" name="Variable">NivelActual</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">9</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-10" name="Set value" sid="1604367052382902" type="Nave">
+                            <param id="0" name="Instance variable">Fuel</param>
+                            <param id="1" name="Value">125</param>
+                        </action>
+                    </actions>
                 </event-block>
             </sub-events>
         </event-block>
