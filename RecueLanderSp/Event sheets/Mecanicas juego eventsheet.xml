@@ -106,12 +106,6 @@
                     <param id="0" name="Family name">&quot;frostys_winterlandregular&quot;</param>
                     <param id="1" name="CSS URL">&quot;stylesheet.css&quot;</param>
                 </action>
-                <action id="0" name="Play" sid="44174214394391" type="Audio">
-                    <param id="0" name="Audio file">M_sica_Rescue</param>
-                    <param id="2" name="Loop">1</param>
-                    <param id="3" name="Volume">0</param>
-                    <param id="1" name="Tag (optional)">&quot;Musica&quot;</param>
-                </action>
                 <action id="-15" name="Set visible" sid="6797363002319732" type="Thruster_anim">
                     <param id="0" name="Visibility">0</param>
                 </action>
@@ -129,15 +123,15 @@
                         <condition id="0" name="Compare value" sid="2588709153306666" type="Dictionary">
                             <param id="0" name="Key">&quot;Musica&quot;</param>
                             <param id="1" name="Comparison">0</param>
-                            <param id="2" name="Value">1</param>
+                            <param id="2" name="Value">0</param>
                         </condition>
                     </conditions>
                     <actions>
-                        <action id="6" name="Stop" sid="36774649018519" type="Audio">
-                            <param id="0" name="Tag">&quot;Musica&quot;</param>
-                        </action>
-                        <action id="5" name="Set frame" sid="3201982896366526" type="Music_on">
-                            <param id="0" name="Frame number">1</param>
+                        <action id="0" name="Play" sid="44174214394391" type="Audio">
+                            <param id="0" name="Audio file">M_sica_Rescue</param>
+                            <param id="2" name="Loop">1</param>
+                            <param id="3" name="Volume">0</param>
+                            <param id="1" name="Tag (optional)">&quot;Musica&quot;</param>
                         </action>
                     </actions>
                 </event-block>
@@ -324,12 +318,12 @@
                     </conditions>
                     <actions>
                         <action behavior="Physics" id="2" name="Apply force at angle" sid="2372120195329576" type="Nave">
-                            <param id="0" name="Force">1.3</param>
+                            <param id="0" name="Force">1.7</param>
                             <param id="1" name="Angle">Nave.Angle</param>
                             <param id="2" name="Image point">1</param>
                         </action>
                         <action behavior="Physics" id="2" name="Apply force at angle" sid="4706900813740487" type="Nave">
-                            <param id="0" name="Force">1.3</param>
+                            <param id="0" name="Force">1.7</param>
                             <param id="1" name="Angle">Nave.Angle</param>
                             <param id="2" name="Image point">2</param>
                         </action>
@@ -346,12 +340,12 @@
                     <conditions>
                         <condition behavior="Physics" id="2" name="Compare angular velocity" sid="1676616502810519" type="Nave">
                             <param id="0" name="Comparison">4</param>
-                            <param id="1" name="Value">60</param>
+                            <param id="1" name="Value">80</param>
                         </condition>
                     </conditions>
                     <actions>
                         <action behavior="Physics" id="9" name="Set angular velocity" sid="2544376829336309" type="Nave">
-                            <param id="0" name="Angular velocity">60</param>
+                            <param id="0" name="Angular velocity">80</param>
                         </action>
                     </actions>
                 </event-block>
@@ -359,12 +353,12 @@
                     <conditions>
                         <condition behavior="Physics" id="2" name="Compare angular velocity" sid="613724135724753" type="Nave">
                             <param id="0" name="Comparison">2</param>
-                            <param id="1" name="Value">-60</param>
+                            <param id="1" name="Value">-80</param>
                         </condition>
                     </conditions>
                     <actions>
                         <action behavior="Physics" id="9" name="Set angular velocity" sid="9333986200264382" type="Nave">
-                            <param id="0" name="Angular velocity">-60</param>
+                            <param id="0" name="Angular velocity">-80</param>
                         </action>
                     </actions>
                 </event-block>
@@ -407,11 +401,11 @@
                                         </condition>
                                     </conditions>
                                     <actions>
-                                        <action id="0" name="Play" sid="3171332396987228" type="Audio">
+                                        <action id="0" name="Play" sid="5614002159976103" type="Audio">
                                             <param id="0" name="Audio file">Fire</param>
                                             <param id="2" name="Loop">1</param>
                                             <param id="3" name="Volume">0</param>
-                                            <param id="1" name="Tag (optional)">&quot;Fire&quot;</param>
+                                            <param id="1" name="Tag (optional)">&quot;&quot;</param>
                                         </action>
                                     </actions>
                                 </event-block>
@@ -455,9 +449,7 @@
                         </event-block>
                         <event-block sid="7774116983390537">
                             <conditions>
-                                <condition id="11" name="On Nth touch end" sid="2226065910311376" type="Touch">
-                                    <param id="0" name="Touch number">1</param>
-                                </condition>
+                                <condition id="1" name="On any touch end" sid="2226065910311376" type="Touch" />
                             </conditions>
                             <actions>
                                 <action id="4" name="Set animation" sid="3899677718688961" type="Fire">
@@ -623,19 +615,6 @@
                             </actions>
                         </event-block>
                     </sub-events>
-                </event-block>
-                <event-block sid="6150904589996595">
-                    <conditions>
-                        <condition behavior="Physics" id="2" name="Compare angular velocity" sid="7471504134002845" type="Nave">
-                            <param id="0" name="Comparison">4</param>
-                            <param id="1" name="Value">60</param>
-                        </condition>
-                    </conditions>
-                    <actions>
-                        <action behavior="Physics" id="9" name="Set angular velocity" sid="5984685841489653" type="Nave">
-                            <param id="0" name="Angular velocity">60</param>
-                        </action>
-                    </actions>
                 </event-block>
             </sub-events>
         </event-group>
@@ -1156,6 +1135,21 @@
                         </action>
                     </actions>
                     <sub-events>
+                        <event-block sid="3991061582165422">
+                            <conditions>
+                                <condition id="-14" name="Compare variable" sid="5228242950969917" type="System">
+                                    <param id="0" name="Variable">Paused</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Call function" sid="2579549322955588" type="Function">
+                                    <param id="0" name="Name">&quot;Pause&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
+                                </action>
+                            </actions>
+                        </event-block>
                         <event-block sid="8519822113869168">
                             <conditions>
                                 <condition id="0" name="Compare value" sid="6068190321169925" type="Dictionary">
@@ -1205,8 +1199,13 @@
                                         <action id="-16" name="Wait" sid="3437839547932507" type="System">
                                             <param id="0" name="Seconds">2</param>
                                         </action>
-                                        <action id="-2" name="Go to layout" sid="2642271017443494" type="System">
-                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        <action id="0" name="Call function" sid="9568267485955445" type="Function">
+                                            <param id="0" name="Name">&quot;Pause&quot;</param>
+                                            <param id="1" name="Parameter {n}"></param>
+                                        </action>
+                                        <action id="-10" name="Set value" sid="9105549860357119" type="Pause_ico">
+                                            <param id="0" name="Instance variable">Enabld</param>
+                                            <param id="1" name="Value">0</param>
                                         </action>
                                     </actions>
                                 </event-block>
@@ -1218,8 +1217,13 @@
                                         <action id="-16" name="Wait" sid="3751825805842022" type="System">
                                             <param id="0" name="Seconds">2</param>
                                         </action>
-                                        <action id="-2" name="Go to layout" sid="1132960766636714" type="System">
-                                            <param id="0" name="Layout">Menu Inicial</param>
+                                        <action id="0" name="Call function" sid="6356908162938549" type="Function">
+                                            <param id="0" name="Name">&quot;Pause&quot;</param>
+                                            <param id="1" name="Parameter {n}"></param>
+                                        </action>
+                                        <action id="-10" name="Set value" sid="1513189050452191" type="Pause_ico">
+                                            <param id="0" name="Instance variable">Enabld</param>
+                                            <param id="1" name="Value">0</param>
                                         </action>
                                     </actions>
                                 </event-block>
@@ -1239,8 +1243,13 @@
                                 <action id="-16" name="Wait" sid="9364199304974716" type="System">
                                     <param id="0" name="Seconds">2</param>
                                 </action>
-                                <action id="-2" name="Go to layout" sid="3897909196970509" type="System">
-                                    <param id="0" name="Layout">Menu Inicial</param>
+                                <action id="0" name="Call function" sid="7783348514277215" type="Function">
+                                    <param id="0" name="Name">&quot;Pause&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
+                                </action>
+                                <action id="-10" name="Set value" sid="3082692160057452" type="Pause_ico">
+                                    <param id="0" name="Instance variable">Enabld</param>
+                                    <param id="1" name="Value">0</param>
                                 </action>
                             </actions>
                         </event-block>
@@ -1275,8 +1284,27 @@
                         <action id="-15" name="Set visible" sid="2661612280074205" type="Win_Halo">
                             <param id="0" name="Visibility">1</param>
                         </action>
+                        <action id="-10" name="Set value" sid="7398064504747495" type="Pause_ico">
+                            <param id="0" name="Instance variable">Enabld</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
                     </actions>
                     <sub-events>
+                        <event-block sid="9222772244415103">
+                            <conditions>
+                                <condition id="-14" name="Compare variable" sid="5865477980586161" type="System">
+                                    <param id="0" name="Variable">Paused</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="0" name="Call function" sid="5661604157110446" type="Function">
+                                    <param id="0" name="Name">&quot;Pause&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
+                                </action>
+                            </actions>
+                        </event-block>
                         <event-block sid="4725987352597471">
                             <conditions>
                                 <condition id="3" name="Has key" sid="4527278128678354" type="Dictionary">
@@ -1351,6 +1379,10 @@
                                         <action id="-16" name="Wait" sid="7616358520031343" type="System">
                                             <param id="0" name="Seconds">2</param>
                                         </action>
+                                        <action id="-10" name="Set value" sid="30078921241445" type="Pause_ico">
+                                            <param id="0" name="Instance variable">Enabld</param>
+                                            <param id="1" name="Value">0</param>
+                                        </action>
                                         <action id="-2" name="Go to layout" sid="1754674385233901" type="System">
                                             <param id="0" name="Layout">Menu Inicial</param>
                                         </action>
@@ -1371,6 +1403,10 @@
                                 </action>
                                 <action id="-16" name="Wait" sid="7396986786271966" type="System">
                                     <param id="0" name="Seconds">2</param>
+                                </action>
+                                <action id="-10" name="Set value" sid="3751034156541593" type="Pause_ico">
+                                    <param id="0" name="Instance variable">Enabld</param>
+                                    <param id="1" name="Value">0</param>
                                 </action>
                                 <action id="-2" name="Go to layout" sid="3952416772385164" type="System">
                                     <param id="0" name="Layout">Menu Inicial</param>
@@ -1517,6 +1553,11 @@
                         <condition id="17" name="On tap object" sid="3501566093641747" type="Touch">
                             <param id="0" name="Object">Pause_ico</param>
                         </condition>
+                        <condition id="-7" name="Compare instance variable" sid="5823661706653758" type="Pause_ico">
+                            <param id="0" name="Instance variable">Enabld</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
                     </conditions>
                     <actions>
                         <action id="0" name="Call function" sid="8797628168938921" type="Function">
@@ -1569,6 +1610,9 @@
                         </condition>
                     </conditions>
                     <actions>
+                        <action id="-15" name="Set visible" sid="9888946922908999" type="Tuto">
+                            <param id="0" name="Visibility">0</param>
+                        </action>
                         <action id="-9" name="Destroy" sid="3235670367446134" type="Tuto" />
                     </actions>
                 </event-block>
