@@ -156,21 +156,6 @@
                         <action id="-25" name="Move to bottom" sid="747431410140518" type="Astronaut_Area" />
                     </actions>
                 </event-block>
-                <event-block sid="2477252111822307">
-                    <conditions>
-                        <condition id="-14" name="Compare variable" sid="5187755508230379" type="System">
-                            <param id="0" name="Variable">NivelActual</param>
-                            <param id="1" name="Comparison">0</param>
-                            <param id="2" name="Value">9</param>
-                        </condition>
-                    </conditions>
-                    <actions>
-                        <action id="-10" name="Set value" sid="1604367052382902" type="Nave">
-                            <param id="0" name="Instance variable">Fuel</param>
-                            <param id="1" name="Value">125</param>
-                        </action>
-                    </actions>
-                </event-block>
             </sub-events>
         </event-block>
         <event-group description="" sid="4407733757147299" title="Movement">
@@ -1566,6 +1551,9 @@
                             <param id="1" name="Layer">5</param>
                             <param id="2" name="X">ViewportLeft(5)</param>
                             <param id="3" name="Y">ViewportTop(5)</param>
+                        </action>
+                        <action id="-15" name="Set visible" sid="3180147988881297" type="Tuto">
+                            <param id="0" name="Visibility">1</param>
                         </action>
                         <action id="-24" name="Move to top" sid="3877671796722381" type="Tuto" />
                         <action disabled="1" id="-7" name="Set size" sid="585341549678744" type="Tuto">
