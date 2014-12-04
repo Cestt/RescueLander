@@ -1405,6 +1405,28 @@
                         <opacity>1</opacity>
                     </world>
                 </instance>
+                <instance type="Pause_Menu_Bg" uid="110">
+                    <properties>
+                        <initial-visibility>Invisible</initial-visibility>
+                        <initial-animation>Default</initial-animation>
+                        <initial-frame>0</initial-frame>
+                        <collisions>Disabled</collisions>
+                    </properties>
+                    <blend-mode>0</blend-mode>
+                    <effect-fallback>0</effect-fallback>
+                    <world>
+                        <x>429.451477051</x>
+                        <y>229</y>
+                        <z>0</z>
+                        <width>377.227996826</width>
+                        <height>303.55065918</height>
+                        <depth>0</depth>
+                        <hotspotX>0.5</hotspotX>
+                        <hotspotY>0.5</hotspotY>
+                        <angle>0</angle>
+                        <opacity>1</opacity>
+                    </world>
+                </instance>
                 <instance type="BarraBase" uid="43">
                     <properties>
                         <initial-visibility>Visible</initial-visibility>
@@ -1694,50 +1716,6 @@
                         <opacity>1</opacity>
                     </world>
                 </instance>
-                <instance type="Pause_Menu_Bg" uid="110">
-                    <properties>
-                        <initial-visibility>Invisible</initial-visibility>
-                        <initial-animation>Default</initial-animation>
-                        <initial-frame>0</initial-frame>
-                        <collisions>Disabled</collisions>
-                    </properties>
-                    <blend-mode>0</blend-mode>
-                    <effect-fallback>0</effect-fallback>
-                    <world>
-                        <x>429.451477051</x>
-                        <y>229</y>
-                        <z>0</z>
-                        <width>377.227996826</width>
-                        <height>303.55065918</height>
-                        <depth>0</depth>
-                        <hotspotX>0.5</hotspotX>
-                        <hotspotY>0.5</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
-                    </world>
-                </instance>
-                <instance type="Level_buton" uid="111">
-                    <properties>
-                        <initial-visibility>Invisible</initial-visibility>
-                        <initial-animation>Default</initial-animation>
-                        <initial-frame>0</initial-frame>
-                        <collisions>Disabled</collisions>
-                    </properties>
-                    <blend-mode>0</blend-mode>
-                    <effect-fallback>0</effect-fallback>
-                    <world>
-                        <x>431.451477051</x>
-                        <y>241</y>
-                        <z>0</z>
-                        <width>230.783004761</width>
-                        <height>72.119689941</height>
-                        <depth>0</depth>
-                        <hotspotX>0.5</hotspotX>
-                        <hotspotY>0.5</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
-                    </world>
-                </instance>
                 <instance type="Pause_Menu_ExitButton" uid="112">
                     <properties>
                         <initial-visibility>Invisible</initial-visibility>
@@ -1856,33 +1834,6 @@
                         <opacity>1</opacity>
                     </world>
                 </instance>
-                <instance type="Retry_button" uid="666">
-                    <properties>
-                        <initial-visibility>Visible</initial-visibility>
-                        <initial-animation>Default</initial-animation>
-                        <initial-frame>0</initial-frame>
-                        <collisions>Enabled</collisions>
-                    </properties>
-                    <instance-variables>
-                        <InitX>0</InitX>
-                        <InitY>0</InitY>
-                        <enbld>0</enbld>
-                    </instance-variables>
-                    <blend-mode>0</blend-mode>
-                    <effect-fallback>0</effect-fallback>
-                    <world>
-                        <x>430.451477051</x>
-                        <y>157</y>
-                        <z>0</z>
-                        <width>232.894821167</width>
-                        <height>72.779632568</height>
-                        <depth>0</depth>
-                        <hotspotX>0.5</hotspotX>
-                        <hotspotY>0.5</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
-                    </world>
-                </instance>
                 <instance type="Hook" uid="630">
                     <properties>
                         <initial-visibility>Visible</initial-visibility>
@@ -1927,6 +1878,77 @@
                         <opacity>1</opacity>
                     </world>
                 </instance>
+                <instance type="Level_buton" uid="111">
+                    <properties>
+                        <initial-visibility>Invisible</initial-visibility>
+                        <initial-animation>Default</initial-animation>
+                        <initial-frame>0</initial-frame>
+                        <collisions>Disabled</collisions>
+                    </properties>
+                    <blend-mode>0</blend-mode>
+                    <effect-fallback>0</effect-fallback>
+                    <world>
+                        <x>431.451477051</x>
+                        <y>241</y>
+                        <z>0</z>
+                        <width>229.152069092</width>
+                        <height>75.584190369</height>
+                        <depth>0</depth>
+                        <hotspotX>0.502617776</hotspotX>
+                        <hotspotY>0.507936537</hotspotY>
+                        <angle>0</angle>
+                        <opacity>1</opacity>
+                    </world>
+                </instance>
+                <instance type="Retry_button" uid="666">
+                    <properties>
+                        <initial-visibility>Visible</initial-visibility>
+                        <initial-animation>Default</initial-animation>
+                        <initial-frame>0</initial-frame>
+                        <collisions>Enabled</collisions>
+                    </properties>
+                    <instance-variables>
+                        <InitX>0</InitX>
+                        <InitY>0</InitY>
+                        <enbld>0</enbld>
+                    </instance-variables>
+                    <blend-mode>0</blend-mode>
+                    <effect-fallback>0</effect-fallback>
+                    <world>
+                        <x>430.451477051</x>
+                        <y>157</y>
+                        <z>0</z>
+                        <width>229.151992798</width>
+                        <height>75.583999634</height>
+                        <depth>0</depth>
+                        <hotspotX>0.502564132</hotspotX>
+                        <hotspotY>0.507936537</hotspotY>
+                        <angle>0</angle>
+                        <opacity>1</opacity>
+                    </world>
+                </instance>
+                <instance type="Lose" uid="597">
+                    <properties>
+                        <initial-visibility>Invisible</initial-visibility>
+                        <initial-animation>Default</initial-animation>
+                        <initial-frame>0</initial-frame>
+                        <collisions>Enabled</collisions>
+                    </properties>
+                    <blend-mode>0</blend-mode>
+                    <effect-fallback>0</effect-fallback>
+                    <world>
+                        <x>424</x>
+                        <y>279</y>
+                        <z>0</z>
+                        <width>365.460113525</width>
+                        <height>334.181976318</height>
+                        <depth>0</depth>
+                        <hotspotX>0.495495498</hotspotX>
+                        <hotspotY>0.578817725</hotspotY>
+                        <angle>0</angle>
+                        <opacity>1</opacity>
+                    </world>
+                </instance>
                 <instance type="Win_Halo" uid="10">
                     <properties>
                         <initial-visibility>Invisible</initial-visibility>
@@ -1967,28 +1989,6 @@
                         <depth>0</depth>
                         <hotspotX>0.5</hotspotX>
                         <hotspotY>0.5</hotspotY>
-                        <angle>0</angle>
-                        <opacity>1</opacity>
-                    </world>
-                </instance>
-                <instance type="Lose" uid="597">
-                    <properties>
-                        <initial-visibility>Invisible</initial-visibility>
-                        <initial-animation>Default</initial-animation>
-                        <initial-frame>0</initial-frame>
-                        <collisions>Enabled</collisions>
-                    </properties>
-                    <blend-mode>0</blend-mode>
-                    <effect-fallback>0</effect-fallback>
-                    <world>
-                        <x>424</x>
-                        <y>279</y>
-                        <z>0</z>
-                        <width>365.460113525</width>
-                        <height>334.181976318</height>
-                        <depth>0</depth>
-                        <hotspotX>0.495495498</hotspotX>
-                        <hotspotY>0.578817725</hotspotY>
                         <angle>0</angle>
                         <opacity>1</opacity>
                     </world>
