@@ -116,6 +116,14 @@
                     <param id="0" name="Instance variable">End</param>
                     <param id="1" name="Value">0</param>
                 </action>
+                <action id="-10" name="Set value" sid="181494660409967" type="Retry_button">
+                    <param id="0" name="Instance variable">InitX</param>
+                    <param id="1" name="Value">Retry_button.X</param>
+                </action>
+                <action id="-10" name="Set value" sid="1286562110825781" type="Retry_button">
+                    <param id="0" name="Instance variable">InitY</param>
+                    <param id="1" name="Value">Retry_button.Y</param>
+                </action>
             </actions>
             <sub-events>
                 <event-block sid="5009435748636948">
@@ -364,19 +372,6 @@
                 </event-block>
                 <event-group description="" sid="8230929351219207" title="Fire_Animation">
                     <sub-events>
-                        <event-block sid="4167744239327268">
-                            <conditions>
-                                <condition id="4" name="On finished" sid="8050065975012128" type="Fire">
-                                    <param id="0" name="Animation">&quot;Default&quot;</param>
-                                </condition>
-                            </conditions>
-                            <actions>
-                                <action id="4" name="Set animation" sid="9072146251697214" type="Fire">
-                                    <param id="0" name="Animation">&quot;Loop&quot;</param>
-                                    <param id="1" name="From">1</param>
-                                </action>
-                            </actions>
-                        </event-block>
                         <event-block sid="5970970332487002">
                             <conditions>
                                 <condition id="12" name="Has Nth touch" sid="7820940089277115" type="Touch">
@@ -405,7 +400,7 @@
                                             <param id="0" name="Audio file">Fire</param>
                                             <param id="2" name="Loop">1</param>
                                             <param id="3" name="Volume">0</param>
-                                            <param id="1" name="Tag (optional)">&quot;&quot;</param>
+                                            <param id="1" name="Tag (optional)">&quot;Fire&quot;</param>
                                         </action>
                                     </actions>
                                 </event-block>
@@ -445,7 +440,32 @@
                                         </action>
                                     </actions>
                                 </event-block>
+                                <event-block sid="4167744239327268">
+                                    <conditions>
+                                        <condition id="4" name="On finished" sid="8050065975012128" type="Fire">
+                                            <param id="0" name="Animation">&quot;Default&quot;</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="4" name="Set animation" sid="9072146251697214" type="Fire">
+                                            <param id="0" name="Animation">&quot;Loop&quot;</param>
+                                            <param id="1" name="From">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
                             </sub-events>
+                        </event-block>
+                        <event-block sid="895386997053484">
+                            <conditions>
+                                <condition id="11" name="On Nth touch end" sid="5371962711661581" type="Touch">
+                                    <param id="0" name="Touch number">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="6" name="Stop" sid="2756463209525782" type="Audio">
+                                    <param id="0" name="Tag">&quot;Fire&quot;</param>
+                                </action>
+                            </actions>
                         </event-block>
                         <event-block sid="7774116983390537">
                             <conditions>
@@ -461,6 +481,9 @@
                                 </action>
                                 <action id="0" name="Set spraying" sid="7628332852861849" type="Smoke">
                                     <param id="0" name="State">0</param>
+                                </action>
+                                <action id="6" name="Stop" sid="497183194505322" type="Audio">
+                                    <param id="0" name="Tag">&quot;Fire&quot;</param>
                                 </action>
                             </actions>
                             <sub-events>
@@ -482,6 +505,9 @@
                                         <action id="5" name="Set frame" sid="4512743190551045" type="Fire">
                                             <param id="0" name="Frame number">Fire.AnimationFrameCount-Frame</param>
                                         </action>
+                                        <action id="6" name="Stop" sid="688124291741658" type="Audio">
+                                            <param id="0" name="Tag">&quot;Fire&quot;</param>
+                                        </action>
                                     </actions>
                                 </event-block>
                                 <event-block sid="1157538122867241">
@@ -496,6 +522,9 @@
                                         <action id="-9" name="Set value" sid="817789990509017" type="System">
                                             <param id="0" name="Variable">Frame</param>
                                             <param id="1" name="Value">0</param>
+                                        </action>
+                                        <action id="6" name="Stop" sid="4708598135101973" type="Audio">
+                                            <param id="0" name="Tag">&quot;Fire&quot;</param>
                                         </action>
                                     </actions>
                                 </event-block>
@@ -1133,6 +1162,23 @@
                             <param id="0" name="Instance variable">End</param>
                             <param id="1" name="Value">1</param>
                         </action>
+                        <action id="-15" name="Set visible" sid="3759484970756205" type="Retry_button">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                        <action id="-4" name="Set position to another object" sid="4241880214109558" type="Retry_button">
+                            <param id="0" name="Object">Lose</param>
+                            <param id="1" name="Image point (optional)">1</param>
+                        </action>
+                        <action id="-10" name="Set value" sid="1618272126301157" type="Retry_button">
+                            <param id="0" name="Instance variable">enbld</param>
+                            <param id="1" name="Value">1</param>
+                        </action>
+                        <action id="-24" name="Move to top" sid="1894596035992582" type="Retry_button" />
+                        <action id="0" name="Spawn another object" sid="4384316382550378" type="Lose">
+                            <param id="0" name="Object">Back_Button</param>
+                            <param id="1" name="Layer">5</param>
+                            <param id="2" name="Image point">2</param>
+                        </action>
                     </actions>
                     <sub-events>
                         <event-block sid="3991061582165422">
@@ -1144,7 +1190,7 @@
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="0" name="Call function" sid="2579549322955588" type="Function">
+                                <action id="0" name="Call function" sid="6515950581539234" type="Function">
                                     <param id="0" name="Name">&quot;Pause&quot;</param>
                                     <param id="1" name="Parameter {n}"></param>
                                 </action>
@@ -1199,10 +1245,6 @@
                                         <action id="-16" name="Wait" sid="3437839547932507" type="System">
                                             <param id="0" name="Seconds">2</param>
                                         </action>
-                                        <action id="0" name="Call function" sid="9568267485955445" type="Function">
-                                            <param id="0" name="Name">&quot;Pause&quot;</param>
-                                            <param id="1" name="Parameter {n}"></param>
-                                        </action>
                                         <action id="-10" name="Set value" sid="9105549860357119" type="Pause_ico">
                                             <param id="0" name="Instance variable">Enabld</param>
                                             <param id="1" name="Value">0</param>
@@ -1216,10 +1258,6 @@
                                     <actions>
                                         <action id="-16" name="Wait" sid="3751825805842022" type="System">
                                             <param id="0" name="Seconds">2</param>
-                                        </action>
-                                        <action id="0" name="Call function" sid="6356908162938549" type="Function">
-                                            <param id="0" name="Name">&quot;Pause&quot;</param>
-                                            <param id="1" name="Parameter {n}"></param>
                                         </action>
                                         <action id="-10" name="Set value" sid="1513189050452191" type="Pause_ico">
                                             <param id="0" name="Instance variable">Enabld</param>
@@ -1242,10 +1280,6 @@
                                 </action>
                                 <action id="-16" name="Wait" sid="9364199304974716" type="System">
                                     <param id="0" name="Seconds">2</param>
-                                </action>
-                                <action id="0" name="Call function" sid="7783348514277215" type="Function">
-                                    <param id="0" name="Name">&quot;Pause&quot;</param>
-                                    <param id="1" name="Parameter {n}"></param>
                                 </action>
                                 <action id="-10" name="Set value" sid="3082692160057452" type="Pause_ico">
                                     <param id="0" name="Instance variable">Enabld</param>
@@ -1356,7 +1390,7 @@
                                             <param id="1" name="Value">Dictionary.AsJSON</param>
                                         </action>
                                         <action id="-16" name="Wait" sid="101463243168618" type="System">
-                                            <param id="0" name="Seconds">2</param>
+                                            <param id="0" name="Seconds">3.5</param>
                                         </action>
                                         <action id="-2" name="Go to layout" sid="5977496063619681" type="System">
                                             <param id="0" name="Layout">Menu Inicial</param>
@@ -1377,7 +1411,7 @@
                                             <param id="1" name="Value">Dictionary.AsJSON</param>
                                         </action>
                                         <action id="-16" name="Wait" sid="7616358520031343" type="System">
-                                            <param id="0" name="Seconds">2</param>
+                                            <param id="0" name="Seconds">3.5</param>
                                         </action>
                                         <action id="-10" name="Set value" sid="30078921241445" type="Pause_ico">
                                             <param id="0" name="Instance variable">Enabld</param>
@@ -1402,7 +1436,7 @@
                                     <param id="0" name="Visibility">1</param>
                                 </action>
                                 <action id="-16" name="Wait" sid="7396986786271966" type="System">
-                                    <param id="0" name="Seconds">2</param>
+                                    <param id="0" name="Seconds">3.5</param>
                                 </action>
                                 <action id="-10" name="Set value" sid="3751034156541593" type="Pause_ico">
                                     <param id="0" name="Instance variable">Enabld</param>
@@ -1667,33 +1701,92 @@
                         </action>
                     </actions>
                 </event-block>
+                <event-block sid="2957132107762954">
+                    <conditions>
+                        <condition id="3" name="On touched object" sid="6232527543007659" type="Touch">
+                            <param id="0" name="Object">Back_Button</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="9233325458544863">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="1032717451074304" type="Retry_button">
+                                    <param id="0" name="Instance variable">enbld</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-16" name="Wait" sid="616452201733504" type="System">
+                                    <param id="0" name="Seconds">0.2</param>
+                                </action>
+                                <action id="-2" name="Go to layout" sid="4265959753026754" type="System">
+                                    <param id="0" name="Layout">Menu Inicial</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
                 <event-block sid="4969733748740148">
                     <conditions>
                         <condition id="3" name="On touched object" sid="5588927090526311" type="Touch">
                             <param id="0" name="Object">Retry_button</param>
                         </condition>
-                        <condition id="-14" name="Compare variable" sid="2627080525760051" type="System">
-                            <param id="0" name="Variable">Menu</param>
-                            <param id="1" name="Comparison">0</param>
-                            <param id="2" name="Value">1</param>
-                        </condition>
                     </conditions>
-                    <actions>
-                        <action id="5" name="Set frame" sid="9614901547838332" type="Retry_button">
-                            <param id="0" name="Frame number">1</param>
-                        </action>
-                        <action id="-16" name="Wait" sid="2597405203340613" type="System">
-                            <param id="0" name="Seconds">0.2</param>
-                        </action>
-                        <action id="5" name="Set frame" sid="9874470209136132" type="Retry_button">
-                            <param id="0" name="Frame number">0</param>
-                        </action>
-                        <action id="-16" name="Wait" sid="824070791714946" type="System">
-                            <param id="0" name="Seconds">0.2</param>
-                        </action>
-                        <action id="-21" name="Reset global variables" sid="7649085198994302" type="System" />
-                        <action id="-26" name="Restart layout" sid="6227785374849874" type="System" />
-                    </actions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="2717609338517591">
+                            <conditions>
+                                <condition id="-14" name="Compare variable" sid="2627080525760051" type="System">
+                                    <param id="0" name="Variable">Menu</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="5" name="Set frame" sid="6158113117263306" type="Retry_button">
+                                    <param id="0" name="Frame number">1</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="2493756837549883" type="System">
+                                    <param id="0" name="Seconds">0.2</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="2447651632728028" type="Retry_button">
+                                    <param id="0" name="Frame number">0</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="9689724902018844" type="System">
+                                    <param id="0" name="Seconds">0.2</param>
+                                </action>
+                                <action id="-21" name="Reset global variables" sid="3901877678894813" type="System" />
+                                <action id="-26" name="Restart layout" sid="6434020902057488" type="System" />
+                            </actions>
+                        </event-block>
+                        <event-block sid="14878315457479">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="2449584486863208" type="Retry_button">
+                                    <param id="0" name="Instance variable">enbld</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="5" name="Set frame" sid="9614901547838332" type="Retry_button">
+                                    <param id="0" name="Frame number">1</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="2597405203340613" type="System">
+                                    <param id="0" name="Seconds">0.2</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="9874470209136132" type="Retry_button">
+                                    <param id="0" name="Frame number">0</param>
+                                </action>
+                                <action id="-16" name="Wait" sid="824070791714946" type="System">
+                                    <param id="0" name="Seconds">0.2</param>
+                                </action>
+                                <action id="-21" name="Reset global variables" sid="7649085198994302" type="System" />
+                                <action id="-26" name="Restart layout" sid="6227785374849874" type="System" />
+                            </actions>
+                        </event-block>
+                    </sub-events>
                 </event-block>
                 <event-block sid="6650291366722183">
                     <conditions>

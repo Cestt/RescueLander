@@ -415,7 +415,7 @@
                 </behavior-type>
             </behaviors>
             <animation-folder>
-                <animation framecount="13" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="3964271936932577" speed="10">
+                <animation framecount="10" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="3964271936932577" speed="10">
                     <frame duration="1" hotspotX="0.504673" hotspotY="0" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\Fire_Anim\Fire01.png">
                         <collision-poly>
                             <point x="0" y="0" />
@@ -486,27 +486,6 @@
                             <point x="0.495327" y="1" />
                         </collision-poly>
                     </frame>
-                    <frame duration="1" hotspotX="0.504673" hotspotY="0" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\Fire_Anim\Fire11.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.495327" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.504673" hotspotY="0" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\Fire_Anim\Fire12.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.495327" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.504673" hotspotY="0" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\Fire_Anim\Fire13.png">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.495327" y="1" />
-                        </collision-poly>
-                    </frame>
                 </animation>
                 <animation framecount="5" loop="1" name="Loop" pingpong="1" repeatcount="1" repeatto="0" sid="6420172470090328" speed="6">
                     <frame duration="1" hotspotX="0.504673" hotspotY="0" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RecueLander\trunk\RecueLanderSp\Art\Fire_Anim\Fire13.png">
@@ -545,28 +524,7 @@
                         </collision-poly>
                     </frame>
                 </animation>
-                <animation framecount="13" loop="0" name="Default_Reverse" pingpong="0" repeatcount="1" repeatto="0" sid="6510790409974259" speed="10">
-                    <frame duration="1" hotspotX="0.504673" hotspotY="0">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.495327" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.504673" hotspotY="0">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.495327" y="1" />
-                        </collision-poly>
-                    </frame>
-                    <frame duration="1" hotspotX="0.504673" hotspotY="0">
-                        <collision-poly>
-                            <point x="0" y="0" />
-                            <point x="1" y="0" />
-                            <point x="0.495327" y="1" />
-                        </collision-poly>
-                    </frame>
+                <animation framecount="10" loop="0" name="Default_Reverse" pingpong="0" repeatcount="1" repeatto="0" sid="6510790409974259" speed="10">
                     <frame duration="1" hotspotX="0.504673" hotspotY="0">
                         <collision-poly>
                             <point x="0" y="0" />
@@ -2560,7 +2518,9 @@
             <plugin id="Sprite" />
             <animation-folder>
                 <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="4511615013748507" speed="5">
-                    <frame duration="1" hotspotX="0.495495" hotspotY="0.578818" original-source="C:\Repositorios\Rescue Lander\trunk\RecueLanderSp\Art\ui\LoseMenu.png">
+                    <frame duration="1" hotspotX="0.495495" hotspotY="0.578818" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\LoseMenu.png">
+                        <image-point name="Imagepoint 1" x="0.495495" y="0.674877" />
+                        <image-point name="Imagepoint 2" x="0.495495" y="0.881773" />
                         <collision-poly>
                             <point x="1" y="0" />
                             <point x="1" y="1" />
@@ -2820,6 +2780,11 @@
         </object-type>
         <object-type name="Retry_button" sid="4065568322405406">
             <plugin id="Sprite" />
+            <instance-variables>
+                <instance-variable name="InitX" sid="5809355852164416" type="number" />
+                <instance-variable name="InitY" sid="2691986130679368" type="number" />
+                <instance-variable name="enbld" sid="5520708025488397" type="number" />
+            </instance-variables>
             <animation-folder>
                 <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="7858849583866308" speed="0">
                     <frame duration="1" hotspotX="0.5" hotspotY="0.5" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\Retry_Button.png">
@@ -2903,6 +2868,25 @@
                             <point x="1" y="0" />
                             <point x="1" y="1" />
                             <point x="0" y="1" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="Back_Button" sid="9518671901994297">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="1" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="4267018054399516" speed="5">
+                    <frame duration="1" hotspotX="0.5" hotspotY="0.507937" original-source="C:\Users\usuario\Desktop\MANUEL\Repositorio\RescueLander\trunk\RecueLanderSp\Art\ui\Back_Button.png">
+                        <collision-poly>
+                            <point x="0.0352941" y="0.107143" />
+                            <point x="0.5" y="0.0178571" />
+                            <point x="0.958824" y="0.125" />
+                            <point x="0.970588" y="0.5" />
+                            <point x="0.941176" y="0.821429" />
+                            <point x="0.5" y="0.857143" />
+                            <point x="0.0588235" y="0.821429" />
+                            <point x="0.0294118" y="0.5" />
                         </collision-poly>
                     </frame>
                 </animation>
