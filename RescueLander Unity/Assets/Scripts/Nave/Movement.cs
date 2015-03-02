@@ -69,7 +69,7 @@ public class Movement : MonoBehaviour {
 							if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended
 					   				& fuel >0){
 										
-										Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude, Vector3.forward) * Vector3.right;
+										Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
 										rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
 										ConsumeFuel();		
 									
@@ -81,7 +81,7 @@ public class Movement : MonoBehaviour {
 
 							if(Input.GetKey(KeyCode.Space) & fuel > 0 & rigid.velocity.magnitude < maxSpeed){
 									
-									Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude, Vector3.forward) * Vector3.right;
+									Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
 									rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
 									ConsumeFuel();
 									
@@ -91,16 +91,15 @@ public class Movement : MonoBehaviour {
 				
 									if(Input.GetMouseButton(0) & rigid.angularVelocity < maxAngularSpeed){
 								
-									RaycastHit _hit;
-									if(Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward,out _hit)){
+									
 											
 										
 														
-												if(_hit.point.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+												if(Input.mousePosition.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
 															Debug.Log("Right");
 															
-												}else if(_hit.point.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+												}else if(Input.mousePosition.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															
 															rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
 															Debug.Log("Left");
@@ -110,7 +109,7 @@ public class Movement : MonoBehaviour {
 												
 										
 										
-									}
+									
 										
 							}
 								
