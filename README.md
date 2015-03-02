@@ -7,4 +7,4 @@ Repositorio para Rescue Lander
 
 Sign apk:
 http://developer.android.com/tools/publishing/app-signing.html > crear clave
-https://www.scirra.com/tutorials/1156/publishing-to-android-via-intelxdk-and-appsigner--->Firmar
+https://www.scirra.com/tutorials/1156/publishing-to-android-via-intelxdk-and-appsigner --->Firmar
