@@ -69,8 +69,8 @@ public class Movement : MonoBehaviour {
 							if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended
 					   				& fuel >0){
 										
-										Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
-										rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
+										Vector3 dir = Quaternion.AngleAxis(-90, Vector3.forward) * Vector3.right;
+										rigid.AddForce(dir * (motorForce + (gameObject.transform.eulerAngles.magnitude + 90 * speedUpgrade)),ForceMode2D.Force);
 										ConsumeFuel();		
 									
 							}	
@@ -91,15 +91,16 @@ public class Movement : MonoBehaviour {
 				
 									if(Input.GetMouseButton(0) & rigid.angularVelocity < maxAngularSpeed){
 								
-									
+									RaycastHit _hit;
+									if(Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward,out _hit)){
 											
 										
 														
-												if(Input.mousePosition.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+												if(_hit.point.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
 															Debug.Log("Right");
 															
-												}else if(Input.mousePosition.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+												}else if(_hit.point.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															
 															rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
 															Debug.Log("Left");
@@ -109,7 +110,7 @@ public class Movement : MonoBehaviour {
 												
 										
 										
-									
+									}
 										
 							}
 								

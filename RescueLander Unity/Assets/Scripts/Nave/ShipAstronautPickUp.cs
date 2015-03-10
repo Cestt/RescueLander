@@ -3,8 +3,7 @@ using System.Collections;
 
 public class ShipAstronautPickUp : MonoBehaviour {
 
-	public tk2dTextMesh text;
-	private TextAstronaut textastronaut;
+
 	[HideInInspector]
 	public bool Pickable = false;
 	[HideInInspector]
@@ -17,7 +16,7 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	void Start () {
 
 		rigid = GetComponent<Rigidbody2D>();
-		textastronaut = text.GetComponent<TextAstronaut>();
+
 	
 	}
 	
@@ -31,9 +30,6 @@ public class ShipAstronautPickUp : MonoBehaviour {
 			Destroy(Astronaut);
 			Astronaut = null;
 			astronautPicked++;
-			dataManger.manager.pickedAstronauts += astronautPicked;
-			dataManger.manager.Save();
-			textastronaut.UpdateText();
 			Debug.Log("Astronaut Picked");
 
 		}

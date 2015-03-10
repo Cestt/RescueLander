@@ -3,16 +3,17 @@ using System.Collections;
 
 public class ShipAstronautDrop : MonoBehaviour {
 
-	public tk2dTextMesh text;
-	private TextAstronaut textastronaut;
+
 	private Rigidbody2D rigid;
 	private ShipAstronautPickUp shipastronautpickup;
+	private int astronautsDroped;
+	public int totalAstronauts;
 
-	void Start () {
+	void Awake () {
 
 		rigid = this.rigidbody2D;
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
-		textastronaut = text.GetComponent<TextAstronaut>();
+	
 
 	}
 	
@@ -27,13 +28,16 @@ public class ShipAstronautDrop : MonoBehaviour {
 			
 			if(rigid.velocity.magnitude == 0 & shipastronautpickup.astronautPicked != 0){
 
-
-				dataManger.manager.dropedAstronauts += shipastronautpickup.astronautPicked;
-				textastronaut.UpdateText();
 				shipastronautpickup.astronautPicked = 0;
+				astronautsDroped += shipastronautpickup.astronautPicked;
 				dataManger.manager.Save();
 				Debug.Log("Astronaut dropped");
 				
+			}
+
+			if(astronautsDroped == totalAstronauts){
+
+
 			}
 			
 		}

@@ -23,8 +23,6 @@ public class TextAstronaut : MonoBehaviour {
 
 	public void UpdateText(){
 
-		pickedAstronauts = dataManger.manager.pickedAstronauts;
-		dropedAstronauts = dataManger.manager.dropedAstronauts;
 		percentaje = (int)(dropedAstronauts * 100) / pickedAstronauts;
 		text.text = "Picked astronauts: " + pickedAstronauts + "  Dropped astronuts: " + dropedAstronauts +" "+ percentaje + " precent saved";
 		text.Commit();

@@ -3,21 +3,26 @@ using System.Collections;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Collections.Generic;
 
 public class dataManger : MonoBehaviour {
 
 	public static dataManger manager;
 
-	public int pickedAstronauts;
-	public int dropedAstronauts;
-	public tk2dTextMesh text;
-	private TextAstronaut textastronaut;
+	[HideInInspector]
+	public int unlocks;
+	[HideInInspector]
+	public Dictionary<string,int> stars = new Dictionary<string, int>();
+	[HideInInspector]
+	public Dictionary<string,int> scores = new Dictionary<string, int>();
+	public int levels;
+
+	private GameObject temp;
 
 
 
 	void Awake () {
 
-		textastronaut = text.GetComponent<TextAstronaut>();
 
 		if(manager == null){
 
@@ -30,15 +35,13 @@ public class dataManger : MonoBehaviour {
 
 		}
 
+		if(Application.loadedLevelName == "Menu"){
+			Initialize();
+		}
+
 
 	}
 
-	void Start () {
-
-		Load();
-		textastronaut.UpdateText();
-
-	}
 	
 
 
@@ -48,8 +51,17 @@ public class dataManger : MonoBehaviour {
 		FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
 		Data data = new Data();
 
-		data.pickedAstronauts = pickedAstronauts;
-		data.dropedAstronauts = dropedAstronauts;
+		data.unlocks = unlocks;
+
+		unlocks = data.unlocks;
+		
+		for(int i = 0; i <= levels; i++){
+			data.stars["level"+i] = stars["level"+i];
+			data.scores["scores"+i] = stars["level"+i];
+
+		}
+		
+
 
 		bf.Serialize(file,data);
 		file.Close();
@@ -64,21 +76,70 @@ public class dataManger : MonoBehaviour {
 			FileStream file = File.Open(Application.persistentDataPath + "/data.jmm",FileMode.Open);
 			Data data = (Data)bf.Deserialize(file);
 
-			pickedAstronauts = data.pickedAstronauts;
-			dropedAstronauts = data.dropedAstronauts;
+			unlocks = data.unlocks;
+
+			for(int i = 0; i<= levels ; i++){
+				stars["level"+i] = data.stars["level"+i];
+				scores["level"+i] = data.scores["scores"+i];
+			}
 
 			file.Close();
 
 		}
 		
 	}
+
+	public void Initialize(){
+		if(File.Exists(Application.persistentDataPath + "/data.jmm")){
+			
+			BinaryFormatter bf = new BinaryFormatter();
+			FileStream file = File.Open(Application.persistentDataPath + "/data.jmm",FileMode.Open);
+			Data data = (Data)bf.Deserialize(file);
+			
+			unlocks = data.unlocks;
+
+			for(int i = 0; i<= levels ; i++){
+				stars["level"+i] = data.stars["level"+i];
+				scores["level"+i] = data.scores["scores"+i];
+
+				temp = GameObject.Find("level"+i);
+			}
+			
+			file.Close();
+			
+		}else{
+
+			BinaryFormatter bf = new BinaryFormatter();
+			FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
+			Data data = new Data();
+			
+			data.unlocks = 0;
+			unlocks = data.unlocks;
+
+			for(int i = 0; i <= levels; i++){
+				data.stars.Add("level"+i,0);
+				data.scores.Add("level"+0,0);
+				stars.Add("level"+i,0);
+				scores.Add("level"+i,0);
+
+
+				temp = GameObject.Find("level"+i);
+
+			}
+			
+			bf.Serialize(file,data);
+			file.Close();
+		}
+
+	}
 }
 
 [Serializable]
 class Data {
 	[HideInInspector]
-	public int pickedAstronauts;
+	public int unlocks;
 	[HideInInspector]
-	public int dropedAstronauts;
-
+	public Dictionary<string,int> stars = new Dictionary<string, int>();
+	[HideInInspector]
+	public Dictionary<string,int> scores = new Dictionary<string, int>();
 }
