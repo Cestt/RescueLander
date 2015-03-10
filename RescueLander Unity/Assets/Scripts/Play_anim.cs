@@ -12,10 +12,12 @@ public class Play_anim : MonoBehaviour
 		index += Time.deltaTime;
 		float x = 0;
 
-		if(x > 0)
-		{
-			x = amplitude * Mathf.Cos (omega * index);
-		}
-		transform.localScale = new Vector3(Mathf.Clamp(x, 0.5f, 1.5f),Mathf.Clamp(x, 0.5f, 1.5f),0);
+		x = amplitude * Mathf.Cos (omega * index);
+		if (x < 0)
+			x *= -1;
+		if (x < 1)
+			x += 0.5f;
+
+		transform.localScale = new Vector3(x,x,0);
 	}
 }

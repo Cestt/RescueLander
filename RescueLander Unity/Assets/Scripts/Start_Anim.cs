@@ -16,5 +16,8 @@ public class Start_Anim : MonoBehaviour
 		float x = amplitudeX*Mathf.Cos (omegaX*index);
 		float y = amplitudeY*Mathf.Sin (omegaY*index);
 		transform.localPosition = new Vector3(x,y,0);
+
+		float angle = Mathf.Atan2(x,y) * Mathf.Rad2Deg;
+		transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 	}
 }
