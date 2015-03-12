@@ -23,6 +23,7 @@ public class dataManger : MonoBehaviour {
 
 	void Awake () {
 
+		Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
 
 		if(manager == null){
 
@@ -55,9 +56,9 @@ public class dataManger : MonoBehaviour {
 
 		unlocks = data.unlocks;
 		
-		for(int i = 0; i <= levels; i++){
-			data.stars["level"+i] = stars["level"+i];
-			data.scores["scores"+i] = stars["level"+i];
+		for(int i = 1; i <= levels; i++){
+			data.stars["Level_"+i] = stars["Level_"+i];
+			data.scores["Level_"+i] = stars["Level_"+i];
 
 		}
 		
@@ -78,9 +79,9 @@ public class dataManger : MonoBehaviour {
 
 			unlocks = data.unlocks;
 
-			for(int i = 0; i<= levels ; i++){
-				stars["level"+i] = data.stars["level"+i];
-				scores["level"+i] = data.scores["scores"+i];
+			for(int i = 1; i<= levels ; i++){
+				stars["Level_"+i] = data.stars["Level_"+i];
+				scores["Level_"+i] = data.scores["Level_"+i];
 			}
 
 			file.Close();
@@ -98,11 +99,25 @@ public class dataManger : MonoBehaviour {
 			
 			unlocks = data.unlocks;
 
-			for(int i = 0; i<= levels ; i++){
-				stars["level"+i] = data.stars["level"+i];
-				scores["level"+i] = data.scores["scores"+i];
+			for(int i = 1; i<= levels ; i++){
+				stars["Level_"+i] = data.stars["Level_"+i];
+				scores["Level_"+i] = data.scores["Level_"+i];
 
-				temp = GameObject.Find("level"+i);
+
+				if(i <= unlocks){
+					temp = GameObject.Find("Level_"+i);
+					temp.GetComponent<Levels>().Unlock = true;
+					for(int j = 1; j <=3; j++){
+						if(j <= stars["Level_"+i]){
+
+							Transform tempChild;
+							tempChild =  temp.transform.Find("LevelStar_"+j);
+							tempChild.GetComponent<Stars>().Unlock = true;
+
+						}
+					}
+
+				}
 			}
 			
 			file.Close();
@@ -113,17 +128,30 @@ public class dataManger : MonoBehaviour {
 			FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
 			Data data = new Data();
 			
-			data.unlocks = 0;
+			data.unlocks = 1;
 			unlocks = data.unlocks;
 
-			for(int i = 0; i <= levels; i++){
-				data.stars.Add("level"+i,0);
-				data.scores.Add("level"+0,0);
-				stars.Add("level"+i,0);
-				scores.Add("level"+i,0);
+			for(int i = 1; i <= levels; i++){
+				data.stars.Add("Level_"+i,0);
+				data.scores.Add("Level_"+i,0);
+				stars.Add("Level_"+i,0);
+				scores.Add("Level_"+i,0);
 
 
-				temp = GameObject.Find("level"+i);
+				if(i <= unlocks){
+					temp = GameObject.Find("Level_"+i);
+					temp.GetComponent<Levels>().Unlock = true;
+
+					for(int j = 1; j <=3; j++){
+						if(j <= stars["Level_"+i]){
+							
+							Transform tempChild;
+							tempChild =  temp.transform.Find("LevelStar_"+j);
+							tempChild.GetComponent<Stars>().Unlock = true;
+							
+						}
+					}
+				}
 
 			}
 			

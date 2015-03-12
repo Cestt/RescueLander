@@ -35,7 +35,7 @@ public class Cameraposition : MonoBehaviour {
 				if(ship.transform.position.x > cam.pixelWidth / 2 & ship.transform.position.x < maxScrollX - cam.pixelWidth/2){
 					tempPos.x = shipPos.position.x - cam.pixelWidth/2;
 				} 
-				if(ship.transform.position.y > cam.pixelHeight / 2 & ship.transform.position.y < 1080 - cam.pixelHeight/2){
+				if(/*ship.transform.position.y > cam.pixelHeight / 2 & */ship.transform.position.y < 1080 - cam.pixelHeight/2){
 					tempPos.y = shipPos.position.y - cam.pixelHeight/2;
 				}
 				cam.transform.position = tempPos;
