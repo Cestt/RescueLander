@@ -89,28 +89,20 @@ public class Movement : MonoBehaviour {
 
 							
 				
-									if(Input.GetMouseButton(0) & rigid.angularVelocity < maxAngularSpeed){
+									if(Input.GetMouseButtonDown(0) & rigid.angularVelocity < maxAngularSpeed){
 								
-									RaycastHit _hit;
-									if(Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward,out _hit)){
-											
-										
-														
-												if(_hit.point.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+									
+												if(Input.mousePosition.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
 															Debug.Log("Right");
 															
-												}else if(_hit.point.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+												}
+												if(Input.mousePosition.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															
 															rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
 															Debug.Log("Left");
 												}
 
-											
-												
-										
-										
-									}
 										
 							}
 								
