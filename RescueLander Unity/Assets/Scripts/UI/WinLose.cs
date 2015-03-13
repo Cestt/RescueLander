@@ -3,9 +3,12 @@ using System.Collections;
 
 public class WinLose : MonoBehaviour {
 
+	public GameObject WinSprite;
+	Halo_Anim haloanim;
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 	
+		haloanim = WinSprite.GetComponent<Halo_Anim>();
 	}
 	
 	// Update is called once per frame
@@ -16,8 +19,7 @@ public class WinLose : MonoBehaviour {
 	void End(string result){
 
 		if(result == "Win"){
-
-
+			StartCoroutine("Win");
 		}
 
 		if(result == "Lose"){
@@ -33,5 +35,12 @@ public class WinLose : MonoBehaviour {
 
 		Application.CaptureScreenshot(Application.persistentDataPath + "Screenshots/screenShot",superSize);
 	
+	}
+
+	IEnumerator Win(){
+		
+		haloanim.win =true;
+		WinSprite.transform.position = new Vector2(Camera.main.pixelWidth/2,Camera.main.pixelHeight/2);
+		yield return new WaitForSeconds(0f);
 	}
 }
