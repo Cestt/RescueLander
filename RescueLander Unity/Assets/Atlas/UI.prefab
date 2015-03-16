@@ -63,7 +63,7 @@ MonoBehaviour:
   atlasWidth: 1024
   atlasHeight: 2048
   forceSquareAtlas: 0
-  atlasWastage: 36.9376183
+  atlasWastage: 33.9087486
   allowMultipleAtlases: 0
   removeDuplicates: 1
   textureParams:
@@ -1379,11 +1379,11 @@ MonoBehaviour:
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
     attachPoints: []
-  - name: 
+  - name: Garage_Button
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: 900e22c2c3bc73741927efa37489db04, type: 3}
     materialId: 0
     anchor: 4
     anchorX: 0
@@ -2375,8 +2375,14 @@ MonoBehaviour:
     overrideMesh: {fileID: 0}
     doubleSidedSprite: 0
     customSpriteGeometry: 0
-    geometryIslands: []
-    dice: 1
+    geometryIslands:
+    - connected: 1
+      points:
+      - {x: 0, y: 0}
+      - {x: 0, y: 346}
+      - {x: 60, y: 346}
+      - {x: 60, y: 0}
+    dice: 0
     diceUnitX: 0
     diceUnitY: 90
     diceFilter: 0
