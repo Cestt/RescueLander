@@ -6,6 +6,7 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 
 	RuntimePlatform platform = Application.platform;
+	public GameObject fuelBar;
 	[HideInInspector]
 	public float motorForce = 0f;
 	public float speedUpgrade = 0f;
@@ -20,6 +21,8 @@ public class Movement : MonoBehaviour {
 	public float massAngular = 0f;
 	public float angularDrag = 0f;
 	public float linearDrag = 0f;
+	private float relation;
+	private tk2dSlicedSprite slicedsprite;
 
 
 
@@ -29,7 +32,9 @@ public class Movement : MonoBehaviour {
 	void Awake() {
 
 		rigid = GetComponent<Rigidbody2D>();
-
+		slicedsprite = fuelBar.GetComponent<tk2dSlicedSprite>();
+		relation = slicedsprite.dimensions.x/fuel;
+		
 	}
 
 	// Update is called once per frame
@@ -91,16 +96,16 @@ public class Movement : MonoBehaviour {
 				
 									if(Input.GetMouseButton(0) & rigid.angularVelocity < maxAngularSpeed){
 								
-									RaycastHit _hit;
-									if(Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward,out _hit)){
+									
 											
 										
 														
-												if(_hit.point.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+												if(Input.mousePosition.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
 															Debug.Log("Right");
 															
-												}else if(_hit.point.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+												}
+												if(Input.mousePosition.x  < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															
 															rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
 															Debug.Log("Left");
@@ -110,7 +115,7 @@ public class Movement : MonoBehaviour {
 												
 										
 										
-									}
+									
 										
 							}
 								
@@ -120,6 +125,7 @@ public class Movement : MonoBehaviour {
 
 	void ConsumeFuel () {
 		fuel -= fuelConsumption;
+		slicedsprite.dimensions = new Vector2(slicedsprite.dimensions.x - (relation*fuelConsumption),slicedsprite.dimensions.y);
 		Debug.Log("Fuel consumption");
 	}
 
