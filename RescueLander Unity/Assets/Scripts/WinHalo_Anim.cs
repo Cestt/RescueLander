@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Halo_Anim : MonoBehaviour
+public class WinHalo_Anim : MonoBehaviour
 {
 	void Update ()
 	{
