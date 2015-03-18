@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WinLose : MonoBehaviour {
 
 	public GameObject WinSprite;
+	public GameObject LoseSprite;
+	public List<GameObject> UI = new List<GameObject> ();
 	Halo_Anim haloanim;
 	// Use this for initialization
 	void Awake () {

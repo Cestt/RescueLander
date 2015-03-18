@@ -40,7 +40,7 @@ public class Damage : MonoBehaviour {
 
 			}
 
-
+			StartCoroutine(lifebarScript.LifeBarReduction((int)slicedsprite.dimensions.x,relation));
 			Destroy(gameObject);
 
 		}
