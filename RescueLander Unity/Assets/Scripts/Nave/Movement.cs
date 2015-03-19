@@ -49,13 +49,17 @@ public class Movement : MonoBehaviour {
 						if (Input.touchCount == 1){
 
 								touch = Input.GetTouch(0);
+								
 							
 							if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended){
 
-								if(touch.position.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+								Vector3 tempVect = Camera.main.ScreenToWorldPoint(touch.position);
+
+								if(tempVect.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 									rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
 									Debug.Log("Right");
-							}else if(touch.position.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+								} 
+								if(tempVect.x < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 									
 									rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
 									Debug.Log("Left");
@@ -98,14 +102,14 @@ public class Movement : MonoBehaviour {
 								
 									
 											
-										
+											Vector3 tempVect = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 														
-												if(Input.mousePosition.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+											if(tempVect.x > Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
 															Debug.Log("Right");
 															
 												}
-												if(Input.mousePosition.x  < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
+											if(tempVect.x  < Camera.main.transform.position.x + Camera.main.pixelWidth/2){
 															
 															rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
 															Debug.Log("Left");
