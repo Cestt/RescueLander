@@ -43,8 +43,8 @@ public class Cameraposition : MonoBehaviour {
 
 				cam.transform.position = tempPos;
 				cam.transform.position = 
-					new Vector3(Mathf.Clamp(cam.transform.position.x,0 + cam.pixelWidth/2,
-					                        maxScrollX - cam.pixelWidth/2),Mathf.Clamp(cam.transform.position.y,0 + cam.pixelHeight/2,1080 - cam.pixelHeight/2),
+					new Vector3(Mathf.Clamp(cam.transform.position.x,cam.pixelWidth/2+100,
+					                        maxScrollX - cam.pixelWidth/2-100),Mathf.Clamp(cam.transform.position.y,0 + cam.pixelHeight/2,1080 - cam.pixelHeight/2),
 					            cam.transform.position.z);
 			}else{
 				

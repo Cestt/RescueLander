@@ -6,6 +6,7 @@ public class Zoom : MonoBehaviour {
 
 	public tk2dCamera cam;
 	public float zoomProgression;
+	public bool zooming;
 
 	void Awake(){
 
@@ -21,6 +22,7 @@ public class Zoom : MonoBehaviour {
 				StartCoroutine(Zooming("in"));
 
 
+
 			}
 			
 
@@ -33,6 +35,7 @@ public class Zoom : MonoBehaviour {
 			if(cam.ZoomFactor > 1){
 				
 				StartCoroutine(Zooming("out"));
+
 				
 				
 			}
@@ -49,6 +52,7 @@ public class Zoom : MonoBehaviour {
 						
 						cam.ZoomFactor += zoomProgression;
 						Debug.Log ("Zooming in");
+						zooming = true;
 
 				}
 
@@ -62,6 +66,7 @@ public class Zoom : MonoBehaviour {
 				yield return new WaitForSeconds(Time.fixedDeltaTime);
 
 			}
+			zooming = false;
 			
 		}
 
