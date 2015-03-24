@@ -6,15 +6,10 @@ public class Zoom : MonoBehaviour {
 
 	public tk2dCamera cam;
 	public float zoomProgression;
-	public float scale;
-	public List<GameObject> UI = new List<GameObject>();
-	private List<Vector3> originalScales = new List<Vector3>();
 
 	void Awake(){
 
-		foreach (GameObject temp in UI) {
-			originalScales.Add(temp.transform.localScale); 
-		}
+
 	
 	}
 
@@ -55,24 +50,11 @@ public class Zoom : MonoBehaviour {
 						cam.ZoomFactor += zoomProgression;
 						Debug.Log ("Zooming in");
 
-						foreach (GameObject temp in UI) {
-
-							temp.transform.localScale = new Vector3(scale,scale,temp.transform.localScale.z);
-
-						}
 				}
 
 
 		if(zoom == "out"){
 
-
-			int index = 0;
-			foreach(GameObject temp in UI){
-				
-				temp.transform.localScale = originalScales[index];
-				index++;
-				
-			}
 
 			while(cam.ZoomFactor > 1){
 

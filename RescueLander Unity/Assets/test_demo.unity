@@ -128,7 +128,7 @@ GameObject:
   - 23: {fileID: 33075652}
   - 33: {fileID: 33075651}
   - 114: {fileID: 33075650}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: WinScore_Txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
 --- !u!1 &58678530
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,7 +403,7 @@ GameObject:
   - 33: {fileID: 88980480}
   - 23: {fileID: 88980479}
   - 114: {fileID: 88980478}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Sound_Button_On
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +484,7 @@ GameObject:
   - 23: {fileID: 93601214}
   - 114: {fileID: 93601213}
   - 114: {fileID: 93601216}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UIBase_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -581,7 +581,7 @@ GameObject:
   - 23: {fileID: 121554164}
   - 114: {fileID: 121554163}
   - 68: {fileID: 121554166}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Lose_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -674,7 +674,7 @@ GameObject:
   - 33: {fileID: 130468688}
   - 23: {fileID: 130468687}
   - 114: {fileID: 130468686}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: AstronautIco_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -754,7 +754,7 @@ GameObject:
   - 33: {fileID: 158918035}
   - 23: {fileID: 158918034}
   - 114: {fileID: 158918033}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Retry_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -935,6 +935,86 @@ MeshFilter:
   m_PrefabInternal: {fileID: 805169270}
   m_GameObject: {fileID: 181032564}
   m_Mesh: {fileID: 0}
+--- !u!1 &186449399
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 186449400}
+  - 20: {fileID: 186449404}
+  - 124: {fileID: 186449403}
+  - 92: {fileID: 186449402}
+  m_Layer: 0
+  m_Name: UI_Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &186449400
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 186449399}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 540, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 436844365}
+  - {fileID: 840208776}
+  - {fileID: 2139990736}
+  - {fileID: 2011415449}
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+--- !u!92 &186449402
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 186449399}
+  m_Enabled: 1
+--- !u!124 &186449403
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 186449399}
+  m_Enabled: 1
+--- !u!20 &186449404
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 186449399}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 4
+  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 540
+  m_Depth: 1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 32
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
 --- !u!1 &204780349
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,7 +1110,7 @@ GameObject:
   - 33: {fileID: 256948536}
   - 23: {fileID: 256948535}
   - 114: {fileID: 256948534}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Retry_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1123,7 +1203,7 @@ GameObject:
   - 33: {fileID: 276031991}
   - 23: {fileID: 276031990}
   - 114: {fileID: 276031989}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: AstronautIco_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1401,7 +1481,7 @@ GameObject:
   - 33: {fileID: 339276643}
   - 23: {fileID: 339276642}
   - 114: {fileID: 339276641}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Retry_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1629,7 +1709,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 436844365}
   - 114: {fileID: 436844366}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Anchor (UpperLeft)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1643,12 +1723,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 436844364}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -960, y: 540, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -960.75708, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 1091112605}
   - {fileID: 93601212}
-  m_Father: {fileID: 1025214990}
+  m_Father: {fileID: 186449400}
   m_RootOrder: 0
 --- !u!114 &436844366
 MonoBehaviour:
@@ -1666,7 +1746,7 @@ MonoBehaviour:
   anchorToNativeBounds: 0
   offset: {x: 0, y: 0}
   tk2dCamera: {fileID: 0}
-  _anchorCamera: {fileID: 1025214989}
+  _anchorCamera: {fileID: 186449404}
 --- !u!1 &463881590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1989,6 +2069,14 @@ Prefab:
       propertyPath: data.color.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 147954, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 147956, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
   m_RootGameObject: {fileID: 1964161248}
@@ -2136,12 +2224,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 1025214988}
   zoomProgression: .0500000007
-  scale: .5
-  UI:
-  - {fileID: 436844364}
-  - {fileID: 840208775}
-  - {fileID: 2139990735}
-  - {fileID: 2011415448}
 --- !u!61 &612795858
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2165,7 +2247,7 @@ GameObject:
   - 33: {fileID: 642928901}
   - 23: {fileID: 642928900}
   - 114: {fileID: 642928899}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Pause_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2378,7 +2460,7 @@ GameObject:
   - 23: {fileID: 700547644}
   - 114: {fileID: 700547643}
   - 60: {fileID: 700547646}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Ship_Ico
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2483,7 +2565,7 @@ GameObject:
   - 33: {fileID: 793729002}
   - 23: {fileID: 793729001}
   - 114: {fileID: 793729000}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Minimap_Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2562,7 +2644,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11453590, guid: bf77c820c4227eb49a7cd67223a658aa, type: 2}
       propertyPath: UI.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 469470, guid: bf77c820c4227eb49a7cd67223a658aa, type: 2}
       propertyPath: m_LocalPosition.x
@@ -2899,7 +2981,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 840208776}
   - 114: {fileID: 840208777}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Anchor (UpperRight)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2913,8 +2995,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 840208775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 960, y: 540, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 960.756958, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 1609081668}
   - {fileID: 2064472497}
@@ -2922,7 +3004,7 @@ Transform:
   - {fileID: 276031988}
   - {fileID: 130468685}
   - {fileID: 1115367567}
-  m_Father: {fileID: 1025214990}
+  m_Father: {fileID: 186449400}
   m_RootOrder: 1
 --- !u!114 &840208777
 MonoBehaviour:
@@ -2940,7 +3022,7 @@ MonoBehaviour:
   anchorToNativeBounds: 0
   offset: {x: 0, y: 0}
   tk2dCamera: {fileID: 0}
-  _anchorCamera: {fileID: 1025214989}
+  _anchorCamera: {fileID: 186449404}
 --- !u!1 &894146144
 GameObject:
   m_ObjectHideFlags: 0
@@ -3080,7 +3162,7 @@ GameObject:
   - 33: {fileID: 904210782}
   - 23: {fileID: 904210781}
   - 114: {fileID: 904210780}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UIBase_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3241,7 +3323,7 @@ GameObject:
   - 23: {fileID: 916767761}
   - 33: {fileID: 916767760}
   - 114: {fileID: 916767759}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Retry_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3803,6 +3885,14 @@ Prefab:
       propertyPath: data.color.b
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 147954, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 147956, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
   m_RootGameObject: {fileID: 158918031}
@@ -3908,7 +3998,7 @@ MonoBehaviour:
   version: 1
   cameraSettings:
     projection: 0
-    orthographicSize: 539.880005
+    orthographicSize: 540
     orthographicPixelsPerMeter: 1
     orthographicOrigin: 1
     orthographicType: 0
@@ -3989,7 +4079,7 @@ MonoBehaviour:
   viewportRegion: {x: 0, y: 0, z: 100, w: 100}
   zoomFactor: 1
   forceResolutionInEditor: 1
-  forceResolution: {x: 1920, y: 1080}
+  forceResolution: {x: 960, y: 540}
 --- !u!20 &1025214989
 Camera:
   m_ObjectHideFlags: 3
@@ -4014,7 +4104,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967263
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4031,11 +4121,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 960, y: 540, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 0}
-  m_Children:
-  - {fileID: 436844365}
-  - {fileID: 840208776}
-  - {fileID: 2139990736}
-  - {fileID: 2011415449}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
 --- !u!114 &1025214991
@@ -4290,7 +4376,7 @@ GameObject:
   - 33: {fileID: 1038014645}
   - 23: {fileID: 1038014644}
   - 114: {fileID: 1038014643}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Levels_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4453,7 +4539,7 @@ GameObject:
   - 33: {fileID: 1091112608}
   - 23: {fileID: 1091112607}
   - 114: {fileID: 1091112606}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UIBase_Left_Col
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4587,7 +4673,7 @@ GameObject:
   - 33: {fileID: 1115367570}
   - 23: {fileID: 1115367569}
   - 114: {fileID: 1115367568}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: AstronautIco_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4667,7 +4753,7 @@ GameObject:
   - 23: {fileID: 1138194120}
   - 33: {fileID: 1138194119}
   - 114: {fileID: 1138194118}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: WinScore_Txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4768,7 +4854,7 @@ GameObject:
   - 33: {fileID: 1149859120}
   - 23: {fileID: 1149859119}
   - 114: {fileID: 1149859118}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Share_Ico
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5042,7 +5128,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
 --- !u!114 &1201683377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5068,7 +5154,7 @@ GameObject:
   - 33: {fileID: 1204590440}
   - 23: {fileID: 1204590439}
   - 114: {fileID: 1204590438}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Pic_Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5160,7 +5246,7 @@ GameObject:
   - 23: {fileID: 1204886097}
   - 114: {fileID: 1204886096}
   - 114: {fileID: 1204886095}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Halo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5439,7 +5525,7 @@ GameObject:
   - 23: {fileID: 1310387604}
   - 33: {fileID: 1310387603}
   - 114: {fileID: 1310387602}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Retry_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5623,7 +5709,7 @@ GameObject:
   - 33: {fileID: 1361058742}
   - 23: {fileID: 1361058741}
   - 114: {fileID: 1361058740}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Share_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5717,7 +5803,7 @@ GameObject:
   - 33: {fileID: 1370483880}
   - 23: {fileID: 1370483879}
   - 114: {fileID: 1370483878}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Win_Star1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5904,7 +5990,7 @@ GameObject:
   - 33: {fileID: 1498577115}
   - 23: {fileID: 1498577114}
   - 114: {fileID: 1498577113}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BarraFondo_Fuel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5985,7 +6071,7 @@ GameObject:
   - 33: {fileID: 1560455903}
   - 23: {fileID: 1560455902}
   - 114: {fileID: 1560455901}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: NextLvl_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6078,7 +6164,7 @@ GameObject:
   - 33: {fileID: 1589878291}
   - 23: {fileID: 1589878290}
   - 114: {fileID: 1589878289}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Oil_Ico
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6288,6 +6374,14 @@ Prefab:
       propertyPath: data.color.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 147954, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 147956, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
   m_RootGameObject: {fileID: 1361058738}
@@ -6304,7 +6398,7 @@ GameObject:
   - 33: {fileID: 1609081671}
   - 23: {fileID: 1609081670}
   - 114: {fileID: 1609081669}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UIBase_Right_Col_Extended
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6399,7 +6493,7 @@ GameObject:
   - 33: {fileID: 1641335135}
   - 23: {fileID: 1641335134}
   - 114: {fileID: 1641335133}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BarraFondo_Vida
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6829,6 +6923,14 @@ Prefab:
       propertyPath: data.color.b
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 147954, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 147956, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
   m_RootGameObject: {fileID: 1560455899}
@@ -6944,7 +7046,7 @@ GameObject:
   - 33: {fileID: 1705357900}
   - 23: {fileID: 1705357899}
   - 114: {fileID: 1705357898}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Win_Star2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7024,7 +7126,7 @@ GameObject:
   - 33: {fileID: 1712566388}
   - 23: {fileID: 1712566387}
   - 114: {fileID: 1712566386}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Win_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7235,7 +7337,7 @@ GameObject:
   - 33: {fileID: 1742702870}
   - 23: {fileID: 1742702869}
   - 114: {fileID: 1742702868}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Music_Button_On
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7395,7 +7497,7 @@ GameObject:
   - 23: {fileID: 1750041298}
   - 33: {fileID: 1750041297}
   - 114: {fileID: 1750041296}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Share_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7501,7 +7603,7 @@ GameObject:
   - 23: {fileID: 1766692354}
   - 33: {fileID: 1766692353}
   - 114: {fileID: 1766692352}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Next_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7908,6 +8010,14 @@ Prefab:
     - target: {fileID: 11447956, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
       propertyPath: data.inlineStyling
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147954, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 147956, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1d800f36d496fe498c9abfeaa73515a, type: 2}
@@ -8391,7 +8501,7 @@ GameObject:
   - 33: {fileID: 1881313291}
   - 23: {fileID: 1881313290}
   - 114: {fileID: 1881313289}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Share_Ico
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8668,7 +8778,7 @@ GameObject:
   - 23: {fileID: 1908719433}
   - 114: {fileID: 1908719432}
   - 114: {fileID: 1908719435}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BarraVida
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8768,7 +8878,7 @@ GameObject:
   - 33: {fileID: 1964161252}
   - 23: {fileID: 1964161251}
   - 114: {fileID: 1964161250}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Share_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8862,7 +8972,7 @@ GameObject:
   - 23: {fileID: 2001313616}
   - 33: {fileID: 2001313615}
   - 114: {fileID: 2001313614}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Share_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8965,7 +9075,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2011415449}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: WinLayout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8980,12 +9090,12 @@ Transform:
   m_GameObject: {fileID: 2011415448}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -51, y: -4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 1712566385}
   - {fileID: 2069586304}
   - {fileID: 1887947191}
-  m_Father: {fileID: 1025214990}
+  m_Father: {fileID: 186449400}
   m_RootOrder: 3
 --- !u!1 &2027071470
 GameObject:
@@ -8998,7 +9108,7 @@ GameObject:
   - 33: {fileID: 2027071474}
   - 23: {fileID: 2027071473}
   - 114: {fileID: 2027071472}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Win_Star3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9206,7 +9316,7 @@ GameObject:
   - 33: {fileID: 2033456052}
   - 23: {fileID: 2033456051}
   - 114: {fileID: 2033456050}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Minimap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9286,7 +9396,7 @@ GameObject:
   - 33: {fileID: 2042664466}
   - 23: {fileID: 2042664465}
   - 114: {fileID: 2042664464}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BarraFuel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10490,7 +10600,7 @@ GameObject:
   - 33: {fileID: 2064472496}
   - 23: {fileID: 2064472495}
   - 114: {fileID: 2064472494}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UIBase_Right_Col
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10580,7 +10690,7 @@ GameObject:
   - 33: {fileID: 2069586307}
   - 23: {fileID: 2069586306}
   - 114: {fileID: 2069586305}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Pic_Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10671,7 +10781,7 @@ GameObject:
   - 33: {fileID: 2095839977}
   - 23: {fileID: 2095839976}
   - 114: {fileID: 2095839975}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Sound_Button_Off
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10751,7 +10861,7 @@ GameObject:
   - 33: {fileID: 2097475445}
   - 23: {fileID: 2097475444}
   - 114: {fileID: 2097475443}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Music_Button_Off
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10828,7 +10938,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2139990736}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LoseLayout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10843,10 +10953,10 @@ Transform:
   m_GameObject: {fileID: 2139990735}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -18, y: 33, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 121554162}
   - {fileID: 1204590437}
   - {fileID: 1742579973}
-  m_Father: {fileID: 1025214990}
+  m_Father: {fileID: 186449400}
   m_RootOrder: 2
