@@ -6,7 +6,7 @@ public class Zoom : MonoBehaviour {
 
 	public tk2dCamera cam;
 	public float zoomProgression;
-	public bool zooming;
+	public bool Finish;
 
 	void Awake(){
 
@@ -14,16 +14,12 @@ public class Zoom : MonoBehaviour {
 	
 	}
 
-	void OnTriggerStay2D(Collider2D coll) {
+	void OnTriggerEnter2D(Collider2D coll) {
 		if (coll.gameObject.tag == "Floor"){
 
-			if(cam.ZoomFactor < 2){
 
 				StartCoroutine(Zooming("in"));
 
-
-
-			}
 			
 
 		}
@@ -36,8 +32,6 @@ public class Zoom : MonoBehaviour {
 				
 				StartCoroutine(Zooming("out"));
 
-				
-				
 			}
 			
 			
@@ -49,11 +43,15 @@ public class Zoom : MonoBehaviour {
 	IEnumerator Zooming(string zoom){
 
 		if (zoom == "in") {
+				
+				while(cam.ZoomFactor < 2){
+					
+					cam.ZoomFactor += zoomProgression;
+					yield return new WaitForSeconds(Time.fixedDeltaTime);
+					
+				}
+				cam.ZoomFactor = 2;
 						
-						cam.ZoomFactor += zoomProgression;
-						Debug.Log ("Zooming in");
-						zooming = true;
-
 				}
 
 
@@ -66,7 +64,7 @@ public class Zoom : MonoBehaviour {
 				yield return new WaitForSeconds(Time.fixedDeltaTime);
 
 			}
-			zooming = false;
+			cam.ZoomFactor = 1;
 			
 		}
 

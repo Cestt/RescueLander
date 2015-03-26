@@ -17,11 +17,13 @@ public class Cameraposition : MonoBehaviour {
 		camera = this.GetComponent<tk2dCamera>();
 		cam = Camera.main;
 		shipPos = ship.transform;
+
 	}
+
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-
+		
 		Follow();
 
 	
@@ -35,16 +37,16 @@ public class Cameraposition : MonoBehaviour {
 			if(BoundedScroll){
 				tempPos = cam.transform.position;
 				
-
+			
 					tempPos.x = shipPos.position.x;
-				 
-
 					tempPos.y = shipPos.position.y;
+					cam.transform.position = Vector3.MoveTowards(transform.position,tempPos,500*Time.deltaTime);
 
-				cam.transform.position = tempPos;
+
 				cam.transform.position = 
-					new Vector3(Mathf.Clamp(cam.transform.position.x,cam.pixelWidth/2+100,
-					                        maxScrollX - cam.pixelWidth/2-100),Mathf.Clamp(cam.transform.position.y,0 + cam.pixelHeight/2,1080 - cam.pixelHeight/2),
+					new Vector3(Mathf.Clamp(cam.transform.position.x,camera.nativeResolutionWidth/2/camera.ZoomFactor,
+					                        maxScrollX - camera.nativeResolutionWidth/2/camera.ZoomFactor),
+					            Mathf.Clamp(cam.transform.position.y,0 + camera.nativeResolutionHeight/2/camera.ZoomFactor,1080 - camera.nativeResolutionHeight/2/camera.ZoomFactor),
 					            cam.transform.position.z);
 			}else{
 				
