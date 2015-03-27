@@ -204,7 +204,7 @@ GameObject:
   - 114: {fileID: 11469476}
   - 114: {fileID: 11416530}
   m_Layer: 0
-  m_Name: Thruster
+  m_Name: Thruster_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1653,6 +1653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fuelBar: {fileID: 0}
   motorForce: 900
+  motor: 0
   speedUpgrade: 0
   maxSpeed: 9999
   angularForce: 1200
@@ -1675,9 +1676,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 901c5fe80ec13ec478e13d4a7dfa820b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosion: {fileID: 0}
+  sparks: {fileID: 0}
   life: 0
   damageThreshold: 0
   lifeBar: {fileID: 0}
+  GameManager: {fileID: 0}
 --- !u!114 &11451732
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1705,6 +1709,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
   zoomProgression: .5
+  Finish: 0
 --- !u!114 &11469468
 MonoBehaviour:
   m_ObjectHideFlags: 1

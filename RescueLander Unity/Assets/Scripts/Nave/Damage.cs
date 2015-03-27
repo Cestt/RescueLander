@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Damage : MonoBehaviour {
 
+	public GameObject explosion;
+	public GameObject sparks;
 	public int life = 0;
 	public int damageThreshold = 0;
 	private ShipAstronautPickUp shipastronautpickup;
@@ -13,6 +15,7 @@ public class Damage : MonoBehaviour {
 	private tk2dSlicedSprite slicedsprite;
 	private LifeBar lifebarScript;
 	private IEnumerator coroutine;
+	private tk2dSpriteAnimator animator;
 	WinLose winLose;
 
 	// Use this for initialization
@@ -25,12 +28,10 @@ public class Damage : MonoBehaviour {
 		relation = slicedsprite.dimensions.x/life;
 		winLose = GameManager.GetComponent<WinLose> ();
 
-	}
-
-	void Start() {
-
 
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -42,10 +43,12 @@ public class Damage : MonoBehaviour {
 				shipastronautpickup.Astronaut = null;
 
 			}
-
+			animator = explosion.GetComponent<tk2dSpriteAnimator>();
 			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
+			explosion.SetActive(true);
+			animator.Play("Explosion");
 			winLose.End("Lose");
-			Destroy(gameObject);
+			animator.AnimationCompleted = DestroyShip;
 
 		}
 
@@ -56,6 +59,13 @@ public class Damage : MonoBehaviour {
 		if (coll.gameObject.tag == "Floor"){
 
 			if(coll.relativeVelocity.magnitude > damageThreshold){
+				ContactPoint2D contactpoint = coll.contacts[0];
+				sparks.transform.position = contactpoint.point;
+				animator = sparks.GetComponent<tk2dSpriteAnimator>();
+				sparks.SetActive(true);
+				animator.Play("Sparks");
+				animator.AnimationCompleted = ResetSparks;
+				
 
 				life -= (int)coll.relativeVelocity.magnitude - damageThreshold;
 				totalDamage += (int)coll.relativeVelocity.magnitude - damageThreshold;
@@ -74,6 +84,13 @@ public class Damage : MonoBehaviour {
 		if (coll.gameObject.tag == "Floor"){
 			
 			if(coll.relativeVelocity.magnitude > damageThreshold){
+
+				ContactPoint2D contactpoint = coll.contacts[0];
+				sparks.transform.position = contactpoint.point;
+				animator = sparks.GetComponent<tk2dSpriteAnimator>();
+				sparks.SetActive(true);
+				animator.Play("Sparks");
+				animator.AnimationCompleted = ResetSparks;
 				
 				life -= (int)coll.relativeVelocity.magnitude - damageThreshold;
 				totalDamage += (int)coll.relativeVelocity.magnitude - damageThreshold;
@@ -87,6 +104,16 @@ public class Damage : MonoBehaviour {
 				
 			}
 		}
+	}
+
+	void DestroyShip(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
+		animator.AnimationCompleted = null;
+		Destroy(gameObject);
+	}
+	void ResetSparks(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
+		animator.AnimationCompleted = null;
+		Vector2 temp = new Vector2(-100,0);
+		sparks.transform.position = temp;
 	}
 
 
