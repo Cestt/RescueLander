@@ -18,7 +18,8 @@ public class ShipSmoke : MonoBehaviour {
 	
 		if(movement.motor){
 			particlesystem.enableEmission = true;
-		}else{
+		}
+		if(!movement.motor){
 			particlesystem.enableEmission = false;
 		}
 

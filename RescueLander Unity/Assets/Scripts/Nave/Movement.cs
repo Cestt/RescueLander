@@ -27,7 +27,7 @@ public class Movement : MonoBehaviour {
 	public float angularDrag = 0f;
 	public float linearDrag = 0f;
 	private float relation;
-	private int currentFrame;
+	private int currentFrame = 0;
 	private tk2dSlicedSprite slicedsprite;
 	private tk2dSpriteAnimator animator;
 
@@ -47,9 +47,9 @@ public class Movement : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 
-		if(animator != null){
+		/*if(animator != null){
 			currentFrame = animator.CurrentFrame;
-		}
+		}*/
 
 			if(platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer || platform == RuntimePlatform.WindowsEditor){
 				if(Input.touchCount > 0) {
@@ -71,9 +71,13 @@ public class Movement : MonoBehaviour {
 									if(!Thruster_l.activeInHierarchy){
 										Thruster_l.SetActive(true);
 									}
+									if(Thruster_r.activeInHierarchy){
+										Thruster_r.SetActive(false);
+									}
 									animator = Thruster_l.GetComponent<tk2dSpriteAnimator>();
-									if(!animator.IsPlaying("Thruster_Loop"))
-									animator.Play("Thruset_Start");
+									if(!animator.IsPlaying("Thruster_Loop")){
+										animator.Play("Thruster_Start");
+									}
 									animator.AnimationCompleted = ThrusterLoop;
 								} 
 								if(tempVect.x < Camera.main.transform.position.x){
@@ -83,21 +87,26 @@ public class Movement : MonoBehaviour {
 									if(!Thruster_r.activeInHierarchy){
 										Thruster_r.SetActive(true);
 									}
+									if(Thruster_l.activeInHierarchy){
+										Thruster_l.SetActive(false);
+									}
 									animator = Thruster_r.GetComponent<tk2dSpriteAnimator>();
-									if(!animator.IsPlaying("Thruster_Loop"))
-									animator.Play("Thruset_Start");
+									if(!animator.IsPlaying("Thruster_Loop")){
+										animator.Play("Thruster_Start");
+									}
+									
 									animator.AnimationCompleted = ThrusterLoop;
 								}
 
 							}
 							
-							if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
+							if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended || Input.touchCount == 2){
 								animator.Stop();
 								Thruster_l.SetActive(false);
 								Thruster_r.SetActive(false);
 							}
 					
-							
+							motor  = false;
 						}
 									
 											
@@ -171,8 +180,9 @@ public class Movement : MonoBehaviour {
 																Thruster_l.SetActive(true);
 															}
 														animator = Thruster_l.GetComponent<tk2dSpriteAnimator>();
-														if(!animator.IsPlaying("Thruster_Loop"))
-														animator.Play("Thruster_Start");
+														if(!animator.IsPlaying("Thruster_Loop")){
+															animator.Play("Thruster_Start");
+														}
 														animator.AnimationCompleted = ThrusterLoop;
 															
 												}
@@ -184,10 +194,12 @@ public class Movement : MonoBehaviour {
 																Thruster_r.SetActive(true);
 															}
 														animator = Thruster_r.GetComponent<tk2dSpriteAnimator>();
-														if(!animator.IsPlaying("Thruster_Loop"))
-														animator.Play("Thruster_Start");
+														if(!animator.IsPlaying("Thruster_Loop")){
+															animator.Play("Thruster_Start");
+														}
 														animator.AnimationCompleted = ThrusterLoop;
 												}
+												motor  = false;
 		
 								}
 								if(Input.GetMouseButtonUp(0)){

@@ -6,6 +6,7 @@ public class Damage : MonoBehaviour {
 	public GameObject explosion;
 	public GameObject sparks;
 	public int life = 0;
+	private int maxLife;
 	public int damageThreshold = 0;
 	private ShipAstronautPickUp shipastronautpickup;
 	public GameObject lifeBar;
@@ -27,6 +28,7 @@ public class Damage : MonoBehaviour {
 		coroutine = lifebarScript.LifeBarReduction(totalDamage,relation);
 		relation = slicedsprite.dimensions.x/life;
 		winLose = GameManager.GetComponent<WinLose> ();
+		maxLife =life;
 
 
 	}
@@ -68,7 +70,9 @@ public class Damage : MonoBehaviour {
 				
 
 				life -= (int)coll.relativeVelocity.magnitude - damageThreshold;
-				totalDamage += (int)coll.relativeVelocity.magnitude - damageThreshold;
+				if(totalDamage <= maxLife){
+					totalDamage += (int)coll.relativeVelocity.magnitude - damageThreshold;
+				}
 				Debug.Log("Total Damage: " + totalDamage);
 				lifebarScript.Starter(totalDamage,relation);
 				Debug.Log("Hull Impact damage");
@@ -93,7 +97,9 @@ public class Damage : MonoBehaviour {
 				animator.AnimationCompleted = ResetSparks;
 				
 				life -= (int)coll.relativeVelocity.magnitude - damageThreshold;
-				totalDamage += (int)coll.relativeVelocity.magnitude - damageThreshold;
+					if(totalDamage <= maxLife){
+						totalDamage += (int)coll.relativeVelocity.magnitude - damageThreshold;
+					}
 				Debug.Log("Total Damage: " + totalDamage);
 				lifebarScript.Starter(totalDamage,relation);
 				Debug.Log("Hull friction damage");
