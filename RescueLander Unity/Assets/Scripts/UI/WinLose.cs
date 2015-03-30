@@ -7,7 +7,8 @@ public class WinLose : MonoBehaviour {
 	public GameObject WinSprite;
 	public GameObject LoseSprite;
 	public GameObject winText;
-	public List<GameObject> UI = new List<GameObject> ();
+	public GameObject UI1;
+	public GameObject UI2;
 	WinHalo_Anim haloanim;
 	tk2dTextMesh text;
 	ScoreManager scoreManager;
@@ -51,12 +52,16 @@ public class WinLose : MonoBehaviour {
 		WinSprite.SetActive (true);
 		int totalScore = (int)scoreManager.scoreCalc ();
 		text.text ="Score: "+ totalScore.ToString();
+		UI1.SetActive (false);
+		UI2.SetActive (false);
 		yield return new WaitForSeconds(2f);
 		Application.LoadLevel("Menu");
 	}
 	IEnumerator Lose(){
 
 		LoseSprite.SetActive (true);
+		UI1.SetActive (false);
+		UI2.SetActive (false);
 		yield return new WaitForSeconds(2f);
 		Application.LoadLevel("Menu");
 	}

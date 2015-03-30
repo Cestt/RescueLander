@@ -4,7 +4,7 @@ using System.Collections;
 public class AstronautPickUp : MonoBehaviour {
 
 	public GameObject ship;
-	public int pickUpDistance = 200;
+	public float pickUpDistance = 200f;
 	private ShipAstronautPickUp shipastronautpickup;
 
 
@@ -20,7 +20,7 @@ public class AstronautPickUp : MonoBehaviour {
 
 		if(ship !=null){
 
-			if(Vector2.Distance(this.transform.position,ship.transform.position) < pickUpDistance * 100 ){
+			if(Vector2.Distance(this.transform.position,ship.transform.position) < pickUpDistance * 100f ){
 				
 				shipastronautpickup.Pickable = true;
 				shipastronautpickup.Astronaut = this.gameObject;

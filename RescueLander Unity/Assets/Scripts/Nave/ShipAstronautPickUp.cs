@@ -30,9 +30,9 @@ public class ShipAstronautPickUp : MonoBehaviour {
 
 			animator = Astronaut.GetComponent<tk2dSpriteAnimator>();
 			if(!animator.IsPlaying("Halo")){
+				animator.Play("Halo");
 				astronautPicked++;
 				Pickable = false;
-				animator.Play("Halo");
 				animator.AnimationCompleted = DestroyAstro;
 				Astronaut = null;
 			}
