@@ -11,11 +11,14 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	[HideInInspector]
 	public int astronautPicked = 0;
 	private Rigidbody2D rigid;
+	private tk2dSpriteAnimator animator;
+
 
 	// Use this for initialization
 	void Start () {
 
 		rigid = GetComponent<Rigidbody2D>();
+
 
 	
 	}
@@ -25,16 +28,24 @@ public class ShipAstronautPickUp : MonoBehaviour {
 
 		if(Pickable = true & rigid.velocity.magnitude == 0 & Astronaut != null){
 
+			animator = Astronaut.GetComponent<tk2dSpriteAnimator>();
+			if(!animator.IsPlaying("Halo")){
+				astronautPicked++;
+				Pickable = false;
+				animator.Play("Halo");
+				animator.AnimationCompleted = DestroyAstro;
+				Astronaut = null;
+			}
 
-			Pickable = false;
-			Destroy(Astronaut);
-			Astronaut = null;
-			astronautPicked++;
-			Debug.Log("Astronaut Picked");
+			Debug.Log("Astronaut Picked: "+astronautPicked);
 
 		}
 
 
 	
+	}
+	void DestroyAstro(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
+		Destroy(Astronaut);
+		animator.AnimationCompleted = null;
 	}
 }

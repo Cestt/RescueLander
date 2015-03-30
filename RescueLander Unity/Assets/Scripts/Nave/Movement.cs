@@ -7,8 +7,13 @@ public class Movement : MonoBehaviour {
 
 	RuntimePlatform platform = Application.platform;
 	public GameObject fuelBar;
+	public GameObject Thruster_r;
+	public GameObject Thruster_l;
+	public GameObject Fire;
 	[HideInInspector]
 	public float motorForce = 0f;
+	[HideInInspector]
+	public bool motor;
 	public float speedUpgrade = 0f;
 	public int maxSpeed = 0;
 	[HideInInspector]
@@ -22,7 +27,9 @@ public class Movement : MonoBehaviour {
 	public float angularDrag = 0f;
 	public float linearDrag = 0f;
 	private float relation;
+	private int currentFrame = 0;
 	private tk2dSlicedSprite slicedsprite;
+	private tk2dSpriteAnimator animator;
 
 
 
@@ -40,6 +47,9 @@ public class Movement : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 
+		/*if(animator != null){
+			currentFrame = animator.CurrentFrame;
+		}*/
 
 			if(platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer || platform == RuntimePlatform.WindowsEditor){
 				if(Input.touchCount > 0) {
@@ -57,17 +67,46 @@ public class Movement : MonoBehaviour {
 
 								if(tempVect.x > Camera.main.transform.position.x){
 									rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
-									Debug.Log("Right");
+									
+									if(!Thruster_l.activeInHierarchy){
+										Thruster_l.SetActive(true);
+									}
+									if(Thruster_r.activeInHierarchy){
+										Thruster_r.SetActive(false);
+									}
+									animator = Thruster_l.GetComponent<tk2dSpriteAnimator>();
+									if(!animator.IsPlaying("Thruster_Loop")){
+										animator.Play("Thruster_Start");
+									}
+									animator.AnimationCompleted = ThrusterLoop;
 								} 
 								if(tempVect.x < Camera.main.transform.position.x){
 									
 									rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
-									Debug.Log("Left");
+									
+									if(!Thruster_r.activeInHierarchy){
+										Thruster_r.SetActive(true);
+									}
+									if(Thruster_l.activeInHierarchy){
+										Thruster_l.SetActive(false);
+									}
+									animator = Thruster_r.GetComponent<tk2dSpriteAnimator>();
+									if(!animator.IsPlaying("Thruster_Loop")){
+										animator.Play("Thruster_Start");
+									}
+									
+									animator.AnimationCompleted = ThrusterLoop;
 								}
 
 							}
-					
 							
+							if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended || Input.touchCount == 2){
+								animator.Stop();
+								Thruster_l.SetActive(false);
+								Thruster_r.SetActive(false);
+							}
+					
+							motor  = false;
 						}
 									
 											
@@ -80,9 +119,23 @@ public class Movement : MonoBehaviour {
 										
 										Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
 										rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
+										animator = Fire.GetComponent<tk2dSpriteAnimator>();
+										if(!Fire.activeInHierarchy)
+										Fire.SetActive(true);
 										ConsumeFuel();		
 									
-							}	
+							}
+							if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
+								motor  = false;
+								if(animator.IsPlaying("Fire_Start")){
+									animator.Play("Fire_End");
+									animator.PlayFromFrame(7-currentFrame);
+								}else{
+									animator.Play("Fire_End");
+								}
+							}
+					
+					
 						}	
 				}
 
@@ -93,8 +146,22 @@ public class Movement : MonoBehaviour {
 									
 									Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
 									rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
+									animator = Fire.GetComponent<tk2dSpriteAnimator>();
+									if(!Fire.activeInHierarchy)
+										Fire.SetActive(true);					
 									ConsumeFuel();
 									
+							}
+							if(Input.GetKeyUp(KeyCode.Space)){
+										motor = false;
+										if(animator.IsPlaying("Fire_Start")){
+											animator.Play("Fire_End");
+											animator.PlayFromFrame(7-currentFrame);
+										}else{
+											animator.Play("Fire_End");
+										}
+									
+
 							}
 
 							
@@ -107,31 +174,60 @@ public class Movement : MonoBehaviour {
 														
 											if(tempVect.x > Camera.main.transform.position.x){
 															rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
-															Debug.Log("Right");
+														
+
+															if(!Thruster_l.activeInHierarchy){
+																Thruster_l.SetActive(true);
+															}
+														animator = Thruster_l.GetComponent<tk2dSpriteAnimator>();
+														if(!animator.IsPlaying("Thruster_Loop")){
+															animator.Play("Thruster_Start");
+														}
+														animator.AnimationCompleted = ThrusterLoop;
 															
 												}
 											if(tempVect.x  < Camera.main.transform.position.x){
 															
 															rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
-															Debug.Log("Left");
+														
+															if(!Thruster_r.activeInHierarchy){
+																Thruster_r.SetActive(true);
+															}
+														animator = Thruster_r.GetComponent<tk2dSpriteAnimator>();
+														if(!animator.IsPlaying("Thruster_Loop")){
+															animator.Play("Thruster_Start");
+														}
+														animator.AnimationCompleted = ThrusterLoop;
 												}
-
-											
-												
-										
-										
-									
-										
-							}
+												motor  = false;
+		
+								}
+								if(Input.GetMouseButtonUp(0)){
+									animator.Stop();
+									Thruster_l.SetActive(false);
+									Thruster_r.SetActive(false);
+								}
 								
 				}
 
 		}
 
 	void ConsumeFuel () {
+		
 		fuel -= fuelConsumption;
 		slicedsprite.dimensions = new Vector2(slicedsprite.dimensions.x - (relation*fuelConsumption),slicedsprite.dimensions.y);
-		Debug.Log("Fuel consumption");
+		motor = true;
+		if(!animator.IsPlaying("Fire_Loop")){
+			if(animator.IsPlaying("Fire_End")){
+				animator.Play("Fire_Start");
+				animator.PlayFromFrame(7-currentFrame);
+			}else{
+				animator.Play("Fire_Start");
+			}
+
+		}
+
+		animator.AnimationCompleted = FireLoop;
 	}
 
 	public void BalanceCalc(){
@@ -144,6 +240,19 @@ public class Movement : MonoBehaviour {
 		rigid.drag = motorForce * linearDrag;
 		
 	}
+
+	void ThrusterLoop(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
+		if(!animator.IsPlaying("Thruster_Loop"))
+		animator.Play("Thruster_Loop");
+	}
+
+	void FireLoop(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
+		if(clip.name == "Fire_End")
+			Fire.SetActive(false);
+		if(!animator.IsPlaying("Fire_Loop") & clip.name != "Fire_End" )
+			animator.Play("Fire_Loop");
+	}
+
 
 
 
