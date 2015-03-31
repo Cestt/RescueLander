@@ -448,7 +448,7 @@ Transform:
   m_GameObject: {fileID: 93601211}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 96, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 1641335132}
   - {fileID: 1498577112}
@@ -578,6 +578,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ship: {fileID: 1031941192}
   pickUpDistance: .639999986
+  picked: 0
 --- !u!114 &112356584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766,7 +767,7 @@ Transform:
   m_GameObject: {fileID: 130468684}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 107.240967, y: -168.223511, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 436844365}
   m_RootOrder: 3
@@ -1391,7 +1392,7 @@ Transform:
   m_GameObject: {fileID: 276031987}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 47.2409668, y: -168.223511, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 436844365}
   m_RootOrder: 2
@@ -1996,6 +1997,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 436844365}
   - 114: {fileID: 436844366}
+  - 114: {fileID: 436844367}
   m_Layer: 5
   m_Name: Anchor (UpperLeft)
   m_TagString: Untagged
@@ -2010,7 +2012,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 436844364}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1042.56641, y: 540, z: 0}
+  m_LocalPosition: {x: -960.28302, y: 540, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 1091112605}
@@ -2037,6 +2039,23 @@ MonoBehaviour:
   offset: {x: 0, y: 0}
   tk2dCamera: {fileID: 0}
   _anchorCamera: {fileID: 186449404}
+--- !u!114 &436844367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 436844364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848f449e7a15e64479f340fbfbdff2c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  astroIco1: {fileID: 276031987}
+  astroIco2: {fileID: 130468684}
+  astroIco3: {fileID: 1115367566}
+  astro1: {fileID: 1657968366}
+  astro2: {fileID: 2030227862}
+  astro3: {fileID: 112356580}
 --- !u!1 &463881590
 GameObject:
   m_ObjectHideFlags: 0
@@ -3821,7 +3840,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 840208775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1042.56641, y: 540, z: 0}
+  m_LocalPosition: {x: 960.283203, y: 540, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 1609081668}
@@ -5494,7 +5513,7 @@ Transform:
   m_GameObject: {fileID: 1091112604}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 1589878288}
   - {fileID: 700547642}
@@ -5628,7 +5647,7 @@ Transform:
   m_GameObject: {fileID: 1115367566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 167.240967, y: -168.223511, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 436844365}
   m_RootOrder: 4
@@ -8776,6 +8795,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ship: {fileID: 1031941192}
   pickUpDistance: .639999986
+  picked: 0
 --- !u!61 &1657968373
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11415,6 +11435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ship: {fileID: 1031941192}
   pickUpDistance: .639999986
+  picked: 0
 --- !u!114 &2030227866
 MonoBehaviour:
   m_ObjectHideFlags: 0
