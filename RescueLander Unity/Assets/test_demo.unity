@@ -4111,6 +4111,7 @@ MonoBehaviour:
   sparks: {fileID: 103290951}
   life: 1000
   damageThreshold: 100
+  damageThresholdFriction: 50
   lifeBar: {fileID: 1908719430}
   GameManager: {fileID: 1201683373}
 --- !u!114 &1031941199
@@ -4136,7 +4137,7 @@ MonoBehaviour:
   angularForce: 1200
   angularSpeedUpgrade: 0
   maxAngularSpeed: 9999
-  fuel: 500
+  fuel: 100
   fuelConsumption: .100000001
   massMotor: 450
   massAngular: 600
@@ -6076,9 +6077,8 @@ MonoBehaviour:
   WinSprite: {fileID: 2011415448}
   LoseSprite: {fileID: 2139990735}
   winText: {fileID: 33075648}
-  UI:
-  - {fileID: 436844364}
-  - {fileID: 840208775}
+  UI1: {fileID: 436844364}
+  UI2: {fileID: 840208775}
 --- !u!4 &1201683376
 Transform:
   m_ObjectHideFlags: 0
@@ -8015,7 +8015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1676373636
 Transform:
   m_ObjectHideFlags: 0

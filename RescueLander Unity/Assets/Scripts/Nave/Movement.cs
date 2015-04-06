@@ -26,7 +26,8 @@ public class Movement : MonoBehaviour {
 	public float massAngular = 0f;
 	public float angularDrag = 0f;
 	public float linearDrag = 0f;
-	private float relation;
+	private float originlSize;
+	private float originalFuel;
 	private int currentFrame = 0;
 	private tk2dSlicedSprite slicedsprite;
 	private tk2dSpriteAnimator animator;
@@ -40,7 +41,8 @@ public class Movement : MonoBehaviour {
 
 		rigid = GetComponent<Rigidbody2D>();
 		slicedsprite = fuelBar.GetComponent<tk2dSlicedSprite>();
-		relation = slicedsprite.dimensions.x/fuel;
+		originlSize = slicedsprite.dimensions.x;
+		originalFuel = fuel;
 		
 	}
 
@@ -217,7 +219,7 @@ public class Movement : MonoBehaviour {
 	void ConsumeFuel () {
 		
 		fuel -= fuelConsumption;
-		slicedsprite.dimensions = new Vector2(slicedsprite.dimensions.x - (relation*fuelConsumption),slicedsprite.dimensions.y);
+		slicedsprite.dimensions = new Vector2(originlSize * (fuel/originalFuel),slicedsprite.dimensions.y);
 		motor = true;
 		if(!animator.IsPlaying("Fire_Loop")){
 			if(animator.IsPlaying("Fire_End")){
