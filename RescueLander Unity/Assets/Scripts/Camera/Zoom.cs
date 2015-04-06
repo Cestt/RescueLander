@@ -17,7 +17,7 @@ public class Zoom : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll) {
 		if (coll.gameObject.tag == "Floor"){
 
-
+				StopCoroutine("Zooming");
 				StartCoroutine(Zooming("in"));
 
 			
@@ -30,6 +30,7 @@ public class Zoom : MonoBehaviour {
 			
 			if(cam.ZoomFactor > 1){
 				
+				StopCoroutine("Zooming");
 				StartCoroutine(Zooming("out"));
 
 			}

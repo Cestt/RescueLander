@@ -8,6 +8,7 @@ public class Damage : MonoBehaviour {
 	public int life = 0;
 	private int maxLife;
 	public int damageThreshold = 0;
+	public int damageThresholdFriction = 0;
 	private ShipAstronautPickUp shipastronautpickup;
 	public GameObject lifeBar;
 	public GameObject GameManager;
@@ -87,7 +88,7 @@ public class Damage : MonoBehaviour {
 	void OnCollisionStay2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Floor"){
 			
-			if(coll.relativeVelocity.magnitude > damageThreshold){
+			if(coll.relativeVelocity.magnitude > damageThresholdFriction){
 
 				ContactPoint2D contactpoint = coll.contacts[0];
 				sparks.transform.position = contactpoint.point;

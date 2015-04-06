@@ -41,7 +41,7 @@ public class ShipAstronautDrop : MonoBehaviour {
 				
 			}
 
-			if(astronautsDroped == totalAstronauts){
+			if(astronautsDroped >= totalAstronauts){
 
 				winLose.End("Win");
 			}
