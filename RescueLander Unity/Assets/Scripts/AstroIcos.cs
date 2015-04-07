@@ -9,7 +9,7 @@ public class AstroIcos : MonoBehaviour
 
 	ShipAstronautPickUp shipAstronautPickUp;
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		shipAstronautPickUp = GameObject.Find ("Ship").GetComponent<ShipAstronautPickUp> ();
 	}
