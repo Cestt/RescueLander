@@ -24,7 +24,7 @@ public class LifeBar : MonoBehaviour {
 			if(slicedsprite.dimensions.x > 5){
 				slicedsprite.dimensions = new Vector2( slicedsprite.dimensions.x - relation,slicedsprite.dimensions.y);
 				Debug.Log("LifeBar reduction");
-				yield return new WaitForSeconds(0.0f/damage);
+				yield return new WaitForSeconds(0.1f/damage);
 				totalDamage--;
 				damageAcumulated++;
 			}
