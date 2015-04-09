@@ -1,14 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Touch_Manger : MonoBehaviour {
 	RuntimePlatform platform = Application.platform;
 	public Camera uicamera;
-
+	//[HideInInspector]
+	public bool paused;
+	private float originalY;
+	public GameObject ship;
+	private Rigidbody2D rigid;
+	public GameObject uiColumnExtended;
+	public GameObject positioner;
 
 
 	void Awake(){
-
+		originalY = uiColumnExtended.transform.position.y;
+		rigid = ship.GetComponent<Rigidbody2D>();
 	}
 
 
@@ -18,14 +26,17 @@ public class Touch_Manger : MonoBehaviour {
 			if(Input.touchCount > 0) {
 				if(Input.GetTouch(0).phase == TouchPhase.Began){
 					
-					RaycastHit2D _hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+					Ray ray;
+					RaycastHit hit;
 					
-					if(_hit.collider!= null){
+					ray = uicamera.ScreenPointToRay(Input.GetTouch(0).position);
+					
+					if (Physics.Raycast(ray.origin,ray.direction * 100, out hit)){
 						Debug.Log("Hit");
-						switch(_hit.collider.name){
+						switch(hit.collider.name){
 							
 						case "Pause_Button" :
-							Pause();
+							Pause(hit.transform.gameObject);
 							break;
 						
 							
@@ -54,7 +65,7 @@ public class Touch_Manger : MonoBehaviour {
 					switch(hit.collider.name){
 						
 					case "Pause_Button" :
-						Pause();
+						Pause(hit.transform.gameObject);
 						break;
 						
 						
@@ -69,35 +80,36 @@ public class Touch_Manger : MonoBehaviour {
 			}
 		}
 
-	}
-	void checkTouch(Vector3 pos){
-		 Ray ray = uicamera.ScreenPointToRay(pos);
-		 RaycastHit hit;
-		if (Physics.Raycast(ray, out hit,Mathf.Infinity)){
-			Debug.Log("Hit");
+		if(Input.GetKeyDown(KeyCode.Escape)){
 
-			switch(hit.transform.name){
-
-			case "Play":
-				Application.LoadLevel("test_demo");
-				Debug.Log("Loading");
-				break;
-			
-
-			case "Pause_Button":
-				Pause();
-				break;
+			if(Application.loadedLevelName == "Menu"){
+				Application.Quit();
+			}else{
+				if(paused){
+					Pause(null);
+				}else{
+					Application.LoadLevel("Menu");
+				}
 			}
+
 		}
+
 	}
 
-	void Pause(){
-		if(Time.timeScale == 1){
-			Time.timeScale = 0;
-			Debug.Log("Pause");
+
+	void Pause(GameObject temp){
+
+		if(!paused){
+			paused = true;
+			rigid.isKinematic = true;
+ 			Debug.Log("Pause");
 		}else{
-			Time.timeScale = 1;
+
+			paused = false;
+			rigid.isKinematic = false;
 			Debug.Log("UnPause");
 		}
 	}
+
+
 }
