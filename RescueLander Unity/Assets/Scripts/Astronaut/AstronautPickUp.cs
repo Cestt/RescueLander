@@ -7,9 +7,6 @@ public class AstronautPickUp : MonoBehaviour {
 	public float pickUpDistance = 200f;
 	private ShipAstronautPickUp shipastronautpickup;
 
-	//Javi
-	[HideInInspector]public bool picked = false;
-
 
 	void Awake () {
 	
@@ -28,7 +25,6 @@ public class AstronautPickUp : MonoBehaviour {
 				shipastronautpickup.Pickable = true;
 				shipastronautpickup.Astronaut = this.gameObject;
 				Debug.Log ("Astronaut distance reached");
-				picked = true;
 				
 			}else if(shipastronautpickup.Astronaut == this.gameObject){
 				

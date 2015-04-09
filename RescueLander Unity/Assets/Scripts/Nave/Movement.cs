@@ -121,8 +121,9 @@ public class Movement : MonoBehaviour {
 										rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
 										animator = Fire.GetComponent<tk2dSpriteAnimator>();
 										if(!Fire.activeInHierarchy)
-										Fire.SetActive(true);
-										ConsumeFuel();		
+											Fire.SetActive(true);
+										ConsumeFuel();
+										/*Javi*/motor = true;
 									
 							}
 							if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
@@ -150,6 +151,7 @@ public class Movement : MonoBehaviour {
 									if(!Fire.activeInHierarchy)
 										Fire.SetActive(true);					
 									ConsumeFuel();
+									/*Javi*/motor = true;
 									
 							}
 							if(Input.GetKeyUp(KeyCode.Space)){

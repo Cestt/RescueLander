@@ -25,8 +25,8 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-		if(Pickable = true & rigid.velocity.magnitude == 0 & Astronaut != null){
+		
+		if(Pickable = true & rigid.velocity.magnitude <= 0.0001 & Astronaut != null){
 
 			animator = Astronaut.GetComponent<tk2dSpriteAnimator>();
 			if(!animator.IsPlaying("Halo")){
