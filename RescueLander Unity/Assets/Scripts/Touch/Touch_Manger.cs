@@ -1,40 +1,115 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Touch_Manger : MonoBehaviour {
 	RuntimePlatform platform = Application.platform;
-	// Use this for initialization
-	void Start () {
-	
+	public Camera uicamera;
+	//[HideInInspector]
+	public bool paused;
+	private float originalY;
+	public GameObject ship;
+	private Rigidbody2D rigid;
+	public GameObject uiColumnExtended;
+	public GameObject positioner;
+
+
+	void Awake(){
+		originalY = uiColumnExtended.transform.position.y;
+		rigid = ship.GetComponent<Rigidbody2D>();
 	}
-	
-	// Update is called once per frame
+
+
+
 	void Update () {
 		if(platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer){
 			if(Input.touchCount > 0) {
 				if(Input.GetTouch(0).phase == TouchPhase.Began){
-					checkTouch(Input.GetTouch(0).position);
+					
+					Ray ray;
+					RaycastHit hit;
+					
+					ray = uicamera.ScreenPointToRay(Input.GetTouch(0).position);
+					
+					if (Physics.Raycast(ray.origin,ray.direction * 100, out hit)){
+						Debug.Log("Hit");
+						switch(hit.collider.name){
+							
+						case "Pause_Button" :
+							Pause(hit.transform.gameObject);
+							break;
+						
+							
+						default :
+
+							break;
+							
+						}
+						
+					}
+					
 				}
 			}
 		}else if(platform == RuntimePlatform.WindowsEditor){
-			if(Input.GetMouseButtonDown(0)) {
-				checkTouch(Input.mousePosition);
-			}
-		}
-	}
-	void checkTouch(Vector3 pos){
-		 Vector3 wp = Camera.main.ScreenToWorldPoint(pos);
-		Vector2 touchPos  = new Vector2(wp.x, wp.y);
-		var hit = Physics2D.OverlapPoint(touchPos);
-		
-		if(hit){
-			switch(hit.name){
+			
+			if(Input.GetMouseButtonUp(0)){
+				
+				Ray ray;
+				RaycastHit hit;
 
-			case "Play":
-				Application.LoadLevel("test_demo");
-				Debug.Log("Loading");
-				break;
+				ray = uicamera.ScreenPointToRay(Input.mousePosition);
+
+				if (Physics.Raycast(ray.origin,ray.direction * 100, out hit)) {
+
+					Debug.Log("Hit");
+					switch(hit.collider.name){
+						
+					case "Pause_Button" :
+						Pause(hit.transform.gameObject);
+						break;
+						
+						
+					default :
+						
+						break;
+						
+					}
+					
+				}
+				
 			}
 		}
+
+		if(Input.GetKeyDown(KeyCode.Escape)){
+
+			if(Application.loadedLevelName == "Menu"){
+				Application.Quit();
+			}else{
+				if(paused){
+					Pause(null);
+				}else{
+					Application.LoadLevel("Menu");
+				}
+			}
+
+		}
+
 	}
+
+
+	void Pause(GameObject temp){
+
+		if(!paused){
+			paused = true;
+			rigid.isKinematic = true;
+ 			Debug.Log("Pause");
+		}else{
+
+			paused = false;
+			rigid.isKinematic = false;
+			Debug.Log("UnPause");
+		}
+	}
+
+
 }
