@@ -14,7 +14,7 @@ public class ShipAstronautDrop : MonoBehaviour {
 
 	void Awake () {
 
-		rigid = this.rigidbody2D;
+		rigid = this.GetComponent<Rigidbody2D>();
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
 		scoreManager = gameManager.GetComponent<ScoreManager> ();
 		winLose = gameManager.GetComponent<WinLose> ();

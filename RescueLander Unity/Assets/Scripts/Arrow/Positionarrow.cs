@@ -20,11 +20,11 @@ public class Positionarrow : MonoBehaviour {
 
 	void Update () {
 
-		if(ship.renderer.isVisible){
+		if(ship.GetComponent<Renderer>().isVisible){
 			visible = true;
 		}
 
-		if(!ship.renderer.isVisible){
+		if(!ship.GetComponent<Renderer>().isVisible){
 			visible = false;
 		}
 

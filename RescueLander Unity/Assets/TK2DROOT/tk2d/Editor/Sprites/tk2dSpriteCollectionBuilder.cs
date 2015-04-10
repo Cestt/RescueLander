@@ -312,7 +312,7 @@ public class tk2dSpriteCollectionBuilder
 			}
 		}
 
-		if (numNotTransparent > 0)
+		if (!allowTrimming || numNotTransparent > 0)
 		{
 			int x0 = 0, x1 = 0, y0 = 0, y1 = 0;
 			
@@ -748,11 +748,17 @@ public class tk2dSpriteCollectionBuilder
 			gen.globalTextureRescale = 1;
 		}
 
+		// Is this a linked collection? If so, validate
+		tk2dEditor.SpriteCollectionBuilder.LinkBuilder.ValidateLinkedSpriteCollection(gen);
+
 		Dictionary<Texture2D, Texture2D> extractRegionCache = new Dictionary<Texture2D, Texture2D>();
 		sourceTextures = new Texture2D[gen.textureParams.Length];
 		for (int i = 0; i < gen.textureParams.Length; ++i)
 		{
 			var param = gen.textureParams[i];
+
+			tk2dEditor.SpriteCollectionBuilder.LinkBuilder.ValidateTextureParam(gen, i);
+
 			if (param.extractRegion && param.texture != null)
 			{
 				Texture2D srcTex = param.texture;
@@ -853,14 +859,17 @@ public class tk2dSpriteCollectionBuilder
 						int tw = Mathf.Min(diceUnitX, srcTex.width - sx);
 						int th = Mathf.Min(diceUnitY, srcTex.height - sy);
 
-						if (gen.textureParams[i].diceFilter == tk2dSpriteCollectionDefinition.DiceFilter.SolidOnly &&
-							!TextureRectFullySolid( srcTex, sx, sy, tw, th )) {
-							continue;
-						}
+						if (!gen.textureParams[i].disableTrimming && !gen.disableTrimming)
+						{
+							if (gen.textureParams[i].diceFilter == tk2dSpriteCollectionDefinition.DiceFilter.SolidOnly &&
+								!TextureRectFullySolid( srcTex, sx, sy, tw, th )) {
+								continue;
+							}
 
-						if (gen.textureParams[i].diceFilter == tk2dSpriteCollectionDefinition.DiceFilter.TransparentOnly &&
-							TextureRectFullySolid( srcTex, sx, sy, tw, th )) {
-							continue;
+							if (gen.textureParams[i].diceFilter == tk2dSpriteCollectionDefinition.DiceFilter.TransparentOnly &&
+								TextureRectFullySolid( srcTex, sx, sy, tw, th )) {
+								continue;
+							}
 						}
 
 						SpriteLut diceLut = new SpriteLut();
@@ -1396,7 +1405,7 @@ public class tk2dSpriteCollectionBuilder
 
 		sourceTextures = null; // need to clear, its static
 		currentBuild = null;
-		
+
 		tk2dEditorUtility.GetOrCreateIndex().AddSpriteCollectionData(gen.spriteCollection);
 		tk2dEditorUtility.CommitIndex();
 	
@@ -1406,12 +1415,23 @@ public class tk2dSpriteCollectionBuilder
 			tk2dSystemUtility.UpdateAssetName(gen.spriteCollection, gen.assetName);
 		}
 		
+		// build linked collections
+		tk2dEditor.SpriteCollectionBuilder.LinkBuilder.Build(gen);
+
         // refresh existing
 		gen.spriteCollection.ResetPlatformData();
 		RefreshExistingAssets(gen.spriteCollection);
+
+		// post build callback
+		if (OnPostBuildSpriteCollection != null) {
+			OnPostBuildSpriteCollection(gen);
+		}
 		
 		return true;
     }
+
+    // Hook into this to be notified when a sprite collection is built
+    public static event System.Action<tk2dSpriteCollection> OnPostBuildSpriteCollection = null;
 	
 	// pass null to rebuild everything
 	static void RefreshExistingAssets(tk2dSpriteCollectionData spriteCollectionData)
@@ -2206,3 +2226,4 @@ public class tk2dSpriteCollectionBuilder
 		}
 	}
 }
+

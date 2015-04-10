@@ -738,9 +738,21 @@ public class tk2dSpriteCollectionData : MonoBehaviour
 			Resources.UnloadAsset(texture);
 		}
 
+		theInst.DestroyMaterialInsts();
 		theInst.DestroyTextureInsts();
 
 		// Debug.Log(Resources.FindObjectsOfTypeAll(typeof(Texture2D)).Length);
+	}
+
+	void DestroyMaterialInsts()
+	{
+		if (needMaterialInstance)
+		{
+			foreach (Material material in materialInsts) {
+				DestroyImmediate(material);
+			}
+		}
+		materialInsts = null;
 	}
 
 	void OnDestroy()
