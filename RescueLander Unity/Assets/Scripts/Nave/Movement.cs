@@ -6,7 +6,7 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 
 	RuntimePlatform platform = Application.platform;
-	public Touch_Manger touchmanager;
+	public Touch_Manager touchmanager;
 	public GameObject fuelBar;
 	public GameObject Thruster_r;
 	public GameObject Thruster_l;
@@ -35,6 +35,7 @@ public class Movement : MonoBehaviour {
 
 
 
+
 	private Rigidbody2D rigid;
 
 	// Use this for initialization
@@ -44,15 +45,18 @@ public class Movement : MonoBehaviour {
 		slicedsprite = fuelBar.GetComponent<tk2dSlicedSprite>();
 		originlSize = slicedsprite.dimensions.x;
 		originalFuel = fuel;
+		animator =  Fire.GetComponent<tk2dSpriteAnimator>();
 		
 	}
 
 	// Update is called once per frame
 	void FixedUpdate () {
 
-		/*if(animator != null){
+		if(animator != null & animator.IsPlaying("Fire_Start")||
+		   animator != null & animator.IsPlaying("Fire_End")||
+		   animator != null & animator.IsPlaying("Fire_Loop")){
 			currentFrame = animator.CurrentFrame;
-		}*/
+		}
 
 			if(platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer || platform == RuntimePlatform.WindowsEditor){
 				if(Input.touchCount > 0) {

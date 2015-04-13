@@ -979,6 +979,7 @@ GameObject:
   - 33: {fileID: 158918035}
   - 23: {fileID: 158918034}
   - 114: {fileID: 158918033}
+  - 65: {fileID: 158918036}
   m_Layer: 5
   m_Name: Retry_Button
   m_TagString: Untagged
@@ -1061,6 +1062,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 945521790}
   m_GameObject: {fileID: 158918031}
   m_Mesh: {fileID: 0}
+--- !u!65 &158918036
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 158918031}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 360, y: 160, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &167026630
 GameObject:
   m_ObjectHideFlags: 0
@@ -1548,6 +1561,7 @@ GameObject:
   - 33: {fileID: 256948536}
   - 23: {fileID: 256948535}
   - 114: {fileID: 256948534}
+  - 65: {fileID: 256948537}
   m_Layer: 5
   m_Name: Retry_Button
   m_TagString: Untagged
@@ -1630,6 +1644,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1785631923}
   m_GameObject: {fileID: 256948532}
   m_Mesh: {fileID: 0}
+--- !u!65 &256948537
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 256948532}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 320, y: 160, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &276031987
 GameObject:
   m_ObjectHideFlags: 0
@@ -2196,7 +2222,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 436844364}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -960, y: 540, z: 50}
+  m_LocalPosition: {x: -864.489746, y: 540, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 93601212}
@@ -3962,7 +3988,7 @@ GameObject:
   - 33: {fileID: 836064262}
   - 23: {fileID: 836064261}
   - 114: {fileID: 836064260}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: AstroGarage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4057,7 +4083,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 840208775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 959.999878, y: 540, z: 50}
+  m_LocalPosition: {x: 864.489868, y: 540, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 904210779}
@@ -4411,7 +4437,7 @@ EdgeCollider2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 938858487}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Points:
@@ -5266,6 +5292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5f0f775651e484c85e21261bca092b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchmanager: {fileID: 1201683375}
   fuelBar: {fileID: 2042664462}
   Thruster_r: {fileID: 1846956274}
   Thruster_l: {fileID: 279524170}
@@ -5343,6 +5370,7 @@ MonoBehaviour:
   Pickable: 0
   Astronaut: {fileID: 0}
   astronautPicked: 0
+  touchmanager: {fileID: 1201683375}
 --- !u!1 &1038728810
 GameObject:
   m_ObjectHideFlags: 0
@@ -6208,9 +6236,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1201683373}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c4bac2c441fbae418b8240a708f26a3, type: 3}
+  m_Script: {fileID: 11500000, guid: 683a705af7954534ab158450a7d0ce72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uicameraGameobject: {fileID: 0}
+  uicamera: {fileID: 186449404}
+  paused: 0
+  ship: {fileID: 1031941192}
+  uiColumnExtended: {fileID: 1609081667}
+  music: {fileID: 1202644169}
+  sounds: {fileID: 2135375946}
+  MenuSpeed: 0
+  Win: {fileID: 2011415448}
+  Lose: {fileID: 2139990735}
+  garaje: {fileID: 991397218}
 --- !u!4 &1201683376
 Transform:
   m_ObjectHideFlags: 0
@@ -6924,6 +6963,10 @@ Prefab:
     - target: {fileID: 413160, guid: ccc807ad83a63034e9633b3dee48ba88, type: 2}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 113162, guid: ccc807ad83a63034e9633b3dee48ba88, type: 2}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ccc807ad83a63034e9633b3dee48ba88, type: 2}
@@ -7882,6 +7925,14 @@ Prefab:
       propertyPath: prewarm
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11416542, guid: bf77c820c4227eb49a7cd67223a658aa, type: 2}
+      propertyPath: touchmanager
+      value: 
+      objectReference: {fileID: 1201683375}
+    - target: {fileID: 11465040, guid: bf77c820c4227eb49a7cd67223a658aa, type: 2}
+      propertyPath: touchmanager
+      value: 
+      objectReference: {fileID: 1201683375}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bf77c820c4227eb49a7cd67223a658aa, type: 2}
   m_RootGameObject: {fileID: 1031941192}
@@ -7974,7 +8025,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
 --- !u!1 &1498577111
 GameObject:
   m_ObjectHideFlags: 0
@@ -8273,6 +8324,7 @@ GameObject:
   - 33: {fileID: 1560455903}
   - 23: {fileID: 1560455902}
   - 114: {fileID: 1560455901}
+  - 65: {fileID: 1560455904}
   m_Layer: 5
   m_Name: NextLvl_Button
   m_TagString: Untagged
@@ -8355,6 +8407,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1663227039}
   m_GameObject: {fileID: 1560455899}
   m_Mesh: {fileID: 0}
+--- !u!65 &1560455904
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1560455899}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 320, y: 160, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1577744385
 GameObject:
   m_ObjectHideFlags: 0
@@ -9858,6 +9922,7 @@ GameObject:
   - 33: {fileID: 1742579976}
   - 23: {fileID: 1742579975}
   - 114: {fileID: 1742579974}
+  - 65: {fileID: 1742579977}
   m_Layer: 5
   m_Name: Garage_Button
   m_TagString: Untagged
@@ -9940,6 +10005,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1788601358}
   m_GameObject: {fileID: 1742579972}
   m_Mesh: {fileID: 0}
+--- !u!65 &1742579977
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1742579972}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 240, y: 120, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1748766453
 GameObject:
   m_ObjectHideFlags: 0
@@ -11312,6 +11389,7 @@ GameObject:
   - 33: {fileID: 1887947194}
   - 23: {fileID: 1887947193}
   - 114: {fileID: 1887947192}
+  - 65: {fileID: 1887947195}
   m_Layer: 5
   m_Name: Garage_Button
   m_TagString: Untagged
@@ -11394,6 +11472,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1300040584}
   m_GameObject: {fileID: 1887947190}
   m_Mesh: {fileID: 0}
+--- !u!65 &1887947195
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1887947190}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 240, y: 120, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1893724965
 GameObject:
   m_ObjectHideFlags: 0
@@ -11775,6 +11865,50 @@ MeshFilter:
   m_PrefabInternal: {fileID: 532857065}
   m_GameObject: {fileID: 1964161248}
   m_Mesh: {fileID: 0}
+--- !u!1 &1980690660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1980690662}
+  - 114: {fileID: 1980690661}
+  m_Layer: 0
+  m_Name: Data_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1980690661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1980690660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e5def2fcf19a764da286a46cb6f7500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocks: 0
+  actualLevel: 0
+  Sounds: 0
+  Music: 0
+  levels: 21
+--- !u!4 &1980690662
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1980690660}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 281.498383, y: 943.340515, z: 500}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
 --- !u!1 &2001313612
 GameObject:
   m_ObjectHideFlags: 0
