@@ -16,7 +16,6 @@ public class Damage : MonoBehaviour {
 	private int totalDamage;
 	private tk2dSlicedSprite slicedsprite;
 	private LifeBar lifebarScript;
-	private IEnumerator coroutine;
 	private tk2dSpriteAnimator animator;
 	WinLose winLose;
 
@@ -26,7 +25,6 @@ public class Damage : MonoBehaviour {
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
 		slicedsprite = lifeBar.GetComponent<tk2dSlicedSprite>();
 		lifebarScript = lifeBar.GetComponent<LifeBar>();
-		coroutine = lifebarScript.LifeBarReduction(totalDamage,relation);
 		relation = slicedsprite.dimensions.x/life;
 		winLose = GameManager.GetComponent<WinLose> ();
 		maxLife =life;
@@ -78,10 +76,6 @@ public class Damage : MonoBehaviour {
 				lifebarScript.Starter(totalDamage,relation);
 				Debug.Log("Hull Impact damage");
 
-			}else{
-
-				Debug.Log("No hull impact damage");
-
 			}
 		}
 	}
@@ -104,10 +98,6 @@ public class Damage : MonoBehaviour {
 				Debug.Log("Total Damage: " + totalDamage);
 				lifebarScript.Starter(totalDamage,relation);
 				Debug.Log("Hull friction damage");
-				
-			}else{
-				
-				Debug.Log("No hull friction damage");
 				
 			}
 		}

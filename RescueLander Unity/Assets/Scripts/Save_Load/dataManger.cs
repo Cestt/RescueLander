@@ -9,8 +9,14 @@ public class dataManger : MonoBehaviour {
 
 	public static dataManger manager;
 
+	//[HideInInspector]
+	public int unlocks = 1;
 	[HideInInspector]
-	public int unlocks;
+	public int actualLevel;
+	[HideInInspector]
+	public bool Sounds = true;
+	[HideInInspector]
+	public bool Music = true;
 	[HideInInspector]
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]
@@ -52,12 +58,14 @@ public class dataManger : MonoBehaviour {
 		Data data = new Data();
 
 		data.unlocks = unlocks;
+		data.Sounds = Sounds;
+		data.Music = Music;
 
-		unlocks = data.unlocks;
 		
-		for(int i = 0; i <= levels; i++){
-			data.stars["level"+i] = stars["level"+i];
-			data.scores["scores"+i] = stars["level"+i];
+		for(int i = 1; i <= levels; i++){
+			Debug.Log("Save: "+i);
+			data.stars["Level_"+i] = stars["Level_"+i];
+			data.scores["Level_"+i] = scores["Level_"+i];
 
 		}
 		
@@ -78,9 +86,23 @@ public class dataManger : MonoBehaviour {
 
 			unlocks = data.unlocks;
 
-			for(int i = 0; i<= levels ; i++){
-				stars["level"+i] = data.stars["level"+i];
-				scores["level"+i] = data.scores["scores"+i];
+			for(int i = 1; i<= levels ; i++){
+				stars["Level_"+i] = data.stars["Level_"+i];
+				scores["Level_"+i] = data.scores["Level_"+i];
+
+				temp = GameObject.Find("Level_"+i);
+				
+				if(i<=unlocks){
+					Transform tempChild =  temp.transform.FindChild("Level_Number");
+					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
+					for(int j = 1; j<=3; j++){
+						if(j<=stars["Level_"+i]){
+							tempChild =  temp.transform.FindChild("LevelStar"+j);
+							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+						}
+						
+					}
+				}
 			}
 
 			file.Close();
@@ -98,11 +120,23 @@ public class dataManger : MonoBehaviour {
 			
 			unlocks = data.unlocks;
 
-			for(int i = 0; i<= levels ; i++){
-				stars["level"+i] = data.stars["level"+i];
-				scores["level"+i] = data.scores["scores"+i];
+			for(int i = 1; i<= levels ; i++){
+				stars["Level_"+i] = data.stars["Level_"+i];
+				scores["Level_"+i] = data.scores["Level_"+i];
 
-				temp = GameObject.Find("level"+i);
+				temp = GameObject.Find("Level_"+i);
+
+				if(i<=unlocks){
+					Transform tempChild =  temp.transform.FindChild("Level_Number");
+					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
+					for(int j = 1; j<=3; j++){
+						if(j<=stars["Level_"+i]){
+							tempChild =  temp.transform.FindChild("LevelStar_"+j);
+							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+						}
+						
+					}
+				}
 			}
 			
 			file.Close();
@@ -113,17 +147,29 @@ public class dataManger : MonoBehaviour {
 			FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
 			Data data = new Data();
 			
-			data.unlocks = 0;
+			data.unlocks = 1;
 			unlocks = data.unlocks;
 
-			for(int i = 0; i <= levels; i++){
-				data.stars.Add("level"+i,0);
-				data.scores.Add("level"+0,0);
-				stars.Add("level"+i,0);
-				scores.Add("level"+i,0);
+			for(int i = 1; i <= levels; i++){
+				data.stars.Add("Level_"+i,0);
+				data.scores.Add("Level_"+i,0);
+				stars.Add("Level_"+i,0);
+				scores.Add("Level_"+i,0);
 
 
-				temp = GameObject.Find("level"+i);
+				temp = GameObject.Find("Level_"+i);
+				if(i<=unlocks & temp!=null){
+					Transform tempChild =  temp.transform.FindChild("Level_Number");
+					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
+					for(int j = 1; j<=3; j++){
+						if(j<=stars["Level_"+i]){
+							tempChild =  temp.transform.FindChild("LevelStar"+j);
+							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+						}
+						
+					}
+
+				}
 
 			}
 			
@@ -138,6 +184,10 @@ public class dataManger : MonoBehaviour {
 class Data {
 	[HideInInspector]
 	public int unlocks;
+	[HideInInspector]
+	public bool Sounds;
+	[HideInInspector]
+	public bool Music;
 	[HideInInspector]
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]

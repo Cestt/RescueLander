@@ -9,7 +9,7 @@ public class ShurikenSortingLayer : MonoBehaviour
 	
 	public void Sort()
 	{
-		GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingLayerName = SortingLayer;
-		GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingOrder = OrderInLayer;
+		particleSystem.renderer.sortingLayerName = SortingLayer;
+		particleSystem.renderer.sortingOrder = OrderInLayer;
 	}
 }
