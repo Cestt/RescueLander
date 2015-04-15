@@ -12,5 +12,7 @@ namespace SpriteColorFX
   {
     Unnamed = 0,
     Unnamed_001 = 1,
+    Unnamed_002 = 2,
+    Unnamed_003 = 3,
   }
 }
