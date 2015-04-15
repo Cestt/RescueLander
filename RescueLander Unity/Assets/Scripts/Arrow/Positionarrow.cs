@@ -10,29 +10,38 @@ public class Positionarrow : MonoBehaviour {
 	public GameObject ship;
 	public int distance;
 	private bool first = true;
+	private tk2dTextMesh text;
+	private Transform arrowText;
+	private Quaternion rotation;
+	private Vector3 position;
 
 	void Awake () {
 
-
+		arrowText = transform.FindChild("Arrow_Text");
+		text = arrowText.gameObject.GetComponent<tk2dTextMesh>();
+		rotation = arrowText.gameObject.transform.rotation;
 	
 	}
 	
 
 	void Update () {
 
-		if(ship.renderer.isVisible){
-			visible = true;
+		if(ship != null){
+			if(ship.GetComponent<Renderer>().isVisible){
+				visible = true;
+			}
+			
+			if(!ship.GetComponent<Renderer>().isVisible){
+				visible = false;
+			}
 		}
 
-		if(!ship.renderer.isVisible){
-			visible = false;
-		}
 
-		if(!visible){
+		if(!visible & ship != null){
 
-
+			position = arrowText.transform.localPosition;
 			Vector3 shipPosition = ship.transform.position;
-			Vector3 camPosition = new Vector3(Camera.main.transform.position.x + Camera.main.pixelHeight/2, Camera.main.transform.position.y + Camera.main.pixelWidth/2);
+			Vector3 camPosition = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y);
 			Vector3 temp = camPosition;
 			temp.z = 0;
 			this.transform.position = temp;
@@ -41,8 +50,13 @@ public class Positionarrow : MonoBehaviour {
 			shipPosition.y = shipPosition.y - camPosition.y;
 			
 			float angle = Mathf.Atan2 (shipPosition.y, shipPosition.x) * Mathf.Rad2Deg;
-			this.transform.rotation = Quaternion.Euler (new Vector3(0, 0, angle - 90));
+			this.transform.rotation = Quaternion.Euler (new Vector3(0, 0, angle + 180));
 
+			distance = (int)Vector2.Distance(shipPosition,transform.position);
+			text.text = ((int)(distance/100)).ToString();
+
+			arrowText.gameObject.transform.localPosition = position;
+			arrowText.gameObject.transform.rotation = rotation;
 			first = true;
 			
 		}

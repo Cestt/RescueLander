@@ -102,6 +102,8 @@ public class dataManger : MonoBehaviour {
 						}
 						
 					}
+					tempChild =  temp.transform.FindChild("Level_Score");
+					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
 				}
 			}
 
@@ -136,6 +138,8 @@ public class dataManger : MonoBehaviour {
 						}
 						
 					}
+					tempChild =  temp.transform.FindChild("Level_Score");
+					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
 				}
 			}
 			
@@ -168,6 +172,8 @@ public class dataManger : MonoBehaviour {
 						}
 						
 					}
+					tempChild =  temp.transform.FindChild("Level_Score");
+					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
 
 				}
 

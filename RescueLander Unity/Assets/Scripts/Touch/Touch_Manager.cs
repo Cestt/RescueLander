@@ -234,6 +234,7 @@ public class Touch_Manager : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Escape)){
 
 			if(Application.loadedLevelName == "Menu"){
+				dataManger.manager.Save();
 				Application.Quit();
 			}else{
 				if(paused){
