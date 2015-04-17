@@ -10,6 +10,7 @@ public class WinLose : MonoBehaviour {
 	public GameObject UI1;
 	public GameObject UI2;
 	private bool first;
+	private int totalScore;
 	WinHalo_Anim haloanim;
 	tk2dTextMesh text;
 	ScoreManager scoreManager;
@@ -35,6 +36,8 @@ public class WinLose : MonoBehaviour {
 				if(dataManger.manager.actualLevel == dataManger.manager.unlocks){
 					dataManger.manager.unlocks++;
 				}
+				totalScore = (int)scoreManager.scoreCalc ();
+				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
 				dataManger.manager.Save();
 				first = false;
 			}
@@ -59,7 +62,6 @@ public class WinLose : MonoBehaviour {
 		
 		//haloanim.Win =true;
 		WinSprite.SetActive (true);
-		int totalScore = (int)scoreManager.scoreCalc ();
 		text.text ="Score: "+ totalScore.ToString();
 		UI1.SetActive (false);
 		UI2.SetActive (false);
