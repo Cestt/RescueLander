@@ -61,17 +61,17 @@ namespace SpriteColorFX
 
         if (baseTarget.shaderType != DissolveShaderType.Normal)
         {
-          DissolvePixelOp newPixelOp = (DissolvePixelOp)EditorGUILayout.EnumPopup(new GUIContent(@"Pixel op", @"Texture type"), baseTarget.pixelOp);
+          SpriteColorHelper.PixelOp newPixelOp = (SpriteColorHelper.PixelOp)EditorGUILayout.EnumPopup(new GUIContent(@"Pixel op", @"Color pixel operation"), baseTarget.pixelOp);
           if (newPixelOp != baseTarget.pixelOp)
             baseTarget.SetPixelOp(newPixelOp);
         }
 
-        DisolveTextureType newTextureType = (DisolveTextureType)EditorGUILayout.EnumPopup(new GUIContent(@"Dissolve type", @"Texture type"), baseTarget.disolveTextureType);
+        DisolveTextureType newTextureType = (DisolveTextureType)EditorGUILayout.EnumPopup(@"Dissolve type", baseTarget.disolveTextureType);
         if (newTextureType != baseTarget.disolveTextureType)
           baseTarget.SetTextureType(newTextureType);
 
         if (baseTarget.disolveTextureType == DisolveTextureType.Custom)
-          baseTarget.disolveTexture = EditorGUILayout.ObjectField(new GUIContent(@"Dissolve custom", "Custom texture"), baseTarget.disolveTexture, typeof(Texture), false) as Texture;
+          baseTarget.disolveTexture = EditorGUILayout.ObjectField(@"Dissolve texture", baseTarget.disolveTexture, typeof(Texture), false) as Texture;
 
         baseTarget.dissolveUVScale = SpriteColorFXEditorHelper.SliderWithReset(@"Dissolve UV scale", SpriteColorFXEditorHelper.TooltipNoiseAmount, baseTarget.dissolveUVScale, 0.1f, 5.0f, 1.0f);
 
@@ -84,7 +84,7 @@ namespace SpriteColorFX
           baseTarget.dissolveBorderColor = SpriteColorFXEditorHelper.ColorWithReset(@"Border color", SpriteColorFXEditorHelper.TooltipNoiseAmount, baseTarget.dissolveBorderColor, Color.grey);
         else if (baseTarget.shaderType == DissolveShaderType.BorderTexture)
         {
-          baseTarget.borderTexture = EditorGUILayout.ObjectField(new GUIContent(@"Border texture", "Border texture"), baseTarget.borderTexture, typeof(Texture), false) as Texture;
+          baseTarget.borderTexture = EditorGUILayout.ObjectField(@"Border texture", baseTarget.borderTexture, typeof(Texture), false) as Texture;
           baseTarget.borderUVScale = SpriteColorFXEditorHelper.SliderWithReset(@"Border UV scale", SpriteColorFXEditorHelper.TooltipNoiseAmount, baseTarget.borderUVScale, 0.1f, 5.0f, 1.0f);
         }
 

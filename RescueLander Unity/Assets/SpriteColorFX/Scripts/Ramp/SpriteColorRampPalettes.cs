@@ -10,9 +10,17 @@ namespace SpriteColorFX
   /// </summary>
   public enum SpriteColorRampPalettes
   {
-    Unnamed = 0,
-    Unnamed_001 = 1,
-    Unnamed_002 = 2,
-    Unnamed_003 = 3,
+    Fire1 = 0,
+    Fire2 = 1,
+    Water1 = 2,
+    Gem1 = 3,
+    Air1 = 4,
+    Crystal1 = 5,
+    Wood1 = 6,
+    Wood2 = 7,
+    Stone1 = 8,
+    Stone2 = 9,
+    Metal1 = 10,
+    Metal2 = 11,
   }
 }

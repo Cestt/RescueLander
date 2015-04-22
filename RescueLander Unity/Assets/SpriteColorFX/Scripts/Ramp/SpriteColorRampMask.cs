@@ -110,7 +110,7 @@ namespace SpriteColorFX
 
       if (spriteRenderer != null && spriteRenderer.sharedMaterial != null)
       {
-        spriteRenderer.sharedMaterial.SetTexture(SpriteColorHelper.ShaderRampMaskTex, textureMask);
+        spriteRenderer.sharedMaterial.SetTexture(SpriteColorHelper.ShaderMaskTex, textureMask);
 
         spriteRenderer.sharedMaterial.SetFloat(SpriteColorHelper.ShaderStrengthParam, strength);
 
