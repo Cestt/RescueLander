@@ -9,6 +9,8 @@ public class WinLose : MonoBehaviour {
 	public GameObject winText;
 	public GameObject UI1;
 	public GameObject UI2;
+
+	private ScreenShoter screenshoter;
 	private bool first;
 	private int totalScore;
 	WinHalo_Anim haloanim;
@@ -36,6 +38,7 @@ public class WinLose : MonoBehaviour {
 				if(dataManger.manager.actualLevel == dataManger.manager.unlocks){
 					dataManger.manager.unlocks++;
 				}
+
 				totalScore = (int)scoreManager.scoreCalc ();
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
 				dataManger.manager.Save();

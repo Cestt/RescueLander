@@ -9,14 +9,12 @@ public class ShipAstronautDrop : MonoBehaviour {
 	private int astronautsDroped;
 	public int totalAstronauts;
 	public GameObject gameManager;
-	private ScoreManager scoreManager;
 	private WinLose winLose;
 
 	void Awake () {
 
 		rigid = this.GetComponent<Rigidbody2D>();
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
-		scoreManager = gameManager.GetComponent<ScoreManager> ();
 		winLose = gameManager.GetComponent<WinLose> ();
 	
 

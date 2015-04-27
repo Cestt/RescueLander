@@ -20,6 +20,8 @@ public class Touch_Manager : MonoBehaviour {
 	public GameObject Lose;
 	public GameObject garaje;
 	private string Result;
+	private Share share;
+	private FacebookSocial faceBook;
 
 
 
@@ -30,6 +32,8 @@ public class Touch_Manager : MonoBehaviour {
 		}
 		uicameraGameobject = GameObject.Find("UI_Camera");
 		uicamera = uicameraGameobject.GetComponent<Camera>();
+		share = GetComponent<Share>();
+		faceBook = GetComponent<FacebookSocial>();
 	}
 
 
@@ -106,6 +110,12 @@ public class Touch_Manager : MonoBehaviour {
 						case "NextLvl_Button" :
 							Application.LoadLevel("Menu");
 							break;
+						case "Share_Button" :
+							share.ShareScreenshot();
+							break;
+						case "Social Media Buttons" :
+							faceBook.FBLogin();
+							break;
 						case "Garage_Button" :
 							Garaje(true);
 							break;
@@ -143,7 +153,8 @@ public class Touch_Manager : MonoBehaviour {
 				ray = uicamera.ScreenPointToRay(Input.mousePosition);
 				ray2 = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-				if (Physics.Raycast(ray.origin,ray.direction * 100, out hit) || Physics.Raycast(ray2.origin,ray.direction * 100, out hit)) {
+				if (Physics.Raycast(ray.origin,ray.direction * 100, out hit) 
+				    || Physics.Raycast(ray2.origin,ray.direction * 100, out hit)) {
 		
 					Debug.Log("Hit");
 
@@ -201,6 +212,13 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "NextLvl_Button" :
 						Application.LoadLevel("Menu");
+						break;
+					case "Share_Button" :
+						share.ShareScreenshot();
+						Debug.Log("Launch Share");
+						break;
+					case "Social Media Buttons" :
+						faceBook.FBLogin();
 						break;
 					case "Garage_Button" :
 						Garaje(true);

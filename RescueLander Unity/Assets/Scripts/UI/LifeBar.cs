@@ -12,11 +12,16 @@ public class LifeBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 	
 	}
 	public void Starter(int totalDamage,float relation){
+
 		StopCoroutine ("LifeBarReduction");
-		StartCoroutine(LifeBarReduction(totalDamage,relation));
+		if(this.gameObject.activeInHierarchy){
+			StartCoroutine(LifeBarReduction(totalDamage,relation));
+		}
+
 	}
 	public IEnumerator LifeBarReduction(int totalDamage,float relation){
 		int damage = totalDamage - damageAcumulated;
