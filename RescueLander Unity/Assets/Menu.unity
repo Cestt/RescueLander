@@ -479,6 +479,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683a705af7954534ab158450a7d0ce72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uicameraGameobject: {fileID: 0}
+  uicamera: {fileID: 0}
+  paused: 0
+  ship: {fileID: 0}
+  uiColumnExtended: {fileID: 0}
+  music: {fileID: 0}
+  sounds: {fileID: 0}
+  MenuSpeed: 0
+  Win: {fileID: 0}
+  Lose: {fileID: 0}
+  garaje: {fileID: 0}
 --- !u!4 &484673138
 Transform:
   m_ObjectHideFlags: 0
@@ -3472,6 +3483,57 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1765402800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1765402802}
+  - 114: {fileID: 1765402801}
+  m_Layer: 0
+  m_Name: Data Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1765402801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1765402800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e5def2fcf19a764da286a46cb6f7500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocks: 1
+  actualLevel: 0
+  Sounds: 1
+  Music: 1
+  actualShip: 
+  totalStars: 0
+  levels: 21
+  coins: 0
+  color1: {r: 0, g: 0, b: 0, a: 0}
+  color2: {r: 0, g: 0, b: 0, a: 0}
+  Ships: []
+  shipUnlocks: 
+--- !u!4 &1765402802
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1765402800}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 635.282349, y: 924.612915, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
 --- !u!1 &1775749198
 GameObject:
   m_ObjectHideFlags: 0

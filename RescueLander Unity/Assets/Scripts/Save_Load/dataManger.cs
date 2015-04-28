@@ -21,7 +21,20 @@ public class dataManger : MonoBehaviour {
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]
 	public Dictionary<string,int> scores = new Dictionary<string, int>();
+	[HideInInspector]
+	public GameObject actualShip;
+	[HideInInspector]
+	public int totalStars;
 	public int levels;
+	[HideInInspector]
+	public int coins;
+	[HideInInspector]
+	public Color color1;
+	[HideInInspector]
+	public Color color2;
+	public List<GameObject> Ships = new List<GameObject>();
+	[HideInInspector]
+	public List<bool> shipUnlocks = new List<bool>();
 
 	private GameObject temp;
 
@@ -60,7 +73,12 @@ public class dataManger : MonoBehaviour {
 		data.unlocks = unlocks;
 		data.Sounds = Sounds;
 		data.Music = Music;
-
+		data.actualShip = actualShip;
+		data.color1 = color1;
+		data.color2 = color2;
+		data.shipUnlocks = shipUnlocks;
+		data.coins = coins;
+		data.totalStars = totalStars;
 		
 		for(int i = 1; i <= levels; i++){
 			Debug.Log("Save: "+i);
@@ -85,6 +103,15 @@ public class dataManger : MonoBehaviour {
 			Data data = (Data)bf.Deserialize(file);
 
 			unlocks = data.unlocks;
+			Sounds = data.Sounds;
+			Music = data.Music;
+			actualShip = data.actualShip;
+			color1 = data.color1;
+			color2 = data.color2;
+			shipUnlocks = data.shipUnlocks;
+			coins = data.coins;
+			totalStars = data.totalStars;
+
 
 			for(int i = 1; i<= levels ; i++){
 				stars["Level_"+i] = data.stars["Level_"+i];
@@ -121,6 +148,14 @@ public class dataManger : MonoBehaviour {
 			Data data = (Data)bf.Deserialize(file);
 			
 			unlocks = data.unlocks;
+			Sounds = data.Sounds;
+			Music = data.Music;
+			actualShip = data.actualShip;
+			color1 = data.color1;
+			color2 = data.color2;
+			shipUnlocks = data.shipUnlocks;
+			coins = data.coins;
+			totalStars = data.totalStars;
 
 			for(int i = 1; i<= levels ; i++){
 				stars["Level_"+i] = data.stars["Level_"+i];
@@ -191,11 +226,24 @@ class Data {
 	[HideInInspector]
 	public int unlocks;
 	[HideInInspector]
-	public bool Sounds;
+	public GameObject actualShip;
 	[HideInInspector]
-	public bool Music;
+	public bool Sounds = true;
+	[HideInInspector]
+	public bool Music = true;
 	[HideInInspector]
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]
 	public Dictionary<string,int> scores = new Dictionary<string, int>();
+	[HideInInspector]
+	public int totalStars;
+	[HideInInspector]
+	public int coins;
+	[HideInInspector]
+	public Color color1;
+	[HideInInspector]
+	public Color color2;
+	[HideInInspector]
+	public List<bool> shipUnlocks = new List<bool>();
+
 }
