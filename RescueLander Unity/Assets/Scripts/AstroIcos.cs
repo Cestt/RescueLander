@@ -8,10 +8,11 @@ public class AstroIcos : MonoBehaviour
 	public GameObject astroIco3;
 
 	ShipAstronautPickUp shipAstronautPickUp;
+
 	// Use this for initialization
 	void Awake ()
 	{
-		shipAstronautPickUp = GameObject.Find ("Ship").GetComponent<ShipAstronautPickUp> ();
+		shipAstronautPickUp = GameObject.FindGameObjectWithTag("Ship").GetComponent<ShipAstronautPickUp>();
 	}
 	
 	// Update is called once per frame
