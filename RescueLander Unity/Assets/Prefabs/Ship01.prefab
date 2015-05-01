@@ -27,7 +27,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 417532}
-  - 68: {fileID: 6854360}
+  - 60: {fileID: 6046288}
   m_Layer: 0
   m_Name: Feet
   m_TagString: Untagged
@@ -272,7 +272,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 188418}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 282.799988, y: 945.700012, z: 500}
+  m_LocalPosition: {x: 282.799988, y: 953.799988, z: 500}
   m_LocalScale: {x: .625, y: .625, z: .625}
   m_Children:
   - {fileID: 417532}
@@ -447,7 +447,7 @@ Rigidbody2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 188418}
   m_Mass: 3
-  m_LinearDrag: 1.82249999
+  m_LinearDrag: .472499996
   m_AngularDrag: .787500024
   m_GravityScale: 9.80000019
   m_FixedAngle: 0
@@ -455,6 +455,36 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
+--- !u!60 &6046288
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114114}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  m_Points:
+    m_Paths:
+    - - {x: -21.4441414, y: -43.8537102}
+      - {x: -11.7734375, y: -52.1979485}
+      - {x: 10.8630857, y: -52.3890648}
+      - {x: 25.3346195, y: -40.9283218}
+      - {x: 40.4916992, y: -60.3731461}
+      - {x: 40.8322258, y: -63.9257812}
+      - {x: 22.6557617, y: -64.0265656}
+      - {x: 23.4811039, y: -60.345314}
+      - {x: 22.6787109, y: -46.0315437}
+      - {x: 11.0040045, y: -54.3647461}
+      - {x: -11.7285156, y: -54.2334976}
+      - {x: -22.3174324, y: -45.6759758}
+      - {x: -23.4501953, y: -60.5732422}
+      - {x: -23.0428219, y: -63.8647461}
+      - {x: -41.0287132, y: -63.8336906}
+      - {x: -40.9545403, y: -60.8326187}
+      - {x: -25.1205082, y: -40.9314461}
 --- !u!60 &6072308
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -498,30 +528,6 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 400, y: 400}
---- !u!68 &6854360
-EdgeCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 114114}
-  m_Enabled: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  m_Points:
-  - {x: -25.1143341, y: -40.6385307}
-  - {x: -41.2279968, y: -63.9017563}
-  - {x: -22.8354244, y: -63.9709282}
-  - {x: -26.173254, y: -55.5393295}
-  - {x: -20.970068, y: -43.5424194}
-  - {x: -12.0722561, y: -53.2440605}
-  - {x: 10.9844465, y: -52.9876099}
-  - {x: 20.4719849, y: -44.6965141}
-  - {x: 26.692028, y: -55.5426445}
-  - {x: 23.104351, y: -63.7448959}
-  - {x: 40.9298515, y: -63.6480713}
-  - {x: 24.8205376, y: -40.0124321}
 --- !u!114 &11403130
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -676,7 +682,7 @@ MonoBehaviour:
   massMotor: 225
   massAngular: 875
   angularDrag: .000300000014
-  linearDrag: .00270000007
+  linearDrag: .000699999975
 --- !u!114 &11452960
 MonoBehaviour:
   m_ObjectHideFlags: 1
