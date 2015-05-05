@@ -23,6 +23,7 @@ public class Touch_Manager : MonoBehaviour {
 	private Share share;
 	private FacebookSocial faceBook;
 	private string selectedZone = "A";
+	public Color_Set colorSet;
 	private SpriteColorFX.SpriteColorTintMask3 colorChange;
 	public GameObject ShipGaraje;
 
@@ -156,9 +157,11 @@ public class Touch_Manager : MonoBehaviour {
 								Color colorApply = hit.collider.gameObject.GetComponentInChildren<tk2dSprite>().color;
 								if(selectedZone == "A"){
 									colorChange.colorMaskRed = colorApply;
+									colorSet.ColorSet(colorApply,"A");
 								}
 								if(selectedZone == "B"){
 									colorChange.colorMaskGreen = colorApply;
+									colorSet.ColorSet(colorApply,"B");
 								}
 							}
 							
@@ -281,9 +284,11 @@ public class Touch_Manager : MonoBehaviour {
 							Color colorApply = hit.collider.gameObject.GetComponentInChildren<tk2dSprite>().color;
 							if(selectedZone == "A"){
 								colorChange.colorMaskRed = colorApply;
+								colorSet.ColorSet(colorApply,"A");
 							}
 							if(selectedZone == "B"){
 								colorChange.colorMaskGreen = colorApply;
+								colorSet.ColorSet(colorApply,"B");
 							}
 						}
 
