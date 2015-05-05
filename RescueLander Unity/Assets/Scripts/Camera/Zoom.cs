@@ -3,22 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Zoom : MonoBehaviour {
-
+	//Camera component that has the Zoom
 	public tk2dCamera cam;
+	//Zoom speed
 	public float zoomProgression;
-	public bool Finish;
+	//Zooming in or out?
+	private string zoom;
 
-	void Awake(){
 
-
-	
-	}
-
+	/// <summary>
+	/// Check collisions for zoom
+	/// </summary>
 	void OnTriggerEnter2D(Collider2D coll) {
 		if (coll.gameObject.tag == "Floor"){
 
-				StopCoroutine("Zooming");
-				StartCoroutine(Zooming("in"));
+			CancelInvoke("Zooming");
+			zoom = "in";
+			InvokeRepeating("Zooming",0,Time.fixedDeltaTime);
 
 			
 
@@ -30,8 +31,9 @@ public class Zoom : MonoBehaviour {
 			
 			if(cam.ZoomFactor > 1){
 				
-				StopCoroutine("Zooming");
-				StartCoroutine(Zooming("out"));
+				CancelInvoke("Zooming");
+				zoom = "out";
+				InvokeRepeating("Zooming",0,Time.fixedDeltaTime);
 
 			}
 			
@@ -40,33 +42,42 @@ public class Zoom : MonoBehaviour {
 	}
 
 
-
-	IEnumerator Zooming(string zoom){
+	/// <summary>
+	/// Zoom in/out depending on zoom variable.
+	/// </summary>
+	void Zooming(){
 
 		if (zoom == "in") {
-				
-				while(cam.ZoomFactor < 2){
+			///cam.Zoomfactor is actually the amount of zoom.
+			if(cam.ZoomFactor < 2){
 					
-					cam.ZoomFactor += zoomProgression;
-					yield return new WaitForSeconds(Time.fixedDeltaTime);
-					
-				}
+				cam.ZoomFactor += zoomProgression;
+									
+			}
+			if(cam.ZoomFactor >= 2){
 				cam.ZoomFactor = 2;
+				CancelInvoke("Zooming");
+			}
+				
 						
-				}
+		}
 
 
 		if(zoom == "out"){
 
 
-			while(cam.ZoomFactor > 1){
+			if(cam.ZoomFactor > 1){
 
 				cam.ZoomFactor -= zoomProgression;
-				yield return new WaitForSeconds(Time.fixedDeltaTime);
 
 			}
-			cam.ZoomFactor = 1;
+			if(cam.ZoomFactor <= 1){
+
+				cam.ZoomFactor = 1;
+				CancelInvoke("Zooming");
 			
+			}
+
 		}
 
 	}
