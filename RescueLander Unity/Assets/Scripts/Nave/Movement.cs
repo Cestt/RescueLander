@@ -32,10 +32,6 @@ public class Movement : MonoBehaviour {
 	private int currentFrame = 0;
 	private tk2dSlicedSprite slicedsprite;
 	private tk2dSpriteAnimator animator;
-
-
-
-
 	private Rigidbody2D rigid;
 
 	// Use this for initialization
@@ -49,7 +45,7 @@ public class Movement : MonoBehaviour {
 		
 	}
 
-	// Update is called once per frame
+
 	void FixedUpdate () {
 
 		if(animator != null & animator.IsPlaying("Fire_Start")||
@@ -130,7 +126,7 @@ public class Movement : MonoBehaviour {
 							if(!Fire.activeInHierarchy)
 								Fire.SetActive(true);
 							ConsumeFuel();
-							/*Javi*/motor = true;
+							motor = true;
 							
 						}
 						if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){

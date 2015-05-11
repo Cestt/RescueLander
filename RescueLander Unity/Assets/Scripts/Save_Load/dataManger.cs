@@ -9,6 +9,11 @@ public class dataManger : MonoBehaviour {
 
 	public static dataManger manager;
 
+
+	[HideInInspector]
+	public int fuelPowerUps;
+	[HideInInspector]
+	public int lifePowerUps;
 	[HideInInspector]
 	public string Camposition = "";
 	[HideInInspector]
@@ -222,6 +227,10 @@ public class dataManger : MonoBehaviour {
 
 [Serializable]
 class Data {
+	[HideInInspector]
+	public int fuelPowerUps;
+	[HideInInspector]
+	public int lifePowerUps;
 	[HideInInspector]
 	public int unlocks;
 	[HideInInspector]
