@@ -9,7 +9,9 @@ public class dataManger : MonoBehaviour {
 
 	public static dataManger manager;
 
-	//[HideInInspector]
+	[HideInInspector]
+	public string Camposition = "";
+	[HideInInspector]
 	public int unlocks = 1;
 	[HideInInspector]
 	public int actualLevel;
@@ -72,7 +74,7 @@ public class dataManger : MonoBehaviour {
 	
 
 
-	public void Save(){
+	public void Save(bool complete){
 
 		if(File.Exists(Application.persistentDataPath + "/data.jmm")){
 			
@@ -94,19 +96,21 @@ public class dataManger : MonoBehaviour {
 			data.shipUnlocks = shipUnlocks;
 			data.coins = coins;
 			data.totalStars = totalStars;
-			
-			for(int i = 1; i <= levels; i++){
-				if(stars["Level_"+i] > data.stars["Level_"+i]){
-					data.stars["Level_"+i] = stars["Level_"+i];
-					Debug.Log("Save Stars");
+			if(complete){
+				for(int i = 1; i <= levels; i++){
+					if(stars["Level_"+i] > data.stars["Level_"+i]){
+						data.stars["Level_"+i] = stars["Level_"+i];
+						Debug.Log("Save Stars");
+					}
+					if(scores["Level_"+i] > data.scores["Level_"+i]){
+						data.scores["Level_"+i] = scores["Level_"+i];
+						Debug.Log("Save Scores");
+					}
+					
+					
 				}
-				if(scores["Level_"+i] > data.scores["Level_"+i]){
-					data.scores["Level_"+i] = scores["Level_"+i];
-					Debug.Log("Save Scores");
-				}
-				
-				
 			}
+
 			
 
 			 file = File.Create(Application.persistentDataPath + "/data.jmm");

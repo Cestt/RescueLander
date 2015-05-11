@@ -25,7 +25,7 @@ public class Color_Set : MonoBehaviour {
 			dataManger.manager.color1g = color.g;
 			dataManger.manager.color1b = color.b;	
 			tint.colorMaskRed = color;
-			dataManger.manager.Save();
+			dataManger.manager.Save(true);
 		}
 		if (zone == "B") {
 			
@@ -33,7 +33,7 @@ public class Color_Set : MonoBehaviour {
 			dataManger.manager.color2g = color.g;
 			dataManger.manager.color2b = color.b;
 			tint.colorMaskGreen = color;
-			dataManger.manager.Save();
+			dataManger.manager.Save(true);
 		}
 
 	}

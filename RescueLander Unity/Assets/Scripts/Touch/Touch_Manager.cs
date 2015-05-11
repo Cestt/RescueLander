@@ -86,10 +86,12 @@ public class Touch_Manager : MonoBehaviour {
 							Pause(hit.transform.gameObject);
 							break;
 						case "Retry_Button" :
+							dataManger.manager.Save(false);
 							Application.LoadLevel (Application.loadedLevel);
 							break;	
 						case "Levels_Button" :
 							Application.LoadLevel ("Menu");
+							dataManger.manager.Camposition = "Forward";
 							break;
 						case "Sound_Button" :
 							if(dataManger.manager.Sounds){
@@ -116,6 +118,7 @@ public class Touch_Manager : MonoBehaviour {
 							
 						case "NextLvl_Button" :
 							Application.LoadLevel("Menu");
+							dataManger.manager.Camposition = "Forward";
 							break;
 						case "Share_Button" :
 							share.ShareScreenshot();
@@ -213,10 +216,12 @@ public class Touch_Manager : MonoBehaviour {
 						Pause(hit.transform.gameObject);
 						break;
 					case "Retry_Button" :
+						dataManger.manager.Save(false);
 						Application.LoadLevel (Application.loadedLevel);
 						break;	
 					case "Levels_Button" :
 						Application.LoadLevel ("Menu");
+						dataManger.manager.Camposition = "Forward";
 						break;
 					case "Sound_Button" :
 						if(dataManger.manager.Sounds){
@@ -242,6 +247,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "NextLvl_Button" :
 						Application.LoadLevel("Menu");
+						dataManger.manager.Camposition = "Forward";
 						break;
 					case "Share_Button" :
 						share.ShareScreenshot();
@@ -302,8 +308,16 @@ public class Touch_Manager : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Escape)){
 
 			if(Application.loadedLevelName == "Menu"){
-				dataManger.manager.Save();
-				Application.Quit();
+				if(dataManger.manager.Camposition == "Forward"){
+					forward = false;
+					CancelInvoke("MoveCamera");
+					InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+					dataManger.manager.Camposition = "";
+				}else{
+					dataManger.manager.Save(true);
+					Application.Quit();
+				}
+
 			}else{
 				if(paused){
 					Pause(null);

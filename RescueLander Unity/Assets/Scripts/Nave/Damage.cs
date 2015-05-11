@@ -61,9 +61,11 @@ public class Damage : MonoBehaviour {
 
 			if(coll.relativeVelocity.magnitude > damageThreshold){
 				ContactPoint2D contactpoint = coll.contacts[0];
-				sparks.transform.position = contactpoint.point;
-				animator = sparks.GetComponent<tk2dSpriteAnimator>();
 				sparks.SetActive(true);
+				sparks.transform.position = contactpoint.point;
+				Quaternion rot = Quaternion.FromToRotation(Vector3.up, contactpoint.normal);
+				sparks.transform.rotation = rot;
+				animator = sparks.GetComponent<tk2dSpriteAnimator>();
 				animator.Play("Sparks");
 				animator.AnimationCompleted = ResetSparks;
 				
@@ -86,6 +88,8 @@ public class Damage : MonoBehaviour {
 
 				ContactPoint2D contactpoint = coll.contacts[0];
 				sparks.transform.position = contactpoint.point;
+				Quaternion rot = Quaternion.FromToRotation(Vector3.up, contactpoint.normal);
+				sparks.transform.rotation = rot;
 				animator = sparks.GetComponent<tk2dSpriteAnimator>();
 				sparks.SetActive(true);
 				animator.Play("Sparks");

@@ -40,8 +40,11 @@ public class WinLose : MonoBehaviour {
 				}
 
 				totalScore = (int)scoreManager.scoreCalc ();
+				if(totalScore > 0 & totalScore <= 500){
+					dataManger.manager.stars["Level"+dataManger.manager.actualShip] = 1;
+				}
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
-				dataManger.manager.Save();
+				dataManger.manager.Save(true);
 				first = false;
 			}
 			Win();
@@ -62,10 +65,10 @@ public class WinLose : MonoBehaviour {
 	}
 
 	void Win(){
-		
+
 		//haloanim.Win =true;
 		WinSprite.SetActive (true);
-		text.text ="Score: "+ totalScore.ToString();
+		text.text = Localization_Bridge.loc.Score +": "+ totalScore.ToString();
 		UI1.SetActive (false);
 		UI2.SetActive (false);
 		Application.LoadLevel("Menu");

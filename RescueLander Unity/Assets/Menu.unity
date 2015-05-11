@@ -490,6 +490,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   garaje: {fileID: 0}
+  colorSet: {fileID: 0}
   ShipGaraje: {fileID: 0}
 --- !u!4 &484673138
 Transform:
@@ -1440,6 +1441,7 @@ GameObject:
   - 92: {fileID: 1025214986}
   - 81: {fileID: 1025214985}
   - 114: {fileID: 1025214991}
+  - 114: {fileID: 1025214992}
   m_Layer: 0
   m_Name: Camera 2DTK
   m_TagString: MainCamera
@@ -1623,6 +1625,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   raycastType: 0
+--- !u!114 &1025214992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1025214984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f21baefa2d61e48859abfc37979974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ship: {fileID: 0}
 --- !u!1 &1031941192
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,6 +1779,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1082689952}
   - 114: {fileID: 1082689951}
+  - 114: {fileID: 1082689953}
   m_Layer: 0
   m_Name: Data Manager
   m_TagString: Untagged
@@ -1783,6 +1798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e5def2fcf19a764da286a46cb6f7500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camposition: 
   unlocks: 1
   actualLevel: 0
   Sounds: 1
@@ -1811,6 +1827,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 11
+--- !u!114 &1082689953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1082689950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2a2040820cf0224cae5ca07d534fbbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Score: 
 --- !u!1 &1095515909
 GameObject:
   m_ObjectHideFlags: 0
