@@ -78,10 +78,6 @@ public class Damage : MonoBehaviour {
 				lifebarScript.Starter(totalDamage,relation);
 				Debug.Log("Hull Impact damage");
 
-			}else{
-
-				Debug.Log("No hull impact damage");
-
 			}
 		}
 	}
@@ -104,10 +100,6 @@ public class Damage : MonoBehaviour {
 				Debug.Log("Total Damage: " + totalDamage);
 				lifebarScript.Starter(totalDamage,relation);
 				Debug.Log("Hull friction damage");
-				
-			}else{
-				
-				Debug.Log("No hull friction damage");
 				
 			}
 		}

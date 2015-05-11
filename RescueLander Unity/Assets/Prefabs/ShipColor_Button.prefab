@@ -11,7 +11,6 @@ GameObject:
   - 114: {fileID: 11423528}
   - 65: {fileID: 6523528}
   - 114: {fileID: 11423524}
-  - 114: {fileID: 11423526}
   m_Layer: 5
   m_Name: ShipColor_Button
   m_TagString: Untagged
@@ -76,7 +75,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &115286
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -88,7 +87,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &115470
 GameObject:
   m_ObjectHideFlags: 1
@@ -115,9 +114,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 108198}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -170.662476, y: 172.110962, z: -90}
+  m_LocalPosition: {x: -248, y: .300000012, z: 115}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 415286}
   - {fileID: 415278}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -132,9 +132,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 415470}
-  - {fileID: 415286}
   m_Father: {fileID: 408198}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!4 &415282
 Transform:
   m_ObjectHideFlags: 1
@@ -166,13 +165,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 115286}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 2.25, z: -90}
+  m_LocalPosition: {x: 55, y: -54.0000114, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 415282}
   - {fileID: 415284}
-  m_Father: {fileID: 415278}
-  m_RootOrder: 1
+  m_Father: {fileID: 408198}
+  m_RootOrder: 0
 --- !u!4 &415470
 Transform:
   m_ObjectHideFlags: 1
@@ -333,7 +332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collection: {fileID: 11469476, guid: 99643c39afa01c842a74752f05760e49, type: 2}
-  _color: {r: .501960814, g: .501960814, b: .501960814, a: 1}
+  _color: {r: .819607854, g: .115709335, b: .115709335, a: 1}
   _scale: {x: .75, y: .75, z: 1}
   _spriteId: 36
   boxCollider2D: {fileID: 0}
@@ -482,77 +481,6 @@ MonoBehaviour:
   upButtonSound: {fileID: 0}
   clickButtonSound: {fileID: 8300000, guid: 7f80b75ea488256478fee2b058cc2657, type: 3}
   releaseButtonSound: {fileID: 0}
---- !u!114 &11423526
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 108198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a677072d2a0bc494abd400e1dd1a0918, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bMin: {x: 0, y: -112.5, z: 0}
-  bMax: {x: 108, y: 0, z: 0}
-  layoutItems:
-  - sprite: {fileID: 11415196}
-    UIMask: {fileID: 0}
-    layout: {fileID: 0}
-    gameObj: {fileID: 115278}
-    snapLeft: 1
-    snapRight: 1
-    snapTop: 1
-    snapBottom: 1
-    fixedSize: 0
-    fillPercentage: -1
-    sizeProportion: 1
-    inLayoutList: 1
-    childDepth: 0
-    oldPos: {x: 1349, y: 724, z: 115}
-  - sprite: {fileID: 0}
-    UIMask: {fileID: 0}
-    layout: {fileID: 0}
-    gameObj: {fileID: 115286}
-    snapLeft: 1
-    snapRight: 1
-    snapTop: 1
-    snapBottom: 1
-    fixedSize: 0
-    fillPercentage: -1
-    sizeProportion: 1
-    inLayoutList: 1
-    childDepth: 1
-    oldPos: {x: 1350, y: 726.25, z: 25}
-  - sprite: {fileID: 0}
-    UIMask: {fileID: 0}
-    layout: {fileID: 0}
-    gameObj: {fileID: 115282}
-    snapLeft: 1
-    snapRight: 1
-    snapTop: 1
-    snapBottom: 1
-    fixedSize: 0
-    fillPercentage: -1
-    sizeProportion: 1
-    inLayoutList: 1
-    childDepth: 2
-    oldPos: {x: 1311, y: 726.25, z: 115}
-  - sprite: {fileID: 11415208}
-    UIMask: {fileID: 0}
-    layout: {fileID: 0}
-    gameObj: {fileID: 115284}
-    snapLeft: 1
-    snapRight: 1
-    snapTop: 1
-    snapBottom: 1
-    fixedSize: 0
-    fillPercentage: -1
-    sizeProportion: 1
-    inLayoutList: 1
-    childDepth: 2
-    oldPos: {x: 1375, y: 726.25, z: 115}
-  autoResizeCollider: 1
 --- !u!114 &11423528
 MonoBehaviour:
   m_ObjectHideFlags: 1
