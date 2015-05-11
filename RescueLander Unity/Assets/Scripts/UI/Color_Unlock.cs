@@ -17,8 +17,8 @@ public class Color_Unlock : MonoBehaviour {
 
 			if(tempColorEnable.StarsRequired <= dataManger.manager.totalStars){
 				tempColorEnable.enabled = true;
-				//Transform tempGrandchild = child.FindChild("Requisite");
-				//tempGrandchild.gameObject.SetActive(false);
+				Transform tempGrandchild = child.FindChild("Requisite");
+				tempGrandchild.gameObject.SetActive(false);
 			}
 		}
 	}
