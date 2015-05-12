@@ -14,7 +14,7 @@ public class Minimap : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-	
+		Ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		coll = GetComponent<BoxCollider2D>();
 
 	}

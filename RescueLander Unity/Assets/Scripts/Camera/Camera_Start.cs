@@ -4,9 +4,10 @@ using System.Collections;
 public class Camera_Start : MonoBehaviour {
 
 	private tk2dCamera camtk2d;
-	public GameObject ship;
+	private GameObject ship;
 
 	void Start () {
+		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		camtk2d = GetComponent<tk2dCamera>();
 		if(Application.loadedLevelName != "Menu"){
 			camtk2d.ZoomFactor = 2;

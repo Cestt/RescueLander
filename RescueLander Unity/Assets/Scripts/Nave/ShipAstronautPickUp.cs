@@ -12,12 +12,12 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	public int astronautPicked = 0;
 	private Rigidbody2D rigid;
 	private tk2dSpriteAnimator animator;
-	public Touch_Manager touchmanager;
+	private Touch_Manager touchmanager;
 
 
 	// Use this for initialization
-	void Start () {
-
+	void Awake () {
+		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		rigid = GetComponent<Rigidbody2D>();
 
 

@@ -3,13 +3,13 @@ using System.Collections;
 
 public class AstronautPickUp : MonoBehaviour {
 
-	public GameObject ship;
+	private GameObject ship;
 	public float pickUpDistance = 200f;
 	private ShipAstronautPickUp shipastronautpickup;
 
 
 	void Awake () {
-	
+		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		shipastronautpickup = ship.GetComponent<ShipAstronautPickUp>();
 
 

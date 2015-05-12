@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Cameraposition : MonoBehaviour {
 
-	public GameObject ship;
+	private GameObject ship;
 	public int maxScrollX;
 	private Camera cam;
 	private Transform shipPos;
@@ -13,7 +13,7 @@ public class Cameraposition : MonoBehaviour {
 	public bool BoundedScroll = true;
 	// Use this for initialization
 	void Awake () {
-
+		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		camera = this.GetComponent<tk2dCamera>();
 		cam = Camera.main;
 		shipPos = ship.transform;

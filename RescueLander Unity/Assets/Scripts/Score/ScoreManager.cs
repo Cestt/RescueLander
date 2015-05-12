@@ -11,7 +11,7 @@ public class ScoreManager : MonoBehaviour {
 	private Movement movement;
 
 	void Awake(){
-
+		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		damage = ship.GetComponent<Damage>();
 		movement = ship.GetComponent<Movement>();
 	}

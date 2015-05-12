@@ -11,7 +11,7 @@ public class AstroIcos : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		shipAstronautPickUp = GameObject.Find ("Ship01").GetComponent<ShipAstronautPickUp> ();
+		shipAstronautPickUp  = GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<ShipAstronautPickUp> ();
 	}
 	
 	// Update is called once per frame

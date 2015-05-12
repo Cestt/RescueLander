@@ -32,6 +32,7 @@ public class Touch_Manager : MonoBehaviour {
 
 	void Awake(){
 		if(uiColumnExtended != null){
+			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 			rigid = ship.GetComponent<Rigidbody2D>();
 			animation = uiColumnExtended.GetComponent<Animation>();
 			colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();

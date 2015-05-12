@@ -8,11 +8,11 @@ public class ShipAstronautDrop : MonoBehaviour {
 	private ShipAstronautPickUp shipastronautpickup;
 	private int astronautsDroped;
 	public int totalAstronauts;
-	public GameObject gameManager;
+	private GameObject gameManager;
 	private WinLose winLose;
 
 	void Awake () {
-
+		gameManager = GameObject.Find("Game Manager");
 		rigid = this.GetComponent<Rigidbody2D>();
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
 		winLose = gameManager.GetComponent<WinLose> ();

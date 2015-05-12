@@ -10,6 +10,9 @@ public class Zoom : MonoBehaviour {
 	//Zooming in or out?
 	private string zoom;
 
+	void Awake(){
+		cam = Camera.main.GetComponent<tk2dCamera>();
+	}
 
 	/// <summary>
 	/// Check collisions for zoom

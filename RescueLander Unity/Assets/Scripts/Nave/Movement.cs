@@ -6,10 +6,14 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 
 	RuntimePlatform platform = Application.platform;
-	public Touch_Manager touchmanager;
+	private Touch_Manager touchmanager;
+	[HideInInspector]
 	public GameObject fuelBar;
+	[HideInInspector]
 	public GameObject Thruster_r;
+	[HideInInspector]
 	public GameObject Thruster_l;
+	[HideInInspector]
 	public GameObject Fire;
 	[HideInInspector]
 	public float motorForce = 0f;
@@ -36,7 +40,14 @@ public class Movement : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake() {
-
+		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
+		fuelBar = GameObject.Find("BarraFuel");
+		Transform findChild = transform.FindChild("Thruster_R");
+		Thruster_r = findChild.gameObject;
+		findChild = transform.FindChild("Thruster_L");
+		Thruster_l = findChild.gameObject;
+		findChild = transform.FindChild("Fire");
+		Fire = findChild.gameObject;
 		rigid = GetComponent<Rigidbody2D>();
 		slicedsprite = fuelBar.GetComponent<tk2dSlicedSprite>();
 		originlSize = slicedsprite.dimensions.x;

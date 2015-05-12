@@ -28,8 +28,8 @@ public class dataManger : MonoBehaviour {
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]
 	public Dictionary<string,int> scores = new Dictionary<string, int>();
-	[HideInInspector]
-	public string actualShip;
+
+	public string actualShip = "Ship01";
 	[HideInInspector]
 	public int totalStars;
 	public int levels;
@@ -192,7 +192,7 @@ public class dataManger : MonoBehaviour {
 			
 			data.unlocks = 1;
 			unlocks = data.unlocks;
-
+			data.actualShip = actualShip;
 			for(int i = 1; i <= levels; i++){
 				data.stars.Add("Level_"+i,0);
 				data.scores.Add("Level_"+i,0);

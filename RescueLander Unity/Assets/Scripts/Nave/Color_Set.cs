@@ -9,7 +9,7 @@ public class Color_Set : MonoBehaviour {
 
 	void Awake () {
 		tintGaraje = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3> ();
-		tint = GetComponent<SpriteColorFX.SpriteColorTintMask3> ();
+		tint = GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<SpriteColorFX.SpriteColorTintMask3> ();
 		if (dataManger.manager.color1b != null) {
 			tint.colorMaskRed = new Color(dataManger.manager.color1r,dataManger.manager.color1g,dataManger.manager.color1b);
 			tint.colorMaskGreen = new Color(dataManger.manager.color2r,dataManger.manager.color2g,dataManger.manager.color2b);
