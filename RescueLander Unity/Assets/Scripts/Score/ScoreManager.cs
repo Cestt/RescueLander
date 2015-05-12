@@ -6,12 +6,12 @@ public class ScoreManager : MonoBehaviour {
 
 	public int timeScore;
 	public float scoreReductionTime;
-	public GameObject ship;
+	private GameObject ship;
 	private Damage damage;
 	private Movement movement;
 
 	void Awake(){
-
+		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		damage = ship.GetComponent<Damage>();
 		movement = ship.GetComponent<Movement>();
 	}

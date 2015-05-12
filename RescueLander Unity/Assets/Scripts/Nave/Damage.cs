@@ -2,31 +2,39 @@
 using System.Collections;
 
 public class Damage : MonoBehaviour {
-
+	[HideInInspector]
 	public GameObject explosion;
+	[HideInInspector]
 	public GameObject sparks;
 	public int life = 0;
 	private int maxLife;
 	public int damageThreshold = 0;
 	public int damageThresholdFriction = 0;
+	public float DamageVariant;
 	private ShipAstronautPickUp shipastronautpickup;
+	[HideInInspector]
 	public GameObject lifeBar;
+	[HideInInspector]
 	public GameObject GameManager;
 	private float relation;
 	private int totalDamage;
 	private tk2dSlicedSprite slicedsprite;
 	private LifeBar lifebarScript;
-	private IEnumerator coroutine;
 	private tk2dSpriteAnimator animator;
+	private float realDamage;
 	WinLose winLose;
 
 	// Use this for initialization
 	void Awake () {
 	
+		Transform findChild = transform.FindChild("Explosion");
+		explosion = findChild.gameObject;
+		sparks = GameObject.Find("Sparks");
+		lifeBar = GameObject.Find("BarraVida");
+		GameManager = GameObject.Find("Game Manager");
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
 		slicedsprite = lifeBar.GetComponent<tk2dSlicedSprite>();
 		lifebarScript = lifeBar.GetComponent<LifeBar>();
-		coroutine = lifebarScript.LifeBarReduction(totalDamage,relation);
 		relation = slicedsprite.dimensions.x/life;
 		winLose = GameManager.GetComponent<WinLose> ();
 		maxLife =life;
@@ -38,6 +46,12 @@ public class Damage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(life <= (maxLife*2)/4 & life >= (maxLife*3)/4){
+			slicedsprite.SetSprite("BarraVida_Naranja");
+		}
+		if(life < (maxLife*3)/4){
+			slicedsprite.SetSprite("BarraVida_Roja");
+		}
 
 		if(life < 0){
 
@@ -63,16 +77,20 @@ public class Damage : MonoBehaviour {
 
 			if(coll.relativeVelocity.magnitude > damageThreshold){
 				ContactPoint2D contactpoint = coll.contacts[0];
-				sparks.transform.position = contactpoint.point;
-				animator = sparks.GetComponent<tk2dSpriteAnimator>();
 				sparks.SetActive(true);
+				sparks.transform.position = contactpoint.point;
+				Quaternion rot = Quaternion.FromToRotation(Vector3.up, contactpoint.normal);
+				sparks.transform.rotation = rot;
+				animator = sparks.GetComponent<tk2dSpriteAnimator>();
 				animator.Play("Sparks");
 				animator.AnimationCompleted = ResetSparks;
 				
 
-				life -= (int)coll.relativeVelocity.magnitude - damageThreshold;
+				realDamage = (int)coll.relativeVelocity.magnitude - damageThreshold;
+				realDamage = realDamage + ((DamageVariant * realDamage)/100);
+				life -= (int)realDamage;
 				if(totalDamage <= maxLife){
-					totalDamage += (int)coll.relativeVelocity.magnitude - damageThreshold;
+					totalDamage += (int)realDamage;
 				}
 				Debug.Log("Total Damage: " + totalDamage);
 				lifebarScript.Starter(totalDamage,relation);
@@ -88,15 +106,19 @@ public class Damage : MonoBehaviour {
 
 				ContactPoint2D contactpoint = coll.contacts[0];
 				sparks.transform.position = contactpoint.point;
+				Quaternion rot = Quaternion.FromToRotation(Vector3.up, contactpoint.normal);
+				sparks.transform.rotation = rot;
 				animator = sparks.GetComponent<tk2dSpriteAnimator>();
 				sparks.SetActive(true);
 				animator.Play("Sparks");
 				animator.AnimationCompleted = ResetSparks;
 				
-				life -= (int)coll.relativeVelocity.magnitude - damageThreshold;
-					if(totalDamage <= maxLife){
-						totalDamage += (int)coll.relativeVelocity.magnitude - damageThreshold;
-					}
+				realDamage = (int)coll.relativeVelocity.magnitude - damageThreshold;
+				realDamage = realDamage + ((DamageVariant * realDamage)/100);
+				life -= (int)realDamage;
+				if(totalDamage <= maxLife){
+					totalDamage += (int)realDamage;
+				}
 				Debug.Log("Total Damage: " + totalDamage);
 				lifebarScript.Starter(totalDamage,relation);
 				Debug.Log("Hull friction damage");

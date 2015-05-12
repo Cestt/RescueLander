@@ -12,11 +12,12 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	public int astronautPicked = 0;
 	private Rigidbody2D rigid;
 	private tk2dSpriteAnimator animator;
+	private Touch_Manager touchmanager;
 
 
 	// Use this for initialization
-	void Start () {
-
+	void Awake () {
+		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		rigid = GetComponent<Rigidbody2D>();
 
 
@@ -26,7 +27,7 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		if(Pickable = true & rigid.velocity.magnitude <= 0.0001 & Astronaut != null){
+		if(Pickable = true & rigid.velocity.magnitude <= 0.0001 & Astronaut != null & touchmanager.paused ==false){
 
 			animator = Astronaut.GetComponent<tk2dSpriteAnimator>();
 			if(!animator.IsPlaying("Halo")){

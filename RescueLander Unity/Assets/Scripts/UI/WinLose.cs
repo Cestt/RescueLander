@@ -9,6 +9,10 @@ public class WinLose : MonoBehaviour {
 	public GameObject winText;
 	public GameObject UI1;
 	public GameObject UI2;
+
+	private ScreenShoter screenshoter;
+	private bool first;
+	private int totalScore;
 	WinHalo_Anim haloanim;
 	tk2dTextMesh text;
 	ScoreManager scoreManager;
@@ -18,6 +22,7 @@ public class WinLose : MonoBehaviour {
 		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
 		text = winText.GetComponent<tk2dTextMesh> ();
 		scoreManager = this.GetComponent<ScoreManager> ();
+		first = true;
 
 	}
 	
@@ -29,11 +34,24 @@ public class WinLose : MonoBehaviour {
 	public void End(string result){
 
 		if(result == "Win"){
-			StartCoroutine("Win");
+			if(first){
+				if(dataManger.manager.actualLevel == dataManger.manager.unlocks){
+					dataManger.manager.unlocks++;
+				}
+
+				totalScore = (int)scoreManager.scoreCalc ();
+				if(totalScore > 0 & totalScore <= 500){
+					dataManger.manager.stars["Level"+dataManger.manager.actualShip] = 1;
+				}
+				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
+				dataManger.manager.Save(true);
+				first = false;
+			}
+			Win();
 		}
 
 		if(result == "Lose"){
-			StartCoroutine("Lose");
+			Lose();
 		}
 
 		//TakeScreenShot(1);
@@ -46,23 +64,21 @@ public class WinLose : MonoBehaviour {
 	
 	}
 
-	IEnumerator Win(){
-		
+	void Win(){
+
 		//haloanim.Win =true;
 		WinSprite.SetActive (true);
-		int totalScore = (int)scoreManager.scoreCalc ();
-		text.text ="Score: "+ totalScore.ToString();
+//		text.text = Localization_Bridge.loc.Score +": "+ totalScore.ToString();
 		UI1.SetActive (false);
 		UI2.SetActive (false);
-		yield return new WaitForSeconds(2f);
-		Application.LoadLevel("Menu");
+
+
 	}
-	IEnumerator Lose(){
+	void Lose(){
 
 		LoseSprite.SetActive (true);
 		UI1.SetActive (false);
 		UI2.SetActive (false);
-		yield return new WaitForSeconds(2f);
-		Application.LoadLevel("Menu");
+
 	}
 }

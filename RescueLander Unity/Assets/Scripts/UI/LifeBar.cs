@@ -5,31 +5,47 @@ public class LifeBar : MonoBehaviour {
 
 	private tk2dSlicedSprite slicedsprite;
 	private int damageAcumulated;
-
+	private int totalDamage;
+	private float relation;
+	private int damage;
+	public float reductionSpeed;
 	void Awake () {
 		slicedsprite = GetComponent<tk2dSlicedSprite>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if(damage <= 0){
+			CancelInvoke ("LifeBarReduction");
+		}
 	
 	}
-	public void Starter(int totalDamage,float relation){
-		StopCoroutine ("LifeBarReduction");
-		StartCoroutine(LifeBarReduction(totalDamage,relation));
+	public void Starter(int totalDamagetemp,float relationtemp){
+
+		CancelInvoke ("LifeBarReduction");
+		if(this.gameObject.activeInHierarchy){
+			totalDamage = totalDamagetemp;
+			relation = relationtemp;
+			 damage = totalDamage - damageAcumulated;
+
+			InvokeRepeating("LifeBarReduction",0,reductionSpeed);
+		}
+
 	}
-	public IEnumerator LifeBarReduction(int totalDamage,float relation){
-		int damage = totalDamage - damageAcumulated;
-		for(int i = damage; i >= 0; i--){
+	private void LifeBarReduction(){
+
+
 			if(slicedsprite.dimensions.x > 5){
 				slicedsprite.dimensions = new Vector2( slicedsprite.dimensions.x - relation,slicedsprite.dimensions.y);
 				Debug.Log("LifeBar reduction");
-				yield return new WaitForSeconds(0.1f/damage);
 				totalDamage--;
 				damageAcumulated++;
+			damage --;
 			}
 			
-		}
+			
+
 		
 		
 	}
