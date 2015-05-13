@@ -9,16 +9,16 @@ public class Color_Unlock : MonoBehaviour {
 	/// Manuel Alirangues.
 	/// </summary>
 	void Awake () {
-		Transform[] allChildren = GetComponentsInChildren<Transform>();
-		Color_Enabled tempColorEnable;
+		Color_Enabled[] allChildren = GetComponentsInChildren<Color_Enabled>();
 
-		foreach (Transform child in allChildren) {
-			tempColorEnable =  child.gameObject.GetComponent<Color_Enabled>();
+		Debug.Log ("Found " + allChildren.Length + " Children");
+		foreach (Color_Enabled child in allChildren) {
 
-			if(tempColorEnable.StarsRequired <= dataManger.manager.totalStars){
-				tempColorEnable.enabled = true;
-				Transform tempGrandchild = child.FindChild("Requisite");
-				tempGrandchild.gameObject.SetActive(false);
+
+			if(child.StarsRequired <= dataManger.manager.totalStars){
+				child.enabled = true;
+				//Transform tempGrandchild = child.FindChild("Requisite");
+				//tempGrandchild.gameObject.SetActive(false);
 			}
 		}
 	}

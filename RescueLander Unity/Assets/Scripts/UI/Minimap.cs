@@ -16,6 +16,9 @@ public class Minimap : MonoBehaviour {
 	void Awake () {
 		Ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		coll = GetComponent<BoxCollider2D>();
+		for (int i = 1; i<= Ship.GetComponent<ShipAstronautDrop>().totalAstronauts; i++) {
+			Astronauts[i-1]= GameObject.Find("Astronaut_0"+i);
+		}
 
 	}
 	void Start () {

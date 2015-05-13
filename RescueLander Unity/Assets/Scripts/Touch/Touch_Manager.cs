@@ -35,9 +35,9 @@ public class Touch_Manager : MonoBehaviour {
 			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 			rigid = ship.GetComponent<Rigidbody2D>();
 			animation = uiColumnExtended.GetComponent<Animation>();
-			colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
-			colorSet = GetComponent<Color_Set>();
 		}
+		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
+		colorSet = GetComponent<Color_Set>();
 		uicameraGameobject = GameObject.Find("UI_Camera");
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
@@ -379,22 +379,26 @@ public class Touch_Manager : MonoBehaviour {
 
 	void Garaje(bool activate){
 		if(activate){
-			if(Win.activeInHierarchy){
-				Result = "Win";
-				Win.SetActive(false);
-			}
-			if(Lose.activeInHierarchy){
-				Result = "Lose";
-				Lose.SetActive(false);
+			if(Application.loadedLevelName != "Menu"){
+				if(Win.activeInHierarchy){
+					Result = "Win";
+					Win.SetActive(false);
+				}
+				if(Lose.activeInHierarchy){
+					Result = "Lose";
+					Lose.SetActive(false);
+				}
 			}
 			garaje.SetActive(true);
 		}
 		if(!activate){
-			if(Result == "Win"){
-				Win.SetActive(true);
-			}
-			if(Result == "Lose"){
-				Lose.SetActive(true);
+			if(Application.loadedLevelName != "Menu"){
+				if(Result == "Win"){
+					Win.SetActive(true);
+				}
+				if(Result == "Lose"){
+					Lose.SetActive(true);
+				}
 			}
 			garaje.SetActive(false);
 			Result = null;
