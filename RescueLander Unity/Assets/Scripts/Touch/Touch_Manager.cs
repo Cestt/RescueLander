@@ -26,6 +26,7 @@ public class Touch_Manager : MonoBehaviour {
 	private Color_Set colorSet;
 	private SpriteColorFX.SpriteColorTintMask3 colorChange;
 	public GameObject ShipGaraje;
+	private Garaje_manager garaje_manager;
 
 
 
@@ -43,7 +44,7 @@ public class Touch_Manager : MonoBehaviour {
 			Win = uicamera.transform.FindChild("WinLayout").gameObject;
 			Lose = uicamera.transform.FindChild("LoseLayout").gameObject;
 		}
-
+		garaje_manager = GetComponent<Garaje_manager>();
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
 		colorSet = GetComponent<Color_Set>();
 		share = GetComponent<Share>();
@@ -149,6 +150,22 @@ public class Touch_Manager : MonoBehaviour {
 							selectedZone = "B";
 							Debug.Log("Zone B selected");
 							break;
+						case "ShipsButton" :
+							garaje_manager.LayoutChanger("Ships");
+							Debug.Log("Ships Selected");
+							break;
+						case "PowerUps_Button" :
+							garaje_manager.LayoutChanger("PowerUps");
+							Debug.Log("Ships Selected");
+							break;
+						case "Coins_Button" :
+							garaje_manager.LayoutChanger("Coins");
+							Debug.Log("Ships Selected");
+							break;
+						case "GarageHeader_Button" :
+							garaje_manager.LayoutChanger("Paint");
+							Debug.Log("Ships Selected");
+							break;
 						default :
 							
 							break;
@@ -184,7 +201,7 @@ public class Touch_Manager : MonoBehaviour {
 								
 				}
 			}
-		}else if(platform == RuntimePlatform.WindowsEditor){
+		}else if(platform == RuntimePlatform.WindowsEditor || platform == RuntimePlatform.OSXEditor){
 			
 			if(Input.GetMouseButtonUp(0)){
 				
@@ -279,6 +296,22 @@ public class Touch_Manager : MonoBehaviour {
 					case "B_Button" :
 						selectedZone = "B";
 						Debug.Log("Zone B selected");
+						break;
+					case "ShipsButton" :
+						garaje_manager.LayoutChanger("Ships");
+						Debug.Log("Ships Selected");
+						break;
+					case "PowerUps_Button" :
+						garaje_manager.LayoutChanger("PowerUps");
+						Debug.Log("Ships Selected");
+						break;
+					case "Coins_Button" :
+						garaje_manager.LayoutChanger("Coins");
+						Debug.Log("Ships Selected");
+						break;
+					case "GarageHeader_Button" :
+						garaje_manager.LayoutChanger("Paint");
+						Debug.Log("Ships Selected");
 						break;
 					default :
 						
