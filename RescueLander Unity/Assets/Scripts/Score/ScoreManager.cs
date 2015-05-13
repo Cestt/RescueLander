@@ -9,6 +9,7 @@ public class ScoreManager : MonoBehaviour {
 	private GameObject ship;
 	private Damage damage;
 	private Movement movement;
+	public int test;
 
 	void Awake(){
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
