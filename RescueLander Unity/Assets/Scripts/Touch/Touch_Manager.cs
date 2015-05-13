@@ -5,20 +5,20 @@ public class Touch_Manager : MonoBehaviour {
 	RuntimePlatform platform = Application.platform;
 	[HideInInspector]
 	public GameObject uicameraGameobject;
-	public Camera uicamera;
+	private Camera uicamera;
 	[HideInInspector]
 	public bool paused;
 	private GameObject ship;
 	private Rigidbody2D rigid;
 	public GameObject uiColumnExtended;
 	private Animation animation;
-	public GameObject music;
-	public GameObject sounds;
+	private GameObject music;
+	private GameObject sounds;
 	public float MenuSpeed;
 	private bool forward;
-	public GameObject Win;
-	public GameObject Lose;
-	public GameObject garaje;
+	private GameObject Win;
+	private GameObject Lose;
+	private GameObject garaje;
 	private string Result;
 	private Share share;
 	private FacebookSocial faceBook;
@@ -31,15 +31,21 @@ public class Touch_Manager : MonoBehaviour {
 
 
 	void Awake(){
+		uicameraGameobject = GameObject.Find("UI_Camera");
+		uicamera = uicameraGameobject.GetComponent<Camera>();
+		garaje = uicamera.transform.FindChild("Garage_Menu").gameObject;
 		if(uiColumnExtended != null){
 			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 			rigid = ship.GetComponent<Rigidbody2D>();
 			animation = uiColumnExtended.GetComponent<Animation>();
+			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
+			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
+			Win = uicamera.transform.FindChild("WinLayout").gameObject;
+			Lose = uicamera.transform.FindChild("LoseLayout").gameObject;
 		}
+
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
 		colorSet = GetComponent<Color_Set>();
-		uicameraGameobject = GameObject.Find("UI_Camera");
-		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
 		faceBook = GetComponent<FacebookSocial>();
 
