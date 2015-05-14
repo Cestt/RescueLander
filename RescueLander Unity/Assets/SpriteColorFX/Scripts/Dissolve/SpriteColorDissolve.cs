@@ -9,7 +9,7 @@ using UnityEngine;
 namespace SpriteColorFX
 {
   /// <summary>
-  /// Shader usef for the effect.
+  /// Shader used for the effect.
   /// </summary>
   public enum DissolveShaderType
   {
@@ -43,7 +43,20 @@ namespace SpriteColorFX
     Plasma,
     Sphere,
     Vertical,
-    Custom,
+    Diamonds,
+    Radial,
+    Radial5,
+    RaysCenter,
+    RaysCorner,
+    Spiral,
+    SpiralFast1,
+    SpiralFast2,
+    SpiralFract,
+    Squares,
+    Waves,
+    WavesVertical,
+
+    Custom = 99,
   }
 
   /// <summary>
@@ -55,17 +68,17 @@ namespace SpriteColorFX
   public sealed class SpriteColorDissolve : MonoBehaviour
   {
     /// <summary>
-    /// Dissolve type.
+    /// Use SetShaderType().
     /// </summary>
     public DissolveShaderType shaderType = DissolveShaderType.Normal;
 
     /// <summary>
-    /// 
+    /// Pixel operation.
     /// </summary>
     public SpriteColorHelper.PixelOp pixelOp = SpriteColorHelper.PixelOp.Solid;
 
     /// <summary>
-    /// Dissolve texture type.
+    /// Use SetTextureType().
     /// </summary>
     public DisolveTextureType disolveTextureType = DisolveTextureType.Burn;
 
@@ -127,39 +140,9 @@ namespace SpriteColorFX
       if (this.shaderType == DissolveShaderType.Normal)
         shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveNormal");
       else if (this.shaderType == DissolveShaderType.BorderColor)
-      {
-        switch (pixelOp)
-        {
-          case SpriteColorHelper.PixelOp.Solid: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorSolid"); break;
-          case SpriteColorHelper.PixelOp.Additive: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorAdditive"); break;
-          case SpriteColorHelper.PixelOp.Subtract: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorSubtract"); break;
-          case SpriteColorHelper.PixelOp.Multiply: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorMultiply"); break;
-          case SpriteColorHelper.PixelOp.Divide: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorDivide"); break;
-          case SpriteColorHelper.PixelOp.Darken: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorDarken"); break;
-          case SpriteColorHelper.PixelOp.Lighten: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorLighten"); break;
-          case SpriteColorHelper.PixelOp.Screen: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorScreen"); break;
-          case SpriteColorHelper.PixelOp.Dodge: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorDodge"); break;
-          case SpriteColorHelper.PixelOp.HardMix: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorHardMix"); break;
-          case SpriteColorHelper.PixelOp.Difference: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderColorDifference"); break;
-        }
-      }
+        shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveColor");
       else if (this.shaderType == DissolveShaderType.BorderTexture)
-      {
-        switch (pixelOp)
-        {
-          case SpriteColorHelper.PixelOp.Solid: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureSolid"); break;
-          case SpriteColorHelper.PixelOp.Additive: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureAdditive"); break;
-          case SpriteColorHelper.PixelOp.Subtract: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureSubtract"); break;
-          case SpriteColorHelper.PixelOp.Multiply: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureMultiply"); break;
-          case SpriteColorHelper.PixelOp.Divide: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureDivide"); break;
-          case SpriteColorHelper.PixelOp.Darken: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureDarken"); break;
-          case SpriteColorHelper.PixelOp.Lighten: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureLighten"); break;
-          case SpriteColorHelper.PixelOp.Screen: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureScreen"); break;
-          case SpriteColorHelper.PixelOp.Dodge: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureDodge"); break;
-          case SpriteColorHelper.PixelOp.HardMix: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureHardMix"); break;
-          case SpriteColorHelper.PixelOp.Difference: shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveBorderTextureDifference"); break;
-        }
-      }
+        shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveTexture");
 
       if (shader != null)
       {
@@ -177,14 +160,10 @@ namespace SpriteColorFX
     /// <summary>
     /// Set the pixel color operation.
     /// </summary>
+    [System.Obsolete(@"No longer needed. You can uso this.pixelOp", false)]
     public void SetPixelOp(SpriteColorHelper.PixelOp pixelOp)
     {
-      if (this.pixelOp != pixelOp)
-      {
-        this.pixelOp = pixelOp;
-
-        SetShaderType(shaderType);
-      }
+      this.pixelOp = pixelOp;
     }
 
     /// <summary>
@@ -206,6 +185,18 @@ namespace SpriteColorFX
           case DisolveTextureType.Plasma: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Plasma"); break;
           case DisolveTextureType.Sphere: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Sphere"); break;
           case DisolveTextureType.Vertical: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Vertical"); break;
+          case DisolveTextureType.Diamonds: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Diamonds"); break;
+          case DisolveTextureType.Radial: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Radial"); break;
+          case DisolveTextureType.Radial5: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Radial5"); break;
+          case DisolveTextureType.RaysCenter: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/RaysCenter"); break;
+          case DisolveTextureType.RaysCorner: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/RaysCorner"); break;
+          case DisolveTextureType.Spiral: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Spiral"); break;
+          case DisolveTextureType.SpiralFast1: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/SpiralFast1"); break;
+          case DisolveTextureType.SpiralFast2: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/SpiralFast2"); break;
+          case DisolveTextureType.SpiralFract: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/SpiralFract"); break;
+          case DisolveTextureType.Squares: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Squares"); break;
+          case DisolveTextureType.Waves: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Waves"); break;
+          case DisolveTextureType.WavesVertical: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/WavesVertical"); break;
         }
       }
     }
@@ -225,7 +216,7 @@ namespace SpriteColorFX
 
     private void OnDisable()
     {
-      if (spriteRenderer != null && spriteRenderer.sharedMaterial != null && string.CompareOrdinal(spriteRenderer.sharedMaterial.name, @"Sprites/Default") == 0)
+      if (spriteRenderer != null && spriteRenderer.sharedMaterial != null && string.CompareOrdinal(spriteRenderer.sharedMaterial.name, @"Sprites/Default") != 0)
         spriteRenderer.sharedMaterial = new Material(Shader.Find(@"Sprites/Default"));
     }
 
@@ -237,6 +228,8 @@ namespace SpriteColorFX
       if (spriteRenderer != null && spriteRenderer.sharedMaterial != null)
       {
         spriteRenderer.sharedMaterial.SetTexture("_DissolveTex", disolveTexture);
+
+        spriteRenderer.sharedMaterial.SetInt("_PixelOp", (int)pixelOp);
 
         if (shaderType == DissolveShaderType.BorderTexture)
         {

@@ -23,7 +23,7 @@ namespace SpriteColorFX
     public static readonly string TooltipUVScroll = "Move the UV coordinates.\nFrom 0 to 1.";
     public static readonly string TooltipLuminanceRange = "Luminance range used.\nFrom 0 to 1.";
     public static readonly string TooltipInvertLuminance = "Invert the luminance values.\nTrue or False.";
-    public static readonly string TooltipTextureMask = "Texture mask (RGBA).";
+    public static readonly string TooltipTextureMask = "Texture mask for masks 1, 2 and 3 (RGB).";
     public static readonly string TooltipInfo = "Open web site.";
     public static readonly string TooltipResetAll = "Reset all values.";
 

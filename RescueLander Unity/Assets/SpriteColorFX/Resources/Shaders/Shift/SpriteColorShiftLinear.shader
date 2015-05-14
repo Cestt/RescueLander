@@ -53,22 +53,6 @@ Shader "Sprites/Sprite Color FX/Sprite Color Shift Linear"
       // Define this add noise effect.
       #define USE_NOISE
 
-      struct appdata_t
-      {
-        float4 vertex   : POSITION;
-        float4 color    : COLOR;
-        float2 texcoord : TEXCOORD0;
-      };
-
-      struct v2f
-      {
-        float4 vertex   : SV_POSITION;
-        fixed4 color    : COLOR;
-        fixed2 texcoord : TEXCOORD0;
-      };
-
-      uniform fixed4 _Color;
-
 	  uniform float _NoiseAmount = 0.0;
 	  uniform float _NoiseSpeed = 1.0;
 
@@ -80,19 +64,6 @@ Shader "Sprites/Sprite Color FX/Sprite Color Shift Linear"
 
       uniform float _BlueShiftX = 0.0;
       uniform float _BlueShiftY = 0.0;
-
-      v2f vert(appdata_t i)
-      {
-        v2f o;
-        o.vertex = mul(UNITY_MATRIX_MVP, i.vertex);
-        o.texcoord = i.texcoord;
-        o.color = i.color * _Color;
-#ifdef PIXELSNAP_ON
-        o.vertex = UnityPixelSnap(o.vertex);
-#endif
-
-        return o;
-      }
 
       uniform sampler2D _MainTex;
 

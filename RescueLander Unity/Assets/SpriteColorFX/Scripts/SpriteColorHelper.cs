@@ -19,17 +19,29 @@ namespace SpriteColorFX
     /// </summary>
     public enum PixelOp
     {
-      Solid,
       Additive,
-      Subtract,
-      Multiply,
-      Divide,
+      Burn,
+      Color,
       Darken,
-      Lighten,
-      Screen,
+      Darker,
+      Difference,
+      Divide,
       Dodge,
       HardMix,
-      Difference,
+      Hue,
+      HardLight,
+      Lighten,
+      Lighter,
+      Luminosity,
+      Multiply,
+      Overlay,
+      PinLight,
+      Saturation,
+      Screen,
+      Solid,
+      SoftLight,
+      Subtract,
+      VividLight,
     }
 
     // Shaders params.
@@ -44,5 +56,23 @@ namespace SpriteColorFX
     public static readonly string ShaderRampGreenIdx = @"_RampGreenIdx";
     public static readonly string ShaderRampBlueIdx = @"_RampBlueIdx";
     public static readonly string ShaderMaskTex = @"_MaskTex";
+    public static readonly string ShaderStrengthRedParam = @"_StrengthRed";
+    public static readonly string ShaderPixelOpRedParam = @"_PixelOpRed";
+    public static readonly string ShaderColorRedParam = @"_ColorRed";
+    public static readonly string ShaderMaskRedParam = @"_MaskRedTex";
+    public static readonly string ShaderUVRedParam = @"_UVRedTexParams";
+    public static readonly string ShaderUVAngleRedParam = @"_UVRedTexAngle";
+    public static readonly string ShaderStrengthGreenParam = @"_StrengthGreen";
+    public static readonly string ShaderPixelOpGreenParam = @"_PixelOpGreen";
+    public static readonly string ShaderColorGreenParam = @"_ColorGreen";
+    public static readonly string ShaderMaskGreenParam = @"_MaskGreenTex";
+    public static readonly string ShaderUVGreenParam = @"_UVGreenTexParams";
+    public static readonly string ShaderUVAngleGreenParam = @"_UVGreenTexAngle";
+    public static readonly string ShaderStrengthBlueParam = @"_StrengthBlue";
+    public static readonly string ShaderPixelOpBlueParam = @"_PixelOpBlue";
+    public static readonly string ShaderColorBlueParam = @"_ColorBlue";
+    public static readonly string ShaderMaskBlueParam = @"_MaskBlueTex";
+    public static readonly string ShaderUVBlueParam = @"_UVBlueTexParams";
+    public static readonly string ShaderUVAngleBlueParam = @"_UVBlueTexAngle";
   }
 }
