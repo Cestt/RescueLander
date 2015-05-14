@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class Touch_Manager : MonoBehaviour {
@@ -286,7 +286,7 @@ public class Touch_Manager : MonoBehaviour {
 						if(dataManger.manager.unlocks >= tempInt){
 							dataManger.manager.actualLevel = tempInt;
 							Debug.Log("Loading Level: " + tempInt);
-							Application.LoadLevel("Level_"+ tempInt);
+							Application.LoadLevel("Level_"+tempInt);
 						}
 					}
 					if(hit.collider.name.Contains("Color")){

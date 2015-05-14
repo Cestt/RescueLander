@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class WinLose : MonoBehaviour {
 
-	private GameObject WinSprite;
-	private GameObject LoseSprite;
-	private GameObject winText;
-	private GameObject UI1;
-	private GameObject UI2;
+	public GameObject WinSprite;
+	public GameObject LoseSprite;
+	public GameObject winText;
+	public GameObject UI1;
+	public GameObject UI2;
 
 	private ScreenShoter screenshoter;
 	private bool first;
@@ -18,12 +18,7 @@ public class WinLose : MonoBehaviour {
 	ScoreManager scoreManager;
 	// Use this for initialization
 	void Awake () {
-		GameObject uicamera = GameObject.Find("UI_Camera");
-		WinSprite = uicamera.transform.FindChild("WinLayout").gameObject;
-		winText = WinSprite.transform.FindChild("Win_Text").gameObject;
-		LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
-		UI1 = uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
-		UI2 = uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
+	
 		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
 		text = winText.GetComponent<tk2dTextMesh> ();
 		scoreManager = this.GetComponent<ScoreManager> ();

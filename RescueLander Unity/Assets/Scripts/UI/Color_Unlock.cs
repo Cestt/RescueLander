@@ -11,7 +11,7 @@ public class Color_Unlock : MonoBehaviour {
 	void Awake () {
 		Color_Enabled[] allChildren = GetComponentsInChildren<Color_Enabled>();
 
-
+		Debug.Log ("Found " + allChildren.Length + " Children");
 		foreach (Color_Enabled child in allChildren) {
 
 
