@@ -163,7 +163,7 @@ public class dataManger : MonoBehaviour {
 					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
 					for(int j = 1; j<=3; j++){
 						if(j<=stars["Level_"+i]){
-							tempChild =  temp.transform.FindChild("LevelStar"+j);
+							tempChild =  temp.transform.FindChild("LevelStar_"+j);
 							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
 						}
 						

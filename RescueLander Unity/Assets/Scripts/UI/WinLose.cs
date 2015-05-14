@@ -20,6 +20,12 @@ public class WinLose : MonoBehaviour {
 	void Awake () {
 	
 //		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
+		GameObject uicamera = GameObject.Find("UI_Camera");
+		WinSprite = uicamera.transform.FindChild("WinLayout").gameObject;
+		winText = WinSprite.transform.FindChild("Pic_Frame/WinScore_Txt").gameObject;
+		LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
+		UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
+		UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
 		text = winText.GetComponent<tk2dTextMesh> ();
 		scoreManager = this.GetComponent<ScoreManager> ();
 		first = true;
@@ -41,7 +47,13 @@ public class WinLose : MonoBehaviour {
 
 				totalScore = (int)scoreManager.scoreCalc ();
 				if(totalScore > 0 & totalScore <= 500){
-					dataManger.manager.stars["Level"+dataManger.manager.actualShip] = 1;
+					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 1;
+				}
+				if(totalScore > 500 & totalScore <= 1500){
+					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 2;
+				}
+				if(totalScore > 1500){
+					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;
 				}
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
 				dataManger.manager.Save(true);

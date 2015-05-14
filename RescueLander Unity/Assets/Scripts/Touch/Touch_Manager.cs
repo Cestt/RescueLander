@@ -26,6 +26,8 @@ public class Touch_Manager : MonoBehaviour {
 	private Color_Set colorSet;
 	private SpriteColorFX.SpriteColorTintMask3 colorChange;
 	public GameObject ShipGaraje;
+	private PowerUp_Manager powerManager;
+	private Garaje_Manager garage_manager;
 
 
 
@@ -38,6 +40,8 @@ public class Touch_Manager : MonoBehaviour {
 			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
 			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
 		}
+		garage_manager = GetComponent<Garaje_Manager>();
+		powerManager = GetComponent<PowerUp_Manager>();
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
 		colorSet = GetComponent<Color_Set>();
 		uicameraGameobject = GameObject.Find("UI_Camera");
@@ -145,6 +149,48 @@ public class Touch_Manager : MonoBehaviour {
 						case "B_Button" :
 							selectedZone = "B";
 							Debug.Log("Zone B selected");
+						break;
+						case "PowerUp_Shield" :
+								powerManager.PowerUp("Shield");
+							break;
+						case "PowerUp_Magnet" :
+							powerManager.PowerUp("Magnet");
+							break;
+						case "PowerUp_Fuel" :
+							powerManager.PowerUp("Fuel");
+							break;
+						case "GarageHeader_Button" :
+							garage_manager.LayoutChanger("Paint");
+							break;
+						case "ShipsButton" :
+							garage_manager.LayoutChanger("Ships");
+							break;
+						case "PowerUps_Button" :
+							garage_manager.LayoutChanger("PowerUps");
+							break;
+						case "Coins_Button" :
+							garage_manager.LayoutChanger("Coins");
+							break;
+						case "ButtonShip_Ship01" :
+							dataManger.manager.actualShip = "Ship01";
+							break;
+						case "ButtonShip_369" :
+							dataManger.manager.actualShip = "369";
+							break;
+						case "ButtonShip_Taboo" :
+							dataManger.manager.actualShip = "Taboo";
+							break;
+						case "ButtonShip_UFLO" :
+							dataManger.manager.actualShip = "UFLO";
+							break;
+						case "ButtonShip_Box" :
+							dataManger.manager.actualShip = "Box";
+							break;
+						case "ButtonShip_Mush" :
+							dataManger.manager.actualShip = "Mush";
+							break;
+						case "ButtonShip_Bow" :
+							dataManger.manager.actualShip = "Bow";
 							break;
 						default :
 							
@@ -277,6 +323,27 @@ public class Touch_Manager : MonoBehaviour {
 					case "B_Button" :
 						selectedZone = "B";
 						Debug.Log("Zone B selected");
+						break;
+					case "PowerUp_Shield" :
+						powerManager.PowerUp("Shield");
+						break;
+					case "PowerUp_Magnet" :
+						powerManager.PowerUp("Magnet");
+						break;
+					case "PowerUp_Fuel" :
+						powerManager.PowerUp("Fuel");
+						break;
+					case "GarageHeader_Button" :
+						garage_manager.LayoutChanger("Paint");
+						break;
+					case "ShipsButton" :
+						garage_manager.LayoutChanger("Ships");
+						break;
+					case "PowerUps_Button" :
+						garage_manager.LayoutChanger("PowerUps");
+						break;
+					case "Coins_Button" :
+						garage_manager.LayoutChanger("Coins");
 						break;
 					default :
 						
