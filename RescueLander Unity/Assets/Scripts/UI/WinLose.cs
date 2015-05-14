@@ -19,7 +19,7 @@ public class WinLose : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 	
-		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
+//		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
 		text = winText.GetComponent<tk2dTextMesh> ();
 		scoreManager = this.GetComponent<ScoreManager> ();
 		first = true;

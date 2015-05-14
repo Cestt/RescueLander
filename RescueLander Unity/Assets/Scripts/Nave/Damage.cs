@@ -7,13 +7,13 @@ public class Damage : MonoBehaviour {
 	[HideInInspector]
 	public GameObject sparks;
 	public int life = 0;
-	private int maxLife;
+	[HideInInspector]
+	public int maxLife;
 	public int damageThreshold = 0;
 	public int damageThresholdFriction = 0;
 	public float DamageVariant;
 	private ShipAstronautPickUp shipastronautpickup;
-	[HideInInspector]
-	public GameObject lifeBar;
+	private GameObject lifeBar;
 	[HideInInspector]
 	public GameObject GameManager;
 	private float relation;
@@ -26,11 +26,11 @@ public class Damage : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-	
 		Transform findChild = transform.FindChild("Explosion");
 		explosion = findChild.gameObject;
 		sparks = GameObject.Find("Sparks");
-		lifeBar = GameObject.Find("BarraVida");
+		GameObject temp = GameObject.Find("UI_Camera");
+		lifeBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Vida/BarraVida").gameObject;
 		GameManager = GameObject.Find("Game Manager");
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
 		slicedsprite = lifeBar.GetComponent<tk2dSlicedSprite>();

@@ -32,7 +32,7 @@ public class Movement : MonoBehaviour {
 	public float angularDrag = 0f;
 	public float linearDrag = 0f;
 	private float originlSize;
-	private float originalFuel;
+	public float originalFuel;
 	private int currentFrame = 0;
 	private tk2dSlicedSprite slicedsprite;
 	private tk2dSpriteAnimator animator;
