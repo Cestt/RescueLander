@@ -4,13 +4,10 @@ using System.Collections;
 public class PowerUp_Manager : MonoBehaviour {
 
 	private GameObject ship;
-	private GameObject lifeBar;
 	private GameObject fuelBar;
-	private float lifeBarOriginalSize;
 	private float fuelBarOriginalSize;
 	public int Magnet_Duration;
 	public int Shield_Duration;
-	public int Life_Recover;
 	public int Fuel_Recover;
 	public float Shield_DmgReduction;
 	private float actualTime;
@@ -23,9 +20,7 @@ public class PowerUp_Manager : MonoBehaviour {
 	
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		GameObject temp = GameObject.Find("UI_Camera");
-		lifeBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Vida/BarraVida").gameObject;
 		fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
-		lifeBarOriginalSize = lifeBar.GetComponent<tk2dSlicedSprite>().dimensions.x;
 		fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;
 
 	}
@@ -40,12 +35,13 @@ public class PowerUp_Manager : MonoBehaviour {
 	public void PowerUp(string Power){
 
 		switch(Power){
-		case "Life" :
-			damage.life += (damage.maxLife  * Life_Recover)/100;
-			break;
+		
 		case "Fuel" :
 			Movement movement = ship.GetComponent<Movement>();
 			movement.fuel += (movement.originalFuel  * Fuel_Recover)/100;
+			tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
+			sliced.dimensions = new Vector2( 
+			            sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
 			break;
 		case "Shield" :
 			Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Shield").gameObject);
@@ -69,9 +65,9 @@ public class PowerUp_Manager : MonoBehaviour {
 			running = true;
 			actualPowerUp.SetActive(true);
 		}else{
-			actualTime = null;
-			timerTime = null;
-			if(actualPowerUp == "PU_Shield"){
+			actualTime = 0;
+			timerTime = 0;
+			if(actualPowerUp.name == "PU_Shield"){
 				damage.DamageVariant = 0;
 			}
 			actualPowerUp.SetActive(false);

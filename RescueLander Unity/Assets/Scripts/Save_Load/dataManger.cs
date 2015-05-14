@@ -22,7 +22,7 @@ public class dataManger : MonoBehaviour {
 	public int actualLevel;
 	[HideInInspector]
 	public bool Sounds = true;
-	[HideInInspector]
+
 	public bool Music = true;
 	[HideInInspector]
 	public Dictionary<string,int> stars = new Dictionary<string, int>();

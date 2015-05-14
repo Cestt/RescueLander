@@ -35,6 +35,8 @@ public class Touch_Manager : MonoBehaviour {
 			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 			rigid = ship.GetComponent<Rigidbody2D>();
 			animation = uiColumnExtended.GetComponent<Animation>();
+			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
+			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
 		}
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
 		colorSet = GetComponent<Color_Set>();
@@ -94,26 +96,27 @@ public class Touch_Manager : MonoBehaviour {
 						case "Levels_Button" :
 							Application.LoadLevel ("Menu");
 							dataManger.manager.Camposition = "Forward";
+							dataManger.manager.Save(false);
 							break;
 						case "Sound_Button" :
 							if(dataManger.manager.Sounds){
 								dataManger.manager.Sounds = false;
-								sounds.GetComponent<tk2dSprite>().SetSprite("VolumeIco_Off");
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 								Debug.Log("Sound off");
 							}else{
 								dataManger.manager.Sounds = true;
-								sounds.GetComponent<tk2dSprite>().SetSprite("VolumeIco_On");
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_On");
 								Debug.Log("Sound on");
 							}
 							break;
 						case "Music_Button" :
 							if(dataManger.manager.Music){
 								dataManger.manager.Music = false;
-								music.GetComponent<tk2dSprite>().SetSprite("MusciIco_Off");
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
 								Debug.Log("Music off");
 							}else{
 								dataManger.manager.Music = true;
-								music.GetComponent<tk2dSprite>().SetSprite("MusciIco_On");
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_On");
 								Debug.Log("Music on");
 							}
 							break;
@@ -225,26 +228,27 @@ public class Touch_Manager : MonoBehaviour {
 					case "Levels_Button" :
 						Application.LoadLevel ("Menu");
 						dataManger.manager.Camposition = "Forward";
+						dataManger.manager.Save(false);
 						break;
 					case "Sound_Button" :
 						if(dataManger.manager.Sounds){
 							dataManger.manager.Sounds = false;
-							sounds.GetComponent<tk2dSprite>().SetSprite("VolumeIco_Off");
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 							Debug.Log("Sound off");
 						}else{
 							dataManger.manager.Sounds = true;
-							sounds.GetComponent<tk2dSprite>().SetSprite("VolumeIco_On");
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_On");
 							Debug.Log("Sound on");
 						}
 						break;
 					case "Music_Button" :
 						if(dataManger.manager.Music){
 							dataManger.manager.Music = false;
-							music.GetComponent<tk2dSprite>().SetSprite("MusciIco_Off");
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
 							Debug.Log("Music off");
 						}else{
 							dataManger.manager.Music = true;
-							music.GetComponent<tk2dSprite>().SetSprite("MusciIco_On");
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_On");
 							Debug.Log("Music on");
 						}
 						break;
