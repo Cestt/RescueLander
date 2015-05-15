@@ -12,7 +12,6 @@ GameObject:
   - 23: {fileID: 2311900}
   - 114: {fileID: 11428658}
   - 114: {fileID: 11481492}
-  - 111: {fileID: 11179262}
   m_Layer: 0
   m_Name: Fire
   m_TagString: Untagged
@@ -236,7 +235,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 189212}
   m_LocalRotation: {x: 2.21972471e-07, y: .707106829, z: -.707106829, w: 2.21972471e-07}
-  m_LocalPosition: {x: 0, y: -51.2999992, z: 0}
+  m_LocalPosition: {x: 0, y: -48.9000015, z: 0}
   m_LocalScale: {x: 8, y: 0, z: 8}
   m_Children: []
   m_Father: {fileID: 480642}
@@ -296,7 +295,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 124386}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 361.033234, y: 475.032074, z: 500}
+  m_LocalPosition: {x: 563.265381, y: 716.338989, z: 500}
   m_LocalScale: {x: .625, y: .625, z: .625}
   m_Children:
   - {fileID: 406150}
@@ -621,21 +620,6 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!111 &11179262
-Animation:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 114690}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 3b41e4b0752158745b36a35cf112ec24, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 3b41e4b0752158745b36a35cf112ec24, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!111 &11190638
 Animation:
   m_ObjectHideFlags: 1
@@ -830,6 +814,7 @@ MonoBehaviour:
   massAngular: 875
   angularDrag: .000300000014
   linearDrag: .000699999975
+  originalFuel: 0
 --- !u!114 &11471372
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -936,10 +921,10 @@ MonoBehaviour:
   explosion: {fileID: 151640}
   sparks: {fileID: 0}
   life: 575
+  maxLife: 0
   damageThreshold: 50
   damageThresholdFriction: 300
   DamageVariant: 0
-  lifeBar: {fileID: 0}
   GameManager: {fileID: 0}
 --- !u!114 &11488708
 MonoBehaviour:

@@ -185,7 +185,6 @@ GameObject:
   - 23: {fileID: 2399728}
   - 114: {fileID: 11499258}
   - 114: {fileID: 11425230}
-  - 111: {fileID: 11143478}
   m_Layer: 0
   m_Name: Fire
   m_TagString: Untagged
@@ -308,7 +307,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149704}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 310.509766, y: 494.600281, z: 500}
+  m_LocalPosition: {x: 692.167053, y: 792.824707, z: 500}
   m_LocalScale: {x: .625, y: .625, z: .625}
   m_Children:
   - {fileID: 468874}
@@ -638,21 +637,6 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!111 &11143478
-Animation:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 196824}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 3b41e4b0752158745b36a35cf112ec24, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 3b41e4b0752158745b36a35cf112ec24, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!114 &11400494
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -748,10 +732,10 @@ MonoBehaviour:
   explosion: {fileID: 176270}
   sparks: {fileID: 0}
   life: 575
+  maxLife: 0
   damageThreshold: 50
   damageThresholdFriction: 300
   DamageVariant: 0
-  lifeBar: {fileID: 0}
   GameManager: {fileID: 0}
 --- !u!114 &11423106
 MonoBehaviour:
@@ -845,6 +829,7 @@ MonoBehaviour:
   massAngular: 875
   angularDrag: .000300000014
   linearDrag: .000699999975
+  originalFuel: 0
 --- !u!114 &11453886
 MonoBehaviour:
   m_ObjectHideFlags: 1

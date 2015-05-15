@@ -12,6 +12,8 @@ GameObject:
   - 114: {fileID: 11427298}
   - 114: {fileID: 11428062}
   - 114: {fileID: 11416138}
+  - 114: {fileID: 11478888}
+  - 114: {fileID: 11407304}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -31,6 +33,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11407304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4384bffb8c4bd54f930366d0f006e9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LayoutChild: []
 --- !u!114 &11416138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -42,7 +56,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f210ff6dc3f8324438bcc91cff137ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShipGaraje: {fileID: 0}
 --- !u!114 &11427298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -56,6 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeScore: 1000
   scoreReductionTime: 10
+  test: 0
 --- !u!114 &11428062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -73,11 +87,25 @@ MonoBehaviour:
   uiColumnExtended: {fileID: 0}
   music: {fileID: 0}
   sounds: {fileID: 0}
-  MenuSpeed: 0
+  MenuSpeed: 10000
   Win: {fileID: 0}
   Lose: {fileID: 0}
   garaje: {fileID: 0}
-  ShipGaraje: {fileID: 0}
+--- !u!114 &11478888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 206b4299f4c41434fb6fdf5631b0de76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Magnet_Duration: 0
+  Shield_Duration: 0
+  Fuel_Recover: 0
+  Shield_DmgReduction: 0
 --- !u!114 &11481780
 MonoBehaviour:
   m_ObjectHideFlags: 1
