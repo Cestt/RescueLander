@@ -2,15 +2,16 @@
 using System.Collections;
 
 public class Color_Set : MonoBehaviour {
-
-	public GameObject ShipGaraje;
-	private SpriteColorFX.SpriteColorTintMask3 tint;
-	private SpriteColorFX.SpriteColorTintMask3 tintGaraje;
+	private SpriteColorFX.SpriteColorMasks3 tint;
+	private GameObject ShipGaraje;
+	private SpriteColorFX.SpriteColorMasks3 tintGaraje;
 
 	void Awake () {
-		tintGaraje = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3> ();
+		GameObject uicamera = GameObject.Find("UI_Camera");
+		ShipGaraje = uicamera.transform.FindChild ("Garage_Menu/Shop_Bg_01/Ships_Menu/TV/Ship01_Garage").gameObject;
+		tintGaraje = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3> ();
 		if (Application.loadedLevelName != "Menu") {
-			tint = GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<SpriteColorFX.SpriteColorTintMask3> ();
+			tint = GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<SpriteColorFX.SpriteColorMasks3> ();
 			if (dataManger.manager.color1b < 1000) {
 				tint.colorMaskRed = new Color(dataManger.manager.color1r,dataManger.manager.color1g,dataManger.manager.color1b);
 				tint.colorMaskGreen = new Color(dataManger.manager.color2r,dataManger.manager.color2g,dataManger.manager.color2b);

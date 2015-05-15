@@ -24,8 +24,8 @@ public class Touch_Manager : MonoBehaviour {
 	private FacebookSocial faceBook;
 	private string selectedZone = "A";
 	private Color_Set colorSet;
-	private SpriteColorFX.SpriteColorTintMask3 colorChange;
-	public GameObject ShipGaraje;
+	private SpriteColorFX.SpriteColorMasks3 colorChange;
+	private GameObject ShipGaraje;
 	private PowerUp_Manager powerManager;
 	private Garaje_Manager garage_manager;
 
@@ -40,11 +40,13 @@ public class Touch_Manager : MonoBehaviour {
 			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
 			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
 		}
+		uicameraGameobject = GameObject.Find("UI_Camera");
+		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
 		powerManager = GetComponent<PowerUp_Manager>();
-		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
 		colorSet = GetComponent<Color_Set>();
-		uicameraGameobject = GameObject.Find("UI_Camera");
+		ShipGaraje = uicameraGameobject.transform.FindChild ("Garage_Menu/Shop_Bg_01/Ships_Menu/TV/Ship01_Garage").gameObject;
+		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
 		faceBook = GetComponent<FacebookSocial>();

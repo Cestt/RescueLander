@@ -13,6 +13,7 @@ public class Garaje_Manager : MonoBehaviour {
 		Layouts = Garage.FindChild("Shop_Bg_01").gameObject;
 		foreach(Transform child in Layouts.transform){
 			if(child.parent == Layouts.transform){
+				Debug.Log ("Child Found");
 				LayoutChild.Add(child);
 			}
 		}

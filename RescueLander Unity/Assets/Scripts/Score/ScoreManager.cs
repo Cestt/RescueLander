@@ -12,9 +12,12 @@ public class ScoreManager : MonoBehaviour {
 	public int test;
 
 	void Awake(){
-		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
-		damage = ship.GetComponent<Damage>();
-		movement = ship.GetComponent<Movement>();
+		if (Application.loadedLevelName != "Menu") {
+			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+			damage = ship.GetComponent<Damage>();
+			movement = ship.GetComponent<Movement>();
+		}
+
 	}
 
 	void Start () {

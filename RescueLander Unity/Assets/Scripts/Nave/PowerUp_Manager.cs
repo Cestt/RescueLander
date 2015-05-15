@@ -17,11 +17,14 @@ public class PowerUp_Manager : MonoBehaviour {
 	private Damage damage;
 
 	void Awake () {
-	
-		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
-		GameObject temp = GameObject.Find("UI_Camera");
-		fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
-		fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;
+		if (Application.loadedLevelName != "Menu") {
+			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+			GameObject temp = GameObject.Find("UI_Camera");
+			fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
+			fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;		
+			damage = ship.GetComponent<Damage>();
+		}
+
 
 	}
 
@@ -37,6 +40,7 @@ public class PowerUp_Manager : MonoBehaviour {
 		switch(Power){
 		
 		case "Fuel" :
+			Debug.Log("Fuel PU");
 			Movement movement = ship.GetComponent<Movement>();
 			movement.fuel += (movement.originalFuel  * Fuel_Recover)/100;
 			tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
@@ -44,9 +48,11 @@ public class PowerUp_Manager : MonoBehaviour {
 			            sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
 			break;
 		case "Shield" :
+			Debug.Log("Shield PU");
 			Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Shield").gameObject);
 			break;
 		case "Magnet" :
+			Debug.Log("Magnet PU");
 			Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Magnet").gameObject);
 			break;
 

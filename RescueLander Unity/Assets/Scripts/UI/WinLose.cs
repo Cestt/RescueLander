@@ -20,15 +20,18 @@ public class WinLose : MonoBehaviour {
 	void Awake () {
 	
 //		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
-		GameObject uicamera = GameObject.Find("UI_Camera");
-		WinSprite = uicamera.transform.FindChild("WinLayout").gameObject;
-		winText = WinSprite.transform.FindChild("Pic_Frame/WinScore_Txt").gameObject;
-		LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
-		UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
-		UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
-		text = winText.GetComponent<tk2dTextMesh> ();
-		scoreManager = this.GetComponent<ScoreManager> ();
-		first = true;
+		if (Application.loadedLevelName != "Menu") {
+			GameObject uicamera = GameObject.Find("UI_Camera");
+			WinSprite = uicamera.transform.FindChild("WinLayout").gameObject;
+			winText = WinSprite.transform.FindChild("Pic_Frame/WinScore_Txt").gameObject;
+			LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
+			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
+			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
+			text = winText.GetComponent<tk2dTextMesh> ();
+			scoreManager = this.GetComponent<ScoreManager> ();
+			first = true;	
+		}
+
 
 	}
 	

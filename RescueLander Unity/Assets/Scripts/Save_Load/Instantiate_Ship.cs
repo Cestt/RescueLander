@@ -6,7 +6,7 @@ public class Instantiate_Ship : MonoBehaviour {
 
 	void Awake () {
 		GameObject instance = Instantiate(Resources.Load("Prefabs/"+dataManger.manager.actualShip, typeof(GameObject))) as GameObject;
-		SpriteColorFX.SpriteColorTintMask3 tint = instance.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
+		SpriteColorFX.SpriteColorMasks3 tint = instance.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 		tint.colorMaskRed.r = dataManger.manager.color1r;
 		tint.colorMaskRed.g = dataManger.manager.color1g;
 		tint.colorMaskRed.b = dataManger.manager.color1b;
