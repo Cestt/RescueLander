@@ -53,6 +53,7 @@ public class PowerUp_Manager : MonoBehaviour {
 			break;
 		case "Magnet" :
 			Debug.Log("Magnet PU");
+			ship.GetComponent<Start_Magnet>().On = true;
 			Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Magnet").gameObject);
 			break;
 

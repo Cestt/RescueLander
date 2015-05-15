@@ -7,7 +7,7 @@ public class Positionarrow : MonoBehaviour {
 
 	[HideInInspector]
 	public bool visible = true;
-	public GameObject ship;
+	private GameObject ship;
 	public int distance;
 	private bool first = true;
 	private tk2dTextMesh text;
@@ -16,7 +16,7 @@ public class Positionarrow : MonoBehaviour {
 	private Vector3 position;
 
 	void Awake () {
-
+		ship = GameObject.Find (dataManger.manager.actualShip + "(Clone)");
 		arrowText = transform.FindChild("Arrow_Text");
 		text = arrowText.gameObject.GetComponent<tk2dTextMesh>();
 		rotation = arrowText.gameObject.transform.rotation;

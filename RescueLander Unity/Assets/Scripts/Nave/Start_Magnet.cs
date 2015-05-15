@@ -6,6 +6,7 @@ public class Start_Magnet : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		if (On) {
 			if(other.name == "Coin"){
+				Debug.Log("Coin in Magnet");
 				other.GetComponent<Coin_Move>().Chase = true;	
 			}
 		}

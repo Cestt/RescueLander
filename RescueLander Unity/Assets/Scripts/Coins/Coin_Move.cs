@@ -12,13 +12,14 @@ public class Coin_Move : MonoBehaviour {
 
 	void Update () {
 		if (Chase) {
-			transform.position = Vector3.MoveTowards(transform.position,ship.transform.position,speed);
+			transform.position = Vector3.MoveTowards(transform.position,ship.transform.position,speed*Time.deltaTime);
 		}
-	}
-	void OnCollisionEnter2D(Collision2D coll){
-		if (coll.transform.name == ship.name) {
-			dataManger.manager.coins += 1;
-			Destroy(gameObject);
+		if (ship != null) {
+			if (Vector2.Distance (transform.position, ship.transform.position) < 65) {
+				Destroy(gameObject);		
+			}		
 		}
+
 	}
+
 }
