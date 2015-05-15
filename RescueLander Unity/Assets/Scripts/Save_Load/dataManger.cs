@@ -28,9 +28,9 @@ public class dataManger : MonoBehaviour {
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]
 	public Dictionary<string,int> scores = new Dictionary<string, int>();
-
-	public string actualShip = "Ship01";
 	[HideInInspector]
+	public string actualShip = "Ship01";
+	//[HideInInspector]
 	public int totalStars;
 	public int levels;
 	[HideInInspector]
@@ -47,7 +47,7 @@ public class dataManger : MonoBehaviour {
 	public float color2g;
 	[HideInInspector]
 	public float color2b;
-	public List<GameObject> Ships = new List<GameObject>();
+	private List<GameObject> Ships = new List<GameObject>();
 	[HideInInspector]
 	public List<bool> shipUnlocks = new List<bool>();
 
@@ -105,6 +105,8 @@ public class dataManger : MonoBehaviour {
 				for(int i = 1; i <= levels; i++){
 					if(stars["Level_"+i] > data.stars["Level_"+i]){
 						data.stars["Level_"+i] = stars["Level_"+i];
+						totalStars += stars["Level_"+i];
+						data.totalStars = totalStars;
 						Debug.Log("Save Stars");
 					}
 					if(scores["Level_"+i] > data.scores["Level_"+i]){

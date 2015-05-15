@@ -8,7 +8,7 @@ public class Touch_Manager : MonoBehaviour {
 	public Camera uicamera;
 	[HideInInspector]
 	public bool paused;
-	private GameObject ship;
+	public GameObject ship;
 	private Rigidbody2D rigid;
 	public GameObject uiColumnExtended;
 	private Animation animation;
@@ -33,19 +33,21 @@ public class Touch_Manager : MonoBehaviour {
 
 
 	void Awake(){
-		if(uiColumnExtended != null){
+		uicameraGameobject = GameObject.Find("UI_Camera");
+		if(Application.loadedLevelName != "Menu"){
+			uiColumnExtended = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/UIBase_RightCol/UIBase_RightCol_Extended").gameObject;
 			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 			rigid = ship.GetComponent<Rigidbody2D>();
 			animation = uiColumnExtended.GetComponent<Animation>();
 			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
 			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
 		}
-		uicameraGameobject = GameObject.Find("UI_Camera");
+
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
 		powerManager = GetComponent<PowerUp_Manager>();
 		colorSet = GetComponent<Color_Set>();
-		ShipGaraje = uicameraGameobject.transform.FindChild ("Garage_Menu/Shop_Bg_01/Ships_Menu/TV/Ship01_Garage").gameObject;
+		ShipGaraje = uicameraGameobject.transform.FindChild ("Garage_Menu/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
@@ -127,7 +129,7 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							break;
 							
-						case "NextLvl_Button" :
+						case "Next_Button" :
 							Application.LoadLevel("Menu");
 							dataManger.manager.Camposition = "Forward";
 							break;
@@ -175,24 +177,38 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "ButtonShip_Ship01" :
 							dataManger.manager.actualShip = "Ship01";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet("Set");
 							break;
 						case "ButtonShip_369" :
 							dataManger.manager.actualShip = "369";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet("Set");
 							break;
 						case "ButtonShip_Taboo" :
 							dataManger.manager.actualShip = "Taboo";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet("Set");
 							break;
 						case "ButtonShip_UFLO" :
 							dataManger.manager.actualShip = "UFLO";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet("Set");
 							break;
 						case "ButtonShip_Box" :
 							dataManger.manager.actualShip = "Box";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet("Set");
 							break;
 						case "ButtonShip_Mush" :
 							dataManger.manager.actualShip = "Mush";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet("Set");
 							break;
 						case "ButtonShip_Bow" :
 							dataManger.manager.actualShip = "Bow";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet("Set");
 							break;
 						default :
 							
@@ -300,7 +316,7 @@ public class Touch_Manager : MonoBehaviour {
 							Debug.Log("Music on");
 						}
 						break;
-					case "NextLvl_Button" :
+					case "Next_Button" :
 						Application.LoadLevel("Menu");
 						dataManger.manager.Camposition = "Forward";
 						break;
@@ -346,6 +362,41 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Coins_Button" :
 						garage_manager.LayoutChanger("Coins");
+						break;
+					case "ButtonShip_Ship01" :
+						dataManger.manager.actualShip = "Ship01";
+						dataManger.manager.Save(false);
+						colorSet.SpriteSet("Set");
+						break;
+					case "ButtonShip_369" :
+						dataManger.manager.actualShip = "369";
+						dataManger.manager.Save(false);
+						colorSet.SpriteSet("Set");
+						break;
+					case "ButtonShip_Taboo" :
+						dataManger.manager.actualShip = "Taboo";
+						dataManger.manager.Save(false);
+						colorSet.SpriteSet("Set");
+						break;
+					case "ButtonShip_UFLO" :
+						dataManger.manager.actualShip = "UFLO";
+						dataManger.manager.Save(false);
+						colorSet.SpriteSet("Set");
+						break;
+					case "ButtonShip_Box" :
+						dataManger.manager.actualShip = "Box";
+						dataManger.manager.Save(false);
+						colorSet.SpriteSet("Set");
+						break;
+					case "ButtonShip_Mush" :
+						dataManger.manager.actualShip = "Mush";
+						dataManger.manager.Save(false);
+						colorSet.SpriteSet("Set");
+						break;
+					case "ButtonShip_Bow" :
+						dataManger.manager.actualShip = "Bow";
+						dataManger.manager.Save(false);
+						colorSet.SpriteSet("Set");
 						break;
 					default :
 						
