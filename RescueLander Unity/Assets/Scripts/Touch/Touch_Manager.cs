@@ -139,7 +139,7 @@ public class Touch_Manager : MonoBehaviour {
 						case "Social Media Buttons" :
 							faceBook.FBLogin();
 							break;
-						case "Button_Garaje" :
+						case "Button_Garage" :
 							Garaje(true);
 							break;
 						case "Exit_Button" :
@@ -327,7 +327,7 @@ public class Touch_Manager : MonoBehaviour {
 					case "Social Media Buttons" :
 						faceBook.FBLogin();
 						break;
-					case "Button_Garaje" :
+					case "Button_Garage" :
 						Garaje(true);
 						break;
 					case "Exit_Button" :

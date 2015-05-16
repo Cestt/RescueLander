@@ -23,9 +23,12 @@ public class Damage : MonoBehaviour {
 	private tk2dSpriteAnimator animator;
 	private float realDamage;
 	WinLose winLose;
+	Movement movement;
+	bool first = true;
 
 	// Use this for initialization
 	void Awake () {
+		movement = GetComponent<Movement> ();
 		maxLife =life;
 		Transform findChild = transform.FindChild("Explosion");
 		explosion = findChild.gameObject;
@@ -126,7 +129,21 @@ public class Damage : MonoBehaviour {
 				Debug.Log("Hull friction damage");
 				
 			}
+			if(gameObject.transform.eulerAngles.magnitude > 90 & gameObject.transform.eulerAngles.magnitude < 270 & first == true ){
+				movement.angularSpeedUpgrade = 25;
+				movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color(0,144,229);
+				movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color(0,144,229);
+				first = false;
+			}
 		}
+	}
+	void OnCollisionExit2D(Collision2D coll) {
+
+			movement.angularSpeedUpgrade = 0;
+			movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color(255,255,255);
+			movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color(255,255,255);
+			first = true;
+
 	}
 
 	void DestroyShip(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){

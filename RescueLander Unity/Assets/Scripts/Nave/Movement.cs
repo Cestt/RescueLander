@@ -59,6 +59,7 @@ public class Movement : MonoBehaviour {
 
 	void FixedUpdate () {
 
+
 		if(animator != null & animator.IsPlaying("Fire_Start")||
 		   animator != null & animator.IsPlaying("Fire_End")||
 		   animator != null & animator.IsPlaying("Fire_Loop")){
@@ -80,7 +81,7 @@ public class Movement : MonoBehaviour {
 							Vector3 tempVect = Camera.main.ScreenToWorldPoint(touch.position);
 							
 							if(tempVect.x > Camera.main.transform.position.x){
-								rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
+								rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 								
 								if(!Thruster_l.activeInHierarchy){
 									Thruster_l.SetActive(true);
@@ -96,7 +97,7 @@ public class Movement : MonoBehaviour {
 							} 
 							if(tempVect.x < Camera.main.transform.position.x){
 								
-								rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
+								rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
 								
 								if(!Thruster_r.activeInHierarchy){
 									Thruster_r.SetActive(true);
