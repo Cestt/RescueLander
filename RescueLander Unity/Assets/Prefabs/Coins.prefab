@@ -13,6 +13,7 @@ GameObject:
   - 114: {fileID: 11467024}
   - 114: {fileID: 11455374}
   - 58: {fileID: 5855308}
+  - 114: {fileID: 11412062}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -33,6 +34,7 @@ GameObject:
   - 114: {fileID: 11411432}
   - 114: {fileID: 11451632}
   - 58: {fileID: 5896024}
+  - 114: {fileID: 11460352}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -53,6 +55,7 @@ GameObject:
   - 114: {fileID: 11427262}
   - 114: {fileID: 11498748}
   - 58: {fileID: 5802788}
+  - 114: {fileID: 11478952}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -73,6 +76,7 @@ GameObject:
   - 114: {fileID: 11430372}
   - 114: {fileID: 11495194}
   - 58: {fileID: 5894066}
+  - 114: {fileID: 11451708}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -93,6 +97,7 @@ GameObject:
   - 114: {fileID: 11400548}
   - 114: {fileID: 11449040}
   - 58: {fileID: 5822450}
+  - 114: {fileID: 11499824}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -113,6 +118,7 @@ GameObject:
   - 114: {fileID: 11471926}
   - 114: {fileID: 11487488}
   - 58: {fileID: 5887400}
+  - 114: {fileID: 11460336}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -148,6 +154,7 @@ GameObject:
   - 114: {fileID: 11442418}
   - 114: {fileID: 11459170}
   - 58: {fileID: 5874052}
+  - 114: {fileID: 11444778}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -168,6 +175,7 @@ GameObject:
   - 114: {fileID: 11423286}
   - 114: {fileID: 11465434}
   - 58: {fileID: 5825182}
+  - 114: {fileID: 11400302}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -188,6 +196,7 @@ GameObject:
   - 114: {fileID: 11492502}
   - 114: {fileID: 11428192}
   - 58: {fileID: 5811346}
+  - 114: {fileID: 11476010}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -208,6 +217,7 @@ GameObject:
   - 114: {fileID: 11405260}
   - 114: {fileID: 11481392}
   - 58: {fileID: 5844400}
+  - 114: {fileID: 11476364}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -228,6 +238,7 @@ GameObject:
   - 114: {fileID: 11458282}
   - 114: {fileID: 11475076}
   - 58: {fileID: 5866752}
+  - 114: {fileID: 11425854}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -248,6 +259,7 @@ GameObject:
   - 114: {fileID: 11466442}
   - 114: {fileID: 11447982}
   - 58: {fileID: 5838020}
+  - 114: {fileID: 11417412}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -951,6 +963,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: .0649999976}
   serializedVersion: 2
   m_Radius: 18.3949986
+--- !u!114 &11400302
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
 --- !u!114 &11400548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1020,6 +1045,32 @@ MonoBehaviour:
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
   renderLayer: 2
+--- !u!114 &11412062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 103294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
+--- !u!114 &11417412
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 190124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
 --- !u!114 &11423286
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1043,6 +1094,19 @@ MonoBehaviour:
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
   renderLayer: 2
+--- !u!114 &11425854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 189634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
 --- !u!114 &11427262
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1126,6 +1190,19 @@ MonoBehaviour:
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
   renderLayer: 2
+--- !u!114 &11444778
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 136600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
 --- !u!114 &11447982
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1168,6 +1245,19 @@ MonoBehaviour:
   library: {fileID: 11404788, guid: 995dee891a1780f488d299aa87791b80, type: 2}
   defaultClipId: 0
   playAutomatically: 1
+--- !u!114 &11451708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
 --- !u!114 &11455374
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1219,6 +1309,32 @@ MonoBehaviour:
   library: {fileID: 11404788, guid: 995dee891a1780f488d299aa87791b80, type: 2}
   defaultClipId: 0
   playAutomatically: 1
+--- !u!114 &11460336
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 135350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
+--- !u!114 &11460352
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
 --- !u!114 &11465434
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1316,6 +1432,45 @@ MonoBehaviour:
   library: {fileID: 11404788, guid: 995dee891a1780f488d299aa87791b80, type: 2}
   defaultClipId: 0
   playAutomatically: 1
+--- !u!114 &11476010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
+--- !u!114 &11476364
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 171034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
+--- !u!114 &11478952
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
 --- !u!114 &11481392
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1395,6 +1550,19 @@ MonoBehaviour:
   library: {fileID: 11404788, guid: 995dee891a1780f488d299aa87791b80, type: 2}
   defaultClipId: 0
   playAutomatically: 1
+--- !u!114 &11499824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0ca64955055af44a06e0fddd50982c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1000
+  Chase: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

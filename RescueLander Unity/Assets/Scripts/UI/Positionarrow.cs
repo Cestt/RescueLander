@@ -15,6 +15,7 @@ public class Positionarrow : MonoBehaviour {
 	private Quaternion rotation;
 	private Vector3 position;
 	private Renderer render;
+	private GameObject shipIco;
 
 	void Awake () {
 		ship = GameObject.Find(dataManger.manager.actualShip+"(Clone)");
@@ -22,6 +23,7 @@ public class Positionarrow : MonoBehaviour {
 		arrowText = transform.FindChild("Distance");
 		text = arrowText.gameObject.GetComponent<tk2dTextMesh>();
 		rotation = arrowText.gameObject.transform.rotation;
+		shipIco = gameObject.transform.FindChild ("ShipIco").gameObject;
 	
 	}
 	
@@ -40,7 +42,6 @@ public class Positionarrow : MonoBehaviour {
 
 
 		if(!visible & ship != null){
-			gameObject.SetActive(true);
 			position = arrowText.transform.localPosition;
 			Vector3 shipPosition = ship.transform.position;
 			Vector3 camPosition = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y);
@@ -56,7 +57,7 @@ public class Positionarrow : MonoBehaviour {
 
 			distance = (int)Vector2.Distance(shipPosition,transform.position);
 			text.text = ((int)(distance/100)).ToString();
-
+			shipIco.transform.eulerAngles = ship.transform.eulerAngles;
 			arrowText.gameObject.transform.localPosition = position;
 			arrowText.gameObject.transform.rotation = rotation;
 			first = true;

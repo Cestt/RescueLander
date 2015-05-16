@@ -41,8 +41,9 @@ public class Touch_Manager : MonoBehaviour {
 			animation = uiColumnExtended.GetComponent<Animation>();
 			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
 			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
+			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
+			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
 		}
-
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
 		powerManager = GetComponent<PowerUp_Manager>();
@@ -413,7 +414,7 @@ public class Touch_Manager : MonoBehaviour {
 							Application.LoadLevel("Level_"+tempInt);
 						}
 					}
-					if(hit.collider.name.Contains("Color")){
+					if(hit.collider.name== "Color_01"){
 						if(hit.collider.gameObject.GetComponent<Color_Enabled>().enabled == true){
 							Color colorApply = hit.collider.gameObject.GetComponentInChildren<tk2dSprite>().color;
 							if(selectedZone == "A"){
