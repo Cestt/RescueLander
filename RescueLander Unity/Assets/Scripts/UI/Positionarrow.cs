@@ -5,19 +5,21 @@ using System.Collections;
 
 public class Positionarrow : MonoBehaviour {
 
-	[HideInInspector]
+	//[HideInInspector]
 	public bool visible = true;
-	private GameObject ship;
+	public GameObject ship;
 	public int distance;
 	private bool first = true;
 	private tk2dTextMesh text;
 	private Transform arrowText;
 	private Quaternion rotation;
 	private Vector3 position;
+	private Renderer render;
 
 	void Awake () {
-		ship = GameObject.Find (dataManger.manager.actualShip + "(Clone)");
-		arrowText = transform.FindChild("Arrow_Text");
+		ship = GameObject.Find(dataManger.manager.actualShip+"(Clone)");
+		render = ship.GetComponent<Renderer> ();
+		arrowText = transform.FindChild("Distance");
 		text = arrowText.gameObject.GetComponent<tk2dTextMesh>();
 		rotation = arrowText.gameObject.transform.rotation;
 	
@@ -27,18 +29,18 @@ public class Positionarrow : MonoBehaviour {
 	void Update () {
 
 		if(ship != null){
-			if(ship.GetComponent<Renderer>().isVisible){
+			if(render.isVisible){
 				visible = true;
 			}
 			
-			if(!ship.GetComponent<Renderer>().isVisible){
+			if(!render.isVisible){
 				visible = false;
 			}
 		}
 
 
 		if(!visible & ship != null){
-
+			gameObject.SetActive(true);
 			position = arrowText.transform.localPosition;
 			Vector3 shipPosition = ship.transform.position;
 			Vector3 camPosition = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y);
@@ -50,7 +52,7 @@ public class Positionarrow : MonoBehaviour {
 			shipPosition.y = shipPosition.y - camPosition.y;
 			
 			float angle = Mathf.Atan2 (shipPosition.y, shipPosition.x) * Mathf.Rad2Deg;
-			this.transform.rotation = Quaternion.Euler (new Vector3(0, 0, angle + 180));
+			this.transform.rotation = Quaternion.Euler (new Vector3(0, 0, angle-90));
 
 			distance = (int)Vector2.Distance(shipPosition,transform.position);
 			text.text = ((int)(distance/100)).ToString();
