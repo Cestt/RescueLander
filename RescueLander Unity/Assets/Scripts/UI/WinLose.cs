@@ -7,8 +7,9 @@ public class WinLose : MonoBehaviour {
 	public GameObject WinSprite;
 	public GameObject LoseSprite;
 	public GameObject winText;
-	public GameObject UI1;
-	public GameObject UI2;
+	private GameObject UI1;
+	private GameObject UI2;
+	private GameObject UI3;
 
 	private ScreenShoter screenshoter;
 	private bool first;
@@ -27,6 +28,8 @@ public class WinLose : MonoBehaviour {
 			LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
 			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
 			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
+			UI3 =  uicamera.transform.FindChild("Anchor (LowerCenter)").gameObject;
+
 			text = winText.GetComponent<tk2dTextMesh> ();
 			scoreManager = this.GetComponent<ScoreManager> ();
 			first = true;	
@@ -86,6 +89,8 @@ public class WinLose : MonoBehaviour {
 //		text.text = Localization_Bridge.loc.Score +": "+ totalScore.ToString();
 		UI1.SetActive (false);
 		UI2.SetActive (false);
+		UI3.SetActive (false);
+
 
 
 	}
@@ -94,6 +99,7 @@ public class WinLose : MonoBehaviour {
 		LoseSprite.SetActive (true);
 		UI1.SetActive (false);
 		UI2.SetActive (false);
+		UI3.SetActive (false);
 
 	}
 }
