@@ -15,10 +15,13 @@ public class Color_Unlock : MonoBehaviour {
 		foreach (Color_Enabled child in allChildren) {
 
 
-			if(child.StarsRequired <= dataManger.manager.totalStars){
+			if(child.StarsRequired <= dataManger.manager.totalStars & child.transform.parent == gameObject.transform){
 				child.enabled = true;
-				//Transform tempGrandchild = child.FindChild("Requisite");
-				//tempGrandchild.gameObject.SetActive(false);
+				Transform tempGrandchild = child.transform.FindChild("Color01_Graphic/Requisite");
+				if(tempGrandchild != null){
+					tempGrandchild.gameObject.SetActive(false);
+				}
+
 			}
 		}
 	}

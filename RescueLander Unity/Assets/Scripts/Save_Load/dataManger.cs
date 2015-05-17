@@ -22,7 +22,7 @@ public class dataManger : MonoBehaviour {
 	public int actualLevel;
 	[HideInInspector]
 	public bool Sounds = true;
-
+	[HideInInspector]
 	public bool Music = true;
 	[HideInInspector]
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
@@ -30,7 +30,7 @@ public class dataManger : MonoBehaviour {
 	public Dictionary<string,int> scores = new Dictionary<string, int>();
 	[HideInInspector]
 	public string actualShip = "Ship01";
-	//[HideInInspector]
+	[HideInInspector]
 	public int totalStars;
 	public int levels;
 	[HideInInspector]
