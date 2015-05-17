@@ -131,8 +131,10 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 							
 						case "Next_Button" :
-							Application.LoadLevel("Menu");
-							dataManger.manager.Camposition = "Forward";
+							int Level = dataManger.manager.actualLevel;
+							dataManger.manager.actualLevel ++;
+							dataManger.manager.Save(false);
+							Application.LoadLevel("Level_"+(Level + 1));
 							break;
 						case "Share_Button" :
 							share.ShareScreenshot();
@@ -318,8 +320,10 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Next_Button" :
-						Application.LoadLevel("Menu");
-						dataManger.manager.Camposition = "Forward";
+						int Level = dataManger.manager.actualLevel;
+						dataManger.manager.actualLevel ++;
+						dataManger.manager.Save(false);
+						Application.LoadLevel("Level_"+(Level + 1));
 						break;
 					case "Share_Button" :
 						share.ShareScreenshot();

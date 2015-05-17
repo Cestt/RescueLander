@@ -134,16 +134,20 @@ public class Damage : MonoBehaviour {
 				movement.angularSpeedUpgrade = thrusterExtra;
 				movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color(0,144,229);
 				movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color(0,144,229);
+				movement.Thruster_l.GetComponent<tk2dSprite>().scale = new Vector3(1,1,1);
+				movement.Thruster_r.GetComponent<tk2dSprite>().scale = new Vector3(1,1,1);
 				first = false;
 			}
 		}
 	}
 	void OnCollisionExit2D(Collision2D coll) {
 
-			movement.angularSpeedUpgrade = 0;
-			movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color(255,255,255);
-			movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color(255,255,255);
-			first = true;
+		movement.angularSpeedUpgrade = 0;
+		movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color(255,255,255);
+		movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color(255,255,255);
+		movement.Thruster_l.GetComponent<tk2dSprite>().scale = new Vector3(0.55f,0.55f,1);
+		movement.Thruster_r.GetComponent<tk2dSprite>().scale = new Vector3(0.55f,0.55f,1);
+		first = true;
 
 	}
 

@@ -126,11 +126,9 @@ public class Movement : MonoBehaviour {
 					
 					
 					
-					if (Input.touchCount ==2){	
+					if (Input.touchCount ==2 & fuel > 0){	
 						touch = Input.GetTouch(1);
-						Debug.Log("Touch");
-						if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended
-						   & fuel >0){
+						if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended){
 							
 							Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
 							rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
@@ -169,7 +167,7 @@ public class Movement : MonoBehaviour {
 					if(!Fire.activeInHierarchy)
 						Fire.SetActive(true);					
 					ConsumeFuel();
-					/*Javi*/motor = true;
+					motor = true;
 					
 				}
 				if(Input.GetKeyUp(KeyCode.Space)){
