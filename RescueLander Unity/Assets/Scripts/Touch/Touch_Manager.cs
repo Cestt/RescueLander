@@ -181,37 +181,38 @@ public class Touch_Manager : MonoBehaviour {
 						case "ButtonShip_Ship01" :
 							dataManger.manager.actualShip = "Ship01";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet("Set");
+							colorSet.SpriteSet();
 							break;
 						case "ButtonShip_369" :
 							dataManger.manager.actualShip = "369";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet("Set");
+							colorSet.SpriteSet();
 							break;
 						case "ButtonShip_Taboo" :
 							dataManger.manager.actualShip = "Taboo";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet("Set");
+							colorSet.SpriteSet();
 							break;
 						case "ButtonShip_UFLO" :
 							dataManger.manager.actualShip = "UFLO";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet("Set");
+							colorSet.SpriteSet();
 							break;
 						case "ButtonShip_Box" :
 							dataManger.manager.actualShip = "Box";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet("Set");
+							colorSet.SpriteSet();
 							break;
 						case "ButtonShip_Mush" :
 							dataManger.manager.actualShip = "Mush";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet("Set");
+							colorSet.SpriteSet();
 							break;
 						case "ButtonShip_Bow" :
 							dataManger.manager.actualShip = "Bow";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet("Set");
+							colorSet.SpriteSet();
+
 							break;
 						default :
 							
@@ -371,37 +372,37 @@ public class Touch_Manager : MonoBehaviour {
 					case "ButtonShip_Ship01" :
 						dataManger.manager.actualShip = "Ship01";
 						dataManger.manager.Save(false);
-						colorSet.SpriteSet("Set");
+						colorSet.SpriteSet();
 						break;
 					case "ButtonShip_369" :
 						dataManger.manager.actualShip = "369";
 						dataManger.manager.Save(false);
-						colorSet.SpriteSet("Set");
+						colorSet.SpriteSet();
 						break;
 					case "ButtonShip_Taboo" :
 						dataManger.manager.actualShip = "Taboo";
 						dataManger.manager.Save(false);
-						colorSet.SpriteSet("Set");
+						colorSet.SpriteSet();
 						break;
 					case "ButtonShip_UFLO" :
 						dataManger.manager.actualShip = "UFLO";
 						dataManger.manager.Save(false);
-						colorSet.SpriteSet("Set");
+						colorSet.SpriteSet();
 						break;
 					case "ButtonShip_Box" :
 						dataManger.manager.actualShip = "Box";
 						dataManger.manager.Save(false);
-						colorSet.SpriteSet("Set");
+						colorSet.SpriteSet();
 						break;
 					case "ButtonShip_Mush" :
 						dataManger.manager.actualShip = "Mush";
 						dataManger.manager.Save(false);
-						colorSet.SpriteSet("Set");
+						colorSet.SpriteSet();
 						break;
 					case "ButtonShip_Bow" :
 						dataManger.manager.actualShip = "Bow";
 						dataManger.manager.Save(false);
-						colorSet.SpriteSet("Set");
+						colorSet.SpriteSet();
 						break;
 					default :
 						

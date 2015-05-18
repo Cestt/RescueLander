@@ -15,6 +15,7 @@ public class PowerUp_Manager : MonoBehaviour {
 	private bool running;
 	private GameObject actualPowerUp;
 	private Damage damage;
+	private Touch_Manager touch;
 
 	void Awake () {
 		if (Application.loadedLevelName != "Menu") {
@@ -23,6 +24,7 @@ public class PowerUp_Manager : MonoBehaviour {
 			fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
 			fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;		
 			damage = ship.GetComponent<Damage>();
+			touch = gameObject.GetComponent<Touch_Manager>();
 		}
 
 
@@ -36,28 +38,30 @@ public class PowerUp_Manager : MonoBehaviour {
 	}
 	
 	public void PowerUp(string Power){
-
-		switch(Power){
-		
-		case "Fuel" :
-			Debug.Log("Fuel PU");
-			Movement movement = ship.GetComponent<Movement>();
-			movement.fuel += (movement.originalFuel  * Fuel_Recover)/100;
-			tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
-			sliced.dimensions = new Vector2( 
-			            sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
-			break;
-		case "Shield" :
-			Debug.Log("Shield PU");
-			Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Shield").gameObject);
-			break;
-		case "Magnet" :
-			Debug.Log("Magnet PU");
-			ship.GetComponent<Start_Magnet>().On = true;
-			Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Magnet").gameObject);
-			break;
-
+		if(!touch.paused){
+			switch(Power){
+				
+			case "Fuel" :
+				Debug.Log("Fuel PU");
+				Movement movement = ship.GetComponent<Movement>();
+				movement.fuel += (movement.originalFuel  * Fuel_Recover)/100;
+				tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
+				sliced.dimensions = new Vector2( 
+				                                sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
+				break;
+			case "Shield" :
+				Debug.Log("Shield PU");
+				Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Shield").gameObject);
+				break;
+			case "Magnet" :
+				Debug.Log("Magnet PU");
+				ship.GetComponent<Start_Magnet>().On = true;
+				Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Magnet").gameObject);
+				break;
+				
+			}
 		}
+
 	}
 
 	private void Timer(string Switch,int _timerTime,GameObject _actualPowerUp){
