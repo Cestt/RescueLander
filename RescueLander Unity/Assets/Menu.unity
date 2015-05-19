@@ -244,23 +244,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7cb93b160865cdc4b94fc29be6e11c75, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &187236180 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 194462, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
-  m_PrefabInternal: {fileID: 990223583}
---- !u!114 &187236185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 187236180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 044d96dc8f162a343a9f276ae268ecb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enabled: 0
-  StarsRequired: 0
 --- !u!1001 &203797667
 Prefab:
   m_ObjectHideFlags: 0
@@ -951,6 +934,65 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 453990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
   m_PrefabInternal: {fileID: 1257594135}
+--- !u!21 &576233034
+Material:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprite/SpriteColorMasks3
+  m_Shader: {fileID: 4800000, guid: 827b460d957ea9847a6c15caed545791, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskRedTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskGreenTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskBlueTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: PixelSnap
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &640719753 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 190050, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
@@ -1433,37 +1475,6 @@ MonoBehaviour:
   isHoverEnabled: 0
   editorExtraBounds: []
   editorIgnoreBounds: []
---- !u!21 &904119686
-Material:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000e000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: PixelSnap
-        second: 0
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &915591556
 GameObject:
   m_ObjectHideFlags: 0
@@ -1548,23 +1559,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -864159853
   m_SortingOrder: 0
---- !u!1 &918202760 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 183650, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
-  m_PrefabInternal: {fileID: 990223583}
---- !u!114 &918202765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 918202760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 044d96dc8f162a343a9f276ae268ecb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enabled: 0
-  StarsRequired: 0
 --- !u!1 &930544161
 GameObject:
   m_ObjectHideFlags: 0
@@ -2255,7 +2249,7 @@ Prefab:
     - target: {fileID: 21210660, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 904119686}
+      objectReference: {fileID: 1845697887}
     - target: {fileID: 3335994, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
       propertyPath: m_Mesh
       value: 
@@ -2358,7 +2352,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 121534, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11491658, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
       propertyPath: m_Enabled
@@ -2367,6 +2361,22 @@ Prefab:
     - target: {fileID: 11413966, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3346450, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3333386, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391726, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3388136, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
@@ -2655,7 +2665,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1095515909}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 960, y: 540, z: -10}
+  m_LocalPosition: {x: 960, y: -841, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2004885646}
@@ -2783,23 +2793,6 @@ Transform:
   - {fileID: 930544162}
   m_Father: {fileID: 395463239}
   m_RootOrder: 7
---- !u!1 &1130600494 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 170082, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
-  m_PrefabInternal: {fileID: 990223583}
---- !u!114 &1130600499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1130600494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 044d96dc8f162a343a9f276ae268ecb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enabled: 0
-  StarsRequired: 0
 --- !u!4 &1133587987 stripped
 Transform:
   m_PrefabParentObject: {fileID: 453990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
@@ -3063,7 +3056,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_Materials:
-  - {fileID: 1290904830}
+  - {fileID: 576233034}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -3602,65 +3595,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 395463239}
   m_RootOrder: 5
---- !u!21 &1290904830
-Material:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprite/SpriteColorMasks3
-  m_Shader: {fileID: 4800000, guid: 827b460d957ea9847a6c15caed545791, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskRedTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskGreenTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskBlueTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: PixelSnap
-        second: 0
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1319821105 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 148070, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
@@ -4355,23 +4289,6 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 453990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
   m_PrefabInternal: {fileID: 936424966}
---- !u!1 &1628619281 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 173950, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
-  m_PrefabInternal: {fileID: 990223583}
---- !u!114 &1628619286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1628619281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 044d96dc8f162a343a9f276ae268ecb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enabled: 0
-  StarsRequired: 0
 --- !u!4 &1711646797 stripped
 Transform:
   m_PrefabParentObject: {fileID: 453990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
@@ -4989,6 +4906,65 @@ Transform:
   - {fileID: 1748766454}
   m_Father: {fileID: 395463239}
   m_RootOrder: 6
+--- !u!21 &1845697887
+Material:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprite/SpriteColorMasks3
+  m_Shader: {fileID: 4800000, guid: 827b460d957ea9847a6c15caed545791, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskRedTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskGreenTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskBlueTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: PixelSnap
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1846712534 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 122986, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
