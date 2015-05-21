@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Value : MonoBehaviour {
 
 	public int Cost;
-	private string _Type;
+	public string _Type;
 	[HideInInspector]
 	public bool bought = false;
 
@@ -25,6 +25,8 @@ public class Value : MonoBehaviour {
 		if(Tipo == Type.World){
 			_Type = "World";
 		}
+		tk2dTextMesh text = gameObject.transform.FindChild("Button_Buy_Up/ButtonShip_Price").GetComponent<tk2dTextMesh>();
+		text.text = Cost.ToString();
 	}
 
 }

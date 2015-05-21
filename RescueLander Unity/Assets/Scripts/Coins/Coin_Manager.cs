@@ -32,6 +32,7 @@ public class Coin_Manager : MonoBehaviour {
 				}
 				if(Type == "Ship"){
 					dataManger.manager.shipUnlocks.Add(Item);
+					dataManger.manager.Save(false);
 				}
 
 				

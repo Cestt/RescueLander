@@ -7,6 +7,7 @@ public class Coin_Move : MonoBehaviour {
 	public bool Chase = false;
 	private PowerUp_Manager powerManager;
 	private int coinDistance = 65;
+	public int CoinValue;
 	bool first;
 	void Awake(){
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
@@ -24,6 +25,7 @@ public class Coin_Move : MonoBehaviour {
 
 			}
 			if (Vector2.Distance (transform.position, ship.transform.position) < coinDistance ) {
+				dataManger.manager.coins += CoinValue;
 				Destroy(gameObject);		
 			}
 			if(!powerManager.On & first){

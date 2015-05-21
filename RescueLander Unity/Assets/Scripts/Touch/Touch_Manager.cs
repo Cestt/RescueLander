@@ -54,6 +54,7 @@ public class Touch_Manager : MonoBehaviour {
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
 		faceBook = GetComponent<FacebookSocial>();
+		coin_manager = GetComponent<Coin_Manager>();
 
 	}
 
@@ -243,6 +244,17 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(false);
 							}
 							break;
+						case "Button_Buy" :
+							if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
+								Value value = hit.collider.gameObject.GetComponent<Value>();
+								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(10))){
+									Destroy(hit.collider.gameObject);
+									Debug.Log("Comprado");
+								}else{
+									Debug.Log("Algo falla joder");
+								}
+							}
+							break;
 						default :
 							
 							break;
@@ -291,7 +303,7 @@ public class Touch_Manager : MonoBehaviour {
 				if (Physics.Raycast(ray.origin,ray.direction * 100, out hit) 
 				    || Physics.Raycast(ray2.origin,ray.direction * 100, out hit)) {
 		
-					Debug.Log("Hit");
+					Debug.Log("Hit "+hit.collider.name);
 
 					switch(hit.collider.name ){
 					case "Play" :
@@ -459,6 +471,17 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(true);
 						}else{
 							colorSet.SpriteSet(false);
+						}
+						break;
+					case "Button_Buy" :
+						if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
+							Value value = hit.collider.gameObject.GetComponent<Value>();
+							if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(11))){
+								Destroy(hit.collider.gameObject);
+								Debug.Log("Comprado");
+							}else{
+								Debug.Log("Algo falla joder");
+							}
 						}
 						break;
 					default :
