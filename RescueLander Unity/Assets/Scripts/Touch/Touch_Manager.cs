@@ -255,6 +255,9 @@ public class Touch_Manager : MonoBehaviour {
 								}
 							}
 							break;
+						case "Cheat" :
+							dataManger.manager.coins += 50000;
+							break;
 						default :
 							
 							break;
@@ -483,6 +486,9 @@ public class Touch_Manager : MonoBehaviour {
 								Debug.Log("Algo falla joder");
 							}
 						}
+						break;
+					case "Cheat" :
+						dataManger.manager.coins += 50000;
 						break;
 					default :
 						
