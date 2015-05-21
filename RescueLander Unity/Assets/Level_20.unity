@@ -2294,6 +2294,82 @@ MonoBehaviour:
   handleStyle: 1
   _handle1: {x: .100000001, y: 0, z: 0}
   _handle2: {x: -.100000001, y: -0, z: -0}
+--- !u!1 &252555286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 252555287}
+  - 33: {fileID: 252555290}
+  - 23: {fileID: 252555289}
+  - 114: {fileID: 252555288}
+  m_Layer: 0
+  m_Name: Rock_Mask 5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &252555287
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 252555286}
+  m_LocalRotation: {x: 0, y: 0, z: -.754709661, w: .656058908}
+  m_LocalPosition: {x: -53.359642, y: -30.2466927, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 741011232}
+  m_RootOrder: 0
+--- !u!114 &252555288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 252555286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602f4dac037b841b7baf63355b4ce069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchor: 4
+  size: {x: 11.3319483, y: 27.0569534}
+  depth: 1
+  createBoxCollider: 0
+--- !u!23 &252555289
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 252555286}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -864159853
+  m_SortingOrder: 1
+--- !u!33 &252555290
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 252555286}
+  m_Mesh: {fileID: 0}
 --- !u!1 &254030133
 GameObject:
   m_ObjectHideFlags: 0
@@ -4075,9 +4151,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 360959718}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -417.5896, y: -385.617188, z: -600}
+  m_LocalPosition: {x: -417.5896, y: -385.617188, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1743182840}
+  - {fileID: 1891807069}
+  - {fileID: 1541038023}
   m_Father: {fileID: 1138371609}
   m_RootOrder: 1
 --- !u!60 &360959720
@@ -4130,7 +4209,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
-  renderLayer: -1
+  renderLayer: 1
 --- !u!33 &360959723
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4163,7 +4242,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -864159853
-  m_SortingOrder: -1
+  m_SortingOrder: 1
 --- !u!1 &361672805
 GameObject:
   m_ObjectHideFlags: 0
@@ -5053,7 +5132,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 959.485107
+      value: 959.504028
       objectReference: {fileID: 0}
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.y
@@ -5954,6 +6033,65 @@ MonoBehaviour:
   handleStyle: 1
   _handle1: {x: .100000001, y: 0, z: 0}
   _handle2: {x: 116.722656, y: -28.8603516, z: 0}
+--- !u!21 &481633876
+Material:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprite/SpriteColorMasks3
+  m_Shader: {fileID: 4800000, guid: 827b460d957ea9847a6c15caed545791, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskRedTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskGreenTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskBlueTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: PixelSnap
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &489978283
 GameObject:
   m_ObjectHideFlags: 0
@@ -6053,7 +6191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collection: {fileID: 11442402, guid: bcf8641cad166e94d83cbbaf4b93eba9, type: 2}
-  _color: {r: 1, g: 1, b: 1, a: 1}
+  _color: {r: .819607854, g: .819607854, b: .819607854, a: 1}
   _scale: {x: -1.35000002, y: 1.35640192, z: 1}
   _spriteId: 49
   boxCollider2D: {fileID: 0}
@@ -6064,7 +6202,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
-  renderLayer: -1
+  renderLayer: 1
 --- !u!33 &505194424
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6097,7 +6235,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -864159853
-  m_SortingOrder: -1
+  m_SortingOrder: 1
 --- !u!4 &505194426
 Transform:
   m_ObjectHideFlags: 0
@@ -6105,9 +6243,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 505194421}
   m_LocalRotation: {x: 0, y: 0, z: -.0940595567, w: .995566607}
-  m_LocalPosition: {x: -1683.7179, y: -387.0383, z: 0}
+  m_LocalPosition: {x: -1683.7179, y: -387.0383, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 726754498}
+  - {fileID: 1734415511}
   m_Father: {fileID: 1138371609}
   m_RootOrder: 0
 --- !u!1 &513003123
@@ -8063,6 +8203,82 @@ MonoBehaviour:
   handleStyle: 1
   _handle1: {x: -169.679565, y: -6.12609863, z: 0}
   _handle2: {x: 22.6538086, y: 0, z: 0}
+--- !u!1 &726754497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 726754498}
+  - 33: {fileID: 726754501}
+  - 23: {fileID: 726754500}
+  - 114: {fileID: 726754499}
+  m_Layer: 0
+  m_Name: Rock_Mask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &726754498
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726754497}
+  m_LocalRotation: {x: 0, y: 0, z: -.0611808933, w: .998126745}
+  m_LocalPosition: {x: -42.9114876, y: -59.8988647, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 505194426}
+  m_RootOrder: 0
+--- !u!114 &726754499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726754497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602f4dac037b841b7baf63355b4ce069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchor: 4
+  size: {x: 75.6774139, y: 13.3623428}
+  depth: 1
+  createBoxCollider: 0
+--- !u!23 &726754500
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726754497}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -864159853
+  m_SortingOrder: 1
+--- !u!33 &726754501
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726754497}
+  m_Mesh: {fileID: 0}
 --- !u!1 &733978130
 GameObject:
   m_ObjectHideFlags: 0
@@ -8175,9 +8391,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 741011231}
   m_LocalRotation: {x: 0, y: 0, z: .10807009, w: .994143307}
-  m_LocalPosition: {x: 246.526367, y: 197.543945, z: 0}
+  m_LocalPosition: {x: 244.497803, y: 200.248535, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 252555287}
+  - {fileID: 1930522228}
   m_Father: {fileID: 1138371609}
   m_RootOrder: 3
 --- !u!60 &741011233
@@ -8227,7 +8445,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
-  renderLayer: -1
+  renderLayer: 1
 --- !u!33 &741011235
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8260,7 +8478,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -864159853
-  m_SortingOrder: -1
+  m_SortingOrder: 1
 --- !u!1 &742050361
 GameObject:
   m_ObjectHideFlags: 0
@@ -8756,7 +8974,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collection: {fileID: 11442402, guid: bcf8641cad166e94d83cbbaf4b93eba9, type: 2}
-  _color: {r: 1, g: 1, b: 1, a: 1}
+  _color: {r: .823529422, g: .748275876, b: .720588267, a: 1}
   _scale: {x: 1, y: 1, z: 1}
   _spriteId: 47
   boxCollider2D: {fileID: 0}
@@ -8767,7 +8985,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
-  renderLayer: -1
+  renderLayer: 1
 --- !u!33 &792043305
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8800,7 +9018,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -864159853
-  m_SortingOrder: -1
+  m_SortingOrder: 1
 --- !u!1 &794660864
 GameObject:
   m_ObjectHideFlags: 0
@@ -9830,7 +10048,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -959.485046
+      value: -959.50415
       objectReference: {fileID: 0}
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.y
@@ -17520,6 +17738,82 @@ MonoBehaviour:
   handleStyle: 1
   _handle1: {x: 27.5483398, y: 86.1743164, z: 0}
   _handle2: {x: -18.6115723, y: -63.194458, z: 0}
+--- !u!1 &1541038022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1541038023}
+  - 33: {fileID: 1541038026}
+  - 23: {fileID: 1541038025}
+  - 114: {fileID: 1541038024}
+  m_Layer: 0
+  m_Name: Rock_Mask 4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1541038023
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1541038022}
+  m_LocalRotation: {x: 0, y: 0, z: -.779470861, w: .626438498}
+  m_LocalPosition: {x: -11.9467773, y: -68.6300049, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 360959719}
+  m_RootOrder: 2
+--- !u!114 &1541038024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1541038022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602f4dac037b841b7baf63355b4ce069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchor: 4
+  size: {x: 17.4649982, y: 27.0569534}
+  depth: 1
+  createBoxCollider: 0
+--- !u!23 &1541038025
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1541038022}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -864159853
+  m_SortingOrder: 1
+--- !u!33 &1541038026
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1541038022}
+  m_Mesh: {fileID: 0}
 --- !u!1 &1541254190
 GameObject:
   m_ObjectHideFlags: 0
@@ -19422,6 +19716,82 @@ MonoBehaviour:
   handleStyle: 1
   _handle1: {x: .100000001, y: 0, z: 0}
   _handle2: {x: .765808105, y: -18.1817627, z: 0}
+--- !u!1 &1734415510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1734415511}
+  - 33: {fileID: 1734415514}
+  - 23: {fileID: 1734415513}
+  - 114: {fileID: 1734415512}
+  m_Layer: 0
+  m_Name: Rock_Mask 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1734415511
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1734415510}
+  m_LocalRotation: {x: 0, y: 0, z: .0771655962, w: .997018337}
+  m_LocalPosition: {x: 38.1017914, y: -60.2278328, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 505194426}
+  m_RootOrder: 1
+--- !u!114 &1734415512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1734415510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602f4dac037b841b7baf63355b4ce069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchor: 4
+  size: {x: 51.2702522, y: 13.3623428}
+  depth: 1
+  createBoxCollider: 0
+--- !u!23 &1734415513
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1734415510}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -864159853
+  m_SortingOrder: 1
+--- !u!33 &1734415514
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1734415510}
+  m_Mesh: {fileID: 0}
 --- !u!1 &1741441768
 GameObject:
   m_ObjectHideFlags: 0
@@ -19465,6 +19835,82 @@ MonoBehaviour:
   handleStyle: 1
   _handle1: {x: 76.638916, y: 52.3688965, z: 0}
   _handle2: {x: -83.6887207, y: -52.3688354, z: 0}
+--- !u!1 &1743182839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1743182840}
+  - 33: {fileID: 1743182843}
+  - 23: {fileID: 1743182842}
+  - 114: {fileID: 1743182841}
+  m_Layer: 0
+  m_Name: Rock_Mask 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1743182840
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1743182839}
+  m_LocalRotation: {x: 0, y: 0, z: .69489342, w: -.719112754}
+  m_LocalPosition: {x: -48.1044922, y: -44.7709656, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 360959719}
+  m_RootOrder: 0
+--- !u!114 &1743182841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1743182839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602f4dac037b841b7baf63355b4ce069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchor: 4
+  size: {x: 41.8323746, y: 39.8080292}
+  depth: 1
+  createBoxCollider: 0
+--- !u!23 &1743182842
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1743182839}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -864159853
+  m_SortingOrder: 1
+--- !u!33 &1743182843
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1743182839}
+  m_Mesh: {fileID: 0}
 --- !u!1 &1744092779
 GameObject:
   m_ObjectHideFlags: 0
@@ -19713,7 +20159,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
-  renderLayer: -1
+  renderLayer: 1
 --- !u!33 &1753499620
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -19746,7 +20192,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -864159853
-  m_SortingOrder: -1
+  m_SortingOrder: 1
 --- !u!1 &1753808775
 GameObject:
   m_ObjectHideFlags: 0
@@ -21289,6 +21735,82 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200331063aad5f240b47cc88ae075ced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1891807068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1891807069}
+  - 33: {fileID: 1891807072}
+  - 23: {fileID: 1891807071}
+  - 114: {fileID: 1891807070}
+  m_Layer: 0
+  m_Name: Rock_Mask 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1891807069
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1891807068}
+  m_LocalRotation: {x: 0, y: 0, z: .402335286, w: -.915492475}
+  m_LocalPosition: {x: -31.9642334, y: -64.3741455, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 360959719}
+  m_RootOrder: 1
+--- !u!114 &1891807070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1891807068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602f4dac037b841b7baf63355b4ce069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchor: 4
+  size: {x: 23.0255508, y: 27.0569534}
+  depth: 1
+  createBoxCollider: 0
+--- !u!23 &1891807071
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1891807068}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -864159853
+  m_SortingOrder: 1
+--- !u!33 &1891807072
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1891807068}
+  m_Mesh: {fileID: 0}
 --- !u!1 &1893120381
 GameObject:
   m_ObjectHideFlags: 0
@@ -21634,6 +22156,82 @@ MonoBehaviour:
   handleStyle: 1
   _handle1: {x: .100000001, y: 0, z: 0}
   _handle2: {x: 98.9210205, y: -2.55535889, z: 0}
+--- !u!1 &1930522227
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1930522228}
+  - 33: {fileID: 1930522231}
+  - 23: {fileID: 1930522230}
+  - 114: {fileID: 1930522229}
+  m_Layer: 0
+  m_Name: Rock_Mask 6
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1930522228
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1930522227}
+  m_LocalRotation: {x: 0, y: 0, z: -.569981039, w: .821657896}
+  m_LocalPosition: {x: 50.475174, y: -25.6542244, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 741011232}
+  m_RootOrder: 1
+--- !u!114 &1930522229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1930522227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602f4dac037b841b7baf63355b4ce069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchor: 4
+  size: {x: 11.3319483, y: 31.2827263}
+  depth: 1
+  createBoxCollider: 0
+--- !u!23 &1930522230
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1930522227}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -864159853
+  m_SortingOrder: 1
+--- !u!33 &1930522231
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1930522227}
+  m_Mesh: {fileID: 0}
 --- !u!1 &1933087962
 GameObject:
   m_ObjectHideFlags: 0
