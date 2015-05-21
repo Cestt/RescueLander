@@ -16,6 +16,7 @@ public class PowerUp_Manager : MonoBehaviour {
 	private GameObject actualPowerUp;
 	private Damage damage;
 	private Touch_Manager touch;
+	public bool On;
 
 	void Awake () {
 		if (Application.loadedLevelName != "Menu") {
@@ -33,7 +34,7 @@ public class PowerUp_Manager : MonoBehaviour {
 	void Update(){
 		if(running & Time.time > actualTime + timerTime){
 			Timer("Stop",0,actualPowerUp);
-			damage = ship.GetComponent<Damage>();
+
 		}
 	}
 	
@@ -55,7 +56,6 @@ public class PowerUp_Manager : MonoBehaviour {
 				break;
 			case "Magnet" :
 				Debug.Log("Magnet PU");
-				ship.GetComponent<Start_Magnet>().On = true;
 				Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Magnet").gameObject);
 				break;
 				
@@ -73,6 +73,9 @@ public class PowerUp_Manager : MonoBehaviour {
 			if(_actualPowerUp.name == "PU_Shield"){
 				damage.DamageVariant = Shield_DmgReduction;
 			}
+			if(_actualPowerUp.name == "PU_Magnet"){
+				On = true;
+			}
 			running = true;
 			actualPowerUp.SetActive(true);
 		}else{
@@ -80,6 +83,9 @@ public class PowerUp_Manager : MonoBehaviour {
 			timerTime = 0;
 			if(actualPowerUp.name == "PU_Shield"){
 				damage.DamageVariant = 0;
+			}
+			if(_actualPowerUp.name == "PU_Magnet"){
+				On = false;
 			}
 			actualPowerUp.SetActive(false);
 			actualPowerUp = null;

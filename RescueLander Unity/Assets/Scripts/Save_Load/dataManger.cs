@@ -13,7 +13,9 @@ public class dataManger : MonoBehaviour {
 	[HideInInspector]
 	public int fuelPowerUps;
 	[HideInInspector]
-	public int lifePowerUps;
+	public int shieldPowerUps;
+	[HideInInspector]
+	public int magnetPowerUps;
 	[HideInInspector]
 	public string Camposition = "";
 	[HideInInspector]
@@ -49,7 +51,7 @@ public class dataManger : MonoBehaviour {
 	public float color2b;
 	private List<GameObject> Ships = new List<GameObject>();
 	[HideInInspector]
-	public List<bool> shipUnlocks = new List<bool>();
+	public List<string> shipUnlocks = new List<string>();
 
 	private GameObject temp;
 
@@ -232,7 +234,9 @@ class Data {
 	[HideInInspector]
 	public int fuelPowerUps;
 	[HideInInspector]
-	public int lifePowerUps;
+	public int shieldPowerUps;
+	[HideInInspector]
+	public int magnetPowerUps;
 	[HideInInspector]
 	public int unlocks;
 	[HideInInspector]
@@ -262,6 +266,6 @@ class Data {
 	[HideInInspector]
 	public float color2b;
 	[HideInInspector]
-	public List<bool> shipUnlocks = new List<bool>();
+	public List<string> shipUnlocks = new List<string>();
 
 }

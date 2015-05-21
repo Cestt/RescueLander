@@ -64,8 +64,9 @@ public class WinLose : MonoBehaviour {
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
 				dataManger.manager.Save(true);
 				first = false;
+				Win();
 			}
-			Win();
+
 		}
 
 		if(result == "Lose"){

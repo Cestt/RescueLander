@@ -4,14 +4,13 @@ using System.Collections;
 public class Coin_Move : MonoBehaviour {
 	private GameObject ship;
 	public int speed;
-	[HideInInspector]
 	public bool Chase = false;
+	private PowerUp_Manager powerManager;
 	private int coinDistance = 65;
+	bool first;
 	void Awake(){
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
-		if (dataManger.manager.actualShip == "Bow") {
-			coinDistance = 70;
-		}
+		powerManager = GameObject.Find("Game Manager").GetComponent<PowerUp_Manager>();
 	}
 
 	void Update () {
@@ -19,10 +18,20 @@ public class Coin_Move : MonoBehaviour {
 			transform.position = Vector3.MoveTowards(transform.position,ship.transform.position,speed*Time.deltaTime);
 		}
 		if (ship != null) {
+			if(powerManager.On & Vector2.Distance (transform.position, ship.transform.position) < 200){
+				Chase = true;
+				first = true;
+
+			}
 			if (Vector2.Distance (transform.position, ship.transform.position) < coinDistance ) {
 				Destroy(gameObject);		
-			}		
+			}
+			if(!powerManager.On & first){
+				Chase = false;
+				first = false;
+			}
 		}
+
 
 	}
 
