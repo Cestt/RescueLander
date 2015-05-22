@@ -3,7 +3,11 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 
 public class Ads : MonoBehaviour {
+
+	private string Items;
+	private Touch_Manager touch;
 	void Awake() {
+		touch = GetComponent<Touch_Manager>();
 		if (Advertisement.isSupported) {
 			Advertisement.allowPrecache = true;
 			Advertisement.Initialize ("37545",true);
@@ -11,30 +15,41 @@ public class Ads : MonoBehaviour {
 			Debug.Log("Platform not supported");
 		}
 	}
-	
-	void OnGUI() {
-		if(GUI.Button(new Rect(10, 10, 150, 50), Advertisement.isReady() ? "Show Ad" : "Waiting...")) {
-			// Show with default zone, pause engine and print result to debug log
 
-			ShowOptions options = new ShowOptions();
-			options.resultCallback = HandleResult;
-			options.pause = true;
-			Advertisement.Show("pictureZone", options);
-		}
-	}
 	void HandleResult (ShowResult result){
 
 		switch (result) {
 		
 		case ShowResult.Failed :
 			Debug.Log("Ad failed");
+
 			break;
 		case ShowResult.Finished:
 			Debug.Log("Ad finished");
+			switch(Items){
+			case "Fuel":
+				dataManger.manager.fuelPowerUps++;
+				break;
+			case "Shield":
+				dataManger.manager.shieldPowerUps++;
+				break;
+			case "Magnet":
+				dataManger.manager.magnetPowerUps++;
+				break;
+			}
+
 			break;
 		case ShowResult.Skipped :
 			Debug.Log("Ad Skipped");
+
 			break;
 		}
+	}
+	public void Launch(string Item){
+		Items = Item;
+		ShowOptions options = new ShowOptions();
+		options.resultCallback = HandleResult;
+		options.pause = touch.Pause(null);
+		Advertisement.Show("pictureZone", options);
 	}
 }

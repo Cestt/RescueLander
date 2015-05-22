@@ -41,6 +41,15 @@ public class Minimap : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		if(Astronauts[0] == null){
+			Destroy(AstronautsIco[0]);
+		}
+		if(Astronauts[1] == null){
+			Destroy(AstronautsIco[1]);
+		}
+		if(Astronauts[2] == null){
+			Destroy(AstronautsIco[2]);
+		}
 		float mapx;
 		float mapy;
 		Vector2 tempVector;

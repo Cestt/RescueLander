@@ -30,6 +30,7 @@ public class Touch_Manager : MonoBehaviour {
 	private Garaje_Manager garage_manager;
 	private Coin_Manager coin_manager;
 	private GameObject PUilustration;
+	private Ads ads;
 
 
 
@@ -46,6 +47,7 @@ public class Touch_Manager : MonoBehaviour {
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
 		}
+		ads = GetComponent<Ads>();
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
 		powerManager = GetComponent<PowerUp_Manager>();
@@ -163,16 +165,22 @@ public class Touch_Manager : MonoBehaviour {
 						case "PowerUp_Shield" :
 							if(dataManger.manager.shieldPowerUps >= 1){
 								powerManager.PowerUp("Shield");
+							}else{
+								ads.Launch("Shield");
 							}
 							break;
 						case "PowerUp_Magnet" :
 							if(dataManger.manager.magnetPowerUps >= 1){
 								powerManager.PowerUp("Magnet");
+							}else{
+								ads.Launch("Magnet");
 							}
 							break;
 						case "PowerUp_Fuel" :
 							if(dataManger.manager.fuelPowerUps >= 1){
 								powerManager.PowerUp("Fuel");
+							}else{
+								ads.Launch("Fuel");
 							}
 							break;
 						case "GarageHeader_Button" :
@@ -401,18 +409,23 @@ public class Touch_Manager : MonoBehaviour {
 					case "PowerUp_Shield" :
 						if(dataManger.manager.shieldPowerUps >= 1){
 							powerManager.PowerUp("Shield");
+						}else{
+							ads.Launch("Shield");
 						}
 						break;
 					case "PowerUp_Magnet" :
 						if(dataManger.manager.magnetPowerUps >= 1){
 							powerManager.PowerUp("Magnet");
+						}else{
+							ads.Launch("Magnet");
 						}
 						break;
 					case "PowerUp_Fuel" :
 						if(dataManger.manager.fuelPowerUps >= 1){
 							powerManager.PowerUp("Fuel");
+						}else{
+							ads.Launch("Fuel");
 						}
-
 						break;
 					case "GarageHeader_Button" :
 						garage_manager.LayoutChanger("Paint");
@@ -589,7 +602,7 @@ public class Touch_Manager : MonoBehaviour {
 	}
 
 
-	void Pause(GameObject temp){
+	public bool Pause(GameObject temp){
 
 		if(!paused){
 			paused = true;
@@ -597,6 +610,7 @@ public class Touch_Manager : MonoBehaviour {
 			animation["UIBase_RightCol_extended_UpDown"].speed = 1;
 			animation.Play("UIBase_RightCol_extended_UpDown");
  			Debug.Log("Pause");
+			return true;
 		}else{
 
 			paused = false;
@@ -605,6 +619,7 @@ public class Touch_Manager : MonoBehaviour {
 			animation.Play("UIBase_RightCol_extended_UpDown");
 			animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
 			Debug.Log("UnPause");
+			return false;
 		}
 	}
 

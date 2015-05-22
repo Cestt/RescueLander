@@ -52,10 +52,10 @@ public class Damage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(life <= (maxLife*2)/4 & life >= (maxLife*3)/4){
+		if(life <= (maxLife*3)/4 & life >= (maxLife*2)/4){
 			slicedsprite.SetSprite("BarraVida_Naranja");
 		}
-		if(life < (maxLife*3)/4){
+		if(life < (maxLife*2)/4){
 			slicedsprite.SetSprite("BarraVida_Roja");
 		}
 
