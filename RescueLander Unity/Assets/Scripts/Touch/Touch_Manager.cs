@@ -29,6 +29,7 @@ public class Touch_Manager : MonoBehaviour {
 	private PowerUp_Manager powerManager;
 	private Garaje_Manager garage_manager;
 	private Coin_Manager coin_manager;
+	private GameObject PUilustration;
 
 
 
@@ -411,7 +412,7 @@ public class Touch_Manager : MonoBehaviour {
 						if(dataManger.manager.fuelPowerUps >= 1){
 							powerManager.PowerUp("Fuel");
 						}
-						break;nager.PowerUp("Fuel");
+
 						break;
 					case "GarageHeader_Button" :
 						garage_manager.LayoutChanger("Paint");
@@ -493,7 +494,9 @@ public class Touch_Manager : MonoBehaviour {
 						if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
 							Value value = hit.collider.gameObject.GetComponent<Value>();
 							if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(11))){
-								Destroy(hit.collider.gameObject);
+								if(value._Type == "Ship" || value._Type == "World"){
+									Destroy(hit.collider.gameObject);
+								}
 								Debug.Log("Comprado");
 							}else{
 								Debug.Log("Algo falla joder");
@@ -502,6 +505,29 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Cheat" :
 						dataManger.manager.coins += 50000;
+						break;
+					case "Button_PowerUp_Shield" :
+						if(PUilustration != null){
+							PUilustration.SetActive(false);
+						}
+						PUilustration = hit.transform.FindChild("Illustration_Shield").gameObject;
+						PUilustration.SetActive(true);
+						break;
+						
+					case "Button_PowerUp_Magnet" :
+						if(PUilustration != null){
+							PUilustration.SetActive(false);
+						}
+						PUilustration = hit.transform.FindChild("Illustration_Magnet").gameObject;
+						PUilustration.SetActive(true);
+						break;
+						
+					case "Button_PowerUp_Fuel" :
+						if(PUilustration != null){
+							PUilustration.SetActive(false);
+						}
+						PUilustration = hit.transform.FindChild("Illustration_Fuel").gameObject;
+						PUilustration.SetActive(true);
 						break;
 					default :
 						

@@ -18,6 +18,7 @@ public class WinLose : MonoBehaviour {
 	tk2dTextMesh text;
 	ScoreManager scoreManager;
 	Coin_Manager coin_manager;
+	public GameObject[] stars;
 
 	void Awake () {
 	
@@ -26,6 +27,9 @@ public class WinLose : MonoBehaviour {
 			GameObject uicamera = GameObject.Find("UI_Camera");
 			WinSprite = uicamera.transform.FindChild("WinLayout").gameObject;
 			winText = WinSprite.transform.FindChild("Pic_Frame/WinScore_Txt").gameObject;
+			for(int j = 1; j <= 3; j++){
+				stars[j-1] = WinSprite.transform.FindChild("Win_Text/Win_Star"+j+"_On").gameObject;
+			}
 			LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
 			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
 			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
@@ -60,10 +64,13 @@ public class WinLose : MonoBehaviour {
 				if(totalScore > 500 & totalScore <= 1500){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 2;
 					dataManger.manager.coins += coin_manager.TwoStarCoin;
+					stars[1].SetActive(true);
 				}
 				if(totalScore > 1500){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;
 					dataManger.manager.coins += coin_manager.ThreeStarCoin;
+					stars[1].SetActive(true);
+					stars[2].SetActive(true);
 				}
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
 				dataManger.manager.Save(true);
