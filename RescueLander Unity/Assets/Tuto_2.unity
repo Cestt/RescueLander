@@ -1721,10 +1721,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &73612705 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 108190, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
-  m_PrefabInternal: {fileID: 73612704}
 --- !u!1 &93781965
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,6 +1939,38 @@ Prefab:
     - target: {fileID: 3349144, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386412, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c588c2d12d3f5514195827aeb65feb8a, type: 2}
+    - target: {fileID: 11487728, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
+      propertyPath: renderLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2383484, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2383484, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2383484, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2383484, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
+      propertyPath: m_ReflectionProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 442392, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 451840, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee36b53919c1a3a408b92eec41b3763e, type: 2}
@@ -2389,7 +2417,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 959.999878
+      value: 960.67981
       objectReference: {fileID: 0}
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.y
@@ -5457,7 +5485,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -960
+      value: -960.679932
       objectReference: {fileID: 0}
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.y
@@ -6966,6 +6994,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 900fe0a20c58e9b4e83ebcce42412cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WinSprite: {fileID: 0}
+  LoseSprite: {fileID: 0}
+  winText: {fileID: 0}
 --- !u!114 &1201683375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7002,6 +7033,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeScore: 1000
   scoreReductionTime: 10
+  test: 0
 --- !u!114 &1201683378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7016,6 +7048,7 @@ MonoBehaviour:
   uicameraGameobject: {fileID: 0}
   uicamera: {fileID: 186449404}
   paused: 0
+  ship: {fileID: 0}
   uiColumnExtended: {fileID: 239374144}
   music: {fileID: 239374142}
   sounds: {fileID: 239374143}
@@ -7023,7 +7056,6 @@ MonoBehaviour:
   Win: {fileID: 2011415448}
   Lose: {fileID: 2139990735}
   garaje: {fileID: 1051926253}
-  ShipGaraje: {fileID: 73612705}
 --- !u!1 &1224495504
 GameObject:
   m_ObjectHideFlags: 0
@@ -7206,65 +7238,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1237517858}
   m_Mesh: {fileID: 0}
---- !u!21 &1249199207
-Material:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprite/SpriteColorMasks3
-  m_Shader: {fileID: 4800000, guid: 827b460d957ea9847a6c15caed545791, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskRedTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskGreenTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskBlueTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: PixelSnap
-        second: 0
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1268317728
 GameObject:
   m_ObjectHideFlags: 0
@@ -8437,6 +8410,65 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1493587005}
   m_Mesh: {fileID: 0}
+--- !u!21 &1498602555
+Material:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprite/SpriteColorMasks3
+  m_Shader: {fileID: 4800000, guid: 827b460d957ea9847a6c15caed545791, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskRedTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskGreenTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskBlueTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: PixelSnap
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1506437586
 GameObject:
   m_ObjectHideFlags: 0
