@@ -9,12 +9,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 487702}
   - 114: {fileID: 11481780}
-  - 114: {fileID: 11427298}
   - 114: {fileID: 11428062}
   - 114: {fileID: 11416138}
   - 114: {fileID: 11478888}
   - 114: {fileID: 11407304}
-  - 114: {fileID: 11480984}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -57,20 +55,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f210ff6dc3f8324438bcc91cff137ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11427298
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 102774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 151c7adfe57fdc3439261123cdea2f9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeScore: 1000
-  scoreReductionTime: 10
-  test: 0
 --- !u!114 &11428062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -109,20 +93,6 @@ MonoBehaviour:
   Fuel_Recover: 20
   Shield_DmgReduction: -50
   On: 0
---- !u!114 &11480984
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 102774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac2132d0d48f8e541b8a6be88ed54e90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OneStarCoin: 0
-  TwoStarCoin: 0
-  ThreeStarCoin: 0
 --- !u!114 &11481780
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -137,6 +107,10 @@ MonoBehaviour:
   WinSprite: {fileID: 0}
   LoseSprite: {fileID: 0}
   winText: {fileID: 0}
+  stars:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

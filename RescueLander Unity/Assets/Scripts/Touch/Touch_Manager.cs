@@ -273,6 +273,29 @@ public class Touch_Manager : MonoBehaviour {
 						case "Cheat" :
 							dataManger.manager.coins += 50000;
 							break;
+						case "Button_PowerUp_Shield" :
+							if(PUilustration != null){
+								PUilustration.SetActive(false);
+							}
+							PUilustration = hit.transform.FindChild("Illustration_Shield").gameObject;
+							PUilustration.SetActive(true);
+							break;
+							
+						case "Button_PowerUp_Magnet" :
+							if(PUilustration != null){
+								PUilustration.SetActive(false);
+							}
+							PUilustration = hit.transform.FindChild("Illustration_Magnet").gameObject;
+							PUilustration.SetActive(true);
+							break;
+							
+						case "Button_PowerUp_Fuel" :
+							if(PUilustration != null){
+								PUilustration.SetActive(false);
+							}
+							PUilustration = hit.transform.FindChild("Illustration_Fuel").gameObject;
+							PUilustration.SetActive(true);
+							break;
 						default :
 							
 							break;

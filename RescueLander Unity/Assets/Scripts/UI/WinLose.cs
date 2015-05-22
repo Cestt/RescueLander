@@ -34,9 +34,9 @@ public class WinLose : MonoBehaviour {
 			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
 			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
 			UI3 =  uicamera.transform.FindChild("Anchor (LowerCenter)").gameObject;
-			coin_manager = GameObject.Find("Game Manager").GetComponent<Coin_Manager>();
+			coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 			text = winText.GetComponent<tk2dTextMesh> ();
-			scoreManager = this.GetComponent<ScoreManager> ();
+			scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
 			first = true;	
 		}
 

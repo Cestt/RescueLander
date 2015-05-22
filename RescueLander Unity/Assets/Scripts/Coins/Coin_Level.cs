@@ -8,7 +8,7 @@ public class Coin_Level : MonoBehaviour {
 	Coin_Manager coin_manager;
 	void Awake(){
 		text = GetComponent<tk2dTextMesh>();
-		coin_manager = GameObject.Find("Game Manager").GetComponent<Coin_Manager>();
+		coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 		
 	}
 	void LateUpdate(){
