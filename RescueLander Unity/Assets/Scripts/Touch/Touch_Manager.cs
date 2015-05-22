@@ -190,9 +190,9 @@ public class Touch_Manager : MonoBehaviour {
 							if(dataManger.manager.shipUnlocks.Contains("Ship01")){
 								dataManger.manager.actualShip = "Ship01";
 								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true);
+								colorSet.SpriteSet(true,"Ship01");
 							}else{
-								colorSet.SpriteSet(false);
+								colorSet.SpriteSet(false,"Ship01");
 							}
 
 							break;
@@ -200,54 +200,54 @@ public class Touch_Manager : MonoBehaviour {
 							if(dataManger.manager.shipUnlocks.Contains("369")){
 								dataManger.manager.actualShip = "369";
 								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true);
+								colorSet.SpriteSet(true,"369");
 							}else{
-								colorSet.SpriteSet(false);
+								colorSet.SpriteSet(false,"369");
 							}
 							break;
 						case "ButtonShip_Taboo" :
 							if(dataManger.manager.shipUnlocks.Contains("Taboo")){
 								dataManger.manager.actualShip = "Taboo";
 								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true);
+								colorSet.SpriteSet(true,"Taboo");
 							}else{
-								colorSet.SpriteSet(false);
+								colorSet.SpriteSet(false,"Taboo");
 							}
 							break;
 						case "ButtonShip_UFLO" :
 							if(dataManger.manager.shipUnlocks.Contains("UFLO")){
 								dataManger.manager.actualShip = "UFLO";
 								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true);
+								colorSet.SpriteSet(true,"UFLO");
 							}else{
-								colorSet.SpriteSet(false);
+								colorSet.SpriteSet(false,"UFLO");
 							}
 							break;
 						case "ButtonShip_Box" :
 							if(dataManger.manager.shipUnlocks.Contains("Box")){
 								dataManger.manager.actualShip = "Box";
 								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true);
+								colorSet.SpriteSet(true,"Box");
 							}else{
-								colorSet.SpriteSet(false);
+								colorSet.SpriteSet(false,"Box");
 							}
 							break;
 						case "ButtonShip_Mush" :
 							if(dataManger.manager.shipUnlocks.Contains("Mush")){
 								dataManger.manager.actualShip = "Mush";
 								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true);
+								colorSet.SpriteSet(true,"Mush");
 							}else{
-								colorSet.SpriteSet(false);
+								colorSet.SpriteSet(false,"Mush");
 							}
 							break;
 						case "ButtonShip_Bow" :
 							if(dataManger.manager.shipUnlocks.Contains("Bow")){
 								dataManger.manager.actualShip = "Bow";
 								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true);
+								colorSet.SpriteSet(true,"Bow");
 							}else{
-								colorSet.SpriteSet(false);
+								colorSet.SpriteSet(false,"Bow");
 							}
 							break;
 						case "Button_Buy" :
@@ -312,7 +312,7 @@ public class Touch_Manager : MonoBehaviour {
 				if (Physics.Raycast(ray.origin,ray.direction * 100, out hit) 
 				    || Physics.Raycast(ray2.origin,ray.direction * 100, out hit)) {
 		
-					Debug.Log("Hit "+hit.collider.name);
+					Debug.Log("Hit");
 
 					switch(hit.collider.name ){
 					case "Play" :
@@ -398,13 +398,20 @@ public class Touch_Manager : MonoBehaviour {
 						Debug.Log("Zone B selected");
 						break;
 					case "PowerUp_Shield" :
-						powerManager.PowerUp("Shield");
+						if(dataManger.manager.shieldPowerUps >= 1){
+							powerManager.PowerUp("Shield");
+						}
 						break;
 					case "PowerUp_Magnet" :
-						powerManager.PowerUp("Magnet");
+						if(dataManger.manager.magnetPowerUps >= 1){
+							powerManager.PowerUp("Magnet");
+						}
 						break;
 					case "PowerUp_Fuel" :
-						powerManager.PowerUp("Fuel");
+						if(dataManger.manager.fuelPowerUps >= 1){
+							powerManager.PowerUp("Fuel");
+						}
+						break;nager.PowerUp("Fuel");
 						break;
 					case "GarageHeader_Button" :
 						garage_manager.LayoutChanger("Paint");
@@ -422,9 +429,9 @@ public class Touch_Manager : MonoBehaviour {
 						if(dataManger.manager.shipUnlocks.Contains("Ship01")){
 							dataManger.manager.actualShip = "Ship01";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet(true);
+							colorSet.SpriteSet(true,"Ship01");
 						}else{
-							colorSet.SpriteSet(false);
+							colorSet.SpriteSet(false,"Ship01");
 						}
 						
 						break;
@@ -432,54 +439,54 @@ public class Touch_Manager : MonoBehaviour {
 						if(dataManger.manager.shipUnlocks.Contains("369")){
 							dataManger.manager.actualShip = "369";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet(true);
+							colorSet.SpriteSet(true,"369");
 						}else{
-							colorSet.SpriteSet(false);
+							colorSet.SpriteSet(false,"369");
 						}
 						break;
 					case "ButtonShip_Taboo" :
 						if(dataManger.manager.shipUnlocks.Contains("Taboo")){
 							dataManger.manager.actualShip = "Taboo";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet(true);
+							colorSet.SpriteSet(true,"Taboo");
 						}else{
-							colorSet.SpriteSet(false);
+							colorSet.SpriteSet(false,"Taboo");
 						}
 						break;
 					case "ButtonShip_UFLO" :
 						if(dataManger.manager.shipUnlocks.Contains("UFLO")){
 							dataManger.manager.actualShip = "UFLO";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet(true);
+							colorSet.SpriteSet(true,"UFLO");
 						}else{
-							colorSet.SpriteSet(false);
+							colorSet.SpriteSet(false,"UFLO");
 						}
 						break;
 					case "ButtonShip_Box" :
 						if(dataManger.manager.shipUnlocks.Contains("Box")){
 							dataManger.manager.actualShip = "Box";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet(true);
+							colorSet.SpriteSet(true,"Box");
 						}else{
-							colorSet.SpriteSet(false);
+							colorSet.SpriteSet(false,"Box");
 						}
 						break;
 					case "ButtonShip_Mush" :
 						if(dataManger.manager.shipUnlocks.Contains("Mush")){
 							dataManger.manager.actualShip = "Mush";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet(true);
+							colorSet.SpriteSet(true,"Mush");
 						}else{
-							colorSet.SpriteSet(false);
+							colorSet.SpriteSet(false,"Mush");
 						}
 						break;
 					case "ButtonShip_Bow" :
 						if(dataManger.manager.shipUnlocks.Contains("Bow")){
 							dataManger.manager.actualShip = "Bow";
 							dataManger.manager.Save(false);
-							colorSet.SpriteSet(true);
+							colorSet.SpriteSet(true,"Bow");
 						}else{
-							colorSet.SpriteSet(false);
+							colorSet.SpriteSet(false,"Bow");
 						}
 						break;
 					case "Button_Buy" :

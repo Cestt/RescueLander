@@ -49,14 +49,22 @@ public class PowerUp_Manager : MonoBehaviour {
 				tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
 				sliced.dimensions = new Vector2( 
 				                                sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
+				dataManger.manager.fuelPowerUps --;
+				if(sliced.dimensions.x > fuelBarOriginalSize || movement.fuel > movement.originalFuel){
+					sliced.dimensions = new Vector2( 
+					                                fuelBarOriginalSize,sliced.dimensions.y);
+					movement.fuel = movement.originalFuel;
+				}
 				break;
 			case "Shield" :
 				Debug.Log("Shield PU");
 				Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Shield").gameObject);
+				dataManger.manager.shieldPowerUps --;
 				break;
 			case "Magnet" :
 				Debug.Log("Magnet PU");
 				Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Magnet").gameObject);
+				dataManger.manager.magnetPowerUps --;
 				break;
 				
 			}
