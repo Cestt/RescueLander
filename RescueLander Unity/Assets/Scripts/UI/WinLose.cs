@@ -60,19 +60,34 @@ public class WinLose : MonoBehaviour {
 				if(totalScore > 0 & totalScore <= 500){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 1;
 					dataManger.manager.coins += coin_manager.OneStarCoin;
+					WinSprite.transform.FindChild("CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+						= coin_manager.OneStarCoin.ToString();
+					WinSprite.transform.FindChild("CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+						= "Finished with 1 Star:";
 				}
 				if(totalScore > 500 & totalScore <= 1500){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 2;
 					dataManger.manager.coins += coin_manager.TwoStarCoin;
 					stars[1].SetActive(true);
+					WinSprite.transform.FindChild("CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+						= coin_manager.TwoStarCoin.ToString();
+					WinSprite.transform.FindChild("CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+						= "Finished with 2 Stars:";
 				}
 				if(totalScore > 1500){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;
 					dataManger.manager.coins += coin_manager.ThreeStarCoin;
 					stars[1].SetActive(true);
 					stars[2].SetActive(true);
+					WinSprite.transform.FindChild("CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+						= coin_manager.ThreeStarCoin.ToString();
+					WinSprite.transform.FindChild("CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+						= "Finished with 3 Stars:";
 				}
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
+				WinSprite.transform.FindChild("CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level "+dataManger.manager.actualLevel.ToString();
+				WinSprite.transform.FindChild("CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
+				WinSprite.transform.FindChild("CoinCount/Total Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = dataManger.manager.coins.ToString();
 				dataManger.manager.Save(true);
 				first = false;
 				Win();
@@ -81,6 +96,9 @@ public class WinLose : MonoBehaviour {
 		}
 
 		if(result == "Lose"){
+			LoseSprite.transform.FindChild("CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
+			LoseSprite.transform.FindChild("CoinCount/Total Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = dataManger.manager.coins.ToString();
+			dataManger.manager.Save(true);
 			Lose();
 		}
 
