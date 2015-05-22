@@ -58,7 +58,9 @@ public class Movement : MonoBehaviour {
 
 
 	void FixedUpdate () {
-
+		if(fuel < 0){
+			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose");
+		}
 
 		if(animator != null & animator.IsPlaying("Fire_Start")||
 		   animator != null & animator.IsPlaying("Fire_End")||
@@ -159,6 +161,7 @@ public class Movement : MonoBehaviour {
 		if(platform == RuntimePlatform.WindowsEditor){
 
 			if(!touchmanager.paused){
+
 				if(Input.GetKey(KeyCode.Space) & fuel > 0 & rigid.velocity.magnitude < maxSpeed){
 					
 					Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
