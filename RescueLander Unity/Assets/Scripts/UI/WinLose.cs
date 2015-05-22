@@ -17,7 +17,8 @@ public class WinLose : MonoBehaviour {
 	WinHalo_Anim haloanim;
 	tk2dTextMesh text;
 	ScoreManager scoreManager;
-	// Use this for initialization
+	Coin_Manager coin_manager;
+
 	void Awake () {
 	
 //		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
@@ -29,7 +30,7 @@ public class WinLose : MonoBehaviour {
 			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
 			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
 			UI3 =  uicamera.transform.FindChild("Anchor (LowerCenter)").gameObject;
-
+			coin_manager = GameObject.Find("Game Manager").GetComponent<Coin_Manager>();
 			text = winText.GetComponent<tk2dTextMesh> ();
 			scoreManager = this.GetComponent<ScoreManager> ();
 			first = true;	
@@ -54,12 +55,15 @@ public class WinLose : MonoBehaviour {
 				totalScore = (int)scoreManager.scoreCalc ();
 				if(totalScore > 0 & totalScore <= 500){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 1;
+					dataManger.manager.coins += coin_manager.OneStarCoin;
 				}
 				if(totalScore > 500 & totalScore <= 1500){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 2;
+					dataManger.manager.coins += coin_manager.TwoStarCoin;
 				}
 				if(totalScore > 1500){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;
+					dataManger.manager.coins += coin_manager.ThreeStarCoin;
 				}
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
 				dataManger.manager.Save(true);
@@ -73,15 +77,10 @@ public class WinLose : MonoBehaviour {
 			Lose();
 		}
 
-		//TakeScreenShot(1);
+
 
 	}
-	void TakeScreenShot(int superSize){
 
-
-		Application.CaptureScreenshot(Application.persistentDataPath + "Screenshots/screenShot",superSize);
-	
-	}
 
 	void Win(){
 

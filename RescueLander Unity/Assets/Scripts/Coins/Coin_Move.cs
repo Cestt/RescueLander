@@ -6,12 +6,14 @@ public class Coin_Move : MonoBehaviour {
 	public int speed;
 	public bool Chase = false;
 	private PowerUp_Manager powerManager;
+	private Coin_Manager coin_manager;
 	private int coinDistance = 65;
 	public int CoinValue;
 	bool first;
 	void Awake(){
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		powerManager = GameObject.Find("Game Manager").GetComponent<PowerUp_Manager>();
+		coin_manager = GameObject.Find("Game Manager").GetComponent<Coin_Manager>();
 	}
 
 	void Update () {
@@ -25,7 +27,7 @@ public class Coin_Move : MonoBehaviour {
 
 			}
 			if (Vector2.Distance (transform.position, ship.transform.position) < coinDistance ) {
-				dataManger.manager.coins += CoinValue;
+				coin_manager.LevelCoin(CoinValue);
 				Destroy(gameObject);		
 			}
 			if(!powerManager.On & first){

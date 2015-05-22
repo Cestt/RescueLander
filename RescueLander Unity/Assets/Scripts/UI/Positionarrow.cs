@@ -56,7 +56,7 @@ public class Positionarrow : MonoBehaviour {
 			this.transform.rotation = Quaternion.Euler (new Vector3(0, 0, angle-90));
 
 			distance = (int)Vector2.Distance(shipPosition,transform.position);
-			text.text = ((int)(distance/100)).ToString();
+			text.text = ((int)(distance/10)).ToString();
 			shipIco.transform.eulerAngles = ship.transform.eulerAngles;
 			arrowText.gameObject.transform.localPosition = position;
 			arrowText.gameObject.transform.rotation = rotation;

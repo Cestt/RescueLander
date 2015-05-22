@@ -4,8 +4,10 @@ using System;
 
 public class Coin_Manager : MonoBehaviour {
 
-	private int totalCoins, levelCoins;
+	private int totalCoins;
 	public int OneStarCoin, TwoStarCoin, ThreeStarCoin;
+	[HideInInspector]
+	public int levelCoins;
 
 	public bool Compra(int Coins,string Type,string Item){
 		try{
@@ -44,5 +46,9 @@ public class Coin_Manager : MonoBehaviour {
 			Debug.Log("Excepcion: " + e);
 			return false;
 		}
+	}
+	public void LevelCoin(int coin){
+		levelCoins += coin;
+		dataManger.manager.coins += coin;
 	}
 }

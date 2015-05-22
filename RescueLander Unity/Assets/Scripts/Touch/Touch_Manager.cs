@@ -160,13 +160,19 @@ public class Touch_Manager : MonoBehaviour {
 							Debug.Log("Zone B selected");
 						break;
 						case "PowerUp_Shield" :
+							if(dataManger.manager.shieldPowerUps >= 1){
 								powerManager.PowerUp("Shield");
+							}
 							break;
 						case "PowerUp_Magnet" :
-							powerManager.PowerUp("Magnet");
+							if(dataManger.manager.magnetPowerUps >= 1){
+								powerManager.PowerUp("Magnet");
+							}
 							break;
 						case "PowerUp_Fuel" :
-							powerManager.PowerUp("Fuel");
+							if(dataManger.manager.fuelPowerUps >= 1){
+								powerManager.PowerUp("Fuel");
+							}
 							break;
 						case "GarageHeader_Button" :
 							garage_manager.LayoutChanger("Paint");
