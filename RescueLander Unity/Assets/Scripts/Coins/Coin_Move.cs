@@ -13,7 +13,7 @@ public class Coin_Move : MonoBehaviour {
 	void Awake(){
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		powerManager = GameObject.Find("Game Manager").GetComponent<PowerUp_Manager>();
-		coin_manager = GameObject.Find("Game Manager").GetComponent<Coin_Manager>();
+		coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 	}
 
 	void Update () {
