@@ -107,6 +107,17 @@ public class tk2dSprite : tk2dBaseSprite
 		CreateCollider();
 	}
 	
+#if UNITY_EDITOR
+	void OnValidate()
+	{
+		MeshFilter meshFilter = GetComponent<MeshFilter>();
+		if (meshFilter != null)
+		{
+			meshFilter.sharedMesh = mesh;
+		}
+	}
+#endif
+
 	/// <summary>
 	/// Adds a tk2dSprite as a component to the gameObject passed in, setting up necessary parameters and building geometry.
 	/// Convenience alias of tk2dBaseSprite.AddComponent<tk2dSprite>(...).

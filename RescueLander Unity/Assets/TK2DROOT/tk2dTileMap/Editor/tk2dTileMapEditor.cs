@@ -693,6 +693,9 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 			}
 
 			tileMap.data.sortMethod = (tk2dTileMapData.SortMethod)EditorGUILayout.EnumPopup("Sort Method", tileMap.data.sortMethod);
+
+			tileMap.data.colorMode = (tk2dTileMapData.ColorMode)EditorGUILayout.EnumPopup("Color Mode", tileMap.data.colorMode);
+			tileMap.data.generateUv2 = EditorGUILayout.Toggle("Generate UV2", tileMap.data.generateUv2);
 			
 			if (tk2dGuiUtility.EndChangeCheck())
 			{

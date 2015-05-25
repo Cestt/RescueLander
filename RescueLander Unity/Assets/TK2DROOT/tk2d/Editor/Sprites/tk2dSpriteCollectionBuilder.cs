@@ -65,7 +65,12 @@ public class tk2dSpriteCollectionBuilder
             importer.textureFormat != TextureImporterFormat.AutomaticTruecolor ||
             importer.npotScale != TextureImporterNPOTScale.None ||
             importer.isReadable != true ||
-		    importer.maxTextureSize < 4096)
+#if (UNITY_3_5 || UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9)
+		    importer.maxTextureSize < 4096
+#else
+		    importer.maxTextureSize < 8192
+#endif
+		    )
 		{
 			return false;
 		}	
@@ -83,14 +88,23 @@ public class tk2dSpriteCollectionBuilder
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1)
             !importer.alphaIsTransparency ||
 #endif
-		    importer.maxTextureSize < 4096)
+#if (UNITY_3_5 || UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9)
+		    importer.maxTextureSize < 4096
+#else
+		    importer.maxTextureSize < 8192
+#endif
+		    )
         {
             importer.textureFormat = TextureImporterFormat.AutomaticTruecolor;
             importer.textureType = TextureImporterType.Advanced;
             importer.npotScale = TextureImporterNPOTScale.None;
             importer.isReadable = true;
 			importer.mipmapEnabled = false;
+#if (UNITY_3_5 || UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9)
 			importer.maxTextureSize = 4096;
+#else
+			importer.maxTextureSize = 8192;
+#endif
 #if !(UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1)
             importer.alphaIsTransparency = true;
 #endif
@@ -1915,6 +1929,7 @@ public class tk2dSpriteCollectionBuilder
 					coll.spriteDefinitions[i].positions[j] = positions[j];
 					coll.spriteDefinitions[i].uvs[j] = uvs[j];
 				}
+				coll.spriteDefinitions[i].normalizedUvs = CalculateNormalizedUvs(uvs);
 				
 				// empty out to a sensible default, which corresponds to what Unity does by default
 				coll.spriteDefinitions[i].normals = new Vector3[0];
@@ -2003,6 +2018,30 @@ public class tk2dSpriteCollectionBuilder
         }
     }
 	
+    static Vector2[] CalculateNormalizedUvs(List<Vector2> uvs)
+    {
+    	Vector2 min = new Vector2(1.0e32f, 1.0e32f);
+    	Vector2 max = new Vector2(-1.0e32f, -1.0e32f);
+    	for (int i = 0; i < uvs.Count; ++i)
+    	{
+    		min.x = Mathf.Min(min.x, uvs[i].x);
+    		min.y = Mathf.Min(min.y, uvs[i].y);
+    		max.x = Mathf.Max(max.x, uvs[i].x);
+    		max.y = Mathf.Max(max.y, uvs[i].y);
+    	}
+
+    	Vector2[] normalizedUvs = new Vector2[uvs.Count];
+    	Vector2 deltaUv = max - min;
+    	for (int i = 0; i < uvs.Count; ++i)
+    	{
+    		Vector2 uv = uvs[i];
+    		normalizedUvs[i].x = Mathf.Clamp01((uv.x - min.x) / deltaUv.x);
+    		normalizedUvs[i].y = Mathf.Clamp01((uv.y - min.y) / deltaUv.y);
+    	}
+
+    	return normalizedUvs;
+    }
+
     static void UpdateAttachPointData(tk2dSpriteCollection gen, float scale, tk2dSpriteCollectionData target, int spriteId, Vector3 origin) {
 		tk2dSpriteCollectionDefinition src = gen.textureParams[spriteId];
 		tk2dSpriteDefinition def = target.spriteDefinitions[spriteId];
