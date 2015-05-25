@@ -63,7 +63,7 @@ namespace UnityEngine.Advertisements {
 #endif
 		} catch(System.Exception e) {
 			Utils.LogDebug("Exception during connectivity check: " + e.Message);
-			return;
+			//return;
 		}
 
 		UnityAdsExternal.init(gameId, testModeEnabled, SharedInstance.gameObject.name, _versionString);

@@ -6,13 +6,15 @@ public class Ads : MonoBehaviour {
 
 	private string Items;
 	private Touch_Manager touch;
+	public GameObject Test;
 	void Awake() {
 		touch = GetComponent<Touch_Manager>();
 		if (Advertisement.isSupported) {
+
 			Advertisement.allowPrecache = true;
 			Advertisement.Initialize ("37545",true);
 		} else {
-			Debug.Log("Platform not supported");
+			Test.GetComponent<tk2dTextMesh>().text = "Ads not supported";
 		}
 	}
 
@@ -46,10 +48,16 @@ public class Ads : MonoBehaviour {
 		}
 	}
 	public void Launch(string Item){
-		Items = Item;
-		ShowOptions options = new ShowOptions();
-		options.resultCallback = HandleResult;
-		options.pause = touch.Pause(null);
-		Advertisement.Show("pictureZone", options);
+		if(Advertisement.isInitialized){
+			Items = Item;
+			ShowOptions options = new ShowOptions();
+			options.resultCallback = HandleResult;
+			options.pause = touch.Pause(null);
+			Advertisement.Show(null,options);
+		}else{
+			Debug.Log("Ad not ready");
+		}
+
 	}
+
 }

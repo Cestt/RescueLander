@@ -57,7 +57,7 @@ public class Touch_Manager : MonoBehaviour {
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
 		faceBook = GetComponent<FacebookSocial>();
-		coin_manager = GetComponent<Coin_Manager>();
+		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 
 	}
 

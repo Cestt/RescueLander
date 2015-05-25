@@ -20,9 +20,9 @@ public class Zoom : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll) {
 		if (coll.gameObject.tag == "Floor"){
 
-			CancelInvoke("Zooming");
+
 			zoom = "in";
-			InvokeRepeating("Zooming",0,Time.fixedDeltaTime);
+			CheckInvoke();
 
 			
 
@@ -34,13 +34,22 @@ public class Zoom : MonoBehaviour {
 			
 			if(cam.ZoomFactor > 1){
 				
-				CancelInvoke("Zooming");
+
 				zoom = "out";
-				InvokeRepeating("Zooming",0,Time.fixedDeltaTime);
+				CheckInvoke();
 
 			}
 			
 			
+		}
+	}
+
+	void CheckInvoke(){
+		CancelInvoke("Zooming");
+		if(IsInvoking("Zooming")){
+			CheckInvoke();
+		}else{
+			InvokeRepeating("Zooming",0,Time.fixedDeltaTime);
 		}
 	}
 

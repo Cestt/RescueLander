@@ -7,8 +7,11 @@ public class Ship_Unlock : MonoBehaviour {
 	void Awake () {
 		foreach(Transform child in GetComponentsInChildren<Transform>()){
 			if(child.parent == gameObject.transform){
-				if(dataManger.manager.shipUnlocks.Contains(child.name.Substring(11))){
-					Destroy(child.FindChild("Button_Buy").gameObject);
+				for(int i = 0; i < dataManger.manager.shipUnlocks.Count; i++){
+					if(dataManger.manager.shipUnlocks[i] == child.name.Substring(11)){
+						Destroy(child.FindChild("Button_Buy").gameObject);
+					}
+					Debug.Log("Ships count " + dataManger.manager.shipUnlocks[0]);
 				}
 			}
 		}

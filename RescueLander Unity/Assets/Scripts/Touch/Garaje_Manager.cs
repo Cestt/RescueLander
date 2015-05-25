@@ -23,7 +23,8 @@ public class Garaje_Manager : MonoBehaviour {
 		foreach(Transform currentLayout in LayoutChild){
 			if(currentLayout.name == Layout+"_Menu"){
 				currentLayout.gameObject.SetActive(true);
-			}else if(currentLayout.name != "Header" & currentLayout.name != "Exit_Button"){
+			}else if(currentLayout.name != "Header" & currentLayout.name != "Exit_Button" & currentLayout.name != "CoinCount_Ico"
+			         & currentLayout.name != "StarCount_Ico"){
 				currentLayout.gameObject.SetActive(false);
 			}
 		}

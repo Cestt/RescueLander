@@ -26,9 +26,12 @@ public class Damage : MonoBehaviour {
 	Movement movement;
 	bool first = true;
 	public float thrusterExtra;
+	private float prevSpeed;
+	private Rigidbody2D rigid;
 
 	// Use this for initialization
 	void Awake () {
+		rigid = GetComponent<Rigidbody2D>();
 		movement = GetComponent<Movement> ();
 		maxLife =life;
 		Transform findChild = transform.FindChild("Explosion");
@@ -52,6 +55,8 @@ public class Damage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		prevSpeed = rigid.GetPointVelocity(transform.TransformPoint(transform.position)).magnitude;
+
 		if(life <= (maxLife*3)/4 & life >= (maxLife*2)/4){
 			slicedsprite.SetSprite("BarraVida_Naranja");
 		}
@@ -81,7 +86,7 @@ public class Damage : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Floor"){
 
-			if(coll.relativeVelocity.magnitude > damageThreshold){
+			if(prevSpeed > damageThreshold){
 				ContactPoint2D contactpoint = coll.contacts[0];
 				sparks.SetActive(true);
 				sparks.transform.position = contactpoint.point;
@@ -92,7 +97,7 @@ public class Damage : MonoBehaviour {
 				animator.AnimationCompleted = ResetSparks;
 				
 
-				realDamage = (int)coll.relativeVelocity.magnitude - damageThreshold;
+				realDamage = (int)prevSpeed - damageThreshold;
 				realDamage = realDamage + ((DamageVariant * realDamage)/100);
 				life -= (int)realDamage;
 				if(totalDamage <= maxLife){
