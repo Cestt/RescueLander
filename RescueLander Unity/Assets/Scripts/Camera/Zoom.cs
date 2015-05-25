@@ -28,6 +28,19 @@ public class Zoom : MonoBehaviour {
 
 		}
 	}
+	void OnTriggerStay2D(Collider2D coll) {
+		if (coll.gameObject.tag == "Floor"){
+			
+			if (cam.ZoomFactor < 2){
+				zoom = "in";
+				CheckInvoke();
+			}
+
+			
+			
+			
+		}
+	}
 
 	void OnTriggerExit2D(Collider2D coll) {
 		if (coll.gameObject.tag == "Floor"){

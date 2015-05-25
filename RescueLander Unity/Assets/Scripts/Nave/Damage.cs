@@ -55,7 +55,7 @@ public class Damage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		prevSpeed = rigid.GetPointVelocity(transform.TransformPoint(transform.position)).magnitude;
+		prevSpeed = rigid.velocity.magnitude;
 
 		if(life <= (maxLife*3)/4 & life >= (maxLife*2)/4){
 			slicedsprite.SetSprite("BarraVida_Naranja");

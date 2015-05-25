@@ -30,6 +30,7 @@ public class Touch_Manager : MonoBehaviour {
 	private Garaje_Manager garage_manager;
 	private Coin_Manager coin_manager;
 	private GameObject PUilustration;
+	private GameObject pauseText;
 	private Ads ads;
 
 
@@ -46,6 +47,7 @@ public class Touch_Manager : MonoBehaviour {
 			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
+			pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
 		}
 		ads = GetComponent<Ads>();
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
@@ -627,11 +629,13 @@ public class Touch_Manager : MonoBehaviour {
 
 	public bool Pause(GameObject temp){
 
+
 		if(!paused){
 			paused = true;
 			rigid.isKinematic = true;
 			animation["UIBase_RightCol_extended_UpDown"].speed = 1;
 			animation.Play("UIBase_RightCol_extended_UpDown");
+			pauseText.SetActive(true);
  			Debug.Log("Pause");
 			return true;
 		}else{
@@ -642,6 +646,7 @@ public class Touch_Manager : MonoBehaviour {
 			animation.Play("UIBase_RightCol_extended_UpDown");
 			animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
 			Debug.Log("UnPause");
+			pauseText.SetActive(false);
 			return false;
 		}
 	}
