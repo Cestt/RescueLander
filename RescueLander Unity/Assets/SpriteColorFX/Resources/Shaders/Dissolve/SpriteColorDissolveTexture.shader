@@ -63,18 +63,18 @@ Shader "Sprites/Sprite Color FX/Sprite Color Dissolve Border Texture"
 	  #include "UnityCG.cginc"
       #include "../SpriteColorFXCG.cginc"
 
-      uniform sampler2D _MainTex;
-      uniform sampler2D _DissolveTex;
-      uniform sampler2D _BorderTex;
+      sampler2D _MainTex;
+      sampler2D _DissolveTex;
+      sampler2D _BorderTex;
 
-      uniform float _DissolveAmount;
-      uniform float _DissolveLineWitdh;
-	  uniform float _DissolveUVScale;
-      uniform float _DissolveInverseOne;
-      uniform float _DissolveInverseTwo;
-	  uniform float _BorderUVScale;
+      float _DissolveAmount;
+      float _DissolveLineWitdh;
+	  float _DissolveUVScale;
+      float _DissolveInverseOne;
+      float _DissolveInverseTwo;
+	  float _BorderUVScale;
 
-	  uniform int _PixelOp;
+	  int _PixelOp;
 
       float4 frag(v2f i) : COLOR
       {

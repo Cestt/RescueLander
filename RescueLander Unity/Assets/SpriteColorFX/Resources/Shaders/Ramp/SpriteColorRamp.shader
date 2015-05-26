@@ -53,21 +53,21 @@ Shader "Sprites/Sprite Color FX/Sprite Color Ramp"
 	  #include "UnityCG.cginc"
       #include "../SpriteColorFXCG.cginc"
 
-      uniform float _Strength = 1.0f;
+      float _Strength = 1.0f;
 
-      uniform float _RampIdx = 0.0f;
+      float _RampIdx = 0.0f;
 
-      uniform float _GammaCorrect = 1.2f;
+      float _GammaCorrect = 1.2f;
 
-      uniform float _UVScroll = 0.0f;
+      float _UVScroll = 0.0f;
 
-      uniform float _InvertLum = 1.0f;
+      float _InvertLum = 1.0f;
 
-      uniform float _LumRangeMin = 0.0f;
-      uniform float _LumRangeMax = 1.0f;
+      float _LumRangeMin = 0.0f;
+      float _LumRangeMax = 1.0f;
 
-      uniform sampler2D _MainTex;
-      uniform sampler2D _RampsTex;
+      sampler2D _MainTex;
+      sampler2D _RampsTex;
 
       float4 frag(v2f i) : COLOR
       {

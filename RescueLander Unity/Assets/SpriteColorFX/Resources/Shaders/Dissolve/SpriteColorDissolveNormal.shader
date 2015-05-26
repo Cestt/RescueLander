@@ -57,13 +57,13 @@ Shader "Sprites/Sprite Color FX/Sprite Color Dissolve Normal"
 	  #include "UnityCG.cginc"
       #include "../SpriteColorFXCG.cginc"
 
-      uniform sampler2D _MainTex;
-      uniform sampler2D _DissolveTex;
+      sampler2D _MainTex;
+      sampler2D _DissolveTex;
 
-      uniform float _DissolveAmount;
-	  uniform float _DissolveUVScale;
-      uniform float _DissolveInverseOne;
-      uniform float _DissolveInverseTwo;
+      float _DissolveAmount;
+	  float _DissolveUVScale;
+      float _DissolveInverseOne;
+      float _DissolveInverseTwo;
 
       float4 frag(v2f i) : COLOR
       {

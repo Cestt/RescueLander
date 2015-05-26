@@ -231,7 +231,7 @@ float3 Luminosity(float3 s, float3 d)
 }
 
 // Select pixel operation.
-inline float3 PixelOp(int pixelOp, float3 s, float3 d)
+float3 PixelOp(int pixelOp, float3 s, float3 d)
 {
   if (pixelOp == 0)
 	return Additive(s, d);

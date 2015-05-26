@@ -51,36 +51,36 @@ Shader "Sprites/Sprite Color FX/Sprite Color Masks 3"
       #pragma fragment frag
       #pragma fragmentoption ARB_precision_hint_fastest
 	  #pragma multi_compile DUMMY PIXELSNAP_ON
-      #pragma target 2.0
+      #pragma target 3.0
 
 	  #include "UnityCG.cginc"
       #include "../SpriteColorFXCG.cginc"
 
-      uniform float _Strength = 1.0f;
+      float _Strength = 1.0f;
 
-      uniform float _StrengthRed = 1.0f;
-	  uniform int _PixelOpRed = 0;
-      uniform fixed4 _ColorRed;
-	  uniform fixed4 _UVRedTexParams;
-	  uniform float _UVRedTexAngle;
+      float _StrengthRed = 1.0f;
+	  int _PixelOpRed = 0;
+      fixed4 _ColorRed;
+	  fixed4 _UVRedTexParams;
+	  float _UVRedTexAngle;
 
-      uniform float _StrengthGreen = 1.0f;
-	  uniform int _PixelOpGreen = 0;
-      uniform fixed4 _ColorGreen;
-	  uniform fixed4 _UVGreenTexParams;
-	  uniform float _UVGreenTexAngle;
+      float _StrengthGreen = 1.0f;
+	  int _PixelOpGreen = 0;
+      fixed4 _ColorGreen;
+	  fixed4 _UVGreenTexParams;
+	  float _UVGreenTexAngle;
 
-      uniform float _StrengthBlue = 1.0f;
-	  uniform int _PixelOpBlue = 0;
-      uniform fixed4 _ColorBlue;
-	  uniform fixed4 _UVBlueTexParams;
-	  uniform float _UVBlueTexAngle;
+      float _StrengthBlue = 1.0f;
+	  int _PixelOpBlue = 0;
+      fixed4 _ColorBlue;
+	  fixed4 _UVBlueTexParams;
+	  float _UVBlueTexAngle;
 
-      uniform sampler2D _MainTex;
-      uniform sampler2D _MaskTex;
-	  uniform sampler2D _MaskRedTex;
-	  uniform sampler2D _MaskGreenTex;
-	  uniform sampler2D _MaskBlueTex;
+      sampler2D _MainTex;
+      sampler2D _MaskTex;
+	  sampler2D _MaskRedTex;
+	  sampler2D _MaskGreenTex;
+	  sampler2D _MaskBlueTex;
 
 	  inline fixed2 UVCoordOp(fixed2 uv, float2 scale, float2 velocity, float angle)
 	  {

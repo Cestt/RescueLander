@@ -53,19 +53,19 @@ Shader "Sprites/Sprite Color FX/Sprite Color Shift Linear"
       // Define this add noise effect.
       #define USE_NOISE
 
-	  uniform float _NoiseAmount = 0.0;
-	  uniform float _NoiseSpeed = 1.0;
+	  float _NoiseAmount = 0.0;
+	  float _NoiseSpeed = 1.0;
 
-      uniform float _RedShiftX = 0.0;
-      uniform float _RedShiftY = 0.0;
+      float _RedShiftX = 0.0;
+      float _RedShiftY = 0.0;
 
-      uniform float _GreenShiftX = 0.0;
-      uniform float _GreenShiftY = 0.0;
+      float _GreenShiftX = 0.0;
+      float _GreenShiftY = 0.0;
 
-      uniform float _BlueShiftX = 0.0;
-      uniform float _BlueShiftY = 0.0;
+      float _BlueShiftX = 0.0;
+      float _BlueShiftY = 0.0;
 
-      uniform sampler2D _MainTex;
+      sampler2D _MainTex;
 
       float4 frag(v2f i) : COLOR
       {
