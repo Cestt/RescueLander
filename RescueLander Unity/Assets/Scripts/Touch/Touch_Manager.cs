@@ -197,7 +197,7 @@ public class Touch_Manager : MonoBehaviour {
 						case "Coins_Button" :
 							garage_manager.LayoutChanger("Coins");
 							break;
-						case "ButtonShip_Ship01" :
+						case "Button_Ship01" :
 							if(dataManger.manager.shipUnlocks.Contains("Ship01")){
 								dataManger.manager.actualShip = "Ship01";
 								dataManger.manager.Save(false);
@@ -205,9 +205,9 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Ship01");
 							}
-
+							
 							break;
-						case "ButtonShip_369" :
+						case "Button_369" :
 							if(dataManger.manager.shipUnlocks.Contains("369")){
 								dataManger.manager.actualShip = "369";
 								dataManger.manager.Save(false);
@@ -216,7 +216,7 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(false,"369");
 							}
 							break;
-						case "ButtonShip_Taboo" :
+						case "Button_Taboo" :
 							if(dataManger.manager.shipUnlocks.Contains("Taboo")){
 								dataManger.manager.actualShip = "Taboo";
 								dataManger.manager.Save(false);
@@ -225,7 +225,7 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(false,"Taboo");
 							}
 							break;
-						case "ButtonShip_UFLO" :
+						case "Button_UFLO" :
 							if(dataManger.manager.shipUnlocks.Contains("UFLO")){
 								dataManger.manager.actualShip = "UFLO";
 								dataManger.manager.Save(false);
@@ -234,7 +234,7 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(false,"UFLO");
 							}
 							break;
-						case "ButtonShip_Box" :
+						case "Button_Box" :
 							if(dataManger.manager.shipUnlocks.Contains("Box")){
 								dataManger.manager.actualShip = "Box";
 								dataManger.manager.Save(false);
@@ -243,7 +243,7 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(false,"Box");
 							}
 							break;
-						case "ButtonShip_Mush" :
+						case "Button_Mush" :
 							if(dataManger.manager.shipUnlocks.Contains("Mush")){
 								dataManger.manager.actualShip = "Mush";
 								dataManger.manager.Save(false);
@@ -252,7 +252,7 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(false,"Mush");
 							}
 							break;
-						case "ButtonShip_Bow" :
+						case "Button_Bow" :
 							if(dataManger.manager.shipUnlocks.Contains("Bow")){
 								dataManger.manager.actualShip = "Bow";
 								dataManger.manager.Save(false);
@@ -465,7 +465,7 @@ public class Touch_Manager : MonoBehaviour {
 					case "Coins_Button" :
 						garage_manager.LayoutChanger("Coins");
 						break;
-					case "ButtonShip_Ship01" :
+					case "Button_Ship01" :
 						if(dataManger.manager.shipUnlocks.Contains("Ship01")){
 							dataManger.manager.actualShip = "Ship01";
 							dataManger.manager.Save(false);
@@ -475,7 +475,7 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						
 						break;
-					case "ButtonShip_369" :
+					case "Button_369" :
 						if(dataManger.manager.shipUnlocks.Contains("369")){
 							dataManger.manager.actualShip = "369";
 							dataManger.manager.Save(false);
@@ -484,7 +484,7 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(false,"369");
 						}
 						break;
-					case "ButtonShip_Taboo" :
+					case "Button_Taboo" :
 						if(dataManger.manager.shipUnlocks.Contains("Taboo")){
 							dataManger.manager.actualShip = "Taboo";
 							dataManger.manager.Save(false);
@@ -493,7 +493,7 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(false,"Taboo");
 						}
 						break;
-					case "ButtonShip_UFLO" :
+					case "Button_UFLO" :
 						if(dataManger.manager.shipUnlocks.Contains("UFLO")){
 							dataManger.manager.actualShip = "UFLO";
 							dataManger.manager.Save(false);
@@ -502,7 +502,7 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(false,"UFLO");
 						}
 						break;
-					case "ButtonShip_Box" :
+					case "Button_Box" :
 						if(dataManger.manager.shipUnlocks.Contains("Box")){
 							dataManger.manager.actualShip = "Box";
 							dataManger.manager.Save(false);
@@ -511,7 +511,7 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(false,"Box");
 						}
 						break;
-					case "ButtonShip_Mush" :
+					case "Button_Mush" :
 						if(dataManger.manager.shipUnlocks.Contains("Mush")){
 							dataManger.manager.actualShip = "Mush";
 							dataManger.manager.Save(false);
@@ -520,7 +520,7 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(false,"Mush");
 						}
 						break;
-					case "ButtonShip_Bow" :
+					case "Button_Bow" :
 						if(dataManger.manager.shipUnlocks.Contains("Bow")){
 							dataManger.manager.actualShip = "Bow";
 							dataManger.manager.Save(false);

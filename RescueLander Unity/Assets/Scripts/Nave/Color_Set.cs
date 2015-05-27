@@ -93,12 +93,27 @@ public class Color_Set : MonoBehaviour {
 					tintMask.colorMaskGreen = new Color32(255,127,0,255);
 					break;
 				case "Box" :
+					tintMask = 
+						ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+					tintMask.colorMaskRed = new Color32(198,156,109,255);
+					tintMask.colorMaskGreen = new Color32(247,49,56,255);
 					
 					break;
 				case "Mush" :
-					
+					tintMask = 
+						ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+					tintMask.colorMaskRed = new Color32(184,154,121,255);
+					tintMask.colorMaskGreen = new Color32(255,0,0,255);
+
 					break;
 				case "Bow" :
+					tintMask = 
+						ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+					tintMask.colorMaskRed = new Color32(147,104,181,255);
+					tintMask.colorMaskGreen = new Color32(255,127,0,255);
 					
 					break;
 			}
@@ -140,15 +155,15 @@ public class Color_Set : MonoBehaviour {
 				tintMask = 
 					ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 				tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
-				tintMask.colorMaskRed = new Color32(147,104,181,255);
-				tintMask.colorMaskGreen = new Color32(255,127,0,255);
+				tintMask.colorMaskRed = new Color32(198,156,109,255);
+				tintMask.colorMaskGreen = new Color32(247,49,56,255);
 				break;
 			case "Mush" :
 				tintMask = 
 					ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 				tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
-				tintMask.colorMaskRed = new Color32(147,104,181,255);
-				tintMask.colorMaskGreen = new Color32(255,127,0,255);
+				tintMask.colorMaskRed = new Color32(184,154,121,255);
+				tintMask.colorMaskGreen = new Color32(255,0,0,255);
 				break;
 			case "Bow" :
 				tintMask = 

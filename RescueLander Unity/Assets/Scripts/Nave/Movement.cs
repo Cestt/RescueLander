@@ -90,6 +90,10 @@ public class Movement : MonoBehaviour {
 								}else{
 									rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 								}
+								if(angularSpeedUpgrade != 0){
+									ConsumeFuel();
+								}
+
 								
 								if(!Thruster_l.activeInHierarchy){
 									Thruster_l.SetActive(true);
@@ -109,6 +113,9 @@ public class Movement : MonoBehaviour {
 									rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 								}else{
 									rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
+								}
+								if(angularSpeedUpgrade != 0){
+									ConsumeFuel();
 								}
 
 								
@@ -210,7 +217,9 @@ public class Movement : MonoBehaviour {
 						}else{
 							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 						}
-						
+						if(angularSpeedUpgrade != 0){
+							ConsumeFuel();
+						}
 						
 						if(!Thruster_l.activeInHierarchy){
 							Thruster_l.SetActive(true);
@@ -228,6 +237,9 @@ public class Movement : MonoBehaviour {
 							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 						}else{
 							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
+						}
+						if(angularSpeedUpgrade != 0){
+							ConsumeFuel();
 						}
 						
 						if(!Thruster_r.activeInHierarchy){
