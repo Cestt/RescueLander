@@ -10,8 +10,12 @@ public class Coin_Global : MonoBehaviour {
 		text = GetComponent<tk2dTextMesh>();
 
 	}
-	void LateUpdate(){
-		text.text = dataManger.manager.coins.ToString();
+	IEnumerator Start () {
+		while (true) {
+			text.text = dataManger.manager.coins.ToString();
+			yield return new WaitForSeconds(1f);
+		}
 	}
+
 
 }

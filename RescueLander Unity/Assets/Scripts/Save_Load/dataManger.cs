@@ -10,11 +10,11 @@ public class dataManger : MonoBehaviour {
 	public static dataManger manager;
 
 
-	[HideInInspector]
+	//[HideInInspector]
 	public int fuelPowerUps;
-	[HideInInspector]
+	//[HideInInspector]
 	public int shieldPowerUps;
-	[HideInInspector]
+	//[HideInInspector]
 	public int magnetPowerUps;
 	[HideInInspector]
 	public string Camposition = "";
@@ -50,8 +50,10 @@ public class dataManger : MonoBehaviour {
 	[HideInInspector]
 	public float color2b;
 	private List<GameObject> Ships = new List<GameObject>();
-	//[HideInInspector]
+	[HideInInspector]
 	public List<string> shipUnlocks = new List<string>();
+	[HideInInspector]
+	public bool Inverted;
 
 	private GameObject temp;
 
@@ -103,6 +105,9 @@ public class dataManger : MonoBehaviour {
 			data.shipUnlocks = shipUnlocks;
 			data.coins = coins;
 			data.totalStars = totalStars;
+			data.fuelPowerUps = fuelPowerUps;
+			data.magnetPowerUps = magnetPowerUps;
+			data.shieldPowerUps = shieldPowerUps;
 			if(complete){
 				for(int i = 1; i <= levels; i++){
 					if(stars["Level_"+i] > data.stars["Level_"+i]){
@@ -153,6 +158,9 @@ public class dataManger : MonoBehaviour {
 			shipUnlocks = data.shipUnlocks;
 			coins = data.coins;
 			totalStars = data.totalStars;
+			fuelPowerUps = data.fuelPowerUps;
+			magnetPowerUps = data.magnetPowerUps;
+			shieldPowerUps = data.shieldPowerUps;
 
 			Debug.Log("Data Unlocks: " + data.unlocks);
 
@@ -176,7 +184,7 @@ public class dataManger : MonoBehaviour {
 					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
 				}
 			}
-
+			Debug.Log("Coins: " + coins);
 			file.Close();
 
 		}
@@ -267,5 +275,7 @@ class Data {
 	public float color2b;
 	[HideInInspector]
 	public List<string> shipUnlocks = new List<string>();
+	[HideInInspector]
+	public bool Inverted;
 
 }

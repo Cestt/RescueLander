@@ -264,7 +264,7 @@ public class Touch_Manager : MonoBehaviour {
 						case "Button_Buy" :
 							if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
 								Value value = hit.collider.gameObject.GetComponent<Value>();
-								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(10))){
+								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(6))){
 									Destroy(hit.collider.gameObject);
 									Debug.Log("Comprado");
 								}else{
@@ -274,6 +274,7 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "Cheat" :
 							dataManger.manager.coins += 50000;
+							dataManger.manager.Save(false);
 							break;
 						case "Button_PowerUp_Shield" :
 							if(PUilustration != null){
@@ -543,6 +544,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Cheat" :
 						dataManger.manager.coins += 50000;
+						dataManger.manager.Save(false);
 						break;
 					case "Button_PowerUp_Shield" :
 						if(PUilustration != null){
