@@ -28,6 +28,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 417532}
   - 60: {fileID: 6046288}
+  - 114: {fileID: 11441038}
   m_Layer: 0
   m_Name: Feet
   m_TagString: Untagged
@@ -337,7 +338,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 188418}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 545.270874, y: 257.975616, z: 500}
+  m_LocalPosition: {x: 888.978577, y: 208.146912, z: 500}
   m_LocalScale: {x: .625, y: .625, z: .625}
   m_Children:
   - {fileID: 417532}
@@ -630,8 +631,9 @@ PolygonCollider2D:
       - {x: 36.3738289, y: -58.2893333}
       - {x: 41.2955093, y: -60.3438835}
       - {x: 42.6189461, y: -64.1213989}
-      - {x: 24.4412117, y: -63.8448486}
-      - {x: 24.1919918, y: -59.9510994}
+      - {x: 41.5497093, y: -63.9557381}
+      - {x: 23.4306641, y: -64.0974884}
+      - {x: 23.9393559, y: -60.0774193}
       - {x: 28.4546871, y: -58.8728409}
       - {x: 21.781641, y: -43.762207}
       - {x: 8.15853882, y: -51.6449814}
@@ -640,6 +642,7 @@ PolygonCollider2D:
       - {x: -27.7203121, y: -58.8131218}
       - {x: -23.3900394, y: -59.8889771}
       - {x: -22.1023445, y: -63.7356834}
+      - {x: -23.8899422, y: -63.6034203}
       - {x: -41.0888672, y: -63.6862793}
       - {x: -39.8767586, y: -59.9313126}
       - {x: -34.7585945, y: -59.3060303}
@@ -820,6 +823,18 @@ MonoBehaviour:
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
   renderLayer: 4
+--- !u!114 &11441038
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb23b6b64382bb4982b50e17a19e2c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamageReduction: 50
 --- !u!114 &11443158
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -161,6 +161,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 406522}
   - 60: {fileID: 6063966}
+  - 114: {fileID: 11438916}
   m_Layer: 0
   m_Name: Feet
   m_TagString: Untagged
@@ -223,7 +224,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 190818}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 551.720276, y: 253.332077, z: 500}
+  m_LocalPosition: {x: 911.482788, y: 151.93045, z: 500}
   m_LocalScale: {x: .625, y: .625, z: .625}
   m_Children:
   - {fileID: 406522}
@@ -549,6 +550,7 @@ PolygonCollider2D:
       - {x: 37.3566399, y: -56.160305}
       - {x: 43.2498055, y: -58.5141106}
       - {x: 45.6558609, y: -64.0431519}
+      - {x: 42.7945328, y: -63.8823967}
       - {x: 23.2974606, y: -64.0999069}
       - {x: 24.0433598, y: -59.0322876}
       - {x: 29.5273438, y: -56.4360733}
@@ -556,8 +558,9 @@ PolygonCollider2D:
       - {x: -25.0925789, y: -34.4189949}
       - {x: -28.3568363, y: -57.0662231}
       - {x: -23.4416027, y: -59.5061417}
-      - {x: -22.5166016, y: -63.9071312}
-      - {x: -44.9642601, y: -63.740078}
+      - {x: -22.683691, y: -64.074295}
+      - {x: -23.9088879, y: -63.7785912}
+      - {x: -45.3981438, y: -63.9570312}
       - {x: -44.3209, y: -58.6095352}
       - {x: -37.7265625, y: -57.7101097}
       - {x: -31.3165531, y: -33.6061516}
@@ -728,7 +731,7 @@ MonoBehaviour:
   damageThresholdFriction: 300
   DamageVariant: 0
   GameManager: {fileID: 0}
-  thrusterExtra: 200
+  thrusterExtra: 500
   dmgReduction: 0
 --- !u!114 &11430844
 MonoBehaviour:
@@ -798,6 +801,18 @@ MonoBehaviour:
   Pickable: 0
   Astronaut: {fileID: 0}
   astronautPicked: 0
+--- !u!114 &11438916
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 186928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb23b6b64382bb4982b50e17a19e2c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamageReduction: 50
 --- !u!114 &11440482
 MonoBehaviour:
   m_ObjectHideFlags: 1

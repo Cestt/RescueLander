@@ -72,6 +72,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 468430}
   - 60: {fileID: 6093250}
+  - 114: {fileID: 11444600}
   m_Layer: 0
   m_Name: Feet
   m_TagString: Untagged
@@ -283,7 +284,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 121766}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 505.743774, y: 254.098587, z: 500}
+  m_LocalPosition: {x: 932.647827, y: 104.208267, z: 500}
   m_LocalScale: {x: .625, y: .625, z: .625}
   m_Children:
   - {fileID: 468430}
@@ -543,16 +544,17 @@ PolygonCollider2D:
       - {x: 63.9796867, y: -31.0240231}
       - {x: 47.0913086, y: -40.7105484}
       - {x: 27.6031246, y: -45.3623657}
-      - {x: 40.3603516, y: -59.0635262}
+      - {x: 39.4946289, y: -59.4098167}
       - {x: 42.735157, y: -63.8346329}
       - {x: 22.9406261, y: -63.8036156}
       - {x: 25.062109, y: -58.7443008}
       - {x: 22.266407, y: -48.955616}
       - {x: -20.0734386, y: -49.2869644}
-      - {x: -23.2476559, y: -59.1246109}
-      - {x: -21.1382809, y: -63.7618408}
-      - {x: -39.743557, y: -63.7327385}
-      - {x: -39.3746109, y: -59.5806274}
+      - {x: -22.7282238, y: -59.1246109}
+      - {x: -20.0994148, y: -63.7618408}
+      - {x: -37.5508804, y: -63.9460716}
+      - {x: -40.9555664, y: -64.2521744}
+      - {x: -38.1625977, y: -58.8880501}
       - {x: -25.538868, y: -46.7896729}
       - {x: -46.8480492, y: -41.0454102}
       - {x: -63.835743, y: -30.2489262}
@@ -691,7 +693,7 @@ MonoBehaviour:
   damageThresholdFriction: 300
   DamageVariant: 0
   GameManager: {fileID: 0}
-  thrusterExtra: 200
+  thrusterExtra: 250
   dmgReduction: 0
 --- !u!114 &11434890
 MonoBehaviour:
@@ -797,6 +799,18 @@ MonoBehaviour:
   Pickable: 0
   Astronaut: {fileID: 0}
   astronautPicked: 0
+--- !u!114 &11444600
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb23b6b64382bb4982b50e17a19e2c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamageReduction: 50
 --- !u!114 &11446364
 MonoBehaviour:
   m_ObjectHideFlags: 1

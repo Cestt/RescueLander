@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 468874}
   - 60: {fileID: 6067018}
+  - 114: {fileID: 11401698}
   m_Layer: 0
   m_Name: Feet
   m_TagString: Untagged
@@ -307,7 +308,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149704}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 507.090607, y: 258.749542, z: 500}
+  m_LocalPosition: {x: 926.492981, y: 110.771675, z: 500}
   m_LocalScale: {x: .625, y: .625, z: .625}
   m_Children:
   - {fileID: 468874}
@@ -545,6 +546,7 @@ PolygonCollider2D:
       - {x: 35.5691414, y: -58.4055786}
       - {x: 39.6146507, y: -59.0138321}
       - {x: 41.328907, y: -64.0189819}
+      - {x: 39.8014641, y: -63.6619377}
       - {x: 21.8466797, y: -63.963501}
       - {x: 22.304493, y: -59.3527489}
       - {x: 26.945118, y: -58.9765282}
@@ -553,6 +555,7 @@ PolygonCollider2D:
       - {x: -26.4714851, y: -58.6731224}
       - {x: -23.0375004, y: -59.4592056}
       - {x: -21.8714848, y: -63.8720703}
+      - {x: -23.2281246, y: -63.6059837}
       - {x: -40.8873062, y: -63.7545166}
       - {x: -40.0957031, y: -58.929882}
       - {x: -35.0582047, y: -58.3530159}
@@ -661,6 +664,18 @@ MonoBehaviour:
   textureMaskBlue: {fileID: 0}
   textureMaskBlueUVParams: {x: 1, y: 1, z: 0, w: 0}
   textureMaskBlueUVAngle: 0
+--- !u!114 &11401698
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 103202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb23b6b64382bb4982b50e17a19e2c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamageReduction: 50
 --- !u!114 &11407584
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -730,7 +745,7 @@ MonoBehaviour:
   damageThresholdFriction: 300
   DamageVariant: 0
   GameManager: {fileID: 0}
-  thrusterExtra: 200
+  thrusterExtra: 400
   dmgReduction: 0
 --- !u!114 &11423028
 MonoBehaviour:
