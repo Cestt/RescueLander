@@ -28,6 +28,8 @@ public class Damage : MonoBehaviour {
 	public float thrusterExtra;
 	private float prevSpeed;
 	private Rigidbody2D rigid;
+	[HideInInspector]
+	public int dmgReduction = 0;
 
 	// Use this for initialization
 	void Awake () {
@@ -98,7 +100,7 @@ public class Damage : MonoBehaviour {
 				
 
 				realDamage = (int)prevSpeed - damageThreshold;
-				realDamage = realDamage + ((DamageVariant * realDamage)/100);
+				realDamage = realDamage + ((DamageVariant * realDamage)/100)-((dmgReduction * realDamage)/100);
 				life -= (int)realDamage;
 				if(totalDamage <= maxLife){
 					totalDamage += (int)realDamage;
