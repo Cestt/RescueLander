@@ -38,7 +38,7 @@ public class Movement : MonoBehaviour {
 	private tk2dSpriteAnimator animator;
 	private Rigidbody2D rigid;
 	//[HideInInspector]
-	public bool inverted;
+	public bool inverted = false;
 
 	// Use this for initialization
 	void Awake() {
@@ -205,7 +205,11 @@ public class Movement : MonoBehaviour {
 					Vector3 tempVect = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 					
 					if(tempVect.x > Camera.main.transform.position.x){
-						rigid.AddTorque(-angularForce - (angularForce * angularSpeedUpgrade));
+						if(inverted){
+							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
+						}else{
+							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
+						}
 						
 						
 						if(!Thruster_l.activeInHierarchy){
@@ -220,7 +224,11 @@ public class Movement : MonoBehaviour {
 					}
 					if(tempVect.x  < Camera.main.transform.position.x){
 						
-						rigid.AddTorque(angularForce + (angularForce * angularSpeedUpgrade));
+						if(inverted){
+							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
+						}else{
+							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
+						}
 						
 						if(!Thruster_r.activeInHierarchy){
 							Thruster_r.SetActive(true);

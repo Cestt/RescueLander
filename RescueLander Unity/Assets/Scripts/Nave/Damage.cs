@@ -137,7 +137,7 @@ public class Damage : MonoBehaviour {
 				Debug.Log("Hull friction damage");
 				
 			}
-			if(gameObject.transform.eulerAngles.magnitude > 90 & gameObject.transform.eulerAngles.magnitude < 270 & first == true ){
+			if(gameObject.transform.eulerAngles.magnitude > 50 & gameObject.transform.eulerAngles.magnitude < 320 & first == true ){
 				movement.angularSpeedUpgrade = thrusterExtra;
 				movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color(0,144,229);
 				movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color(0,144,229);

@@ -976,7 +976,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 961.199951
+      value: 864.484375
       objectReference: {fileID: 0}
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1234,6 +1234,14 @@ Prefab:
       propertyPath: ThreeStarCoin
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 11478888, guid: 7cb93b160865cdc4b94fc29be6e11c75, type: 2}
+      propertyPath: Magnet_Duration
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 11478888, guid: 7cb93b160865cdc4b94fc29be6e11c75, type: 2}
+      propertyPath: Shield_Duration
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7cb93b160865cdc4b94fc29be6e11c75, type: 2}
   m_IsPrefabParent: 0
@@ -1445,42 +1453,7 @@ Material:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 1, a: 1}
---- !u!4 &506464516 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 431258, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
-  m_PrefabInternal: {fileID: 62330527}
---- !u!21 &568783536
-Material:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000e000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: PixelSnap
-        second: 0
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
---- !u!21 &621689388
+--- !u!21 &483224662
 Material:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -1525,6 +1498,41 @@ Material:
       data:
         first:
           name: _MaskBlueTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: PixelSnap
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+--- !u!4 &506464516 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 431258, guid: 586f5d7a228deb14c99238112ea01a92, type: 2}
+  m_PrefabInternal: {fileID: 62330527}
+--- !u!21 &568783536
+Material:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000e000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
@@ -2569,7 +2577,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -961.199951
+      value: -864.484314
       objectReference: {fileID: 0}
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2630,7 +2638,7 @@ Prefab:
     - target: {fileID: 21291496, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 621689388}
+      objectReference: {fileID: 483224662}
     - target: {fileID: 11432526, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: _anchorCamera
       value: 
@@ -3315,6 +3323,51 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bc9f56ba761908944b5e78a86e8050e4, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1936085198 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 199890, guid: bc9f56ba761908944b5e78a86e8050e4, type: 2}
+  m_PrefabInternal: {fileID: 1936085197}
+--- !u!1 &1936085199 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166352, guid: bc9f56ba761908944b5e78a86e8050e4, type: 2}
+  m_PrefabInternal: {fileID: 1936085197}
+--- !u!1 &1936085200 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 170730, guid: bc9f56ba761908944b5e78a86e8050e4, type: 2}
+  m_PrefabInternal: {fileID: 1936085197}
+--- !u!114 &1936085201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1936085198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b1d100840db854887c95845ebb38e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1936085202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1936085199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b1d100840db854887c95845ebb38e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1936085203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1936085200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b1d100840db854887c95845ebb38e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1982912290
 GameObject:
   m_ObjectHideFlags: 0
