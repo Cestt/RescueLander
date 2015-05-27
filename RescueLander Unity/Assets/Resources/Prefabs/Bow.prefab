@@ -51,7 +51,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 436870}
-  - 60: {fileID: 6056398}
+  - 61: {fileID: 6156026}
   m_Layer: 0
   m_Name: Feet
   m_TagString: Untagged
@@ -295,7 +295,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 139760}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 890.639526, y: 219.704514, z: 500}
+  m_LocalPosition: {x: 569.659058, y: 243.20816, z: 500}
   m_LocalScale: {x: .625, y: .625, z: .625}
   m_Children:
   - {fileID: 436870}
@@ -522,37 +522,6 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
---- !u!60 &6056398
-PolygonCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 142978}
-  m_Enabled: 0
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  m_Points:
-    m_Paths:
-    - - {x: -41.4618645, y: -41.5031242}
-      - {x: -41.0003433, y: -28.0417004}
-      - {x: 41.143261, y: -26.7448254}
-      - {x: 41.1924324, y: -42.0662117}
-      - {x: 50.4260254, y: -43.2908211}
-      - {x: 42.2951164, y: -55.7912102}
-      - {x: 47.2610359, y: -63.7847672}
-      - {x: 22.5005379, y: -63.6839867}
-      - {x: 25.6662121, y: -58.3536148}
-      - {x: 38.9688988, y: -44.4990234}
-      - {x: 39.0669441, y: -29.2591801}
-      - {x: -39.4733391, y: -30.199316}
-      - {x: -39.3202171, y: -44.2722664}
-      - {x: -26.9781742, y: -57.9643555}
-      - {x: -21.9629402, y: -63.9630852}
-      - {x: -46.8833504, y: -63.9978523}
-      - {x: -42.4345703, y: -54.7083015}
-      - {x: -50.7452164, y: -44.0132828}
 --- !u!60 &6099500
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -617,6 +586,19 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 400, y: 400}
+--- !u!61 &6156026
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 142978}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: .00107421877, y: -54.9007835}
+  serializedVersion: 2
+  m_Size: {x: 101.873596, y: 22.4256535}
 --- !u!111 &11160626
 Animation:
   m_ObjectHideFlags: 1
