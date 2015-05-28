@@ -32,7 +32,7 @@ public class Touch_Manager : MonoBehaviour {
 	private GameObject PUilustration;
 	private GameObject pauseText;
 	private Ads ads;
-
+	private GameObject check;
 
 
 
@@ -48,6 +48,14 @@ public class Touch_Manager : MonoBehaviour {
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
 			pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
+		}else{
+			check = GameObject.Find("Invert Rotation").transform.FindChild("Check_Frame").gameObject;
+			if(dataManger.manager.inverted){
+				check.SetActive(true);
+			}else{
+				check.SetActive(false);
+			}
+
 		}
 		ads = GetComponent<Ads>();
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
@@ -300,6 +308,15 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							PUilustration = hit.transform.FindChild("Illustration_Fuel").gameObject;
 							PUilustration.SetActive(true);
+							break;
+						
+						case "Check_Frame" :
+							dataManger.manager.inverted = !dataManger.manager.inverted;
+							if(dataManger.manager.inverted){
+								check.SetActive(true);
+							}else{
+								check.SetActive(false);
+							}
 							break;
 						default :
 							
@@ -570,6 +587,14 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						PUilustration = garaje.transform.FindChild("Shop_Bg_01/PowerUps_Menu/Illustration_Fuel").gameObject;
 						PUilustration.SetActive(true);
+						break;
+					case "Check_Frame" :
+						dataManger.manager.inverted = !dataManger.manager.inverted;
+						if(dataManger.manager.inverted){
+							check.SetActive(true);
+						}else{
+							check.SetActive(false);
+						}
 						break;
 					default :
 						

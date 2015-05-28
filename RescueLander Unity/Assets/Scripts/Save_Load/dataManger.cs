@@ -10,11 +10,11 @@ public class dataManger : MonoBehaviour {
 	public static dataManger manager;
 
 
-	//[HideInInspector]
+	[HideInInspector]
 	public int fuelPowerUps;
-	//[HideInInspector]
+	[HideInInspector]
 	public int shieldPowerUps;
-	//[HideInInspector]
+	[HideInInspector]
 	public int magnetPowerUps;
 	[HideInInspector]
 	public string Camposition = "";
@@ -53,7 +53,7 @@ public class dataManger : MonoBehaviour {
 	[HideInInspector]
 	public List<string> shipUnlocks = new List<string>();
 	[HideInInspector]
-	public bool Inverted;
+	public bool inverted;
 
 	private GameObject temp;
 
@@ -276,6 +276,6 @@ class Data {
 	[HideInInspector]
 	public List<string> shipUnlocks = new List<string>();
 	[HideInInspector]
-	public bool Inverted;
+	public bool inverted;
 
 }

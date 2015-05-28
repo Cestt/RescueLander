@@ -38,8 +38,7 @@ public class Movement : MonoBehaviour {
 	private tk2dSpriteAnimator animator;
 	private tk2dSpriteAnimator animator2;
 	private Rigidbody2D rigid;
-	//[HideInInspector]
-	public bool inverted = false;
+
 
 	// Use this for initialization
 	void Awake() {
@@ -87,7 +86,7 @@ public class Movement : MonoBehaviour {
 							Vector3 tempVect = Camera.main.ScreenToWorldPoint(touch.position);
 							
 							if(tempVect.x > Camera.main.transform.position.x){
-								if(inverted){
+								if(dataManger.manager.inverted){
 									rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
 								}else{
 									rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
@@ -111,7 +110,7 @@ public class Movement : MonoBehaviour {
 							} 
 							if(tempVect.x < Camera.main.transform.position.x){
 
-								if(inverted){
+								if(dataManger.manager.inverted){
 									rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 								}else{
 									rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
@@ -214,7 +213,7 @@ public class Movement : MonoBehaviour {
 					Vector3 tempVect = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 					
 					if(tempVect.x > Camera.main.transform.position.x){
-						if(inverted){
+						if(dataManger.manager.inverted){
 							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
 						}else{
 							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
@@ -235,7 +234,7 @@ public class Movement : MonoBehaviour {
 					}
 					if(tempVect.x  < Camera.main.transform.position.x){
 						
-						if(inverted){
+						if(dataManger.manager.inverted){
 							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 						}else{
 							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
