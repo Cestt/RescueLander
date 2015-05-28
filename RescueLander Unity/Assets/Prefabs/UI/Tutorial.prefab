@@ -33,6 +33,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &188936
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 413332}
+  - 23: {fileID: 2304252}
+  - 33: {fileID: 3389580}
+  - 114: {fileID: 11403976}
+  m_Layer: 5
+  m_Name: ChatText_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &189560
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,7 +63,7 @@ GameObject:
   - 33: {fileID: 3352686}
   - 114: {fileID: 11470444}
   m_Layer: 5
-  m_Name: Chat_Text
+  m_Name: ChatText_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,6 +87,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &413332
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 188936}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 277, y: 174, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 416690}
+  m_RootOrder: 2
 --- !u!4 &416690
 Transform:
   m_ObjectHideFlags: 1
@@ -76,11 +106,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157664}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -960, y: -540, z: 10}
+  m_LocalPosition: {x: -888, y: -540, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 451840}
   - {fileID: 442392}
+  - {fileID: 413332}
   - {fileID: 439038}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -91,11 +122,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 189560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 288, y: 50, z: 0}
+  m_LocalPosition: {x: 277, y: 174, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 416690}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!4 &442392
 Transform:
   m_ObjectHideFlags: 1
@@ -103,7 +134,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 191760}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 149.283447, y: 0, z: -5}
+  m_LocalPosition: {x: 149.283447, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 416690}
@@ -115,11 +146,35 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 163016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 416690}
   m_RootOrder: 0
+--- !u!23 &2304252
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 188936}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 477ed5d830218004a899c06025839534, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -2001621311
+  m_SortingOrder: 2
 --- !u!23 &2332078
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -213,6 +268,61 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 191760}
   m_Mesh: {fileID: 0}
+--- !u!33 &3389580
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 188936}
+  m_Mesh: {fileID: 0}
+--- !u!114 &11403976
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 188936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 994457055a9434b4aa7b65ad37262d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _font: {fileID: 0}
+  _text: 
+  _color: {r: 1, g: 1, b: 1, a: 1}
+  _color2: {r: 1, g: 1, b: 1, a: 1}
+  _useGradient: 0
+  _textureGradient: 0
+  _anchor: 6
+  _scale: {x: 1, y: 1, z: 1}
+  _kerning: 0
+  _maxChars: 16
+  _inlineStyling: 0
+  _formatting: 0
+  _wordWrapWidth: 0
+  spacing: 0
+  lineSpacing: 0
+  data:
+    version: 1
+    font: {fileID: 11425344, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
+    text: 'Hello there Rookie!
+
+      Welcome to the Rescuers initiation course, here wou''ll learn
+
+      all you need to know about piloting your own Rescue Lander.'
+    color: {r: 0, g: 0, b: 0, a: 1}
+    color2: {r: 1, g: 1, b: 1, a: 1}
+    useGradient: 0
+    textureGradient: 0
+    anchor: 0
+    renderLayer: 2
+    scale: {x: 1.25, y: 1.25, z: 1}
+    kerning: 1
+    maxChars: 150
+    inlineStyling: 0
+    formatting: 0
+    wordWrapWidth: 0
+    spacing: 0
+    lineSpacing: -10
 --- !u!114 &11470444
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -241,22 +351,26 @@ MonoBehaviour:
   lineSpacing: 0
   data:
     version: 1
-    font: {fileID: 0}
-    text: New TextMesh
+    font: {fileID: 11425344, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
+    text: 'Hello there Rookie!
+
+      Welcome to the Rescuers initiation course, here wou''ll learn
+
+      all you need to know about piloting your own Rescue Lander.'
     color: {r: 0, g: 0, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
     textureGradient: 0
-    anchor: 6
+    anchor: 0
     renderLayer: 2
-    scale: {x: 1, y: 1, z: 1}
-    kerning: 0
-    maxChars: 16
+    scale: {x: 1.25, y: 1.25, z: 1}
+    kerning: 1
+    maxChars: 150
     inlineStyling: 0
     formatting: 0
     wordWrapWidth: 0
     spacing: 0
-    lineSpacing: 0
+    lineSpacing: -10
 --- !u!114 &11477750
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -280,7 +394,7 @@ MonoBehaviour:
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
   renderLayer: 0
-  _dimensions: {x: 1200, y: 150}
+  _dimensions: {x: 1230.26636, y: 198.432785}
   _anchor: 0
   _borderOnly: 0
   legacyMode: 0
