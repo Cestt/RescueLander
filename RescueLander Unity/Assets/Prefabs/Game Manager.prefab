@@ -14,6 +14,8 @@ GameObject:
   - 114: {fileID: 11478888}
   - 114: {fileID: 11407304}
   - 114: {fileID: 11490298}
+  - 114: {fileID: 11408314}
+  - 114: {fileID: 11482788}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -45,6 +47,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LayoutChild: []
+--- !u!114 &11408314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9db2f74b3c00004ab46176f91b73d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenshotSprite: {fileID: 0}
 --- !u!114 &11416138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -105,13 +119,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 900fe0a20c58e9b4e83ebcce42412cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WinSprite: {fileID: 0}
-  LoseSprite: {fileID: 0}
-  winText: {fileID: 0}
   stars:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  WinTimer: 3
+--- !u!114 &11482788
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e0cf296df5d6438b4566f25b42686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Test: {fileID: 0}
 --- !u!114 &11490298
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -49,15 +49,17 @@ public class WinLose : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Application.loadedLevelName != "Menu") {
+			if(Time.time > actualTime + WinTimer ){
+				WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
+				MisionAcomplished.SetActive (false);
+			}
+			if(MisionAcomplished.activeInHierarchy & Input.touchCount > 0){
+				WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
+				MisionAcomplished.SetActive (false);
+			}	
+		}
 
-		if(Time.time > actualTime + WinTimer){
-			WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
-			MisionAcomplished.SetActive (false);
-		}
-		if(MisionAcomplished.activeInHierarchy & Input.touchCount > 0){
-			WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
-			MisionAcomplished.SetActive (false);
-		}
 	}
 
 	public void End(string result){

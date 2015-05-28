@@ -49,7 +49,7 @@ public class Touch_Manager : MonoBehaviour {
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
 			pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
 		}else{
-			check = GameObject.Find("Invert Rotation").transform.FindChild("Check_Frame").gameObject;
+			check = GameObject.Find("Invert Rotation").transform.FindChild("Check").gameObject;
 			if(dataManger.manager.inverted){
 				check.SetActive(true);
 			}else{
@@ -286,7 +286,7 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.coins += 50000;
 							dataManger.manager.Save(false);
 							break;
-						case "Button_PowerUp_Shield" :
+						case "Button_Shield" :
 							if(PUilustration != null){
 								PUilustration.SetActive(false);
 							}
@@ -294,7 +294,7 @@ public class Touch_Manager : MonoBehaviour {
 							PUilustration.SetActive(true);
 							break;
 							
-						case "Button_PowerUp_Magnet" :
+						case "Button_Magnet" :
 							if(PUilustration != null){
 								PUilustration.SetActive(false);
 							}
@@ -302,7 +302,7 @@ public class Touch_Manager : MonoBehaviour {
 							PUilustration.SetActive(true);
 							break;
 							
-						case "Button_PowerUp_Fuel" :
+						case "Button_Fuel" :
 							if(PUilustration != null){
 								PUilustration.SetActive(false);
 							}
@@ -317,6 +317,7 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								check.SetActive(false);
 							}
+							dataManger.manager.Save(false);
 							break;
 						default :
 							
@@ -565,7 +566,7 @@ public class Touch_Manager : MonoBehaviour {
 						dataManger.manager.coins += 50000;
 						dataManger.manager.Save(false);
 						break;
-					case "Button_PowerUp_Shield" :
+					case "Button_Shield" :
 						if(PUilustration != null){
 							PUilustration.SetActive(false);
 						}
@@ -573,7 +574,7 @@ public class Touch_Manager : MonoBehaviour {
 						PUilustration.SetActive(true);
 						break;
 						
-					case "Button_PowerUp_Magnet" :
+					case "Button_Magnet" :
 						if(PUilustration != null){
 							PUilustration.SetActive(false);
 						}
@@ -581,7 +582,7 @@ public class Touch_Manager : MonoBehaviour {
 						PUilustration.SetActive(true);
 						break;
 						
-					case "Button_PowerUp_Fuel" :
+					case "Button_Fuel" :
 						if(PUilustration != null){
 							PUilustration.SetActive(false);
 						}
@@ -595,6 +596,7 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							check.SetActive(false);
 						}
+						dataManger.manager.Save(false);
 						break;
 					default :
 						

@@ -108,6 +108,7 @@ public class dataManger : MonoBehaviour {
 			data.fuelPowerUps = fuelPowerUps;
 			data.magnetPowerUps = magnetPowerUps;
 			data.shieldPowerUps = shieldPowerUps;
+			dataManger.manager.inverted = inverted;
 			if(complete){
 				for(int i = 1; i <= levels; i++){
 					if(stars["Level_"+i] > data.stars["Level_"+i]){
@@ -161,6 +162,7 @@ public class dataManger : MonoBehaviour {
 			fuelPowerUps = data.fuelPowerUps;
 			magnetPowerUps = data.magnetPowerUps;
 			shieldPowerUps = data.shieldPowerUps;
+			inverted = dataManger.manager.inverted;
 
 			Debug.Log("Data Unlocks: " + data.unlocks);
 
