@@ -5,6 +5,7 @@ public class Color_Set : MonoBehaviour {
 	private SpriteColorFX.SpriteColorMasks3 tint;
 	private GameObject ShipGaraje;
 	private GameObject ShipGaraje2;
+	private GameObject ShipMenu;
 	private SpriteColorFX.SpriteColorMasks3 tintGaraje;
 
 	void Awake () {
@@ -18,6 +19,8 @@ public class Color_Set : MonoBehaviour {
 				tint.colorMaskRed = new Color(dataManger.manager.color1r,dataManger.manager.color1g,dataManger.manager.color1b);
 				tint.colorMaskGreen = new Color(dataManger.manager.color2r,dataManger.manager.color2g,dataManger.manager.color2b);
 			}
+		}else{
+			ShipMenu = GameObject.Find("Ship_Anim").transform.FindChild("Ship01").gameObject;
 		}
 		if (dataManger.manager.color1b < 1000) {
 			tintGaraje.GetComponent<SpriteRenderer> ().sprite = Resources.Load ("Sprites/" + dataManger.manager.actualShip + "_High", typeof(Sprite)) as Sprite;
@@ -62,6 +65,8 @@ public class Color_Set : MonoBehaviour {
 				ShipGaraje2.GetComponent<SpriteRenderer>().sprite =  Resources.Load("Sprites/"+dataManger.manager.actualShip + "_High", typeof(Sprite)) as Sprite;
 				ShipGaraje.GetComponent<SpriteRenderer>().sprite =  Resources.Load("Sprites/"+dataManger.manager.actualShip + "_High", typeof(Sprite)) as Sprite;
 				ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>().textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+				ShipMenu.GetComponent<SpriteRenderer>().sprite =  Resources.Load("Sprites/"+dataManger.manager.actualShip, typeof(Sprite)) as Sprite;
+				ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>().textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
 				
 				switch(dataManger.manager.actualShip){
 				case "Ship01" :
