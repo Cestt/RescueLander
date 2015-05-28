@@ -265,7 +265,9 @@ public class Touch_Manager : MonoBehaviour {
 							if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
 								Value value = hit.collider.gameObject.GetComponent<Value>();
 								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
-									Destroy(hit.collider.gameObject);
+									if(value._Type == "Ship" || value._Type == "World"){
+										Destroy(hit.collider.gameObject);
+									}
 									Debug.Log("Comprado " + hit.transform.parent.name.Substring(7));
 								}else{
 									Debug.Log("Algo falla joder");

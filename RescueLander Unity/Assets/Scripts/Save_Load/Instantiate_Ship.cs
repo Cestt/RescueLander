@@ -14,7 +14,7 @@ public class Instantiate_Ship : MonoBehaviour {
 		tint.colorMaskGreen.g = dataManger.manager.color2g;
 		tint.colorMaskGreen.b = dataManger.manager.color2b;
 		tint.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
-		instance.transform.position = new Vector3(transform.position.x,transform.position.y + 52, transform.position.z - 50);
+		instance.transform.position = new Vector3(transform.position.x - 7,transform.position.y + 52, transform.position.z - 50);
 		Debug.Log("Ship instantiated");
 	}
 	

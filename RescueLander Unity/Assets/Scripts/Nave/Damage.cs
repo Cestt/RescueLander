@@ -57,6 +57,14 @@ public class Damage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if((gameObject.transform.eulerAngles.magnitude < 50 || gameObject.transform.eulerAngles.magnitude > 320) & first == false ){
+			movement.angularSpeedUpgrade = 0;
+			movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color32(255,255,255,255);
+			movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color32(255,255,255,255);
+			movement.Thruster_l.GetComponent<tk2dSprite>().scale = new Vector3(0.55f,0.55f,1);
+			movement.Thruster_r.GetComponent<tk2dSprite>().scale = new Vector3(0.55f,0.55f,1);
+			first = true;
+		}
 		prevSpeed = rigid.velocity.magnitude;
 
 		if(life <= (maxLife*3)/4 & life >= (maxLife*2)/4){
@@ -110,6 +118,14 @@ public class Damage : MonoBehaviour {
 				Debug.Log("Hull Impact damage");
 
 			}
+			if(gameObject.transform.eulerAngles.magnitude > 50 & gameObject.transform.eulerAngles.magnitude < 320 & first == true ){
+				movement.angularSpeedUpgrade = thrusterExtra;
+				movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color32(0,144,229,255);
+				movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color32(0,144,229,255);
+				movement.Thruster_l.GetComponent<tk2dSprite>().scale = new Vector3(1,1,1);
+				movement.Thruster_r.GetComponent<tk2dSprite>().scale = new Vector3(1,1,1);
+				first = false;
+			}
 		}
 	}
 	void OnCollisionStay2D(Collision2D coll) {
@@ -137,26 +153,10 @@ public class Damage : MonoBehaviour {
 				Debug.Log("Hull friction damage");
 				
 			}
-			if(gameObject.transform.eulerAngles.magnitude > 50 & gameObject.transform.eulerAngles.magnitude < 320 & first == true ){
-				movement.angularSpeedUpgrade = thrusterExtra;
-				movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color(0,144,229);
-				movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color(0,144,229);
-				movement.Thruster_l.GetComponent<tk2dSprite>().scale = new Vector3(1,1,1);
-				movement.Thruster_r.GetComponent<tk2dSprite>().scale = new Vector3(1,1,1);
-				first = false;
-			}
+
 		}
 	}
-	void OnCollisionExit2D(Collision2D coll) {
 
-		movement.angularSpeedUpgrade = 0;
-		movement.Thruster_l.GetComponent<tk2dSprite>().color = new Color(255,255,255);
-		movement.Thruster_r.GetComponent<tk2dSprite>().color = new Color(255,255,255);
-		movement.Thruster_l.GetComponent<tk2dSprite>().scale = new Vector3(0.55f,0.55f,1);
-		movement.Thruster_r.GetComponent<tk2dSprite>().scale = new Vector3(0.55f,0.55f,1);
-		first = true;
-
-	}
 
 	void DestroyShip(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
 		animator.AnimationCompleted = null;

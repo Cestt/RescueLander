@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Value : MonoBehaviour {
 
 	public int Cost;
+	[HideInInspector]
 	public string _Type;
 	[HideInInspector]
 	public bool bought = false;

@@ -36,6 +36,7 @@ public class Movement : MonoBehaviour {
 	private int currentFrame = 0;
 	private tk2dSlicedSprite slicedsprite;
 	private tk2dSpriteAnimator animator;
+	private tk2dSpriteAnimator animator2;
 	private Rigidbody2D rigid;
 	//[HideInInspector]
 	public bool inverted = false;
@@ -50,6 +51,7 @@ public class Movement : MonoBehaviour {
 		Thruster_l = findChild.gameObject;
 		findChild = transform.FindChild("Fire");
 		Fire = findChild.gameObject;
+		animator2 = Fire.GetComponent<tk2dSpriteAnimator>();
 		rigid = GetComponent<Rigidbody2D>();
 		slicedsprite = fuelBar.GetComponent<tk2dSlicedSprite>();
 		originlSize = slicedsprite.dimensions.x;
@@ -91,7 +93,7 @@ public class Movement : MonoBehaviour {
 									rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 								}
 								if(angularSpeedUpgrade != 0){
-									ConsumeFuel();
+									ConsumeFuel(false);
 								}
 
 								
@@ -115,7 +117,7 @@ public class Movement : MonoBehaviour {
 									rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
 								}
 								if(angularSpeedUpgrade != 0){
-									ConsumeFuel();
+									ConsumeFuel(false);
 								}
 
 								
@@ -152,20 +154,20 @@ public class Movement : MonoBehaviour {
 							
 							Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
 							rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
-							animator = Fire.GetComponent<tk2dSpriteAnimator>();
+
 							if(!Fire.activeInHierarchy)
 								Fire.SetActive(true);
-							ConsumeFuel();
+							ConsumeFuel(true);
 							motor = true;
 							
 						}
 						if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
 							motor  = false;
-							if(animator.IsPlaying("Fire_Start")){
-								animator.Play("Fire_End");
-								animator.PlayFromFrame(7-currentFrame);
+							if(animator2.IsPlaying("Fire_Start")){
+								animator2.Play("Fire_End");
+								animator2.PlayFromFrame(7-currentFrame);
 							}else{
-								animator.Play("Fire_End");
+								animator2.Play("Fire_End");
 							}
 						}
 						
@@ -184,20 +186,20 @@ public class Movement : MonoBehaviour {
 					
 					Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
 					rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
-					animator = Fire.GetComponent<tk2dSpriteAnimator>();
+
 					if(!Fire.activeInHierarchy)
 						Fire.SetActive(true);					
-					ConsumeFuel();
+					ConsumeFuel(true);
 					motor = true;
 					
 				}
 				if(Input.GetKeyUp(KeyCode.Space)){
 					motor = false;
-					if(animator.IsPlaying("Fire_Start")){
-						animator.Play("Fire_End");
-						animator.PlayFromFrame(7-currentFrame);
+					if(animator2.IsPlaying("Fire_Start")){
+						animator2.Play("Fire_End");
+						animator2.PlayFromFrame(7-currentFrame);
 					}else{
-						animator.Play("Fire_End");
+						animator2.Play("Fire_End");
 					}
 					
 					
@@ -218,7 +220,7 @@ public class Movement : MonoBehaviour {
 							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 						}
 						if(angularSpeedUpgrade != 0){
-							ConsumeFuel();
+							ConsumeFuel(false);
 						}
 						
 						if(!Thruster_l.activeInHierarchy){
@@ -239,7 +241,7 @@ public class Movement : MonoBehaviour {
 							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
 						}
 						if(angularSpeedUpgrade != 0){
-							ConsumeFuel();
+							ConsumeFuel(false);
 						}
 						
 						if(!Thruster_r.activeInHierarchy){
@@ -266,22 +268,25 @@ public class Movement : MonoBehaviour {
 		
 	}
 	
-	void ConsumeFuel () {
+	void ConsumeFuel (bool Complete) {
 		
 		fuel -= fuelConsumption;
 		slicedsprite.dimensions = new Vector2(originlSize * (fuel/originalFuel),slicedsprite.dimensions.y);
 		motor = true;
-		if(!animator.IsPlaying("Fire_Loop")){
-			if(animator.IsPlaying("Fire_End")){
-				animator.Play("Fire_Start");
-				animator.PlayFromFrame(7-currentFrame);
-			}else{
-				animator.Play("Fire_Start");
+		if(Complete){
+			if(!animator2.IsPlaying("Fire_Loop")){
+				if(animator2.IsPlaying("Fire_End")){
+					animator2.Play("Fire_Start");
+					animator2.PlayFromFrame(7-currentFrame);
+				}else{
+					animator2.Play("Fire_Start");
+				}
+				
 			}
-
+			
+			animator.AnimationCompleted = FireLoop;
 		}
 
-		animator.AnimationCompleted = FireLoop;
 	}
 
 	public void BalanceCalc(){
@@ -301,10 +306,8 @@ public class Movement : MonoBehaviour {
 	}
 
 	void FireLoop(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
-		if(clip.name == "Fire_End")
-			Fire.SetActive(false);
-		if(!animator.IsPlaying("Fire_Loop") & clip.name != "Fire_End" )
-			animator.Play("Fire_Loop");
+		if(!animator2.IsPlaying("Fire_Loop") & clip.name != "Fire_End" )
+			animator2.Play("Fire_Loop");
 	}
 
 

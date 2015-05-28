@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class WinLose : MonoBehaviour {
 
-	public GameObject WinSprite;
-	public GameObject LoseSprite;
-	public GameObject winText;
+	private GameObject WinSprite;
+	private GameObject LoseSprite;
+	private GameObject winText;
 	private GameObject UI1;
 	private GameObject UI2;
 	private GameObject UI3;
@@ -19,6 +19,9 @@ public class WinLose : MonoBehaviour {
 	ScoreManager scoreManager;
 	Coin_Manager coin_manager;
 	public GameObject[] stars;
+	private float actualTime;
+	public float WinTimer;
+	private GameObject MisionAcomplished;
 
 	void Awake () {
 	
@@ -27,6 +30,7 @@ public class WinLose : MonoBehaviour {
 			GameObject uicamera = GameObject.Find("UI_Camera");
 			WinSprite = uicamera.transform.FindChild("WinLayout").gameObject;
 			winText = WinSprite.transform.FindChild("Resume/Pic_Frame/WinScore_Txt").gameObject;
+			MisionAcomplished = WinSprite.transform.FindChild("Win_Text").gameObject;
 			for(int j = 1; j <= 3; j++){
 				stars[j-1] = WinSprite.transform.FindChild("Win_Text/Win_Star"+j+"_On").gameObject;
 			}
@@ -45,7 +49,15 @@ public class WinLose : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+		if(Time.time > actualTime + WinTimer){
+			WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
+			MisionAcomplished.SetActive (false);
+		}
+		if(MisionAcomplished.activeInHierarchy & Input.touchCount > 0){
+			WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
+			MisionAcomplished.SetActive (false);
+		}
 	}
 
 	public void End(string result){
@@ -111,8 +123,9 @@ public class WinLose : MonoBehaviour {
 
 		//haloanim.Win =true;
 		WinSprite.SetActive(true);
-		WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
-		WinSprite.transform.FindChild("Win_Text").gameObject.SetActive (false);
+		WinSprite.transform.FindChild("Resume").gameObject.SetActive (false);
+		MisionAcomplished.SetActive (true);
+		actualTime = Time.time;
 //		text.text = Localization_Bridge.loc.Score +": "+ totalScore.ToString();
 		UI1.SetActive (false);
 		UI2.SetActive (false);

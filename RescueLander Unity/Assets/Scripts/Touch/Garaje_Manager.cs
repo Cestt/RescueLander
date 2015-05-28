@@ -21,8 +21,16 @@ public class Garaje_Manager : MonoBehaviour {
 	
 	public void LayoutChanger(string Layout){
 		foreach(Transform currentLayout in LayoutChild){
+			if(Layout != "Paint" & currentLayout.name == "Header"){
+				Debug.Log("Change Name");
+				currentLayout.GetComponentInChildren<tk2dTextMesh>().text = "Paint";
+			}
+			if(Layout == "Paint" & currentLayout.name == "Header" ){
+				currentLayout.GetComponentInChildren<tk2dTextMesh>().text = "Garage";
+			}
 			if(currentLayout.name == Layout+"_Menu"){
 				currentLayout.gameObject.SetActive(true);
+
 			}else if(currentLayout.name != "Header" & currentLayout.name != "Exit_Button" & currentLayout.name != "CoinCount_Ico"
 			         & currentLayout.name != "StarCount_Ico"){
 				currentLayout.gameObject.SetActive(false);

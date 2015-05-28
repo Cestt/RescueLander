@@ -11,9 +11,13 @@ public class Minimap : MonoBehaviour {
 	public List<GameObject> AstronautsIco = new List<GameObject>();
 	private GameObject Ship;
 	public GameObject Ship_Ico;
+	private GameObject Platform;
+	private GameObject Platform_Ico;
 
 	// Use this for initialization
 	void Awake () {
+		Platform = GameObject.Find("Landing Platform");
+		Platform_Ico = transform.FindChild("Minimap_PlatformIco").gameObject;
 		Ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		coll = GetComponent<BoxCollider2D>();
 		for (int i = 1; i<= Ship.GetComponent<ShipAstronautDrop>().totalAstronauts; i++) {
@@ -36,7 +40,11 @@ public class Minimap : MonoBehaviour {
 			AstronautsIco[i].transform.position = tempVector; 
 
 		}
-		
+		mapx = (100 * Platform.transform.position.x)/MapWidth;
+		mapy = (100 * Platform.transform.position.y)/MapHeight;
+		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
+		tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
+		Platform_Ico.transform.position = tempVector; 
 	}
 	
 	// Update is called once per frame
