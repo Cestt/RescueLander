@@ -11,11 +11,12 @@ GameObject:
   - 23: {fileID: 2303108}
   - 33: {fileID: 3303108}
   - 114: {fileID: 11403106}
-  - 60: {fileID: 6000650}
   - 114: {fileID: 11470944}
+  - 60: {fileID: 6048084}
+  - 60: {fileID: 6040412}
   m_Layer: 0
   m_Name: Landing Platform
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,7 +47,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 103108}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 142, y: 510, z: 550}
+  m_LocalPosition: {x: 530, y: 178.600006, z: 875}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 403110}
@@ -126,7 +127,26 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 103110}
   m_Mesh: {fileID: 0}
---- !u!60 &6000650
+--- !u!60 &6040412
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 103108}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  m_Points:
+    m_Paths:
+    - - {x: 89.6875, y: 24.0874996}
+      - {x: 83.5374985, y: 10.25}
+      - {x: -121.974998, y: 10.25}
+      - {x: -121.974998, y: -24.5999985}
+      - {x: 123, y: -24.5999985}
+      - {x: 123, y: 24.5999985}
+--- !u!60 &6048084
 PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
