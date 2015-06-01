@@ -10,6 +10,8 @@ public class WinLose : MonoBehaviour {
 	private GameObject UI1;
 	private GameObject UI2;
 	private GameObject UI3;
+	private GameObject UI4;
+	private GameObject UI5;
 
 	private ScreenShoter screenshoter;
 	private bool first;
@@ -38,6 +40,8 @@ public class WinLose : MonoBehaviour {
 			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
 			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
 			UI3 =  uicamera.transform.FindChild("Anchor (LowerCenter)").gameObject;
+			UI4 =  uicamera.transform.FindChild("Anchor (LowerLeft)").gameObject;
+			UI5 =  uicamera.transform.FindChild("Anchor (LowerRight)").gameObject;
 			coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 			text = winText.GetComponent<tk2dTextMesh> ();
 			scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
@@ -132,6 +136,8 @@ public class WinLose : MonoBehaviour {
 		UI1.SetActive (false);
 		UI2.SetActive (false);
 		UI3.SetActive (false);
+		UI4.SetActive(true);
+		UI5.SetActive(true);
 
 
 
@@ -142,6 +148,8 @@ public class WinLose : MonoBehaviour {
 		UI1.SetActive (false);
 		UI2.SetActive (false);
 		UI3.SetActive (false);
+		UI4.SetActive(true);
+		UI5.SetActive(true);
 
 	}
 }

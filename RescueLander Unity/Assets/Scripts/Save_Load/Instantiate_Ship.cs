@@ -5,15 +5,56 @@ public class Instantiate_Ship : MonoBehaviour {
 
 
 	void Awake () {
+
 		GameObject instance = Instantiate(Resources.Load("Prefabs/"+dataManger.manager.actualShip, typeof(GameObject))) as GameObject;
-		SpriteColorFX.SpriteColorMasks3 tint = instance.GetComponent<SpriteColorFX.SpriteColorMasks3>();
-		tint.colorMaskRed.r = dataManger.manager.color1r;
-		tint.colorMaskRed.g = dataManger.manager.color1g;
-		tint.colorMaskRed.b = dataManger.manager.color1b;
-		tint.colorMaskGreen.r = dataManger.manager.color2r;
-		tint.colorMaskGreen.g = dataManger.manager.color2g;
-		tint.colorMaskGreen.b = dataManger.manager.color2b;
-		tint.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
+		SpriteColorFX.SpriteColorMasks3 tintMask = instance.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+		tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
+		if(dataManger.manager.color1r == 0 & dataManger.manager.color1g == 0 & dataManger.manager.color1b == 0){
+
+			switch(dataManger.manager.actualShip){
+				case "Ship01" :
+					tintMask.colorMaskRed = new Color32(249,176,0,255);
+					tintMask.colorMaskGreen = new Color32(197,0,0,255);
+					break;
+				case "369" :
+
+					tintMask.colorMaskRed = new Color32(207,207,207,255);
+					tintMask.colorMaskGreen = new Color32(106,161,185,255);
+					break;
+				case "Taboo" :
+					tintMask.colorMaskRed = new Color32(247,233,32,255);
+					tintMask.colorMaskGreen = new Color32(255,127,0,255);
+					break;
+				case "UFLO" :
+					tintMask.colorMaskRed = new Color32(147,104,181,255);
+					tintMask.colorMaskGreen = new Color32(255,127,0,255);
+					break;
+				case "Box" :
+					tintMask.colorMaskRed = new Color32(198,156,109,255);
+					tintMask.colorMaskGreen = new Color32(247,49,56,255);
+					
+					break;
+				case "Mush" :
+					tintMask.colorMaskRed = new Color32(184,154,121,255);
+					tintMask.colorMaskGreen = new Color32(255,0,0,255);
+					
+					break;
+				case "Bow" :
+					tintMask.colorMaskRed = new Color32(147,104,181,255);
+					tintMask.colorMaskGreen = new Color32(255,127,0,255);
+					
+					break;
+			}
+		}else{
+			tintMask.colorMaskRed.r = dataManger.manager.color1r;
+			tintMask.colorMaskRed.g = dataManger.manager.color1g;
+			tintMask.colorMaskRed.b = dataManger.manager.color1b;
+			tintMask.colorMaskGreen.r = dataManger.manager.color2r;
+			tintMask.colorMaskGreen.g = dataManger.manager.color2g;
+			tintMask.colorMaskGreen.b = dataManger.manager.color2b;
+		}
+
+
 		instance.transform.position = new Vector3(transform.position.x - 7,transform.position.y + 52, transform.position.z - 50);
 		Debug.Log("Ship instantiated");
 	}

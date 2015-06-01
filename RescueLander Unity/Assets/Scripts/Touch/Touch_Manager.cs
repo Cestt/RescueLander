@@ -33,6 +33,8 @@ public class Touch_Manager : MonoBehaviour {
 	private GameObject pauseText;
 	private Ads ads;
 	private GameObject check;
+	private GameObject options;
+	private bool levelEnable = true;
 
 
 
@@ -48,8 +50,10 @@ public class Touch_Manager : MonoBehaviour {
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
 			pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
+
 		}else{
 			check = GameObject.Find("Invert Rotation").transform.FindChild("Check").gameObject;
+			options = uicameraGameobject.transform.FindChild("Options_Menu").gameObject;
 			if(dataManger.manager.inverted){
 				check.SetActive(true);
 			}else{
@@ -163,6 +167,10 @@ public class Touch_Manager : MonoBehaviour {
 						case "Exit_Button" :
 							dataManger.manager.Save(false);
 							Garaje(false);
+							if(Application.loadedLevelName == "Menu"){
+								options.SetActive(false);
+							}
+
 							break;
 						case "A_Button" :
 							selectedZone = "A";
@@ -318,19 +326,24 @@ public class Touch_Manager : MonoBehaviour {
 								check.SetActive(false);
 							}
 							dataManger.manager.Save(false);
+							break;	
+						case "Options_Button" :
+							options.SetActive(true);
+							levelEnable = false;
 							break;
 						default :
 							
 							break;
 							
 						}
-						if(hit.collider.tag == "Level_Ico"){
+						if(hit.collider.tag == "Level_Ico" & levelEnable){
 							string tempString = hit.collider.name.Substring(6);
 							int tempInt = int.Parse(tempString);
 							Debug.Log("Clicked Level: "+tempInt);
 							if(dataManger.manager.unlocks >= tempInt){
 								dataManger.manager.actualLevel = tempInt;
 								StartCoroutine(LoadLevelAsync(tempInt));
+								levelEnable = false;
 							}
 						}
 						if(hit.collider.name.Contains("Color")){
@@ -443,6 +456,10 @@ public class Touch_Manager : MonoBehaviour {
 					case "Exit_Button" :
 						Garaje(false);
 						dataManger.manager.Save(false);
+						if(Application.loadedLevelName == "Menu"){
+							options.SetActive(false);
+						}
+
 						break;
 					case "A_Button" :
 						selectedZone = "A";
@@ -598,18 +615,23 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						dataManger.manager.Save(false);
 						break;
+					case "Options_Button" :
+							options.SetActive(true);
+						levelEnable = false;
+						break;
 					default :
 						
 						break;
 						
 					}
-					if(hit.collider.tag == "Level_Ico"){
+					if(hit.collider.tag == "Level_Ico" & levelEnable){
 						string tempString = hit.collider.name.Substring(6);
 						int tempInt = int.Parse(tempString);
 						Debug.Log("Clicked Level: "+tempInt);
 						if(dataManger.manager.unlocks >= tempInt){
 							dataManger.manager.actualLevel = tempInt;
 							StartCoroutine(LoadLevelAsync(tempInt));
+							levelEnable = false;
 						}
 					}
 					if(hit.collider.name== "Color_01"){
@@ -718,6 +740,7 @@ public class Touch_Manager : MonoBehaviour {
 				}
 			}
 			garaje.SetActive(true);
+			levelEnable = false;
 		}
 		if(!activate){
 			if(Application.loadedLevelName != "Menu"){
@@ -729,6 +752,7 @@ public class Touch_Manager : MonoBehaviour {
 				}
 			}
 			garaje.SetActive(false);
+			levelEnable = true;
 			Result = null;
 		}
 

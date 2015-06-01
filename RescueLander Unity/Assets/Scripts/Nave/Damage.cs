@@ -41,7 +41,6 @@ public class Damage : MonoBehaviour {
 		sparks = GameObject.Find("Sparks");
 		GameObject temp = GameObject.Find("UI_Camera");
 		lifeBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Vida/BarraVida").gameObject;
-		Debug.Log (lifeBar.name);
 		GameManager = GameObject.Find("Game Manager");
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
 		slicedsprite = lifeBar.GetComponent<tk2dSlicedSprite>();

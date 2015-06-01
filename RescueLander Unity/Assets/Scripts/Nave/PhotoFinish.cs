@@ -11,10 +11,12 @@ public class PhotoFinish : MonoBehaviour {
 	private GameObject ship;
 	private Vector3 plataform_pos;
 	private ShipAstronautPickUp pickUp;
+	private ShipAstronautDrop drop;
 	private Camera cam;
 
 	void Awake(){
 		ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
+		drop = ship.GetComponent<ShipAstronautDrop>();
 		plataform_pos = GameObject.Find ("Landing Platform").transform.position;
 		pickUp = ship.GetComponent<ShipAstronautPickUp>();
 		cam = GetComponent<Camera>();
@@ -29,12 +31,12 @@ public class PhotoFinish : MonoBehaviour {
 		float dist = Mathf.Sqrt( (vect.x*vect.x) + (vect.y*vect.y));
 
 
-		if (dist < 100f & vect.y < 70f & vect.x < 75 & vect.x > -85 & pickUp.astronautPicked>0){
+		if (dist < 100f & vect.y < 70f & vect.x < 75 & vect.x > -85 & pickUp.astronautPicked>drop.totalAstronauts){
 			//Movemos en el eje X la camara
 			int maxScrollX = GameObject.Find("Camera 2DTK").GetComponent<Cameraposition>().maxScrollX;
 			transform.position = new Vector3(ship_pos.x,transform.position.y,0);
-			transform.position = new Vector3(Mathf.Clamp(transform.position.x,cam.pixelHeight/2/camera.ZoomFactor,
-			                                             maxScrollX - cam.pixelHeight/2/camera.ZoomFactor),
+			transform.position = new Vector3(Mathf.Clamp(transform.position.x,cam.pixelHeight/2,
+			                                             maxScrollX - cam.pixelHeight/2),
 			                                 transform.position.y,
 			                                 transform.position.z);
 			TakePhoto();

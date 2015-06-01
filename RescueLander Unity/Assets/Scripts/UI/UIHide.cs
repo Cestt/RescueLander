@@ -4,9 +4,9 @@ using System.Collections;
 public class UIHide : MonoBehaviour {
 
 	private Animation animation;
-	public GameObject ColumnLeft;
-	public GameObject ColumnRight;
-	public GameObject ship;
+	private GameObject ColumnLeft;
+	private GameObject ColumnRight;
+	private GameObject ship;
 	private tk2dCamera camera;
 	private bool first = true;
 	private Vector2 tempVect;
@@ -15,6 +15,10 @@ public class UIHide : MonoBehaviour {
 
 	void Awake(){
 
+		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+		GameObject uicamera = GameObject.Find("UI_Camera");
+		ColumnLeft = uicamera.transform.FindChild("Anchor (UpperLeft)/UIBase_Left").gameObject;
+		ColumnRight = uicamera.transform.FindChild("Anchor (UpperRight)/UIBase_Right").gameObject;
 		Physics2D.IgnoreLayerCollision(5, 8, true);
 		camera = this.GetComponentInParent<tk2dCamera>();
 		originVect = this.transform.localPosition;

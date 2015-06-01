@@ -30,18 +30,18 @@ public class dataManger : MonoBehaviour {
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]
 	public Dictionary<string,int> scores = new Dictionary<string, int>();
-	[HideInInspector]
+	//[HideInInspector]
 	public string actualShip = "Ship01";
 	[HideInInspector]
 	public int totalStars;
 	public int levels;
 	[HideInInspector]
 	public int coins;
-	[HideInInspector]
+	//[HideInInspector]
 	public float color1r;
-	[HideInInspector]
+	//[HideInInspector]
 	public float color1g;
-	[HideInInspector]
+	//[HideInInspector]
 	public float color1b;
 	[HideInInspector]
 	public float color2r;
