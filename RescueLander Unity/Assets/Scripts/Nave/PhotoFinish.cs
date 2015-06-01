@@ -33,8 +33,8 @@ public class PhotoFinish : MonoBehaviour {
 			//Movemos en el eje X la camara
 			int maxScrollX = GameObject.Find("Camera 2DTK").GetComponent<Cameraposition>().maxScrollX;
 			transform.position = new Vector3(ship_pos.x,transform.position.y,0);
-			transform.position = new Vector3(Mathf.Clamp(transform.position.x,cam.pixelHeight/2/camera.ZoomFactor,
-			                                             maxScrollX - cam.pixelHeight/2/camera.ZoomFactor),
+			transform.position = new Vector3(Mathf.Clamp(transform.position.x,cam.pixelHeight/2,
+			                                             maxScrollX - cam.pixelHeight/2),
 			                                 transform.position.y,
 			                                 transform.position.z);
 			TakePhoto();

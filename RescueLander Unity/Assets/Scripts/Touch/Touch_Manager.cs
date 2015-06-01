@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 public class Touch_Manager : MonoBehaviour {
 	RuntimePlatform platform = Application.platform;
@@ -29,6 +31,7 @@ public class Touch_Manager : MonoBehaviour {
 	private PowerUp_Manager powerManager;
 	private Garaje_Manager garage_manager;
 	private Coin_Manager coin_manager;
+	private Social_Manager socialManager;
 	private GameObject PUilustration;
 	private GameObject pauseText;
 	private Ads ads;
@@ -61,6 +64,7 @@ public class Touch_Manager : MonoBehaviour {
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
 		powerManager = GetComponent<PowerUp_Manager>();
+		socialManager = GetComponent<Social_Manager>();
 		colorSet = GetComponent<Color_Set>();
 		ShipGaraje = uicameraGameobject.transform.FindChild ("Garage_Menu/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
@@ -144,7 +148,7 @@ public class Touch_Manager : MonoBehaviour {
 								Debug.Log("Music on");
 							}
 							break;
-							
+						
 						case "Next_Button" :
 							int Level = dataManger.manager.actualLevel;
 							dataManger.manager.actualLevel ++;
@@ -319,6 +323,20 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							dataManger.manager.Save(false);
 							break;
+						case "GooglePlayButton":
+							// authenticate user:
+							Social.localUser.Authenticate((bool success) => {
+								socialManager.Check("Login",success);
+							});
+							break;
+						case "LeaderboardButton":
+							// show leaderboard UI
+							Social.ShowLeaderboardUI();
+							break;
+						case "AchievmentsButton":
+							// show achievements UI
+							Social.ShowAchievementsUI();
+							break;	
 						default :
 							
 							break;
@@ -598,6 +616,20 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						dataManger.manager.Save(false);
 						break;
+					case "GooglePlayButton":
+						// authenticate user:
+						Social.localUser.Authenticate((bool success) => {
+							socialManager.Check("Login",success);
+						});
+						break;
+					case "LeaderboardButton":
+						// show leaderboard UI
+						Social.ShowLeaderboardUI();
+						break;
+					case "AchievmentsButton":
+						// show achievements UI
+						Social.ShowAchievementsUI();
+						break;	
 					default :
 						
 						break;

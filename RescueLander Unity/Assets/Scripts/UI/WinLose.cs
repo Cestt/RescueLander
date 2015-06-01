@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 public class WinLose : MonoBehaviour {
 
@@ -22,6 +24,7 @@ public class WinLose : MonoBehaviour {
 	private float actualTime;
 	public float WinTimer;
 	private GameObject MisionAcomplished;
+	private Social_Manager socialManager;
 
 	void Awake () {
 	
@@ -41,6 +44,7 @@ public class WinLose : MonoBehaviour {
 			coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 			text = winText.GetComponent<tk2dTextMesh> ();
 			scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
+			socialManager = GameObject.Find ("Game Manager").GetComponent<Social_Manager>();
 			first = true;	
 		}
 
@@ -133,8 +137,15 @@ public class WinLose : MonoBehaviour {
 		UI2.SetActive (false);
 		UI3.SetActive (false);
 
-
-
+		//Sumamos las puntuaciones totales y se publica en el leaderboard
+		int new_score = 0;
+		for (int i=1; i<=dataManger.manager.actualLevel; i++){
+			new_score += dataManger.manager.scores["Level_"+i];
+		}
+		Debug.Log ("Leaderboard nueva puntuacion: "+ new_score);
+		/*Social.ReportScore(new_score, "ID_LEADERBOARD", (bool success) => {
+			socialManager.Check("Leaderboard",success);
+		});*/
 	}
 	void Lose(){
 
