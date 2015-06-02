@@ -26,16 +26,16 @@ namespace SpriteColorFX
     /// </summary>
     public Texture2D textureMask;
 
+    /// <summary>
+    /// Use SetPixelOp().
+    /// </summary>
+    public SpriteColorHelper.PixelOp pixelOp = SpriteColorHelper.PixelOp.Multiply;
+
 #region #1 Mask (red channel).
     /// <summary>
     /// Mask strength [0..1].
     /// </summary>
     public float strengthMaskRed = 1.0f;
-
-    /// <summary>
-    /// Pixel operation.
-    /// </summary>
-    public SpriteColorHelper.PixelOp pixelOpMaskRed = SpriteColorHelper.PixelOp.Multiply;
 
     /// <summary>
     /// Mask color.
@@ -65,11 +65,6 @@ namespace SpriteColorFX
     public float strengthMaskGreen = 1.0f;
 
     /// <summary>
-    /// Pixel operation.
-    /// </summary>
-    public SpriteColorHelper.PixelOp pixelOpMaskGreen = SpriteColorHelper.PixelOp.Multiply;
-
-    /// <summary>
     /// Mask color.
     /// </summary>
     public Color colorMaskGreen = Color.white;
@@ -97,11 +92,6 @@ namespace SpriteColorFX
     public float strengthMaskBlue = 1.0f;
 
     /// <summary>
-    /// Pixel operation.
-    /// </summary>
-    public SpriteColorHelper.PixelOp pixelOpMaskBlue = SpriteColorHelper.PixelOp.Multiply;
-
-    /// <summary>
     /// Mask color.
     /// </summary>
     public Color colorMaskBlue = Color.white;
@@ -124,26 +114,38 @@ namespace SpriteColorFX
 
 		private SpriteRenderer spriteRenderer;
 
+    /// <summary>
+    /// Set the pixel color operation.
+    /// </summary>
+    public void SetPixelOp(SpriteColorHelper.PixelOp pixelOp)
+    {
+      this.pixelOp = pixelOp;
+
+      string shaderPath = string.Format("Shaders/Masks/SpriteColorMasks3{0}", this.pixelOp.ToString());
+
+      Shader shader = Resources.Load<Shader>(shaderPath);
+      if (shader != null)
+      {
+        spriteRenderer.sharedMaterial = new Material(shader);
+        spriteRenderer.sharedMaterial.name = @"Sprite/SpriteColorMasks3";
+      }
+      else
+      {
+        Debug.LogWarning(string.Format("Failed to load '{0}', SpriteColorMasks3 disabled.", shaderPath));
+
+        this.enabled = false;
+      }
+    }
+
 		private void OnEnable()
 		{
 			spriteRenderer = base.GetComponent<SpriteRenderer>();
 			if (spriteRenderer != null)
-			{
-				Shader shader = Resources.Load<Shader>(@"Shaders/Masks/SpriteColorMasks3");
-				if (shader != null)
-				{
-					spriteRenderer.sharedMaterial = new Material(shader);
-					spriteRenderer.sharedMaterial.name = @"Sprite/SpriteColorMasks3";
-				}
-				else
-				{
-					Debug.LogWarning(@"Failed to load necessary files, SpriteColorMasks3 disabled.");
-					base.enabled = false;
-				}
-			}
-			else
+        SetPixelOp(pixelOp);
+      else
 			{
 				Debug.LogWarning(string.Format("'{0}' without SpriteRenderer, SpriteColorMasks3 disabled.", base.gameObject.name));
+
 				base.enabled = false;
 			}
 		}
@@ -167,25 +169,22 @@ namespace SpriteColorFX
 				spriteRenderer.sharedMaterial.SetTexture(SpriteColorHelper.ShaderMaskTex, textureMask);
 				spriteRenderer.sharedMaterial.SetFloat(SpriteColorHelper.ShaderStrengthParam, strength);
 
-        // #1
+        // #1 mask red.
         spriteRenderer.sharedMaterial.SetFloat(SpriteColorHelper.ShaderStrengthRedParam, strengthMaskRed);
-        spriteRenderer.sharedMaterial.SetInt(SpriteColorHelper.ShaderPixelOpRedParam, (int)pixelOpMaskRed);
         spriteRenderer.sharedMaterial.SetColor(SpriteColorHelper.ShaderColorRedParam, colorMaskRed);
         spriteRenderer.sharedMaterial.SetTexture(SpriteColorHelper.ShaderMaskRedParam, textureMaskRed);
         spriteRenderer.sharedMaterial.SetVector(SpriteColorHelper.ShaderUVRedParam, textureMaskRedUVParams);
         spriteRenderer.sharedMaterial.SetFloat(SpriteColorHelper.ShaderUVAngleRedParam, textureMaskRedUVAngle * Mathf.Deg2Rad);
 
-        // #2
+        // #2 mask green.
         spriteRenderer.sharedMaterial.SetFloat(SpriteColorHelper.ShaderStrengthGreenParam, strengthMaskGreen);
-        spriteRenderer.sharedMaterial.SetInt(SpriteColorHelper.ShaderPixelOpGreenParam, (int)pixelOpMaskGreen);
         spriteRenderer.sharedMaterial.SetColor(SpriteColorHelper.ShaderColorGreenParam, colorMaskGreen);
         spriteRenderer.sharedMaterial.SetTexture(SpriteColorHelper.ShaderMaskGreenParam, textureMaskGreen);
         spriteRenderer.sharedMaterial.SetVector(SpriteColorHelper.ShaderUVGreenParam, textureMaskGreenUVParams);
         spriteRenderer.sharedMaterial.SetFloat(SpriteColorHelper.ShaderUVAngleGreenParam, textureMaskGreenUVAngle * Mathf.Deg2Rad);
 
-        // #3
+        // #3 mask blue.
         spriteRenderer.sharedMaterial.SetFloat(SpriteColorHelper.ShaderStrengthBlueParam, strengthMaskBlue);
-        spriteRenderer.sharedMaterial.SetInt(SpriteColorHelper.ShaderPixelOpBlueParam, (int)pixelOpMaskBlue);
         spriteRenderer.sharedMaterial.SetColor(SpriteColorHelper.ShaderColorBlueParam, colorMaskBlue);
         spriteRenderer.sharedMaterial.SetTexture(SpriteColorHelper.ShaderMaskBlueParam, textureMaskBlue);
         spriteRenderer.sharedMaterial.SetVector(SpriteColorHelper.ShaderUVBlueParam, textureMaskBlueUVParams);

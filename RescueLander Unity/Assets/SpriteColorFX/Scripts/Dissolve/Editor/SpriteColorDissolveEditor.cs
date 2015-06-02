@@ -61,7 +61,7 @@ namespace SpriteColorFX
 
         if (baseTarget.shaderType != DissolveShaderType.Normal)
         {
-          SpriteColorHelper.PixelOp newPixelOp = (SpriteColorHelper.PixelOp)EditorGUILayout.EnumPopup(new GUIContent(@"Pixel op", @"Color pixel operation"), baseTarget.pixelOp);
+          SpriteColorHelper.PixelOp newPixelOp = (SpriteColorHelper.PixelOp)EditorGUILayout.EnumPopup(new GUIContent(@"Blend mode", @"Blend modes"), baseTarget.pixelOp);
           if (newPixelOp != baseTarget.pixelOp)
             baseTarget.SetPixelOp(newPixelOp);
         }

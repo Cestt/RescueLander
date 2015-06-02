@@ -30,7 +30,7 @@ namespace SpriteColorFX
   }
 
   /// <summary>
-  /// Dissolve texture type. If you want to use your own, set 'Custom'.
+  /// Dissolve texture type. If you want to use your own, set 'Custom' and change 'borderTexture'.
   /// </summary>
   public enum DisolveTextureType
   {
@@ -43,7 +43,6 @@ namespace SpriteColorFX
     Plasma,
     Sphere,
     Vertical,
-    Diamonds,
     Radial,
     Radial5,
     RaysCenter,
@@ -73,7 +72,7 @@ namespace SpriteColorFX
     public DissolveShaderType shaderType = DissolveShaderType.Normal;
 
     /// <summary>
-    /// Pixel operation.
+    /// Use SetPixelOp().
     /// </summary>
     public SpriteColorHelper.PixelOp pixelOp = SpriteColorHelper.PixelOp.Solid;
 
@@ -88,7 +87,7 @@ namespace SpriteColorFX
     public Texture disolveTexture;
 
     /// <summary>
-    /// Border texture.
+    /// Border texture. Change this if you want to use a custom texture.
     /// </summary>
     public Texture borderTexture;
 
@@ -135,15 +134,25 @@ namespace SpriteColorFX
     public void SetShaderType(DissolveShaderType shaderType)
     {
       this.shaderType = shaderType;
-      Shader shader = null;
+
+      SetPixelOp(pixelOp);
+    }
+
+    /// <summary>
+    /// Set the pixel color operation.
+    /// </summary>
+    public void SetPixelOp(SpriteColorHelper.PixelOp pixelOp)
+    {
+      this.pixelOp = pixelOp;
+
+      string shaderPath = string.Empty;
 
       if (this.shaderType == DissolveShaderType.Normal)
-        shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveNormal");
-      else if (this.shaderType == DissolveShaderType.BorderColor)
-        shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveColor");
-      else if (this.shaderType == DissolveShaderType.BorderTexture)
-        shader = Resources.Load<Shader>(@"Shaders/Dissolve/SpriteColorDissolveTexture");
+        shaderPath = @"Shaders/Dissolve/SpriteColorDissolveNormal";
+      else
+        shaderPath = string.Format("Shaders/Dissolve/SpriteColorDissolve{0}{1}", shaderType.ToString(), this.pixelOp.ToString());
 
+      Shader shader = Resources.Load<Shader>(shaderPath);
       if (shader != null)
       {
         spriteRenderer.sharedMaterial = new Material(shader);
@@ -151,19 +160,10 @@ namespace SpriteColorFX
       }
       else
       {
-        Debug.LogWarning(@"Failed to load necessary files, SpriteColorDissolve disabled.");
+        Debug.LogWarning(string.Format("Failed to load '{0}', SpriteColorDissolve disabled.", shaderPath));
 
         this.enabled = false;
       }
-    }
-
-    /// <summary>
-    /// Set the pixel color operation.
-    /// </summary>
-    [System.Obsolete(@"No longer needed. You can uso this.pixelOp", false)]
-    public void SetPixelOp(SpriteColorHelper.PixelOp pixelOp)
-    {
-      this.pixelOp = pixelOp;
     }
 
     /// <summary>
@@ -174,29 +174,20 @@ namespace SpriteColorFX
       if (textureType != disolveTextureType)
       {
         disolveTextureType = textureType;
-        switch (disolveTextureType)
+
+        if (disolveTextureType != DisolveTextureType.Custom)
         {
-          case DisolveTextureType.Burn: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Burn"); break;
-          case DisolveTextureType.Explosion: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Explosion"); break;
-          case DisolveTextureType.Grow: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Grow"); break;
-          case DisolveTextureType.Horizontal: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Horizontal"); break;
-          case DisolveTextureType.Organic: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Organic"); break;
-          case DisolveTextureType.Pixel: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Pixel"); break;
-          case DisolveTextureType.Plasma: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Plasma"); break;
-          case DisolveTextureType.Sphere: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Sphere"); break;
-          case DisolveTextureType.Vertical: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Vertical"); break;
-          case DisolveTextureType.Diamonds: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Diamonds"); break;
-          case DisolveTextureType.Radial: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Radial"); break;
-          case DisolveTextureType.Radial5: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Radial5"); break;
-          case DisolveTextureType.RaysCenter: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/RaysCenter"); break;
-          case DisolveTextureType.RaysCorner: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/RaysCorner"); break;
-          case DisolveTextureType.Spiral: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Spiral"); break;
-          case DisolveTextureType.SpiralFast1: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/SpiralFast1"); break;
-          case DisolveTextureType.SpiralFast2: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/SpiralFast2"); break;
-          case DisolveTextureType.SpiralFract: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/SpiralFract"); break;
-          case DisolveTextureType.Squares: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Squares"); break;
-          case DisolveTextureType.Waves: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/Waves"); break;
-          case DisolveTextureType.WavesVertical: disolveTexture = Resources.Load<Texture>(@"Textures/Dissolve/WavesVertical"); break;
+          string texturePath = string.Format("Textures/Dissolve/{0}", disolveTextureType.ToString());
+
+          Texture texture = Resources.Load<Texture>(texturePath);
+          if (texture != null)
+            disolveTexture = texture;
+          else
+          {
+            Debug.LogWarning(string.Format("Failed to load '{0}', SpriteColorDissolve disabled.", texturePath));
+
+            this.enabled = false;
+          }
         }
       }
     }
@@ -227,27 +218,25 @@ namespace SpriteColorFX
 
       if (spriteRenderer != null && spriteRenderer.sharedMaterial != null)
       {
-        spriteRenderer.sharedMaterial.SetTexture("_DissolveTex", disolveTexture);
-
-        spriteRenderer.sharedMaterial.SetInt("_PixelOp", (int)pixelOp);
+        spriteRenderer.sharedMaterial.SetTexture(@"_DissolveTex", disolveTexture);
 
         if (shaderType == DissolveShaderType.BorderTexture)
         {
-          spriteRenderer.sharedMaterial.SetTexture("_BorderTex", borderTexture);
-          spriteRenderer.sharedMaterial.SetFloat("_BorderUVScale", borderUVScale);
+          spriteRenderer.sharedMaterial.SetTexture(@"_BorderTex", borderTexture);
+          spriteRenderer.sharedMaterial.SetFloat(@"_BorderUVScale", borderUVScale);
         }
 
-        spriteRenderer.sharedMaterial.SetFloat("_DissolveAmount", 1.0f - dissolveAmount);
+        spriteRenderer.sharedMaterial.SetFloat(@"_DissolveAmount", 1.0f - dissolveAmount);
 
         if (shaderType != DissolveShaderType.Normal)
-          spriteRenderer.sharedMaterial.SetFloat("_DissolveLineWitdh", dissolveBorderWitdh);
+          spriteRenderer.sharedMaterial.SetFloat(@"_DissolveLineWitdh", dissolveBorderWitdh);
 
         if (shaderType == DissolveShaderType.BorderColor)
-          spriteRenderer.sharedMaterial.SetColor("_DissolveLineColor", dissolveBorderColor);
+          spriteRenderer.sharedMaterial.SetColor(@"_DissolveLineColor", dissolveBorderColor);
 
-        spriteRenderer.sharedMaterial.SetFloat("_DissolveUVScale", dissolveUVScale);
-        spriteRenderer.sharedMaterial.SetFloat("_DissolveInverseOne", dissolveInverse == false ? 0.0f : 1.0f);
-        spriteRenderer.sharedMaterial.SetFloat("_DissolveInverseTwo", dissolveInverse == false ? -1.0f : 1.0f);
+        spriteRenderer.sharedMaterial.SetFloat(@"_DissolveUVScale", dissolveUVScale);
+        spriteRenderer.sharedMaterial.SetFloat(@"_DissolveInverseOne", dissolveInverse == false ? 0.0f : 1.0f);
+        spriteRenderer.sharedMaterial.SetFloat(@"_DissolveInverseTwo", dissolveInverse == false ? -1.0f : 1.0f);
       }
     }
   }

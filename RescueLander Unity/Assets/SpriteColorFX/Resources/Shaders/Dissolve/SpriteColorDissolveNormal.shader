@@ -52,7 +52,7 @@ Shader "Sprites/Sprite Color FX/Sprite Color Dissolve Normal"
       #pragma fragment frag
       #pragma fragmentoption ARB_precision_hint_fastest
 	  #pragma multi_compile DUMMY PIXELSNAP_ON
-      #pragma target 2.0
+      #pragma target 3.0
 
 	  #include "UnityCG.cginc"
       #include "../SpriteColorFXCG.cginc"

@@ -55,14 +55,14 @@ inline float3 Additive(float3 s, float3 d)
   return s + d;
 }
 
-// Burn.
+// Color burn.
 inline float3 Burn(float3 s, float3 d)
 {
-  return 1.0 - (1.0 - d) / s;
+  return 1.0 - (1.0 - s) / d;
 }
 
 // Color.
-inline float3 Color(float3 s, float3 d)
+float3 Color(float3 s, float3 d)
 {
   d = RGB2HSV(d);
   d.z = RGB2HSV(s).z;
@@ -76,38 +76,38 @@ inline float3 Darken(float3 s, float3 d)
   return min(s, d);
 }
 
-// Darker.
+// Darker color.
 inline float3 Darker(float3 s, float3 d)
 {
-  return (s.r + s.g + s.b < d.r + d.g + d.b) ? s : d;
+  return (Luminance601(s) < Luminance601(d)) ? s : d;
 }
 
 // Difference.
 inline float3 Difference(float3 s, float3 d)
 {
-  return abs(d - s);
+  return abs(s - d);
 }
 
 // Divide.
 inline float3 Divide(float3 s, float3 d)
 {
-  return d / s;
+  return s / d;
 }
 
-// Dodge.
+// Color dodge.
 inline float3 Dodge(float3 s, float3 d)
 {
-  return d / (1.0 - s);
+  return s / (1.0 - d);
 }
 
 // HardMix.
 inline float3 HardMix(float3 s, float3 d)
 {
-  return floor(s + d);
+  return (d > 1.0 - s) ? 1.0 : 0.0;
 }
 
 // Hue.
-inline float3 Hue(float3 s, float3 d)
+float3 Hue(float3 s, float3 d)
 {
   d = RGB2HSV(d);
   d.x = RGB2HSV(s).x;
@@ -116,14 +116,9 @@ inline float3 Hue(float3 s, float3 d)
 }
 
 // HardLight.
-inline float3 HardLight(float3 s, float3 d)
+float3 HardLight(float3 s, float3 d)
 {
-  float3 color;
-  color.r = (s.r < 0.5) ? 2.0 * s.r * d.r : 1.0 - 2.0 * (1.0 - s.r) * (1.0 - d.r);
-  color.g = (s.g < 0.5) ? 2.0 * s.g * d.g : 1.0 - 2.0 * (1.0 - s.g) * (1.0 - d.g);
-  color.b = (s.b < 0.5) ? 2.0 * s.b * d.b : 1.0 - 2.0 * (1.0 - s.b) * (1.0 - d.b);
-
-  return color;
+  return (d > 0.5) ? 1.0 - (1.0 - s) * (1.0 - 2.0 * (d - 0.5)) : s * (2.0 * d);
 }
 
 // Lighten.
@@ -132,10 +127,10 @@ inline float3 Lighten(float3 s, float3 d)
   return max(s, d);
 }
 
-// Lighter.
+// Lighter color.
 inline float3 Lighter(float3 s, float3 d)
 {
-  return (s.x + s.y + s.z > d.x + d.y + d.z) ? s : d;
+  return (Luminance601(s) > Luminance601(d)) ? s : d;
 }
 
 // Multiply.
@@ -145,46 +140,37 @@ inline float3 Multiply(float3 s, float3 d)
 }
 
 // Overlay.
-inline float3 Overlay(float3 s, float3 d)
+float3 Overlay(float3 s, float3 d)
 {
-  float3 color;
-  color.r = (d.r < 0.5) ? 2.0 * s.r * d.r : 1.0 - 2.0 * (1.0 - s.r) * (1.0 - d.r);
-  color.g = (d.g < 0.5) ? 2.0 * s.g * d.g : 1.0 - 2.0 * (1.0 - s.g) * (1.0 - d.g);
-  color.b = (d.b < 0.5) ? 2.0 * s.b * d.b : 1.0 - 2.0 * (1.0 - s.b) * (1.0 - d.b);
-
-  return color;
+  return (s > 0.5) ? 1.0 - 2.0 * (1.0 - s) * (1.0 - d) : 2.0 * s * d;
 }
 
 // Screen.
 inline float3 Screen(float3 s, float3 d)
 {
-  return s + d - s * d;
+  return 1.0 - (1.0 - s) * (1.0 - d);
+}
+
+// Solid.
+inline float3 Solid(float3 s, float3 d)
+{
+  return d;
 }
 
 // SoftLight.
-inline float3 SoftLight(float3 s, float3 d)
+float3 SoftLight(float3 s, float3 d)
 {
-  float3 color;
-  color.r = (s.r < 0.5) ? d.r - (1.0 - 2.0 * s.r) * d.r * (1.0 - d.r) : (d.r < 0.25) ? d.r + (2.0 * s.r - 1.0) * d.r * ((16.0 * d.r - 12.0) * d.r + 3.0) : d.r + (2.0 * s.r - 1.0) * (sqrt(d.r) - d.r);
-  color.g = (s.g < 0.5) ? d.g - (1.0 - 2.0 * s.g) * d.g * (1.0 - d.g) : (d.g < 0.25) ? d.g + (2.0 * s.g - 1.0) * d.g * ((16.0 * d.g - 12.0) * d.g + 3.0) : d.r + (2.0 * s.g - 1.0) * (sqrt(d.g) - d.g);
-  color.b = (s.b < 0.5) ? d.b - (1.0 - 2.0 * s.b) * d.b * (1.0 - d.b) : (d.b < 0.25) ? d.b + (2.0 * s.b - 1.0) * d.b * ((16.0 * d.b - 12.0) * d.b + 3.0) : d.b + (2.0 * s.b - 1.0) * (sqrt(d.b) - d.b);
-
-  return color;
+  return (1.0 - s) * s * d + s * (1.0 - (1.0 - s) * (1.0 - d));
 }
 
 // PinLight.
-inline float3 PinLight(float3 s, float3 d)
+float3 PinLight(float3 s, float3 d)
 {
-  float3 color;
-  color.r = (2.0 * s.r - 1.0 > d.r) ? 2.0 * s.r - 1.0 : (s.r < 0.5 * d.r) ? 2.0 * s.r : d.r;
-  color.g = (2.0 * s.g - 1.0 > d.g) ? 2.0 * s.g - 1.0 : (s.g < 0.5 * d.g) ? 2.0 * s.g : d.g;
-  color.b = (2.0 * s.b - 1.0 > d.b) ? 2.0 * s.b - 1.0 : (s.b < 0.5 * d.b) ? 2.0 * s.b : d.b;
-
-  return color;
+  return (d > 0.5) ? max(s, 2.0 * (d - 0.5)) : min(s, 2.0 * d);
 }
 
 // Saturation.
-inline float3 Saturation(float3 s, float3 d)
+float3 Saturation(float3 s, float3 d)
 {
   d = RGB2HSV(d);
   d.y = RGB2HSV(s).y;
@@ -200,14 +186,9 @@ inline float3 Subtract(float3 s, float3 d)
 }
 
 // VividLight.
-inline float3 VividLight(float3 s, float3 d)
+float3 VividLight(float3 s, float3 d)
 {
-  float3 color;
-  color.r = (s.r < 0.5) ? 1.0 - (1.0 - d.r) / (2.0 * s.r) : d.r / (2.0 * (1.0 - s.r));
-  color.g = (s.g < 0.5) ? 1.0 - (1.0 - d.g) / (2.0 * s.g) : d.g / (2.0 * (1.0 - s.g));
-  color.b = (s.b < 0.5) ? 1.0 - (1.0 - d.b) / (2.0 * s.b) : d.r / (2.0 * (1.0 - s.b));
-
-  return color;
+  return (d > 0.5) ? s / (1.0 - (d - 0.5) * 2.0) : 1.0 - (1.0 - s) / (d * 2.0);
 }
 
 // Luminosity.
@@ -230,58 +211,131 @@ float3 Luminosity(float3 s, float3 d)
   return c;
 }
 
-// Select pixel operation.
-float3 PixelOp(int pixelOp, float3 s, float3 d)
-{
-  if (pixelOp == 0)
-	return Additive(s, d);
-  else if (pixelOp == 1)
-	return Burn(s, d);
-  else if (pixelOp == 2)
-	return Color(s, d);
-  else if (pixelOp == 3)
-	return Darken(s, d);
-  else if (pixelOp == 4)
-	return Darker(s, d);
-  else if (pixelOp == 5)
-	return Difference(s, d);
-  else if (pixelOp == 6)
-	return Divide(s, d);
-  else if (pixelOp == 7)
-	return Dodge(s, d);
-  else if (pixelOp == 8)
-	return HardMix(s, d);
-  else if (pixelOp == 9)
-	return Hue(s, d);
-  else if (pixelOp == 10)
-	return HardLight(s, d);
-  else if (pixelOp == 11)
-	return Lighten(s, d);
-  else if (pixelOp == 12)
-	return Lighter(s, d);
-  else if (pixelOp == 13)
-	return Luminosity(s, d);
-  else if (pixelOp == 14)
-	return Multiply(s, d);
-  else if (pixelOp == 15)
-	return Overlay(s, d);
-  else if (pixelOp == 16)
-	return PinLight(s, d);
-  else if (pixelOp == 17)
-	return Saturation(s, d);
-  else if (pixelOp == 18)
-	return Screen(s, d);
-  else if (pixelOp == 19)
-	return d;
-  else if (pixelOp == 20)
-	return SoftLight(s, d);
-  else if (pixelOp == 21)
-	return Subtract(s, d);
-  else if (pixelOp == 22)
-	return VividLight(s, d);
+// Dissolve color pixel shader.
+#define DISSOLVE_COLOR_FRAG(PixelOp) \
+  sampler2D _MainTex; \
+  sampler2D _DissolveTex; \
+  \
+  float _DissolveAmount; \
+  float _DissolveLineWitdh; \
+  fixed4 _DissolveLineColor; \
+  float _DissolveUVScale; \
+  float _DissolveInverseOne; \
+  float _DissolveInverseTwo; \
+  \
+  float4 frag(v2f i) : COLOR \
+  { \
+    float4 pixel = tex2D(_MainTex, i.texcoord) * i.color; \
+  \
+    float4 dissolve = _DissolveInverseOne - tex2D(_DissolveTex, i.texcoord * _DissolveUVScale) * _DissolveInverseTwo; \
+  \
+    int isClear = int(dissolve.r + _DissolveAmount); \
+  \
+    float3 border = lerp(0.0, _DissolveLineColor.rgb > 0.0 ? PixelOp(pixel.rgb, _DissolveLineColor.rgb) : pixel.rgb, isClear); \
+  \
+    return float4(lerp(border, pixel.rgb, int(dissolve.r + _DissolveAmount - _DissolveLineWitdh)) * pixel.a, lerp(0.0, 1.0, isClear) * pixel.a); \
+  }
 
-  return s;
-}
+// Dissolve texture pixel shader.
+#define DISSOLVE_TEXTURE_FRAG(PixelOp) \
+  sampler2D _MainTex; \
+  sampler2D _DissolveTex; \
+  sampler2D _BorderTex; \
+  \
+  float _DissolveAmount; \
+  float _DissolveLineWitdh; \
+  float _DissolveUVScale; \
+  float _DissolveInverseOne; \
+  float _DissolveInverseTwo; \
+  float _BorderUVScale; \
+  \
+  float4 frag(v2f i) : COLOR \
+  { \
+    float4 pixel = tex2D(_MainTex, i.texcoord) * i.color; \
+  \
+    fixed4 pixelBorder = tex2D(_BorderTex, i.texcoord * _BorderUVScale) * i.color; \
+  \
+    float4 dissolve = _DissolveInverseOne - tex2D(_DissolveTex, i.texcoord * _DissolveUVScale) * _DissolveInverseTwo; \
+  \
+    int isClear = int(dissolve.r + _DissolveAmount); \
+  \
+    float3 border = lerp(0.0, pixelBorder.rgb > 0.0 ? PixelOp(pixel.rgb, pixelBorder.rgb) : pixel.rgb, isClear); \
+  \
+    return float4(lerp(border, pixel.rgb, int(dissolve.r + _DissolveAmount - _DissolveLineWitdh)) * pixel.a, lerp(0.0, 1.0, isClear) * pixel.a); \
+  }
+
+// Masks3 pixel shader.
+#define MASKS3_FRAG(PixelOp) \
+  float _Strength = 1.0f; \
+  \
+  float _StrengthRed = 1.0f; \
+  fixed4 _ColorRed; \
+  fixed4 _UVRedTexParams; \
+  float _UVRedTexAngle; \
+  \
+  float _StrengthGreen = 1.0f; \
+  fixed4 _ColorGreen; \
+  fixed4 _UVGreenTexParams; \
+  float _UVGreenTexAngle; \
+  \
+  float _StrengthBlue = 1.0f; \
+  fixed4 _ColorBlue; \
+  fixed4 _UVBlueTexParams; \
+  float _UVBlueTexAngle; \
+  \
+  sampler2D _MainTex; \
+  sampler2D _MaskTex; \
+  sampler2D _MaskRedTex; \
+  sampler2D _MaskGreenTex; \
+  sampler2D _MaskBlueTex; \
+  \
+  inline fixed2 UVCoordOp(fixed2 uv, float2 scale, float2 velocity, float angle) \
+  { \
+    float cosAngle = cos(angle); \
+    float sinAngle = sin(angle); \
+  \
+    uv = mul(uv, float2x2(cosAngle, -sinAngle, sinAngle, cosAngle)); \
+    uv *= scale; \
+    uv += velocity * _Time.y; \
+  \
+    return uv; \
+  } \
+  \
+  float4 frag(v2f i) : COLOR \
+  { \
+    float4 pixel = tex2D(_MainTex, i.texcoord) * i.color; \
+    float3 mask = tex2D(_MaskTex, i.texcoord).rgb; \
+  \
+    float3 colorMaskR = float3(0.0, 0.0, 0.0); \
+    float3 colorMaskG = float3(0.0, 0.0, 0.0); \
+    float3 colorMaskB = float3(0.0, 0.0, 0.0); \
+  \
+    float3 colorMask = float3(0.0, 0.0, 0.0); \
+  \
+    if (mask.r > 0.0) \
+    { \
+	  colorMaskR = mask.r * _StrengthRed; \
+      colorMask += _ColorRed.rgb * colorMaskR * tex2D(_MaskRedTex, UVCoordOp(i.texcoord, _UVRedTexParams.xy, _UVRedTexParams.zw, _UVRedTexAngle)).rgb; \
+    } \
+  \
+    if (mask.g > 0.0) \
+    { \
+      colorMaskG = mask.g * _StrengthGreen; \
+      colorMask += _ColorGreen.rgb * colorMaskG * tex2D(_MaskGreenTex, UVCoordOp(i.texcoord, _UVGreenTexParams.xy, _UVGreenTexParams.zw, _UVGreenTexAngle)).rgb; \
+    } \
+  \
+    if (mask.b > 0.0) \
+    { \
+      colorMaskB = mask.b * _StrengthBlue; \
+      colorMask += _ColorBlue.rgb * colorMaskB * tex2D(_MaskBlueTex, UVCoordOp(i.texcoord, _UVBlueTexParams.xy, _UVBlueTexParams.zw, _UVBlueTexAngle)).rgb; \
+    } \
+  \
+    float3 final = lerp(pixel.rgb, colorMask > 0.0 ? PixelOp(pixel.rgb, colorMask) : pixel.rgb, colorMaskR + colorMaskG + colorMaskB); \
+  \
+    return float4(lerp(pixel.rgb, final, _Strength) * pixel.a, pixel.a); \
+ }
+
+// Common vertex shader.
 
 struct appdata_t
 {
@@ -297,7 +351,7 @@ struct v2f
   fixed2 texcoord : TEXCOORD0;
 };
 
-uniform fixed4 _Color;
+fixed4 _Color;
 
 v2f vert(appdata_t i)
 {

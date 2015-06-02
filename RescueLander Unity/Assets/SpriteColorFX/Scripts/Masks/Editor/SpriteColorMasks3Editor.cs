@@ -32,8 +32,6 @@ namespace SpriteColorFX
 
 		private SpriteColorMasks3 baseTarget;
 
-		private bool[] foldoutsMasks = new bool[3];
-		
     /// <summary>
     /// OnInspectorGUI.
     /// </summary>
@@ -56,60 +54,70 @@ namespace SpriteColorFX
 			
         baseTarget.strength = (float)SpriteColorFXEditorHelper.IntSliderWithReset(@"Strength", SpriteColorFXEditorHelper.TooltipStrength, Mathf.RoundToInt(baseTarget.strength * 100.0f), 0, 100, 100) * 0.01f;
 
-			  if (foldoutsMasks[0] = EditorGUILayout.Foldout(foldoutsMasks[0], @"#1 mask (red)"))
+        SpriteColorHelper.PixelOp newPixelOp = (SpriteColorHelper.PixelOp)EditorGUILayout.EnumPopup(new GUIContent(@"Blend mode", @"Blend modes"), baseTarget.pixelOp);
+        if (newPixelOp != baseTarget.pixelOp)
+          baseTarget.SetPixelOp(newPixelOp);
+
+        EditorGUILayout.LabelField(@"#1 mask (red)");
 			  {
 				  EditorGUI.indentLevel++;
 
 				  baseTarget.strengthMaskRed = (float)SpriteColorFXEditorHelper.IntSliderWithReset(@"Strength", SpriteColorFXEditorHelper.TooltipStrength, Mathf.RoundToInt(baseTarget.strengthMaskRed * 100f), 0, 100, 100) * 0.01f;
 				  
-          baseTarget.pixelOpMaskRed = (SpriteColorHelper.PixelOp)EditorGUILayout.EnumPopup(new GUIContent(@"Pixel op", @"Color pixel operation"), baseTarget.pixelOpMaskRed);
-				  
           baseTarget.colorMaskRed = EditorGUILayout.ColorField(@"Color", baseTarget.colorMaskRed);
 				  
-          baseTarget.textureMaskRed = (EditorGUILayout.ObjectField(new GUIContent(@"Texture (RGB)", SpriteColorFXEditorHelper.TooltipTextureMask), baseTarget.textureMaskRed, typeof(Texture2D), false) as Texture2D);
+          baseTarget.textureMaskRed = (EditorGUILayout.ObjectField(new GUIContent(@"Texture (RGB)", SpriteColorFXEditorHelper.TooltipTextureMask), baseTarget.textureMaskRed, typeof(Texture2D), false, GUILayout.Height(54.0f)) as Texture2D);
 				  if (baseTarget.textureMaskRed != null)
-					  UVParamsInspectorGUI(ref baseTarget.textureMaskRedUVParams, ref baseTarget.textureMaskRedUVAngle);
+          {
+            EditorGUILayout.LabelField(@"UV params");
+            
+            UVParamsInspectorGUI(ref baseTarget.textureMaskRedUVParams, ref baseTarget.textureMaskRedUVAngle);
+          }
 
 				  EditorGUI.indentLevel--;
 			  }
 
-			  if (foldoutsMasks[1] = EditorGUILayout.Foldout(foldoutsMasks[1], @"#2 mask (green)"))
+        EditorGUILayout.LabelField(@"#2 mask (green)");
 			  {
 				  EditorGUI.indentLevel++;
 				  
           baseTarget.strengthMaskGreen = (float)SpriteColorFXEditorHelper.IntSliderWithReset(@"Strength", SpriteColorFXEditorHelper.TooltipStrength, Mathf.RoundToInt(baseTarget.strengthMaskGreen * 100f), 0, 100, 100) * 0.01f;
 				  
-          baseTarget.pixelOpMaskGreen = (SpriteColorHelper.PixelOp)EditorGUILayout.EnumPopup(new GUIContent(@"Pixel op", @"Color pixel operation"), baseTarget.pixelOpMaskGreen);
-				  
           baseTarget.colorMaskGreen = EditorGUILayout.ColorField(@"Color", baseTarget.colorMaskGreen);
-				  
-          baseTarget.textureMaskGreen = (EditorGUILayout.ObjectField(new GUIContent(@"Texture (RGB)", SpriteColorFXEditorHelper.TooltipTextureMask), baseTarget.textureMaskGreen, typeof(Texture2D), false) as Texture2D);
-				  if (baseTarget.textureMaskGreen != null)
-					  UVParamsInspectorGUI(ref baseTarget.textureMaskGreenUVParams, ref baseTarget.textureMaskGreenUVAngle);
+
+          baseTarget.textureMaskGreen = (EditorGUILayout.ObjectField(new GUIContent(@"Texture (RGB)", SpriteColorFXEditorHelper.TooltipTextureMask), baseTarget.textureMaskGreen, typeof(Texture2D), false, GUILayout.Height(54.0f)) as Texture2D);
+          if (baseTarget.textureMaskGreen != null)
+          {
+            EditorGUILayout.LabelField(@"UV params");
+
+            UVParamsInspectorGUI(ref baseTarget.textureMaskGreenUVParams, ref baseTarget.textureMaskGreenUVAngle);
+          }
 
 				  EditorGUI.indentLevel--;
 			  }
-			
-        if (foldoutsMasks[2] = EditorGUILayout.Foldout(foldoutsMasks[2], @"#3 mask (blue)"))
+
+        EditorGUILayout.LabelField(@"#3 mask (blue)");
 			  {
 				  EditorGUI.indentLevel++;
 
 				  baseTarget.strengthMaskBlue = (float)SpriteColorFXEditorHelper.IntSliderWithReset(@"Strength", SpriteColorFXEditorHelper.TooltipStrength, Mathf.RoundToInt(baseTarget.strengthMaskBlue * 100f), 0, 100, 100) * 0.01f;
           
-          baseTarget.pixelOpMaskBlue = (SpriteColorHelper.PixelOp)EditorGUILayout.EnumPopup(new GUIContent(@"Pixel op", @"Color pixel operation"), baseTarget.pixelOpMaskBlue);
-          
           baseTarget.colorMaskBlue = EditorGUILayout.ColorField(@"Color", baseTarget.colorMaskBlue);
-          
-          baseTarget.textureMaskBlue = (EditorGUILayout.ObjectField(new GUIContent(@"Texture (RGB)", SpriteColorFXEditorHelper.TooltipTextureMask), baseTarget.textureMaskBlue, typeof(Texture2D), false) as Texture2D);
+
+          baseTarget.textureMaskBlue = (EditorGUILayout.ObjectField(new GUIContent(@"Texture (RGB)", SpriteColorFXEditorHelper.TooltipTextureMask), baseTarget.textureMaskBlue, typeof(Texture2D), false, GUILayout.Height(54.0f)) as Texture2D);
 				  if (baseTarget.textureMaskBlue != null)
-					  this.UVParamsInspectorGUI(ref baseTarget.textureMaskBlueUVParams, ref baseTarget.textureMaskBlueUVAngle);
+          {
+            EditorGUILayout.LabelField(@"UV params");
+            
+            UVParamsInspectorGUI(ref baseTarget.textureMaskBlueUVParams, ref baseTarget.textureMaskBlueUVAngle);
+          }
 
 				  EditorGUI.indentLevel--;
 			  }
 
 			  EditorGUILayout.Separator();
 
-			  baseTarget.textureMask = (EditorGUILayout.ObjectField(new GUIContent(@"Mask #1 (RGB)", SpriteColorFXEditorHelper.TooltipTextureMask), this.baseTarget.textureMask, typeof(Texture2D), false) as Texture2D);
+        baseTarget.textureMask = (EditorGUILayout.ObjectField(new GUIContent(@"Mask #1 (RGB)", SpriteColorFXEditorHelper.TooltipTextureMask), this.baseTarget.textureMask, typeof(Texture2D), false, GUILayout.Height(54.0f)) as Texture2D);
 
 			  EditorGUILayout.Separator();
 
@@ -125,21 +133,19 @@ namespace SpriteColorFX
           if (GUILayout.Button(new GUIContent(@"Reset all", SpriteColorFXEditorHelper.TooltipResetAll), GUILayout.Width(82.0f)) == true)
           {
             baseTarget.strength = 1.0f;
+            baseTarget.pixelOp = SpriteColorHelper.PixelOp.Multiply;
 
             baseTarget.strengthMaskRed = 1.0f;
-            baseTarget.pixelOpMaskRed = SpriteColorHelper.PixelOp.Multiply;
             baseTarget.colorMaskRed = Color.white;
             baseTarget.textureMaskRedUVParams = new Vector4(1.0f, 1.0f, 0.0f, 0.0f);
             baseTarget.textureMaskRedUVAngle = 0.0f;
 
             baseTarget.strengthMaskGreen = 1.0f;
-            baseTarget.pixelOpMaskGreen = SpriteColorHelper.PixelOp.Multiply;
             baseTarget.colorMaskGreen = Color.white;
             baseTarget.textureMaskGreenUVParams = new Vector4(1.0f, 1.0f, 0.0f, 0.0f);
             baseTarget.textureMaskGreenUVAngle = 0.0f;
 
             baseTarget.strengthMaskBlue = 1.0f;
-            baseTarget.pixelOpMaskBlue = SpriteColorHelper.PixelOp.Multiply;
             baseTarget.colorMaskBlue = Color.white;
             baseTarget.textureMaskBlueUVParams = new Vector4(1.0f, 1.0f, 0.0f, 0.0f);
             baseTarget.textureMaskBlueUVAngle = 0.0f;
