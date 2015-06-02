@@ -187,6 +187,10 @@ public class Touch_Manager : MonoBehaviour {
 						case "PowerUp_Shield" :
 							if(dataManger.manager.shieldPowerUps >= 1){
 								powerManager.PowerUp("Shield");
+								//ACHIEVEMENT
+								Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+									socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+								});
 							}else{
 								ads.Launch("Shield");
 							}
@@ -194,6 +198,10 @@ public class Touch_Manager : MonoBehaviour {
 						case "PowerUp_Magnet" :
 							if(dataManger.manager.magnetPowerUps >= 1){
 								powerManager.PowerUp("Magnet");
+								//ACHIEVEMENT
+								Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+									socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+								});
 							}else{
 								ads.Launch("Magnet");
 							}
@@ -201,6 +209,10 @@ public class Touch_Manager : MonoBehaviour {
 						case "PowerUp_Fuel" :
 							if(dataManger.manager.fuelPowerUps >= 1){
 								powerManager.PowerUp("Fuel");
+								//ACHIEVEMENT
+								Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+									socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+								});
 							}else{
 								ads.Launch("Fuel");
 							}
@@ -289,6 +301,10 @@ public class Touch_Manager : MonoBehaviour {
 										Destroy(hit.collider.gameObject);
 									}
 									Debug.Log("Comprado " + hit.transform.parent.name.Substring(7));
+									//ACHIEVEMENT: 
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBA", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBA",success);
+									});
 								}else{
 									Debug.Log("Algo falla joder");
 								}
@@ -367,13 +383,22 @@ public class Touch_Manager : MonoBehaviour {
 						if(hit.collider.name.Contains("Color")){
 							if(hit.collider.gameObject.GetComponent<Color_Enabled>().enabled == true){
 								Color colorApply = hit.collider.gameObject.GetComponentInChildren<tk2dSprite>().color;
+								bool changeColor = false;
 								if(selectedZone == "A"){
 									colorChange.colorMaskRed = colorApply;
 									colorSet.ColorSet(colorApply,"A");
+									changeColor = true;
 								}
 								if(selectedZone == "B"){
 									colorChange.colorMaskGreen = colorApply;
 									colorSet.ColorSet(colorApply,"B");
+									changeColor = true;
+								}
+								//ACHIEVEMENT
+								if (changeColor){
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBQ", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBQ",success);
+									});
 								}
 							}
 							
@@ -633,12 +658,12 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						dataManger.manager.Save(false);
 						break;
-<<<<<<< HEAD
+
 					case "Options_Button" :
 							options.SetActive(true);
 						levelEnable = false;
 						break;
-=======
+
 					case "GooglePlayButton":
 						// authenticate user:
 						Social.localUser.Authenticate((bool success) => {
@@ -653,7 +678,6 @@ public class Touch_Manager : MonoBehaviour {
 						// show achievements UI
 						Social.ShowAchievementsUI();
 						break;	
->>>>>>> origin/Features_Javi
 					default :
 						
 						break;

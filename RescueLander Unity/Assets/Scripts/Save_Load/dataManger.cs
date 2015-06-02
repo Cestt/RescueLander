@@ -54,6 +54,8 @@ public class dataManger : MonoBehaviour {
 	public List<string> shipUnlocks = new List<string>();
 	[HideInInspector]
 	public bool inverted;
+	[HideInInspector]
+	public Dictionary<string,string> socialPending = new Dictionary<string, string>();
 
 	private GameObject temp;
 
@@ -279,5 +281,7 @@ class Data {
 	public List<string> shipUnlocks = new List<string>();
 	[HideInInspector]
 	public bool inverted;
+	[HideInInspector]
+	public Dictionary<string,string> socialPending = new Dictionary<string, string>();
 
 }

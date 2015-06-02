@@ -26,6 +26,7 @@ public class WinLose : MonoBehaviour {
 	private float actualTime;
 	public float WinTimer;
 	private GameObject MisionAcomplished;
+	private Damage damage;
 	private Social_Manager socialManager;
 
 	void Awake () {
@@ -39,6 +40,7 @@ public class WinLose : MonoBehaviour {
 			for(int j = 1; j <= 3; j++){
 				stars[j-1] = WinSprite.transform.FindChild("Win_Text/Win_Star"+j+"_On").gameObject;
 			}
+			damage = GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<Damage>();
 			LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
 			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
 			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
@@ -105,6 +107,10 @@ public class WinLose : MonoBehaviour {
 						= coin_manager.ThreeStarCoin.ToString();
 					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
 						= "Finished with 3 Stars:";
+					//ACHIEVEMENT
+					Social.ReportProgress("CgkIuv-YgIkeEAIQCQ", 100.0f, (bool success) => {
+						socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
+					});
 				}
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
 				WinSprite.transform.FindChild("Resume/CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level "+dataManger.manager.actualLevel.ToString();
@@ -143,15 +149,33 @@ public class WinLose : MonoBehaviour {
 		UI4.SetActive(true);
 		UI5.SetActive(true);
 
+		//ACHIEVEMENT: Can't touch this
+		if (damage.life == damage.maxLife){
+			Social.ReportProgress("CgkIuv-YgIkeEAIQAQ", 100.0f, (bool success) => {
+				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQAQ",success);
+			});
+		}
+		//ACHIEVEMENT:
+		if (dataManger.manager.actualLevel == dataManger.manager.levels){
+			Social.ReportProgress("CgkIuv-YgIkeEAIQCw", 100.0f, (bool success) => {
+				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCw",success);
+			});
+		}
+		//ACHIEVEMENT
+		if (dataManger.manager.totalStars == dataManger.manager.levels*3){
+			Social.ReportProgress("CgkIuv-YgIkeEAIQDA", 100.0f, (bool success) => {
+				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQDA",success);
+			});
+		}
 		//Sumamos las puntuaciones totales y se publica en el leaderboard
 		int new_score = 0;
 		for (int i=1; i<=dataManger.manager.actualLevel; i++){
 			new_score += dataManger.manager.scores["Level_"+i];
 		}
 		Debug.Log ("Leaderboard nueva puntuacion: "+ new_score);
-		/*Social.ReportScore(new_score, "ID_LEADERBOARD", (bool success) => {
-			socialManager.Check("Leaderboard",success);
-		});*/
+		Social.ReportScore(new_score, "CgkIuv-YgIkeEAIQDQ", (bool success) => {
+			socialManager.Check("Leaderboard",new_score.ToString(),success);
+		});
 	}
 	void Lose(){
 
