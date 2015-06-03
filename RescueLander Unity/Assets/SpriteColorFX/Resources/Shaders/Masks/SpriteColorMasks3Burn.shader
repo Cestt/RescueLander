@@ -57,7 +57,6 @@ Shader "Sprites/Sprite Color FX/Sprite Color Masks 3 Burn"
       #include "../SpriteColorFXCG.cginc"
 
       MASKS3_FRAG(Burn)
-
 	  ENDCG
 	}
   }

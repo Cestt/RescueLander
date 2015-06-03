@@ -56,7 +56,7 @@ Shader "Sprites/Sprite Color FX/Sprite Color Masks 3 Darken"
 	  #include "UnityCG.cginc"
       #include "../SpriteColorFXCG.cginc"
 
-      MASKS3_FRAG(Darken)
+      MASKS3_FRAG(Darken)	  
 	  ENDCG
 	}
   }

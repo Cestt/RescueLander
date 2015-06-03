@@ -62,7 +62,6 @@ Shader "Sprites/Sprite Color FX/Sprite Color Dissolve Border Color VividLight"
 	  #include "../SpriteColorFXCG.cginc"
 
 	  DISSOLVE_COLOR_FRAG(VividLight)
-
 	  ENDCG
 	}
   }
