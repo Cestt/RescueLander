@@ -175,9 +175,11 @@ namespace SpriteColorFX
     {
       Color color = new Color();
 
-      color.r = Random.Range(-0.3f, 0.3f) + 0.5f;
-      color.g = Random.Range(-0.3f, 0.3f) + 0.5f;
-      color.b = Random.Range(-0.3f, 0.3f) + 0.5f;
+      const float rgbRange = 0.35f;
+
+      color.r = Random.Range(-rgbRange, rgbRange) + 0.5f;
+      color.g = Random.Range(-rgbRange, rgbRange) + 0.5f;
+      color.b = Random.Range(-rgbRange, rgbRange) + 0.5f;
       color.a = 1.0f;
 
       return color;
@@ -188,106 +190,6 @@ namespace SpriteColorFX
       textureColors[0] = MakeTexture(12, 12, spriteColorMask.colorMaskRed);
       textureColors[1] = MakeTexture(12, 12, spriteColorMask.colorMaskGreen);
       textureColors[2] = MakeTexture(12, 12, spriteColorMask.colorMaskBlue);
-    }
-
-    private Vector3 RGB2HSV(Color color)
-    {
-      Vector3 hsv = Vector3.zero;
-
-      float r = color.r;
-      float g = color.g;
-      float b = color.b;
-
-      float max = Mathf.Max(r, Mathf.Max(g, b));
-      if (max <= 0.0f)
-        return hsv;
-
-      float min = Mathf.Min(r, Mathf.Min(g, b));
-      float dif = max - min;
-
-      if (max > min)
-      {
-        if (g == max)
-          hsv.x = (b - r) / dif * 60.0f + 120.0f;
-        else if (b == max)
-          hsv.x = (r - g) / dif * 60.0f + 240.0f;
-        else if (b > g)
-          hsv.x = (g - b) / dif * 60.0f + 360.0f;
-        else
-          hsv.x = (g - b) / dif * 60.0f;
-
-        if (hsv.x < 0.0f)
-          hsv.x = hsv.x + 360.0f;
-      }
-      else
-        hsv.x = 0.0f;
-
-      hsv.x *= 1.0f / 360.0f;
-      hsv.y = (dif / max) * 1.0f;
-      hsv.z = max;
-
-      return hsv;
-    }
-
-    public static Color HSV2RGB(Vector3 hsv)
-    {
-      float r = hsv.z;
-      float g = hsv.z;
-      float b = hsv.z;
-
-      if (hsv.y != 0.0f)
-      {
-        float max = hsv.z;
-        float dif = hsv.z * hsv.y;
-        float min = hsv.z - dif;
-
-        float h = hsv.x * 360.0f;
-
-        if (h < 60.0f)
-        {
-          r = max;
-          g = h * dif / 60.0f + min;
-          b = min;
-        }
-        else if (h < 120.0f)
-        {
-          r = -(h - 120.0f) * dif / 60.0f + min;
-          g = max;
-          b = min;
-        }
-        else if (h < 180.0f)
-        {
-          r = min;
-          g = max;
-          b = (h - 120.0f) * dif / 60.0f + min;
-        }
-        else if (h < 240.0f)
-        {
-          r = min;
-          g = -(h - 240.0f) * dif / 60.0f + min;
-          b = max;
-        }
-        else if (h < 300.0f)
-        {
-          r = (h - 240.0f) * dif / 60.0f + min;
-          g = min;
-          b = max;
-        }
-        else if (h <= 360.0f)
-        {
-          r = max;
-          g = min;
-          b = -(h - 360.0f) * dif / 60.0f + min;
-        }
-        else
-        {
-          r = 0.0f;
-          g = 0.0f;
-          b = 0.0f;
-        }
-      }
-
-      return new Color(Mathf.Clamp01(r), Mathf.Clamp01(g), Mathf.Clamp01(b), 1.0f);
     }
 
     private Texture2D MakeTexture(int width, int height, Color col)

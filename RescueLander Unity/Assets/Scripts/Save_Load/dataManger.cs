@@ -56,6 +56,10 @@ public class dataManger : MonoBehaviour {
 	public bool inverted;
 	[HideInInspector]
 	public Dictionary<string,string> socialPending = new Dictionary<string, string>();
+	[HideInInspector]
+	public int coinsSpend;
+	[HideInInspector]
+	public int coinsAcumulated;
 
 	private GameObject temp;
 
@@ -283,5 +287,8 @@ class Data {
 	public bool inverted;
 	[HideInInspector]
 	public Dictionary<string,string> socialPending = new Dictionary<string, string>();
-
+	[HideInInspector]
+	public int coinsSpend;
+	[HideInInspector]
+	public int coinsAcumulated;
 }

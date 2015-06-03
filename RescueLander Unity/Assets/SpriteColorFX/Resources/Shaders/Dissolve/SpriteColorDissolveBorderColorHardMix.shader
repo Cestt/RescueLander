@@ -62,7 +62,6 @@ Shader "Sprites/Sprite Color FX/Sprite Color Dissolve Border Color HardMix"
 	  #include "../SpriteColorFXCG.cginc"
 
 	  DISSOLVE_COLOR_FRAG(HardMix)
-
 	  ENDCG
 	}
   }

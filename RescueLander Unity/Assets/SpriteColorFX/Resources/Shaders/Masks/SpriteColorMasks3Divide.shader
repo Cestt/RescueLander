@@ -57,7 +57,6 @@ Shader "Sprites/Sprite Color FX/Sprite Color Masks 3 Divide"
       #include "../SpriteColorFXCG.cginc"
 
       MASKS3_FRAG(Divide)
-
 	  ENDCG
 	}
   }

@@ -58,7 +58,6 @@ Shader "Sprites/Sprite Color FX/Sprite Color Masks 3 Subtract"
       #include "../SpriteColorFXCG.cginc"
 
       MASKS3_FRAG(Subtract)
-
 	  ENDCG
 	}
   }

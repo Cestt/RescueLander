@@ -15,6 +15,7 @@ public class Coin_Manager : MonoBehaviour {
 				return false;
 			}else{
 				dataManger.manager.coins -= Coins;
+				dataManger.manager.coinsSpend += Coins;
 				if(Type == "PowerUp"){
 					switch(Item){
 					case "Shield":
@@ -50,5 +51,6 @@ public class Coin_Manager : MonoBehaviour {
 	public void LevelCoin(int coin){
 		levelCoins += coin;
 		dataManger.manager.coins += coin;
+		dataManger.manager.coinsAcumulated += coin;
 	}
 }

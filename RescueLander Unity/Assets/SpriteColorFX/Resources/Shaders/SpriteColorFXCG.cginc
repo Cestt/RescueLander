@@ -58,16 +58,16 @@ inline float3 Additive(float3 s, float3 d)
 // Color burn.
 inline float3 Burn(float3 s, float3 d)
 {
-  return 1.0 - (1.0 - s) / d;
+  return 1.0 - (1.0 - d) / s;
 }
 
 // Color.
 float3 Color(float3 s, float3 d)
 {
-  d = RGB2HSV(d);
-  d.z = RGB2HSV(s).z;
+  s = RGB2HSV(s);
+  s.z = RGB2HSV(d).z;
 
-  return HSV2RGB(d);
+  return HSV2RGB(s);
 }
 
 // Darken.
@@ -85,25 +85,25 @@ inline float3 Darker(float3 s, float3 d)
 // Difference.
 inline float3 Difference(float3 s, float3 d)
 {
-  return abs(s - d);
+  return abs(d - s);
 }
 
 // Divide.
 inline float3 Divide(float3 s, float3 d)
 {
-  return s / d;
+  return (d > 0.0) ? s / d : s;
 }
 
 // Color dodge.
 inline float3 Dodge(float3 s, float3 d)
 {
-  return s / (1.0 - d);
+  return d / (1.0 - s);
 }
 
 // HardMix.
 inline float3 HardMix(float3 s, float3 d)
 {
-  return (d > 1.0 - s) ? 1.0 : 0.0;
+  return floor(s + d);
 }
 
 // Hue.
@@ -118,7 +118,7 @@ float3 Hue(float3 s, float3 d)
 // HardLight.
 float3 HardLight(float3 s, float3 d)
 {
-  return (d > 0.5) ? 1.0 - (1.0 - s) * (1.0 - 2.0 * (d - 0.5)) : s * (2.0 * d);
+  return (s < 0.5) ? 2.0 * s * d : 1.0 - 2.0 * (1.0 - s) * (1.0 - d);
 }
 
 // Lighten.
@@ -148,7 +148,7 @@ float3 Overlay(float3 s, float3 d)
 // Screen.
 inline float3 Screen(float3 s, float3 d)
 {
-  return 1.0 - (1.0 - s) * (1.0 - d);
+  return s + d - s * d;
 }
 
 // Solid.
@@ -157,16 +157,16 @@ inline float3 Solid(float3 s, float3 d)
   return d;
 }
 
-// SoftLight.
+// Soft light.
 float3 SoftLight(float3 s, float3 d)
 {
   return (1.0 - s) * s * d + s * (1.0 - (1.0 - s) * (1.0 - d));
 }
 
-// PinLight.
+// Pin light.
 float3 PinLight(float3 s, float3 d)
 {
-  return (d > 0.5) ? max(s, 2.0 * (d - 0.5)) : min(s, 2.0 * d);
+  return (2.0 * s - 1.0 > d) ? 2.0 * s - 1.0 : (s < 0.5 * d) ? 2.0 * s : d;
 }
 
 // Saturation.
@@ -178,7 +178,6 @@ float3 Saturation(float3 s, float3 d)
   return HSV2RGB(d);
 }
 
-
 // Subtract.
 inline float3 Subtract(float3 s, float3 d)
 {
@@ -188,7 +187,7 @@ inline float3 Subtract(float3 s, float3 d)
 // VividLight.
 float3 VividLight(float3 s, float3 d)
 {
-  return (d > 0.5) ? s / (1.0 - (d - 0.5) * 2.0) : 1.0 - (1.0 - s) / (d * 2.0);
+  return (s < 0.5) ? (s > 0.0 ? 1.0 - (1.0 - d) / (2.0 * s) : s) : (s < 1.0 ? d / (2.0 * (1.0 - s)) : s);
 }
 
 // Luminosity.
@@ -330,7 +329,7 @@ float3 Luminosity(float3 s, float3 d)
       colorMask += _ColorBlue.rgb * colorMaskB * tex2D(_MaskBlueTex, UVCoordOp(i.texcoord, _UVBlueTexParams.xy, _UVBlueTexParams.zw, _UVBlueTexAngle)).rgb; \
     } \
   \
-    float3 final = lerp(pixel.rgb, colorMask > 0.0 ? PixelOp(pixel.rgb, colorMask) : pixel.rgb, colorMaskR + colorMaskG + colorMaskB); \
+    float3 final = lerp(pixel.rgb, PixelOp(pixel.rgb, colorMask), colorMaskR + colorMaskG + colorMaskB); \
   \
     return float4(lerp(pixel.rgb, final, _Strength) * pixel.a, pixel.a); \
  }
