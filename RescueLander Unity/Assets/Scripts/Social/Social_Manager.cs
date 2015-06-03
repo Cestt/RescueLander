@@ -1,13 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using GooglePlayGames.BasicApi;
 
 public class Social_Manager : MonoBehaviour{
 
-	/*
+
 	void Awake(){
-		SocialPending();
-	}*/
+		//SocialPending();
+		if(Application.loadedLevelName == "Menu"){
+			// recommended for debugging:
+			PlayGamesPlatform.DebugLogEnabled = true;
+			// Activate the Google Play Games platform
+			PlayGamesPlatform.Activate();
+		}
+	}
 
 	private void SocialPending(){
 		List<string> notPending = new List<string>();
