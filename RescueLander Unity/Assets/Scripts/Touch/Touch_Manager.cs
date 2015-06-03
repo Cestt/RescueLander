@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using GooglePlayGames;
 using UnityEngine.SocialPlatforms;
@@ -55,13 +55,13 @@ public class Touch_Manager : MonoBehaviour {
 			pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
 
 		}else{
-			check = GameObject.Find("Invert Rotation").transform.FindChild("Check").gameObject;
+//			check = GameObject.Find("Invert Rotation").transform.FindChild("Check").gameObject;
 			options = uicameraGameobject.transform.FindChild("Options_Menu").gameObject;
-			if(dataManger.manager.inverted){
-				check.SetActive(true);
-			}else{
-				check.SetActive(false);
-			}
+//			if(dataManger.manager.inverted){
+//				check.SetActive(true);
+//			}else{
+//				check.SetActive(false);
+//			}
 
 		}
 		ads = GetComponent<Ads>();
