@@ -577,9 +577,9 @@ Rigidbody2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 188418}
   m_Mass: 3
-  m_LinearDrag: .206250012
-  m_AngularDrag: .712500036
-  m_GravityScale: 9.80000019
+  m_LinearDrag: .299999982
+  m_AngularDrag: .0675000027
+  m_GravityScale: 10
   m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -740,7 +740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosion: {fileID: 125560}
   sparks: {fileID: 0}
-  life: 400
+  life: 575
   maxLife: 0
   damageThreshold: 50
   damageThresholdFriction: 100
@@ -832,7 +832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb23b6b64382bb4982b50e17a19e2c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamageReduction: 50
+  DamageReduction: 30
 --- !u!114 &11443158
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -871,22 +871,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fuelBar: {fileID: 0}
-  Thruster_r: {fileID: 135146}
-  Thruster_l: {fileID: 186892}
-  Fire: {fileID: 191066}
-  motorForce: 825
+  Thruster_r: {fileID: 136506, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
+  Thruster_l: {fileID: 109622, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
+  Fire: {fileID: 180364, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
+  motorForce: 675
   motor: 0
   speedUpgrade: 0
   maxSpeed: 9999
-  angularForce: 2850
+  angularForce: 2625
   angularSpeedUpgrade: 0
   maxAngularSpeed: 9999
   fuel: 2000
   fuelConsumption: .550000012
-  massMotor: 275
-  massAngular: 950
-  angularDrag: .000250000012
-  linearDrag: .000250000012
+  massMotor: 225
+  massAngular: 875
+  angularDrag: .000300000014
+  linearDrag: .000699999975
   originalFuel: 0
 --- !u!114 &11452960
 MonoBehaviour:
