@@ -28,6 +28,14 @@ public class WinLose : MonoBehaviour {
 	private GameObject MisionAcomplished;
 	private Damage damage;
 	private Social_Manager socialManager;
+	private tk2dTextMesh scoreText;
+	private tk2dTextMesh scoreTotalText;
+	private int scoreNumber;
+	private int scoreAct;
+	private GameObject scoreObject;
+	private int scoreChangeText;
+	private string scoreTextRemaining;
+	private int scoreTotal;
 
 	void Awake () {
 	
@@ -49,6 +57,7 @@ public class WinLose : MonoBehaviour {
 			UI5 =  uicamera.transform.FindChild("Anchor (LowerRight)").gameObject;
 			coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 			text = winText.GetComponent<tk2dTextMesh> ();
+			scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
 			scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
 			socialManager = GameObject.Find ("Game Manager").GetComponent<Social_Manager>();
 			first = true;	
@@ -148,7 +157,9 @@ public class WinLose : MonoBehaviour {
 		UI3.SetActive (false);
 		UI4.SetActive(true);
 		UI5.SetActive(true);
-
+		//Muestra los score
+		scoreAct = 1;
+		InvokeRepeating("ShowScore",0,1f);
 		//ACHIEVEMENT: Can't touch this
 		if (damage.life == damage.maxLife){
 			Social.ReportProgress("CgkIuv-YgIkeEAIQAQ", 100.0f, (bool success) => {
@@ -186,5 +197,59 @@ public class WinLose : MonoBehaviour {
 		UI4.SetActive(true);
 		UI5.SetActive(true);
 
+	}
+
+	private void ShowScore(){
+		if (scoreAct == 1){
+			scoreTotal = 0;
+			scoreObject = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Time").gameObject;
+			scoreObject.SetActive(true);
+			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
+			scoreNumber = scoreManager.timeScore;
+			Debug.Log ("Time:"+scoreNumber);
+			scoreAct++;
+			scoreChangeText = 0;
+			scoreTextRemaining = "Time Score";
+			InvokeRepeating("ChangeScore",0,0.05f);
+		}else if (scoreAct == 2){
+			scoreObject.SetActive(false);
+			scoreObject = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Life").gameObject;
+			scoreObject.SetActive(true);
+			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
+			scoreNumber = damage.life;
+			Debug.Log ("Life:"+scoreNumber);
+			scoreChangeText = 0;
+			scoreTextRemaining = "Life Score";
+			InvokeRepeating("ChangeScore",0,0.05f);
+			scoreAct++;
+		}else if (scoreAct == 3){
+			scoreObject.SetActive(false);
+			scoreObject = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Fuel").gameObject;
+			scoreObject.SetActive(true);
+			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
+			scoreNumber = (int)GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<Movement>().fuel;
+			Debug.Log ("Fuel:"+scoreNumber);
+			scoreChangeText = 0;
+			scoreTextRemaining = "Fuel Score";
+			InvokeRepeating("ChangeScore",0,0.05f);
+			scoreAct++;
+		}else if (scoreAct == 4){
+			CancelInvoke("ShowScore");
+			Debug.Log ("Cancelando ShowScore");
+		}
+	}
+
+	private void ChangeScore(){
+		if (scoreChangeText < 10){
+			scoreText.text = scoreTextRemaining +" "+ Random.Range(0,scoreNumber).ToString();
+			scoreChangeText++;
+		}else{
+			scoreText.text = scoreTextRemaining +" "+ scoreNumber.ToString();
+			scoreTotal += scoreNumber;
+			Debug.Log ("ScoreTotal:"+scoreTotal);
+			scoreTotalText.text = "Score "+ scoreTotal.ToString();
+			CancelInvoke("ChangeScore");
+			Debug.Log ("Cancelando ChangeScore");
+		}
 	}
 }
