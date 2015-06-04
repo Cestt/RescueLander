@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using GooglePlayGames.BasicApi;
+using UnityEngine.SocialPlatforms;
+using GooglePlayGames;
+
 
 public class Social_Manager : MonoBehaviour{
 
