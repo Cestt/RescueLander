@@ -107,7 +107,7 @@ public class Touch_Manager : MonoBehaviour {
 						switch(hit.collider.name ){
 						case "Play" :
 							forward = true;
-							if(dataManger.manager.tutorial >= 4){
+							if(dataManger.manager.tutorial >= 0){
 								if(IsInvoking("MoveCamera")){
 									CancelInvoke("MoveCamera");
 									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
@@ -460,7 +460,7 @@ public class Touch_Manager : MonoBehaviour {
 					switch(hit.collider.name ){
 					case "Play" :
 						forward = true;
-						if(dataManger.manager.tutorial >= 4){
+						if(dataManger.manager.tutorial >= 0){
 							if(IsInvoking("MoveCamera")){
 								CancelInvoke("MoveCamera");
 								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
