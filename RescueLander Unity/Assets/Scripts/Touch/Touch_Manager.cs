@@ -374,6 +374,16 @@ public class Touch_Manager : MonoBehaviour {
 							Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
 						
 							break;
+						case "RateUsButton":
+							if (platform == RuntimePlatform.Android){
+								Debug.Log ("Rate Android");
+								Application.OpenURL("market://details?id=YOUR_ID");
+							}
+							else if (platform == RuntimePlatform.IPhonePlayer){
+								Debug.Log ("Rade Iphone");
+								Application.OpenURL("itms-apps://itunes.apple.com/app/idYOUR_ID");
+							}
+							break;
 						default :
 							
 							break;

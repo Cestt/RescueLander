@@ -8,7 +8,11 @@ public class Coin_Manager : MonoBehaviour {
 	public int OneStarCoin, TwoStarCoin, ThreeStarCoin;
 	[HideInInspector]
 	public int levelCoins;
+	private Social_Manager socialManager;
 
+	void Awake(){
+		socialManager = GameObject.Find ("Game Manager").GetComponent<Social_Manager>();
+	}
 	public bool Compra(int Coins,string Type,string Item){
 		try{
 			if(Coins > dataManger.manager.coins){
@@ -16,6 +20,12 @@ public class Coin_Manager : MonoBehaviour {
 			}else{
 				dataManger.manager.coins -= Coins;
 				dataManger.manager.coinsSpend += Coins;
+				//ACHIEVEMENT
+				if (dataManger.manager.coinsSpend >= 100000){
+					Social.ReportProgress("CgkIuv-YgIkeEAIQEg", 100.0f, (bool success) => {
+						socialManager.Check("Achievement","CgkIuv-YgIkeEAIQEg",success);
+					});
+				}
 				if(Type == "PowerUp"){
 					switch(Item){
 					case "Shield":
@@ -52,5 +62,11 @@ public class Coin_Manager : MonoBehaviour {
 		levelCoins += coin;
 		dataManger.manager.coins += coin;
 		dataManger.manager.coinsAcumulated += coin;
+		//ACHIEVEMENT
+		if (dataManger.manager.coinsAcumulated >= 100000){
+			Social.ReportProgress("CgkIuv-YgIkeEAIQEQ", 100.0f, (bool success) => {
+				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQEQ",success);
+			});
+		}
 	}
 }

@@ -38,7 +38,9 @@ public class Movement : MonoBehaviour {
 	private tk2dSpriteAnimator animator;
 	private tk2dSpriteAnimator animator2;
 	private Rigidbody2D rigid;
-
+	private AudioSource audioSource;
+	private AudioClip clipRealenti;
+	private AudioClip clipMotor;
 
 	// Use this for initialization
 	void Awake() {
@@ -56,7 +58,9 @@ public class Movement : MonoBehaviour {
 		originlSize = slicedsprite.dimensions.x;
 		originalFuel = fuel;
 		animator =  Fire.GetComponent<tk2dSpriteAnimator>();
-		
+		//audioSource = GetComponent<AudioSource>();
+		//clipRealenti = Resources.Load ("Sounds/EngineRealenti");
+		//clipMotor = Resources.Load ("Sounds/Motor1");
 	}
 
 

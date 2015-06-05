@@ -15,7 +15,11 @@ public class PhotoFinish : MonoBehaviour {
 	private Camera cam;
 
 	void Awake(){
-		ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
+		photo = GameObject.Find("UI_Camera").transform.FindChild("WinLayout/Resume/Pic_Frame/PicRenderer").gameObject;
+		if (Application.loadedLevelName.Contains ("Tuto"))
+			ship = GameObject.Find ("101 (Clone)");
+		else
+			ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
 		drop = ship.GetComponent<ShipAstronautDrop>();
 		plataform_pos = GameObject.Find ("Landing Platform").transform.position;
 		pickUp = ship.GetComponent<ShipAstronautPickUp>();
@@ -25,14 +29,14 @@ public class PhotoFinish : MonoBehaviour {
 
 	void LateUpdate(){
 		//Condiciones
-		if (ship != null){
+		if (ship != null & photo != null){
 			Vector3 ship_pos = ship.transform.position;
 
 			Vector2 vect = new Vector2(ship_pos.x - plataform_pos.x, ship_pos.y - plataform_pos.y);
 			float dist = Mathf.Sqrt( (vect.x*vect.x) + (vect.y*vect.y));
 
-
-			if (dist < 100f & vect.y < 70f & vect.x < 75 & vect.x > -85 & pickUp.astronautPicked >= drop.totalAstronauts){
+			//Debug.Log ("DIST: "+dist +"VECTOR "+ vect);
+			if (dist < 116f & vect.y < 70f & vect.x < 107 & vect.x > -105 & pickUp.astronautPicked >= drop.totalAstronauts){
 				//Movemos en el eje X la camara
 				int maxScrollX = GameObject.Find("Camera 2DTK").GetComponent<Cameraposition>().maxScrollX;
 				transform.position = new Vector3(ship_pos.x,transform.position.y,0);
