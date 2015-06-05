@@ -55,13 +55,14 @@ public class Touch_Manager : MonoBehaviour {
 			pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
 
 		}else{
-//			check = GameObject.Find("Invert Rotation").transform.FindChild("Check").gameObject;
+		
 			options = uicameraGameobject.transform.FindChild("Options_Menu").gameObject;
-//			if(dataManger.manager.inverted){
-//				check.SetActive(true);
-//			}else{
-//				check.SetActive(false);
-//			}
+			check = options.transform.FindChild("Shop_Bg_01/Invert Rotation/Check").gameObject;
+			if(dataManger.manager.inverted){
+				check.SetActive(true);
+			}else{
+				check.SetActive(false);
+			}
 
 		}
 		ads = GetComponent<Ads>();
@@ -365,6 +366,14 @@ public class Touch_Manager : MonoBehaviour {
 							// show achievements UI
 							Social.ShowAchievementsUI();
 							break;	
+						case "FeedbackButton":
+							string email = "info@evolvegames.es";
+							string subject = MyEscapeURL("FeedBack Rescue Lander");
+							string body = MyEscapeURL("");
+							
+							Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
+						
+							break;
 						default :
 							
 							break;
@@ -678,6 +687,14 @@ public class Touch_Manager : MonoBehaviour {
 						// show achievements UI
 						Social.ShowAchievementsUI();
 						break;	
+					case "FeedbackButton":
+						string email = "info@evolvegames.es";
+						string subject = MyEscapeURL("FeedBack Rescue Lander");
+						string body = MyEscapeURL("");
+						
+						Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
+						
+						break;	
 					default :
 						
 						break;
@@ -822,6 +839,11 @@ public class Touch_Manager : MonoBehaviour {
 		AsyncOperation async = Application.LoadLevelAsync("Level_" + Level);
 		yield return async;
 		Debug.Log("Loading complete");
+	}
+
+	string MyEscapeURL (string url)
+	{
+		return WWW.EscapeURL(url).Replace("+","%20");
 	}
 
 
