@@ -37,6 +37,8 @@ public class WinLose : MonoBehaviour {
 	private string scoreTextRemaining;
 	private int scoreTotal;
 
+	public int lifeThrdStarPercent = 90;
+
 	void Awake () {
 	
 //		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
@@ -85,29 +87,17 @@ public class WinLose : MonoBehaviour {
 
 		if(result == "Win"){
 			if(first){
+				Movement mov = GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<Movement>();
+				float fuel = mov.GetComponent<Movement>().fuel;
+				float maxFuel = mov.GetComponent<Movement>().originalFuel;
+
 				if(dataManger.manager.actualLevel == dataManger.manager.unlocks){
 					dataManger.manager.unlocks++;
 				}
 
 				totalScore = (int)scoreManager.scoreCalc ();
-				if(totalScore > 0 & totalScore <= 500){
-					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 1;
-					dataManger.manager.coins += coin_manager.OneStarCoin;
-					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
-						= coin_manager.OneStarCoin.ToString();
-					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-						= "Finished with 1 Star:";
-				}
-				if(totalScore > 500 & totalScore <= 1500){
-					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 2;
-					dataManger.manager.coins += coin_manager.TwoStarCoin;
-					stars[1].SetActive(true);
-					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
-						= coin_manager.TwoStarCoin.ToString();
-					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-						= "Finished with 2 Stars:";
-				}
-				if(totalScore > 1500){
+
+				if(totalScore > 1500 & damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;
 					dataManger.manager.coins += coin_manager.ThreeStarCoin;
 					stars[1].SetActive(true);
@@ -121,6 +111,25 @@ public class WinLose : MonoBehaviour {
 						socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
 					});
 				}
+				else if(totalScore > 500 & fuel >= (maxFuel*0.2f)){
+					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 2;
+					dataManger.manager.coins += coin_manager.TwoStarCoin;
+					stars[1].SetActive(true);
+					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+						= coin_manager.TwoStarCoin.ToString();
+					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+						= "Finished with 2 Stars:";
+				}
+				else if(totalScore > 0 & totalScore <= 500){
+					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 1;
+					dataManger.manager.coins += coin_manager.OneStarCoin;
+					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+						= coin_manager.OneStarCoin.ToString();
+					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+						= "Finished with 1 Star:";
+				}
+
+
 				dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
 				WinSprite.transform.FindChild("Resume/CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level "+dataManger.manager.actualLevel.ToString();
 				WinSprite.transform.FindChild("Resume/CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
