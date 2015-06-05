@@ -45,14 +45,20 @@ public class Touch_Manager : MonoBehaviour {
 		uicameraGameobject = GameObject.Find("UI_Camera");
 		if(Application.loadedLevelName != "Menu"){
 			uiColumnExtended = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/UIBase_RightCol/UIBase_RightCol_Extended").gameObject;
-			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+			if(Application.loadedLevelName.Contains("Tuto")){
+				ship = GameObject.Find("101(Clone)");
+			}else{
+				ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+				pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
+				coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
+			}
 			rigid = ship.GetComponent<Rigidbody2D>();
 			animation = uiColumnExtended.GetComponent<Animation>();
 			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
 			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
-			pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
+
 
 		}else{
 		
@@ -76,7 +82,7 @@ public class Touch_Manager : MonoBehaviour {
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
 		faceBook = GetComponent<FacebookSocial>();
-		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
+
 
 	}
 
@@ -101,12 +107,17 @@ public class Touch_Manager : MonoBehaviour {
 						switch(hit.collider.name ){
 						case "Play" :
 							forward = true;
-							if(IsInvoking("MoveCamera")){
-								CancelInvoke("MoveCamera");
-								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+							if(dataManger.manager.tutorial >= 4){
+								if(IsInvoking("MoveCamera")){
+									CancelInvoke("MoveCamera");
+									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+								}else{
+									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+								}
 							}else{
-								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+								Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 							}
+
 							
 							break;	
 						case "Back_Button" :
@@ -128,7 +139,9 @@ public class Touch_Manager : MonoBehaviour {
 							break;	
 						case "Levels_Button" :
 							Application.LoadLevel ("Menu");
-							dataManger.manager.Camposition = "Forward";
+							if(dataManger.manager.tutorial >= 3){
+								dataManger.manager.Camposition = "Forward";
+							}
 							dataManger.manager.Save(false);
 							break;
 						case "Sound_Button" :
@@ -437,11 +450,15 @@ public class Touch_Manager : MonoBehaviour {
 					switch(hit.collider.name ){
 					case "Play" :
 						forward = true;
-						if(IsInvoking("MoveCamera")){
-							CancelInvoke("MoveCamera");
-							InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+						if(dataManger.manager.tutorial >= 4){
+							if(IsInvoking("MoveCamera")){
+								CancelInvoke("MoveCamera");
+								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+							}else{
+								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+							}
 						}else{
-							InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+							Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 						}
 
 						break;	
@@ -464,7 +481,9 @@ public class Touch_Manager : MonoBehaviour {
 						break;	
 					case "Levels_Button" :
 						Application.LoadLevel ("Menu");
-						dataManger.manager.Camposition = "Forward";
+						if(dataManger.manager.tutorial >= 3){
+							dataManger.manager.Camposition = "Forward";
+						}
 						dataManger.manager.Save(false);
 						break;
 					case "Sound_Button" :
@@ -764,6 +783,7 @@ public class Touch_Manager : MonoBehaviour {
 			rigid.isKinematic = true;
 			animation["UIBase_RightCol_extended_UpDown"].speed = 1;
 			animation.Play("UIBase_RightCol_extended_UpDown");
+			if(!Application.loadedLevelName.Contains("Tuto"))
 			pauseText.SetActive(true);
  			Debug.Log("Pause");
 			return true;
@@ -771,6 +791,7 @@ public class Touch_Manager : MonoBehaviour {
 
 			paused = false;
 			rigid.isKinematic = false;
+			rigid.velocity = ship.GetComponent<Damage>().saveSpeed;
 			animation["UIBase_RightCol_extended_UpDown"].speed = -1;
 			animation.Play("UIBase_RightCol_extended_UpDown");
 			animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;

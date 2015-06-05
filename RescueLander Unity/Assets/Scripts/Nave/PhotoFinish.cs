@@ -15,7 +15,11 @@ public class PhotoFinish : MonoBehaviour {
 	private Camera cam;
 
 	void Awake(){
-		ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
+		if(Application.loadedLevelName.Contains("Tuto")){
+			ship = GameObject.Find("101(Clone)");
+		}else{
+			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+		}
 		drop = ship.GetComponent<ShipAstronautDrop>();
 		plataform_pos = GameObject.Find ("Landing Platform").transform.position;
 		pickUp = ship.GetComponent<ShipAstronautPickUp>();

@@ -30,6 +30,9 @@ public class Damage : MonoBehaviour {
 	private Rigidbody2D rigid;
 	[HideInInspector]
 	public int dmgReduction = 0;
+	[HideInInspector]
+	public Vector2 saveSpeed;
+	private Touch_Manager touch;
 
 	// Use this for initialization
 	void Awake () {
@@ -42,6 +45,7 @@ public class Damage : MonoBehaviour {
 		GameObject temp = GameObject.Find("UI_Camera");
 		lifeBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Vida/BarraVida").gameObject;
 		GameManager = GameObject.Find("Game Manager");
+		touch = GameManager.GetComponent<Touch_Manager>();
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
 		slicedsprite = lifeBar.GetComponent<tk2dSlicedSprite>();
 		lifebarScript = lifeBar.GetComponent<LifeBar>();
@@ -64,7 +68,13 @@ public class Damage : MonoBehaviour {
 			movement.Thruster_r.GetComponent<tk2dSprite>().scale = new Vector3(0.55f,0.55f,1);
 			first = true;
 		}
-		prevSpeed = rigid.velocity.magnitude;
+		if(!touch.paused){
+			prevSpeed = rigid.velocity.magnitude;
+			saveSpeed = rigid.velocity;
+		}
+		if(transform.position.y < 0){
+			life = -1;
+		}
 
 		if(life <= (maxLife*3)/4 & life >= (maxLife*2)/4){
 			slicedsprite.SetSprite("BarraVida_Naranja");

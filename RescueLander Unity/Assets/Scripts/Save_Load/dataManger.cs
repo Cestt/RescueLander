@@ -30,18 +30,18 @@ public class dataManger : MonoBehaviour {
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]
 	public Dictionary<string,int> scores = new Dictionary<string, int>();
-	//[HideInInspector]
+	[HideInInspector]
 	public string actualShip = "Ship01";
 	[HideInInspector]
 	public int totalStars;
 	public int levels;
 	[HideInInspector]
 	public int coins;
-	//[HideInInspector]
+	[HideInInspector]
 	public float color1r;
-	//[HideInInspector]
+	[HideInInspector]
 	public float color1g;
-	//[HideInInspector]
+	[HideInInspector]
 	public float color1b;
 	[HideInInspector]
 	public float color2r;
@@ -60,6 +60,8 @@ public class dataManger : MonoBehaviour {
 	public int coinsSpend;
 	[HideInInspector]
 	public int coinsAcumulated;
+	[HideInInspector]
+	public int tutorial = 1;
 
 	private GameObject temp;
 
@@ -114,7 +116,8 @@ public class dataManger : MonoBehaviour {
 			data.fuelPowerUps = fuelPowerUps;
 			data.magnetPowerUps = magnetPowerUps;
 			data.shieldPowerUps = shieldPowerUps;
-			dataManger.manager.inverted = inverted;
+			data.inverted = inverted;
+			data.tutorial = tutorial;
 			if(complete){
 				for(int i = 1; i <= levels; i++){
 					if(stars["Level_"+i] > data.stars["Level_"+i]){
@@ -168,7 +171,8 @@ public class dataManger : MonoBehaviour {
 			fuelPowerUps = data.fuelPowerUps;
 			magnetPowerUps = data.magnetPowerUps;
 			shieldPowerUps = data.shieldPowerUps;
-			inverted = dataManger.manager.inverted;
+			inverted = data.inverted;
+			tutorial = data.tutorial;
 
 			Debug.Log("Data Unlocks: " + data.unlocks);
 
@@ -209,10 +213,13 @@ public class dataManger : MonoBehaviour {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
 			Data data = new Data();
-			
+			data.tutorial = 1;
 			data.unlocks = 1;
 			unlocks = data.unlocks;
+			tutorial = data.tutorial;
 			data.actualShip = actualShip;
+			shipUnlocks.Add("Ship_01");
+			data.shipUnlocks = shipUnlocks;
 			for(int i = 1; i <= levels; i++){
 				data.stars.Add("Level_"+i,0);
 				data.scores.Add("Level_"+i,0);
@@ -291,4 +298,6 @@ class Data {
 	public int coinsSpend;
 	[HideInInspector]
 	public int coinsAcumulated;
+	[HideInInspector]
+	public int tutorial;
 }
