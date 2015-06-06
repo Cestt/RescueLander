@@ -41,6 +41,7 @@ public class Movement : MonoBehaviour {
 	private AudioSource audioSource;
 	private AudioClip clipRealenti;
 	private AudioClip clipMotor;
+	public float [] fuelLevel;
 
 	// Use this for initialization
 	void Awake() {
@@ -61,6 +62,7 @@ public class Movement : MonoBehaviour {
 		//audioSource = GetComponent<AudioSource>();
 		//clipRealenti = Resources.Load ("Sounds/EngineRealenti");
 		//clipMotor = Resources.Load ("Sounds/Motor1");
+		fuel = fuelLevel[dataManger.manager.actualLevel-1];
 	}
 
 
