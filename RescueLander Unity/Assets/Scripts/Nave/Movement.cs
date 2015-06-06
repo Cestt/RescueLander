@@ -25,7 +25,8 @@ public class Movement : MonoBehaviour {
 	public float angularForce = 0f;
 	public float angularSpeedUpgrade = 0f;
 	public int maxAngularSpeed = 0;
-	public float fuel = 0;
+	[HideInInspector]
+	public float fuel;
 	public float fuelConsumption = 0;
 	public float massMotor = 0f;
 	public float massAngular = 0f;
@@ -45,6 +46,7 @@ public class Movement : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake() {
+		fuel = fuelLevel[dataManger.manager.actualLevel-1];
 		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		fuelBar = GameObject.Find("BarraFuel");
 		Transform findChild = transform.FindChild("Thruster_R");
@@ -62,7 +64,7 @@ public class Movement : MonoBehaviour {
 		//audioSource = GetComponent<AudioSource>();
 		//clipRealenti = Resources.Load ("Sounds/EngineRealenti");
 		//clipMotor = Resources.Load ("Sounds/Motor1");
-		fuel = fuelLevel[dataManger.manager.actualLevel-1];
+
 	}
 
 
