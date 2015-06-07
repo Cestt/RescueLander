@@ -29,7 +29,7 @@ public class LifeBar : MonoBehaviour {
 			relation = relationtemp;
 			 damage = totalDamage - damageAcumulated;
 
-			InvokeRepeating("LifeBarReduction",0,reductionSpeed);
+			InvokeRepeating("LifeBarReduction",0,reductionSpeed / damage);
 		}
 
 	}

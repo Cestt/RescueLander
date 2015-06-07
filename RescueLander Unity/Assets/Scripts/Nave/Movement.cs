@@ -100,7 +100,7 @@ public class Movement : MonoBehaviour {
 									rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 								}
 								if(angularSpeedUpgrade != 0){
-									ConsumeFuel(false);
+									ConsumeFuel(false,false);
 								}
 
 								
@@ -124,7 +124,7 @@ public class Movement : MonoBehaviour {
 									rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
 								}
 								if(angularSpeedUpgrade != 0){
-									ConsumeFuel(false);
+									ConsumeFuel(false,false);
 								}
 
 								
@@ -164,7 +164,7 @@ public class Movement : MonoBehaviour {
 
 							if(!Fire.activeInHierarchy)
 								Fire.SetActive(true);
-							ConsumeFuel(true);
+							ConsumeFuel(true,false);
 							motor = true;
 							
 						}
@@ -196,7 +196,7 @@ public class Movement : MonoBehaviour {
 
 					if(!Fire.activeInHierarchy)
 						Fire.SetActive(true);					
-					ConsumeFuel(true);
+					ConsumeFuel(true,false);
 					motor = true;
 					
 				}
@@ -227,7 +227,7 @@ public class Movement : MonoBehaviour {
 							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
 						}
 						if(angularSpeedUpgrade != 0){
-							ConsumeFuel(false);
+							ConsumeFuel(false,true);
 						}
 						
 						if(!Thruster_l.activeInHierarchy){
@@ -248,7 +248,7 @@ public class Movement : MonoBehaviour {
 							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
 						}
 						if(angularSpeedUpgrade != 0){
-							ConsumeFuel(false);
+							ConsumeFuel(false,true);
 						}
 						
 						if(!Thruster_r.activeInHierarchy){
@@ -275,9 +275,13 @@ public class Movement : MonoBehaviour {
 		
 	}
 	
-	void ConsumeFuel (bool Complete) {
-		
-		fuel -= fuelConsumption;
+	void ConsumeFuel (bool Complete,bool increment) {
+		if(!increment){
+			fuel -= fuelConsumption;
+		}else{
+			fuel -= fuelConsumption * 1.5f;
+		}
+
 		slicedsprite.dimensions = new Vector2(originlSize * (fuel/originalFuel),slicedsprite.dimensions.y);
 		motor = true;
 		if(Complete){
