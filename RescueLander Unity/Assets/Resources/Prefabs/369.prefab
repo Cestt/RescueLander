@@ -515,9 +515,9 @@ Rigidbody2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 124386}
   m_Mass: 3
-  m_LinearDrag: .472499996
-  m_AngularDrag: .787500024
-  m_GravityScale: 10
+  m_LinearDrag: .337500006
+  m_AngularDrag: .735000014
+  m_GravityScale: 30
   m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -698,7 +698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb23b6b64382bb4982b50e17a19e2c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamageReduction: 50
+  DamageReduction: 30
 --- !u!114 &11428658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -800,24 +800,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fuelBar: {fileID: 0}
-  Thruster_r: {fileID: 142896}
-  Thruster_l: {fileID: 127102}
-  Fire: {fileID: 114690}
-  motorForce: 675
+  Thruster_r: {fileID: 136506, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
+  Thruster_l: {fileID: 109622, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
+  Fire: {fileID: 180364, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
+  motorForce: 1350
   motor: 0
   speedUpgrade: 0
   maxSpeed: 9999
-  angularForce: 2625
+  angularForce: 2940
   angularSpeedUpgrade: 0
   maxAngularSpeed: 9999
   fuel: 2000
   fuelConsumption: .550000012
-  massMotor: 225
-  massAngular: 875
-  angularDrag: .000300000014
-  linearDrag: .000699999975
+  massMotor: 450
+  massAngular: 980
+  angularDrag: .000250000012
+  linearDrag: .000250000012
   originalFuel: 0
-  fuelLevel: []
+  fuelLevel:
+  - 1200
+  - 1200
+  - 1200
+  - 1200
+  - 1200
+  - 1150
+  - 1250
+  - 1250
+  - 1350
+  - 1250
+  - 1400
+  - 1400
+  - 1500
+  - 1500
+  - 1600
+  - 2000
+  - 2200
+  - 2200
+  - 2400
+  - 3650
+  - 3750
 --- !u!114 &11471372
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -935,15 +956,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 901c5fe80ec13ec478e13d4a7dfa820b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 151640}
+  explosion: {fileID: 125560, guid: 203a2e5d7d4f25b41b7314f7a2f9e21b, type: 2}
   sparks: {fileID: 0}
-  life: 575
+  life: 500
   maxLife: 0
-  damageThreshold: 50
-  damageThresholdFriction: 200
-  DamageVariant: 0
+  damageThreshold: 65
+  damageThresholdFriction: 210
+  DamageVariant: -12
   GameManager: {fileID: 0}
-  thrusterExtra: 300
+  thrusterExtra: 500
   dmgReduction: 0
   saveSpeed: {x: 0, y: 0}
 --- !u!114 &11488708

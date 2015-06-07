@@ -74,6 +74,7 @@ GameObject:
   - 60: {fileID: 6003378}
   - 114: {fileID: 11400494}
   - 114: {fileID: 11423028}
+  - 114: {fileID: 11492252}
   m_Layer: 0
   m_Name: Taboo
   m_TagString: Ship
@@ -735,15 +736,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 901c5fe80ec13ec478e13d4a7dfa820b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 176270}
+  explosion: {fileID: 125560, guid: 203a2e5d7d4f25b41b7314f7a2f9e21b, type: 2}
   sparks: {fileID: 0}
   life: 575
   maxLife: 0
   damageThreshold: 50
-  damageThresholdFriction: 200
+  damageThresholdFriction: 300
   DamageVariant: 0
   GameManager: {fileID: 0}
-  thrusterExtra: 400
+  thrusterExtra: 200
   dmgReduction: 0
   saveSpeed: {x: 0, y: 0}
 --- !u!114 &11423028
@@ -834,9 +835,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fuelBar: {fileID: 0}
-  Thruster_r: {fileID: 169956}
-  Thruster_l: {fileID: 194866}
-  Fire: {fileID: 196824}
+  Thruster_r: {fileID: 136506, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
+  Thruster_l: {fileID: 109622, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
+  Fire: {fileID: 180364, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
   motorForce: 675
   motor: 0
   speedUpgrade: 0
@@ -851,7 +852,28 @@ MonoBehaviour:
   angularDrag: .000300000014
   linearDrag: .000699999975
   originalFuel: 0
-  fuelLevel: []
+  fuelLevel:
+  - 1200
+  - 1200
+  - 1200
+  - 1200
+  - 1200
+  - 1150
+  - 1250
+  - 1250
+  - 1350
+  - 1250
+  - 1400
+  - 1400
+  - 1500
+  - 1500
+  - 1600
+  - 2000
+  - 2200
+  - 2200
+  - 2400
+  - 3650
+  - 3750
 --- !u!114 &11453886
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -978,6 +1000,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalAstronauts: 3
+--- !u!114 &11492252
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901c5fe80ec13ec478e13d4a7dfa820b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 125560, guid: 203a2e5d7d4f25b41b7314f7a2f9e21b, type: 2}
+  sparks: {fileID: 0}
+  life: 450
+  maxLife: 0
+  damageThreshold: 65
+  damageThresholdFriction: 210
+  DamageVariant: -8
+  GameManager: {fileID: 0}
+  thrusterExtra: 500
+  dmgReduction: 0
+  saveSpeed: {x: 0, y: 0}
 --- !u!114 &11496834
 MonoBehaviour:
   m_ObjectHideFlags: 1
