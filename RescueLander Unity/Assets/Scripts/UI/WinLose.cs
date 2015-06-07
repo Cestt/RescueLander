@@ -168,7 +168,7 @@ public class WinLose : MonoBehaviour {
 		UI5.SetActive(true);
 		//Muestra los score
 		scoreAct = 1;
-		InvokeRepeating("ShowScore",0,1f);
+		InvokeRepeating("ShowScore",0,2f);
 		//ACHIEVEMENT: Can't touch this
 		if (damage.life == damage.maxLife){
 			Social.ReportProgress("CgkIuv-YgIkeEAIQAQ", 100.0f, (bool success) => {

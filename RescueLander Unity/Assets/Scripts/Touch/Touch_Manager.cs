@@ -50,8 +50,9 @@ public class Touch_Manager : MonoBehaviour {
 			}else{
 				ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 				pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
-				coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
+
 			}
+
 			rigid = ship.GetComponent<Rigidbody2D>();
 			animation = uiColumnExtended.GetComponent<Animation>();
 			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
@@ -71,13 +72,14 @@ public class Touch_Manager : MonoBehaviour {
 			}
 
 		}
+		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 		ads = GetComponent<Ads>();
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
 		powerManager = GetComponent<PowerUp_Manager>();
 		socialManager = GetComponent<Social_Manager>();
 		colorSet = GetComponent<Color_Set>();
-		ShipGaraje = uicameraGameobject.transform.FindChild ("Garage_Menu/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
+		ShipGaraje = uicameraGameobject.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
@@ -650,6 +652,7 @@ public class Touch_Manager : MonoBehaviour {
 					case "Button_Buy" :
 						if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
 							Value value = hit.collider.gameObject.GetComponent<Value>();
+							Debug.Log(hit.transform.parent.name.Substring(7));
 							if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
 								if(value._Type == "Ship" || value._Type == "World"){
 									Destroy(hit.collider.gameObject);

@@ -10,7 +10,7 @@ public class Garaje_Manager : MonoBehaviour {
 	void Awake () {
 		GameObject uicamera = GameObject.Find("UI_Camera");
 		Transform Garage = uicamera.transform.FindChild("Garage_Menu");
-		Layouts = Garage.FindChild("Shop_Bg_01").gameObject;
+		Layouts = Garage.FindChild("Canvas/Shop_Bg_01").gameObject;
 		foreach(Transform child in Layouts.transform){
 			if(child.parent == Layouts.transform){
 				Debug.Log ("Child Found");

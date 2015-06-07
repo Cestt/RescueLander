@@ -10,8 +10,8 @@ public class Color_Set : MonoBehaviour {
 
 	void Awake () {
 		GameObject uicamera = GameObject.Find("UI_Camera");
-		ShipGaraje = uicamera.transform.FindChild ("Garage_Menu/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
-		ShipGaraje2 = uicamera.transform.FindChild ("Garage_Menu/Shop_Bg_01/Ships_Menu/TV/Ship01_Garage").gameObject;
+		ShipGaraje = uicamera.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
+		ShipGaraje2 = uicamera.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/TV/Ship01_Garage").gameObject;
 		tintGaraje = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3> ();
 		if (Application.loadedLevelName == "Menu") {
 			ShipMenu = GameObject.Find("Ship_Anim").transform.FindChild("Ship01").gameObject;
