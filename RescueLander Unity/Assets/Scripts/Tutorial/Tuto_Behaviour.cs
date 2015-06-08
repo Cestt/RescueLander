@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Tuto_Behaviour : MonoBehaviour {
 	
 	private GameObject tuto;
-	private int step = 1;
+	public int step = 1;
 	private List<GameObject> texts = new List<GameObject>();
 	private bool first = true;
 	private GameObject currentText;
@@ -35,9 +35,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 			step++;
 			first = true;
 		}
-		if(step == 7 & Input.touchCount > 0 || Input.GetMouseButtonUp(0) & step !=7){
 
-		}
 		if(first){
 			foreach(GameObject text in texts){
 				if(text.name == "ChatText_"+step){

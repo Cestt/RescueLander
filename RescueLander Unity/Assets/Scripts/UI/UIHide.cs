@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class UIHide : MonoBehaviour {
 
 	private Animation animation;
@@ -11,10 +12,15 @@ public class UIHide : MonoBehaviour {
 	private bool first = true;
 	private Vector2 tempVect;
 	private Vector2 originVect;
+	private tk2dCamera cam;
+	private GameObject UILeft;
+	private GameObject UIRight;
 
 
 	void Awake(){
-
+		cam = GetComponent<tk2dCamera>();
+		UILeft = gameObject.transform.FindChild("Left");
+		UIRight = gameObject.transform.FindChild("Right");
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		GameObject uicamera = GameObject.Find("UI_Camera");
 		ColumnLeft = uicamera.transform.FindChild("Anchor (UpperLeft)/UIBase_Left").gameObject;
@@ -24,7 +30,19 @@ public class UIHide : MonoBehaviour {
 		originVect = this.transform.localPosition;
 		
 	}
+	void Update(){
+		if(cam.ZoomFactor != 1){
+			UILeft.transform.localScale.x /= cam.ZoomFactor;
+			UILeft.transform.localScale.y /= cam.ZoomFactor;
+			UIRight.transform.localScale.x /= cam.ZoomFactor;
+			UIRight.transform.localScale.y /= cam.ZoomFactor;
 
+			UILeft.transform.localPosition.x /= cam.ZoomFactor;
+			UILeft.transform.localPosition.y /= cam.ZoomFactor;
+			UIRight.transform.localPosition.x /= cam.ZoomFactor;
+			UIRight.transform.localPosition.y /= cam.ZoomFactor;
+		}
+	}
 
 	void OnTriggerEnter2D(Collider2D coll) {
 

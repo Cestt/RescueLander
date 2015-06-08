@@ -120,7 +120,7 @@ public class WinLose : MonoBehaviour {
 					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
 						= "Finished with 2 Stars:";
 				}
-				else if(totalScore > 0 & totalScore <= 500){
+				else {
 					dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 1;
 					dataManger.manager.coins += coin_manager.OneStarCoin;
 					WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
@@ -157,6 +157,7 @@ public class WinLose : MonoBehaviour {
 
 		//haloanim.Win =true;
 		WinSprite.SetActive(true);
+		LoseSprite.SetActive(false);
 		WinSprite.transform.FindChild("Resume").gameObject.SetActive (false);
 		MisionAcomplished.SetActive (true);
 		actualTime = Time.time;

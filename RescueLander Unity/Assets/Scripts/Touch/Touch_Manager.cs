@@ -75,6 +75,7 @@ public class Touch_Manager : MonoBehaviour {
 		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 		ads = GetComponent<Ads>();
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
+		PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
 		powerManager = GetComponent<PowerUp_Manager>();
 		socialManager = GetComponent<Social_Manager>();
@@ -334,7 +335,7 @@ public class Touch_Manager : MonoBehaviour {
 							if(PUilustration != null){
 								PUilustration.SetActive(false);
 							}
-							PUilustration = hit.transform.FindChild("Illustration_Shield").gameObject;
+							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
 							PUilustration.SetActive(true);
 							break;
 							
@@ -342,7 +343,7 @@ public class Touch_Manager : MonoBehaviour {
 							if(PUilustration != null){
 								PUilustration.SetActive(false);
 							}
-							PUilustration = hit.transform.FindChild("Illustration_Magnet").gameObject;
+							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Magnet").gameObject;
 							PUilustration.SetActive(true);
 							break;
 							
@@ -350,7 +351,7 @@ public class Touch_Manager : MonoBehaviour {
 							if(PUilustration != null){
 								PUilustration.SetActive(false);
 							}
-							PUilustration = hit.transform.FindChild("Illustration_Fuel").gameObject;
+							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Fuel").gameObject;
 							PUilustration.SetActive(true);
 							break;
 						
@@ -671,7 +672,7 @@ public class Touch_Manager : MonoBehaviour {
 						if(PUilustration != null){
 							PUilustration.SetActive(false);
 						}
-						PUilustration = garaje.transform.Find("Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
+						PUilustration = garaje.transform.Find("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
 						PUilustration.SetActive(true);
 						break;
 						
@@ -679,7 +680,7 @@ public class Touch_Manager : MonoBehaviour {
 						if(PUilustration != null){
 							PUilustration.SetActive(false);
 						}
-						PUilustration = garaje.transform.FindChild("Shop_Bg_01/PowerUps_Menu/Illustration_Magnet").gameObject;
+						PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Magnet").gameObject;
 						PUilustration.SetActive(true);
 						break;
 						
@@ -687,7 +688,7 @@ public class Touch_Manager : MonoBehaviour {
 						if(PUilustration != null){
 							PUilustration.SetActive(false);
 						}
-						PUilustration = garaje.transform.FindChild("Shop_Bg_01/PowerUps_Menu/Illustration_Fuel").gameObject;
+						PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Fuel").gameObject;
 						PUilustration.SetActive(true);
 						break;
 					case "Check_Frame" :

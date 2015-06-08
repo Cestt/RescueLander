@@ -79,7 +79,7 @@ public class Damage : MonoBehaviour {
 		if(life <= (maxLife*3)/4 & life >= (maxLife*2)/4){
 			slicedsprite.SetSprite("BarraVida_Naranja");
 		}
-		if(life < (maxLife*2)/4){
+		if(life < (maxLife*1)/4){
 			slicedsprite.SetSprite("BarraVida_Roja");
 		}
 
@@ -94,7 +94,6 @@ public class Damage : MonoBehaviour {
 			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
 			explosion.SetActive(true);
 			animator.Play("Explosion");
-			winLose.End("Lose");
 			animator.AnimationCompleted = DestroyShip;
 
 		}
@@ -169,6 +168,7 @@ public class Damage : MonoBehaviour {
 
 	void DestroyShip(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
 		animator.AnimationCompleted = null;
+		winLose.End("Lose");
 		Destroy(gameObject);
 	}
 	void ResetSparks(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){

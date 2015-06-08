@@ -46,7 +46,12 @@ public class Movement : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake() {
-		fuel = fuelLevel[dataManger.manager.actualLevel-1];
+
+		if(Application.loadedLevelName.Contains("Tuto")){
+			fuel = 1000;
+		}else{
+			fuel = fuelLevel[dataManger.manager.actualLevel-1];
+		}
 		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		fuelBar = GameObject.Find("BarraFuel");
 		Transform findChild = transform.FindChild("Thruster_R");
