@@ -19,8 +19,8 @@ public class UIHide : MonoBehaviour {
 
 	void Awake(){
 		cam = GetComponent<tk2dCamera>();
-		UILeft = gameObject.transform.FindChild("Left");
-		UIRight = gameObject.transform.FindChild("Right");
+		UILeft = gameObject.transform.FindChild("Left").gameObject;
+		UIRight = gameObject.transform.FindChild("Right").gameObject;
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		GameObject uicamera = GameObject.Find("UI_Camera");
 		ColumnLeft = uicamera.transform.FindChild("Anchor (UpperLeft)/UIBase_Left").gameObject;
@@ -32,15 +32,23 @@ public class UIHide : MonoBehaviour {
 	}
 	void Update(){
 		if(cam.ZoomFactor != 1){
-			UILeft.transform.localScale.x /= cam.ZoomFactor;
-			UILeft.transform.localScale.y /= cam.ZoomFactor;
-			UIRight.transform.localScale.x /= cam.ZoomFactor;
-			UIRight.transform.localScale.y /= cam.ZoomFactor;
+			Vector3 TempVect = UILeft.transform.localScale; 
+			TempVect.x /= cam.ZoomFactor;
+			TempVect.y /= cam.ZoomFactor;
+			UILeft.transform.localScale = TempVect;
+			TempVect = UIRight.transform.localScale;
+			TempVect.x /= cam.ZoomFactor;
+			TempVect.y /= cam.ZoomFactor;
+			UIRight.transform.localScale = TempVect;
 
-			UILeft.transform.localPosition.x /= cam.ZoomFactor;
-			UILeft.transform.localPosition.y /= cam.ZoomFactor;
-			UIRight.transform.localPosition.x /= cam.ZoomFactor;
-			UIRight.transform.localPosition.y /= cam.ZoomFactor;
+			TempVect = UILeft.transform.localPosition; 
+			TempVect.x /= cam.ZoomFactor;
+			TempVect.y /= cam.ZoomFactor;
+			UILeft.transform.localPosition = TempVect;
+			TempVect = UIRight.transform.localPosition; 
+			TempVect.x /= cam.ZoomFactor;
+			TempVect.y /= cam.ZoomFactor;
+			UIRight.transform.localPosition = TempVect;
 		}
 	}
 

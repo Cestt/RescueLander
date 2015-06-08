@@ -50,7 +50,7 @@ public class dataManger : MonoBehaviour {
 	[HideInInspector]
 	public float color2b;
 	private List<GameObject> Ships = new List<GameObject>();
-	[HideInInspector]
+	//[HideInInspector]
 	public List<string> shipUnlocks = new List<string>();
 	[HideInInspector]
 	public bool inverted;
