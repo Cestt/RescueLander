@@ -218,7 +218,7 @@ public class dataManger : MonoBehaviour {
 			unlocks = data.unlocks;
 			tutorial = data.tutorial;
 			data.actualShip = actualShip;
-			shipUnlocks.Add("Ship_01");
+			shipUnlocks.Add("Ship01");
 			data.shipUnlocks = shipUnlocks;
 			for(int i = 1; i <= levels; i++){
 				data.stars.Add("Level_"+i,0);
