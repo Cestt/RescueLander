@@ -59,13 +59,14 @@ public class WinLose : MonoBehaviour {
 				UI5 =  uicamera.transform.FindChild("Anchor (LowerRight)").gameObject;
 				coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 				scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
+				scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
 			}
 			damage = ship.GetComponent<Damage>();
 			LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
 			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
 			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
 			text = winText.GetComponent<tk2dTextMesh> ();
-			scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
+
 
 			socialManager = GameObject.Find ("Game Manager").GetComponent<Social_Manager>();
 			first = true;	

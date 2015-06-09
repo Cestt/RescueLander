@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Tuto_Behaviour : MonoBehaviour {
+public class Tuto_Behaviour1 : MonoBehaviour {
 	
 	public GameObject tuto;
 	public int step = 1;
@@ -33,8 +33,8 @@ public class Tuto_Behaviour : MonoBehaviour {
 
 	void Update () {
 	
-		if(Input.touchCount > 0 & step !=7 & step !=9 & step != 10 & step != 11
-		   || Input.GetMouseButtonUp(0)& step !=7 & step !=9 & step != 10 & step != 11){
+		if(Input.touchCount > 0 & step != 6  & step != 7 & step != 8
+		   || Input.GetMouseButtonUp(0) & step != 6 & step != 7  & step != 8){
 			step++;
 			first = true;
 		}
@@ -50,28 +50,32 @@ public class Tuto_Behaviour : MonoBehaviour {
 
 				first = false;
 		}
-		if(step == 7){
+		if(step == 2){
 			zoom.enabled = false;
-			ship.GetComponent<Rigidbody2D>().isKinematic = false;
 			zoom.zoom = "out";
 			zoom.CheckInvoke();
-
-		}
-
-		if(step == 9){
-			ship.GetComponent<Rigidbody2D>().isKinematic = false;
-			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
-
-		}
-		if(step == 11 & Input.touchCount > 0 || step == 11 & Input.GetMouseButtonUp(0)){
-			Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 			
 		}
-		if(step == 10 & Input.touchCount > 0 || step == 10 & Input.GetMouseButtonUp(0)){
+		if(step == 5){
+			tuto.SetActive(false);
+			ship.GetComponent<Rigidbody2D>().isKinematic = false;
+			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
+			
+		}
+		if(step == 7 & Input.touchCount > 0 || step == 7 & Input.GetMouseButtonUp(0)){
+			tuto.SetActive(false);
+			ship.GetComponent<Rigidbody2D>().isKinematic = false;
+			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
 			transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+			dataManger.manager.shieldPowerUps++;
+			dataManger.manager.magnetPowerUps++;
+			dataManger.manager.fuelPowerUps++;
 			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
-			step++;
-			first = true;
+
+			
+		}
+		if(step == 8 & Input.touchCount > 0 || step == 8 & Input.GetMouseButtonUp(0)){
+			Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 			
 		}
 	}

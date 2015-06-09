@@ -34,6 +34,11 @@ public class Minimap : MonoBehaviour {
 		float mapx;
 		float mapy;
 		Vector2 tempVector;
+		mapx = (100 * Platform.transform.position.x)/MapWidth;
+		mapy = (100 * Platform.transform.position.y)/MapHeight;
+		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
+		tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
+		Platform_Ico.transform.position = tempVector; 
 		if(Astronauts[0] != null){
 			for(int i = 0; i < Astronauts.Count;i++) {
 				
@@ -47,11 +52,7 @@ public class Minimap : MonoBehaviour {
 			}
 		}
 
-		mapx = (100 * Platform.transform.position.x)/MapWidth;
-		mapy = (100 * Platform.transform.position.y)/MapHeight;
-		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
-		tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
-		Platform_Ico.transform.position = tempVector; 
+
 	}
 	
 	// Update is called once per frame
