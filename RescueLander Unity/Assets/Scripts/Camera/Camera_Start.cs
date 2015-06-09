@@ -7,7 +7,12 @@ public class Camera_Start : MonoBehaviour {
 	private GameObject ship;
 
 	void Start () {
-		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+
+		if (Application.loadedLevelName.Contains ("Tuto")){
+			ship = GameObject.Find ("101(Clone)");
+		}else{
+			ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
+		}
 		camtk2d = GetComponent<tk2dCamera>();
 		if(Application.loadedLevelName != "Menu"){
 			camtk2d.ZoomFactor = 2;

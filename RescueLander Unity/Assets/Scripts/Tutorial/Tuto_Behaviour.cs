@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class Tuto_Behaviour : MonoBehaviour {
 	
-	private GameObject tuto;
+	public GameObject tuto;
 	public int step = 1;
 	private List<GameObject> texts = new List<GameObject>();
-	private bool first = true;
+	public bool first = true;
 	private GameObject currentText;
 	private GameObject ship;
 	private Rigidbody2D rigid;
@@ -15,6 +15,8 @@ public class Tuto_Behaviour : MonoBehaviour {
 
 	void Awake () {
 		ship = GameObject.Find("101(Clone)");
+		ship.GetComponent<Rigidbody2D>().fixedAngle = true;
+		ship.GetComponent<Rigidbody2D>().isKinematic = true;
 		rigid = ship.GetComponent<Rigidbody2D>();
 		zoom =  ship.transform.FindChild("Zoomer").GetComponent<Zoom>();
 		tuto = transform.FindChild("Tutorial").gameObject;
@@ -31,7 +33,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 
 	void Update () {
 	
-		if(Input.touchCount > 0 & step !=7 || Input.GetMouseButtonUp(0)& step !=7){
+		if(Input.touchCount > 0 & step !=7 & step !=9|| Input.GetMouseButtonUp(0)& step !=7 & step !=9 & step != 10){
 			step++;
 			first = true;
 		}
@@ -49,8 +51,20 @@ public class Tuto_Behaviour : MonoBehaviour {
 		}
 		if(step == 7){
 			zoom.enabled = false;
+			ship.GetComponent<Rigidbody2D>().isKinematic = false;
 			zoom.zoom = "out";
 			zoom.CheckInvoke();
+
+		}
+
+		if(step == 9){
+			ship.GetComponent<Rigidbody2D>().isKinematic = false;
+			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
+
+		}
+		if(step == 10 & Input.touchCount > 0 || step == 10 & Input.GetMouseButtonUp(0)){
+			Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
+			
 		}
 	}
 }
