@@ -102,6 +102,7 @@ public class WinLose : MonoBehaviour {
 					dataManger.manager.unlocks++;
 				}
 				if(!Application.loadedLevelName.Contains("Tuto")){
+					scoreManager.stopScore();
 					totalScore = (int)scoreManager.timeScore;
 					
 					if(totalScore > 1500 & damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
@@ -112,7 +113,7 @@ public class WinLose : MonoBehaviour {
 						WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 							= coin_manager.ThreeStarCoin.ToString();
 						WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-							= "Finished with 3 Stars:";
+							= "3 Stars:";
 						//ACHIEVEMENT
 						Social.ReportProgress("CgkIuv-YgIkeEAIQCQ", 100.0f, (bool success) => {
 							socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
@@ -125,7 +126,7 @@ public class WinLose : MonoBehaviour {
 						WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 							= coin_manager.TwoStarCoin.ToString();
 						WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-							= "Finished with 2 Stars:";
+							= "2 Stars:";
 					}
 					else {
 						dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 1;
@@ -133,11 +134,11 @@ public class WinLose : MonoBehaviour {
 						WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 							= coin_manager.OneStarCoin.ToString();
 						WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-							= "Finished with 1 Star:";
+							= "1 Star:";
 					}
 					
 					
-					dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = totalScore;
+					dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = (int)scoreManager.scoreCalc();
 					WinSprite.transform.FindChild("Resume/CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level "+dataManger.manager.actualLevel.ToString();
 					WinSprite.transform.FindChild("Resume/CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
 					WinSprite.transform.FindChild("Resume/CoinCount/Total Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = dataManger.manager.coins.ToString();

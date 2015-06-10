@@ -43,7 +43,9 @@ public class ScoreManager : MonoBehaviour {
 
 
 	}
-
+	public void stopScore(){
+		CancelInvoke("timeScoreCalc");
+	}
 	void timeScoreCalc(){
 
 		if(timeScore > 0){

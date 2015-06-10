@@ -456,6 +456,7 @@ public class Touch_Manager : MonoBehaviour {
 							int tempInt = int.Parse(tempString);
 							Debug.Log("Clicked Level: "+tempInt);
 							if(dataManger.manager.unlocks >= tempInt){
+								uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
 								dataManger.manager.actualLevel = tempInt;
 								StartCoroutine(LoadLevelAsync(tempInt));
 								levelEnable = false;
@@ -800,7 +801,12 @@ public class Touch_Manager : MonoBehaviour {
 						
 						Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
 						
+						break;
+					case "More_PowerUps":
+
+						
 						break;	
+			
 					default :
 						
 						break;
@@ -811,6 +817,7 @@ public class Touch_Manager : MonoBehaviour {
 						int tempInt = int.Parse(tempString);
 						Debug.Log("Clicked Level: "+tempInt);
 						if(dataManger.manager.unlocks >= tempInt){
+							uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
 							dataManger.manager.actualLevel = tempInt;
 							StartCoroutine(LoadLevelAsync(tempInt));
 							levelEnable = false;
