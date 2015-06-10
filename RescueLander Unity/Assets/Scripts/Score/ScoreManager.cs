@@ -9,6 +9,7 @@ public class ScoreManager : MonoBehaviour {
 	private GameObject ship;
 	private Damage damage;
 	private Movement movement;
+	private Touch_Manager touch;
 
 
 	void Awake(){
@@ -20,6 +21,7 @@ public class ScoreManager : MonoBehaviour {
 			}
 			damage = ship.GetComponent<Damage>();
 			movement = ship.GetComponent<Movement>();
+			touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		}
 
 	}
@@ -32,7 +34,11 @@ public class ScoreManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		if(touch.paused){
+			CancelInvoke("timeScoreCalc");
+		}else if(!touch.paused & !IsInvoking("timeScoreCalc")){
+			InvokeRepeating("timeScoreCalc",0,scoreReductionTime);
+		}
 
 
 	}

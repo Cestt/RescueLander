@@ -12,8 +12,11 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 	private GameObject ship;
 	private Rigidbody2D rigid;
 	private Zoom zoom;
+	private int prevStep;
+	private bool once = true;
 
 	void Awake () {
+		prevStep = step;
 		ship = GameObject.Find("101(Clone)");
 		ship.GetComponent<Rigidbody2D>().fixedAngle = true;
 		ship.GetComponent<Rigidbody2D>().isKinematic = true;
@@ -32,13 +35,65 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 	
 
 	void Update () {
+		if(prevStep != step){
+			once = true;
+			prevStep = step;
+		}
 	
 		if(Input.touchCount > 0 & step != 3 
 		   || Input.GetMouseButtonUp(0) & step != 3 ){
+			if(Input.GetTouch(0).phase == TouchPhase.Began){
 			step++;
 			first = true;
+			nextStep();
+			}
 		}
 
+
+		if(step == 2){
+			if(once){
+				zoom.enabled = false;
+				zoom.zoom = "out";
+				zoom.CheckInvoke();
+				once = false;
+			}
+
+			
+		}
+		if(step == 3){
+			if(once){
+				tuto.SetActive(false);
+				ship.GetComponent<Rigidbody2D>().isKinematic = false;
+				ship.GetComponent<Rigidbody2D>().fixedAngle = false;
+				once = false;
+			}
+
+			
+		}
+
+		if(step == 5){
+			if(once){
+				tuto.SetActive(false);
+				transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+				dataManger.manager.coins += 500;
+				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
+				once = false;
+			}
+			
+		}
+		if(step == 6){
+			if(once){
+				Application.LoadLevel("Menu");
+				once = false;
+			}
+			
+		}
+
+	}
+	void nextStep(){
+		StartCoroutine("Onestep");
+	}
+	IEnumerator Onestep(){
 		if(first){
 			foreach(GameObject text in texts){
 				if(text.name == "ChatText_"+step){
@@ -47,34 +102,9 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 					currentText = text;
 				}
 			}
-
-				first = false;
-		}
-		if(step == 2){
-			zoom.enabled = false;
-			zoom.zoom = "out";
-			zoom.CheckInvoke();
 			
+			first = false;
+			yield return null;
 		}
-		if(step == 3){
-			tuto.SetActive(false);
-			ship.GetComponent<Rigidbody2D>().isKinematic = false;
-			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
-			
-		}
-
-		if(step == 5){
-			tuto.SetActive(false);
-			transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-			dataManger.manager.coins += 500;
-			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
-
-			
-		}
-		if(step == 6){
-			Application.LoadLevel("Menu");
-			
-		}
-
 	}
 }

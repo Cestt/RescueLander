@@ -4,7 +4,7 @@ using System.Collections;
 public class Key_Areas : MonoBehaviour {
 
 	private float actualTime;
-	public float TimerTime;
+	public float TimerTime = 3;
 	private bool running;
 	private GameObject ship;
 	private Tuto_Behaviour tuto;
@@ -42,6 +42,7 @@ public class Key_Areas : MonoBehaviour {
 			running = false;
 			tuto.step++;
 			tuto.first = true;
+			tuto.nextStep();
 
 		}
 		if(actualTime + TimerTime < Time.time & running & tuto.step == 9){
@@ -53,6 +54,7 @@ public class Key_Areas : MonoBehaviour {
 				tuto.tuto.SetActive(false);
 			tuto.step++;
 			tuto.first = true;
+			tuto.nextStep();
 			
 		}
 	}

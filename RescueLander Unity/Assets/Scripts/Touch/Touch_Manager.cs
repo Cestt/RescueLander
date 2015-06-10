@@ -43,15 +43,21 @@ public class Touch_Manager : MonoBehaviour {
 	private tk2dUIToggleButton[] buttonsGarage = new tk2dUIToggleButton[3];
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
 
+
 	void Awake(){
 		uicameraGameobject = GameObject.Find("UI_Camera");
 		if(Application.loadedLevelName != "Menu"){
 			uiColumnExtended = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/UIBase_RightCol/UIBase_RightCol_Extended").gameObject;
 			if(Application.loadedLevelName.Contains("Tuto")){
+				if(Application.loadedLevelName == "Tuto_3"){
+					animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
+				}
 				ship = GameObject.Find("101(Clone)");
 			}else{
 				ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 				pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
+				animators.Add(GameObject.Find("Astronaut_02").GetComponent<tk2dSpriteAnimator>());
+				animators.Add(GameObject.Find("Astronaut_03").GetComponent<tk2dSpriteAnimator>());
 
 			}
 
@@ -62,10 +68,9 @@ public class Touch_Manager : MonoBehaviour {
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
 
-			animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
-			animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
-			animators.Add(GameObject.Find("Astronaut_02").GetComponent<tk2dSpriteAnimator>());
-			animators.Add(GameObject.Find("Astronaut_03").GetComponent<tk2dSpriteAnimator>());
+			//animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
+
+			if(!Application.loadedLevelName.Contains("Tuto"))
 			foreach (tk2dSpriteAnimator animat in GameObject.Find("Coins").GetComponentsInChildren<tk2dSpriteAnimator>())
 				animators.Add(animat);
 		}else{
@@ -79,6 +84,7 @@ public class Touch_Manager : MonoBehaviour {
 			}
 
 		}
+		if(!Application.loadedLevelName.Contains("Tuto"))
 		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 		ads = GetComponent<Ads>();
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
@@ -858,7 +864,7 @@ public class Touch_Manager : MonoBehaviour {
 
 	public bool Pause(GameObject temp){
 
-
+		Debug.Log("Pause");
 		if(!paused){
 			paused = true;
 			rigid.isKinematic = true;
