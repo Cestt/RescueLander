@@ -3,28 +3,35 @@ using System.Collections;
 
 public class Sound_Manager : MonoBehaviour {
 
-	private AudioClip mainMusic;
-	private AudioSource audioSourceMusic;
-	private AudioSource audioSourceEffects;
+	/*public AudioClip alarm;
+	public AudioClip coin;
+	public AudioClip explosion;
+	public AudioClip pickUp;*/
+
+	private AudioSource source;
 
 	void Awake () {
 
-		mainMusic = Resources.Load("Sounds/Pamgaea",typeof(AudioClip)) as AudioClip;
-
 		if(dataManger.manager.Music == true){
-			audioSourceMusic = gameObject.AddComponent<AudioSource>();
-			audioSourceMusic.loop = true;
-			audioSourceMusic.clip = mainMusic;
-			audioSourceMusic.Play();
+			if (!dataManger.manager.GetComponent<AudioSource>().isPlaying)
+				dataManger.manager.GetComponent<AudioSource>().Play();
+			//audioSourceMusic.Play();
+		}else{
+			if (dataManger.manager.GetComponent<AudioSource>().isPlaying)
+				dataManger.manager.GetComponent<AudioSource>().Pause();
 		}
-		if(dataManger.manager.Music == true){
-			audioSourceEffects = gameObject.AddComponent<AudioSource>();
 
-		}
+		//source = GetComponent<AudioSource>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	public void PlaySound(string type){
+		if (!dataManger.manager.Sounds)
+			return;
+		/*switch (type){
+		case "Coin":
+			source.PlayOneShot(coin);
+			break;
+			
+		}*/
 	}
 }

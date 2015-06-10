@@ -76,6 +76,8 @@ public class Touch_Manager : MonoBehaviour {
 		}else{
 		
 			options = uicameraGameobject.transform.FindChild("Options_Menu").gameObject;
+			sounds = options.transform.FindChild("Shop_Bg_01/Sound_Button").gameObject;
+			music = options.transform.FindChild("Shop_Bg_01/Music_Button").gameObject;
 			check = options.transform.FindChild("Shop_Bg_01/Invert Rotation/Check").gameObject;
 			if(dataManger.manager.inverted){
 				check.SetActive(true);
@@ -179,10 +181,12 @@ public class Touch_Manager : MonoBehaviour {
 						case "Music_Button" :
 							if(dataManger.manager.Music){
 								dataManger.manager.Music = false;
+								dataManger.manager.GetComponent<AudioSource>().Pause();
 								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
 								Debug.Log("Music off");
 							}else{
 								dataManger.manager.Music = true;
+								dataManger.manager.GetComponent<AudioSource>().Play();
 								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_On");
 								Debug.Log("Music on");
 							}
@@ -411,6 +415,10 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.Save(false);
 							break;	
 						case "Options_Button" :
+							if (!dataManger.manager.Music)
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+							if (!dataManger.manager.Sounds)
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 							options.SetActive(true);
 							levelEnable = false;
 							break;
@@ -559,10 +567,12 @@ public class Touch_Manager : MonoBehaviour {
 					case "Music_Button" :
 						if(dataManger.manager.Music){
 							dataManger.manager.Music = false;
+							dataManger.manager.GetComponent<AudioSource>().Pause();
 							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
 							Debug.Log("Music off");
 						}else{
 							dataManger.manager.Music = true;
+							dataManger.manager.GetComponent<AudioSource>().Play();
 							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_On");
 							Debug.Log("Music on");
 						}
@@ -777,6 +787,10 @@ public class Touch_Manager : MonoBehaviour {
 
 					case "Options_Button" :
 							options.SetActive(true);
+						if (!dataManger.manager.Music)
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+						if (!dataManger.manager.Sounds)
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 						levelEnable = false;
 						break;
 
