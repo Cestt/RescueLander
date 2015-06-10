@@ -2449,6 +2449,7 @@ GameObject:
   - 124: {fileID: 186449403}
   - 92: {fileID: 186449402}
   - 114: {fileID: 186449401}
+  - 114: {fileID: 186449405}
   m_Layer: 0
   m_Name: UI_Camera
   m_TagString: Untagged
@@ -2536,6 +2537,20 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+--- !u!114 &186449405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 186449399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 043cb5ea8bdc6684b86d57b2247e9249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tuto: {fileID: 0}
+  step: 1
+  first: 1
 --- !u!1 &197364202
 GameObject:
   m_ObjectHideFlags: 0
@@ -2670,7 +2685,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 959.999878
+      value: 959.88208
       objectReference: {fileID: 0}
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.y
@@ -3044,6 +3059,65 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
+--- !u!21 &368869121
+Material:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprite/SpriteColorMasks3
+  m_Shader: {fileID: 4800000, guid: a28d9cde9a3eb3c458d34f29fee8568a, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskRedTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskGreenTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskBlueTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: PixelSnap
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &371116016
 GameObject:
   m_ObjectHideFlags: 0
@@ -7329,7 +7403,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -960
+      value: -959.881897
       objectReference: {fileID: 0}
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.y
@@ -13194,51 +13268,25 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6040412, guid: 75a3718ecce3e3749b091a17e13d6416, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 75a3718ecce3e3749b091a17e13d6416, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1872830601 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 103108, guid: 75a3718ecce3e3749b091a17e13d6416, type: 2}
   m_PrefabInternal: {fileID: 1872830600}
---- !u!60 &1872830602
-PolygonCollider2D:
+--- !u!114 &1872830602
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1872830601}
   m_Enabled: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  m_Points:
-    m_Paths:
-    - - {x: 89.6875, y: 24.0874996}
-      - {x: 83.5374985, y: 10.25}
-      - {x: -121.974998, y: 10.25}
-      - {x: -121.974998, y: -24.5999985}
-      - {x: 123, y: -24.5999985}
-      - {x: 123, y: 24.5999985}
---- !u!60 &1872830603
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1872830601}
-  m_Enabled: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  m_Points:
-    m_Paths:
-    - - {x: 89.6875, y: 24.0874996}
-      - {x: 83.5374985, y: 10.25}
-      - {x: -121.974998, y: 10.25}
-      - {x: -121.974998, y: -24.5999985}
-      - {x: 123, y: -24.5999985}
-      - {x: 123, y: 24.5999985}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf9b4f3b392c6d47a4f259b3c1ba231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1876260266
 GameObject:
   m_ObjectHideFlags: 0
