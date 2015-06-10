@@ -102,7 +102,7 @@ public class WinLose : MonoBehaviour {
 					dataManger.manager.unlocks++;
 				}
 				if(!Application.loadedLevelName.Contains("Tuto")){
-					totalScore = (int)scoreManager.scoreCalc ();
+					totalScore = (int)scoreManager.timeScore;
 					
 					if(totalScore > 1500 & damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
 						dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;

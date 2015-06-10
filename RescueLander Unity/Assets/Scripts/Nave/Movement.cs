@@ -43,6 +43,9 @@ public class Movement : MonoBehaviour {
 	private AudioClip clipRealenti;
 	private AudioClip clipMotor;
 	public float [] fuelLevel;
+	private float actualTime;
+	public float LoseTime;
+	private bool running;
 
 	// Use this for initialization
 	void Awake() {
@@ -75,9 +78,14 @@ public class Movement : MonoBehaviour {
 
 	void FixedUpdate () {
 		if(fuel < 0){
+			actualTime = Time.time;
+			running = true;
+		}else{
+			running = false;
+		}
+		if(running & actualTime + LoseTime < Time.time){
 			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose");
 		}
-
 		if(animator != null & animator.IsPlaying("Fire_Start")||
 		   animator != null & animator.IsPlaying("Fire_End")||
 		   animator != null & animator.IsPlaying("Fire_Loop")){
