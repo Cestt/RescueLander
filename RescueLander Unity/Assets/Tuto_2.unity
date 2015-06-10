@@ -2278,7 +2278,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 863.61377
+      value: 782.4646
       objectReference: {fileID: 0}
     - target: {fileID: 434036, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2550,6 +2550,65 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 258399068}
   m_Mesh: {fileID: 0}
+--- !u!21 &299914138
+Material:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprite/SpriteColorMasks3
+  m_Shader: {fileID: 4800000, guid: a28d9cde9a3eb3c458d34f29fee8568a, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskRedTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskGreenTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskBlueTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: PixelSnap
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &360703005
 GameObject:
   m_ObjectHideFlags: 0
@@ -2824,6 +2883,50 @@ Transform:
   - {fileID: 1308883704}
   m_Father: {fileID: 1631914480}
   m_RootOrder: 0
+--- !u!1 &453078883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 453078885}
+  - 68: {fileID: 453078884}
+  m_Layer: 0
+  m_Name: GroundCollider
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!68 &453078884
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 453078883}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  m_Points:
+  - {x: 3375.0127, y: -7.05134583}
+  - {x: 1151.99316, y: .41835022}
+  - {x: -1150.17505, y: -.550140381}
+  - {x: -4149.41602, y: -7.70237732}
+--- !u!4 &453078885
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 453078883}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 153.5, z: 550}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
 --- !u!21 &480175647
 Material:
   serializedVersion: 5
@@ -2878,7 +2981,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!114 &487616231
 MonoBehaviour:
@@ -6179,7 +6282,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
 --- !u!1 &493628409 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 178836, guid: 646e581dca7dd9e4d87a3183c41d9b07, type: 2}
@@ -6623,6 +6726,70 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2001621311
   m_SortingOrder: 2
+--- !u!1 &543191481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 543191483}
+  - 68: {fileID: 543191482}
+  m_Layer: 0
+  m_Name: BoxesCollider
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!68 &543191482
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 543191481}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  m_Points:
+  - {x: 192.530884, y: -64.9165497}
+  - {x: 276.703247, y: -23.8492126}
+  - {x: 222.37146, y: 90.0960388}
+  - {x: 172.312866, y: 65.9752197}
+  - {x: 171.741821, y: 78.7748413}
+  - {x: 43.8088379, y: 78.7626648}
+  - {x: 43.4418945, y: 49.4839325}
+  - {x: -51.8353882, y: 49.1444855}
+  - {x: -52.0097046, y: 19.7033691}
+  - {x: -116.029114, y: 19.0678711}
+  - {x: -115.952698, y: 7.38407898}
+  - {x: -134.259155, y: 7.34983826}
+  - {x: -135.62323, y: 47.1434174}
+  - {x: -167.868774, y: 48.2255707}
+  - {x: -197.474548, y: -7.71681213}
+  - {x: -204.779175, y: -8.25132751}
+  - {x: -187.42627, y: 111.734619}
+  - {x: -195.118835, y: 113.685089}
+  - {x: -203.676025, y: 59.7914124}
+  - {x: -277.020752, y: 67.5256348}
+  - {x: -268.943726, y: 61.2301331}
+  - {x: -204.473145, y: 54.5941772}
+  - {x: -216.804749, y: -41.3158722}
+  - {x: -194.506104, y: -56.89534}
+--- !u!4 &543191483
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 543191481}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 202, z: 550}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
 --- !u!1 &584775960
 GameObject:
   m_ObjectHideFlags: 0
@@ -7607,7 +7774,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -863.613586
+      value: -782.4646
       objectReference: {fileID: 0}
     - target: {fileID: 461266, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_LocalPosition.y
@@ -7668,7 +7835,7 @@ Prefab:
     - target: {fileID: 21291496, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 1526630019}
+      objectReference: {fileID: 299914138}
     - target: {fileID: 11432526, guid: 9643614790ba2a44ea6b42fdb066b6c9, type: 2}
       propertyPath: _anchorCamera
       value: 
@@ -9810,65 +9977,6 @@ Transform:
   - {fileID: 627543261}
   m_Father: {fileID: 186449400}
   m_RootOrder: 5
---- !u!21 &1526630019
-Material:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprite/SpriteColorMasks3
-  m_Shader: {fileID: 4800000, guid: a28d9cde9a3eb3c458d34f29fee8568a, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskRedTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskGreenTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskBlueTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: PixelSnap
-        second: 0
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1596631678
 GameObject:
   m_ObjectHideFlags: 0
@@ -11546,65 +11654,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2001621311
   m_SortingOrder: 2
---- !u!21 &2094266476
-Material:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprite/SpriteColorMasks3
-  m_Shader: {fileID: 4800000, guid: a28d9cde9a3eb3c458d34f29fee8568a, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskRedTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskGreenTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskBlueTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: PixelSnap
-        second: 0
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2139990735 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 120228, guid: 02f93cca916e11749a4b50da14bdc9fe, type: 2}
