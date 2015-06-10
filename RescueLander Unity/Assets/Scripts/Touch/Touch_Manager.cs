@@ -498,7 +498,6 @@ public class Touch_Manager : MonoBehaviour {
 				if (Physics.Raycast(ray.origin,ray.direction * 100, out hit) 
 				    || Physics.Raycast(ray2.origin,ray.direction * 100, out hit)) {
 		
-					Debug.Log("Hit");
 
 					switch(hit.collider.name ){
 					case "Play" :
@@ -722,7 +721,6 @@ public class Touch_Manager : MonoBehaviour {
 					case "Button_Buy" :
 						if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
 							Value value = hit.collider.gameObject.GetComponent<Value>();
-							Debug.Log(hit.transform.parent.name.Substring(7));
 							if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
 								if(value._Type == "Ship" || value._Type == "World"){
 									Destroy(hit.collider.gameObject);
@@ -901,7 +899,6 @@ public class Touch_Manager : MonoBehaviour {
 				CancelInvoke("MoveCamera");
 			}else{
 				Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position,tempPos,MenuSpeed*Time.fixedDeltaTime);
-				Debug.Log("MoveCamera");
 			}
 		}else{
 			tempPos.x = Camera.main.GetComponent<tk2dCamera>().nativeResolutionWidth/2;

@@ -71,6 +71,7 @@ public class Tuto_Behaviour1 : MonoBehaviour {
 			dataManger.manager.magnetPowerUps++;
 			dataManger.manager.fuelPowerUps++;
 			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
+			step++;
 
 			
 		}

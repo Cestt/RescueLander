@@ -174,7 +174,6 @@ public class dataManger : MonoBehaviour {
 			inverted = data.inverted;
 			tutorial = data.tutorial;
 
-			Debug.Log("Data Unlocks: " + data.unlocks);
 
 			for(int i = 1; i<= levels ; i++){
 				stars["Level_"+i] = data.stars["Level_"+i];
@@ -196,7 +195,6 @@ public class dataManger : MonoBehaviour {
 					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
 				}
 			}
-			Debug.Log("Coins: " + coins);
 			file.Close();
 
 		}
