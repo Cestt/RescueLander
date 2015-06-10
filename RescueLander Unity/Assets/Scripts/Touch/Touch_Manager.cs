@@ -871,7 +871,7 @@ public class Touch_Manager : MonoBehaviour {
 			animation["UIBase_RightCol_extended_UpDown"].speed = 1;
 			animation.Play("UIBase_RightCol_extended_UpDown");
 			if(!Application.loadedLevelName.Contains("Tuto"))
-			pauseText.SetActive(true);
+				pauseText.SetActive(true);
 			for (int i=0; i< animators.Count; i++){
 				if (animators[i] != null)
 					animators[i].Pause();
@@ -886,8 +886,8 @@ public class Touch_Manager : MonoBehaviour {
 			animation["UIBase_RightCol_extended_UpDown"].speed = -1;
 			animation.Play("UIBase_RightCol_extended_UpDown");
 			animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
-			Debug.Log("UnPause");
-			pauseText.SetActive(false);
+			if(!Application.loadedLevelName.Contains("Tuto"))
+				pauseText.SetActive(false);
 			for (int i=0; i< animators.Count; i++){
 				if (animators[i] != null)
 					animators[i].Resume();
