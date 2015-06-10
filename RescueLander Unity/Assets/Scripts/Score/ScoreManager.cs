@@ -21,8 +21,9 @@ public class ScoreManager : MonoBehaviour {
 			}
 			damage = ship.GetComponent<Damage>();
 			movement = ship.GetComponent<Movement>();
-			touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
+
 		}
+		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 
 	}
 
