@@ -237,7 +237,6 @@ public class WinLose : MonoBehaviour {
 			scoreObject.SetActive(true);
 			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
 			scoreNumber = scoreManager.timeScore;
-			Debug.Log ("Time:"+scoreNumber);
 			scoreAct++;
 			scoreChangeText = 0;
 			scoreTextRemaining = "Time Score";
@@ -248,7 +247,6 @@ public class WinLose : MonoBehaviour {
 			scoreObject.SetActive(true);
 			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
 			scoreNumber = damage.life;
-			Debug.Log ("Life:"+scoreNumber);
 			scoreChangeText = 0;
 			scoreTextRemaining = "Life Score";
 			InvokeRepeating("ChangeScore",0,0.05f);
@@ -259,14 +257,12 @@ public class WinLose : MonoBehaviour {
 			scoreObject.SetActive(true);
 			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
 			scoreNumber = (int)GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<Movement>().fuel;
-			Debug.Log ("Fuel:"+scoreNumber);
 			scoreChangeText = 0;
 			scoreTextRemaining = "Fuel Score";
 			InvokeRepeating("ChangeScore",0,0.05f);
 			scoreAct++;
 		}else if (scoreAct == 4){
 			CancelInvoke("ShowScore");
-			Debug.Log ("Cancelando ShowScore");
 		}
 	}
 
@@ -277,10 +273,8 @@ public class WinLose : MonoBehaviour {
 		}else{
 			scoreText.text = scoreTextRemaining +" "+ scoreNumber.ToString();
 			scoreTotal += scoreNumber;
-			Debug.Log ("ScoreTotal:"+scoreTotal);
 			scoreTotalText.text = "Score "+ scoreTotal.ToString();
 			CancelInvoke("ChangeScore");
-			Debug.Log ("Cancelando ChangeScore");
 		}
 	}
 }

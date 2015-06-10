@@ -308,7 +308,7 @@ public class Movement : MonoBehaviour {
 				
 			}
 			
-			animator.AnimationCompleted = FireLoop;
+			animator2.AnimationCompleted = FireLoop;
 		}
 
 	}

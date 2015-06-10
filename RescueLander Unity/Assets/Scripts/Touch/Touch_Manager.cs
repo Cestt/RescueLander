@@ -130,16 +130,20 @@ public class Touch_Manager : MonoBehaviour {
 						switch(hit.collider.name ){
 						case "Play" :
 							forward = true;
-							if(dataManger.manager.tutorial >= 4){
-								if(IsInvoking("MoveCamera")){
-									CancelInvoke("MoveCamera");
-									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+							if(levelEnable){
+
+								if(dataManger.manager.tutorial >= 4){
+									if(IsInvoking("MoveCamera")){
+										CancelInvoke("MoveCamera");
+										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									}else{
+										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									}
 								}else{
-									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 								}
-							}else{
-								Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 							}
+
 
 							
 							break;	
@@ -213,7 +217,7 @@ public class Touch_Manager : MonoBehaviour {
 							if(Application.loadedLevelName == "Menu"){
 								options.SetActive(false);
 							}
-
+							levelEnable = true;
 							break;
 						case "A_Button" :
 							selectedZone = "A";
@@ -454,6 +458,10 @@ public class Touch_Manager : MonoBehaviour {
 								Application.OpenURL("itms-apps://itunes.apple.com/app/idYOUR_ID");
 							}
 							break;
+						case "More_PowerUps":
+							Garaje(true);
+							garage_manager.LayoutChanger("PowerUps");
+							break;	
 						default :
 							
 							break;
@@ -517,15 +525,18 @@ public class Touch_Manager : MonoBehaviour {
 					switch(hit.collider.name ){
 					case "Play" :
 						forward = true;
-						if(dataManger.manager.tutorial >= 4){
-							if(IsInvoking("MoveCamera")){
-								CancelInvoke("MoveCamera");
-								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+						if(levelEnable){
+
+							if(dataManger.manager.tutorial >= 4){
+								if(IsInvoking("MoveCamera")){
+									CancelInvoke("MoveCamera");
+									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+								}else{
+									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+								}
 							}else{
-								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+								Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 							}
-						}else{
-							Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 						}
 
 						break;	
@@ -599,7 +610,7 @@ public class Touch_Manager : MonoBehaviour {
 						if(Application.loadedLevelName == "Menu"){
 							options.SetActive(false);
 						}
-
+						levelEnable = true;
 						break;
 					case "A_Button" :
 						selectedZone = "A";
@@ -817,8 +828,8 @@ public class Touch_Manager : MonoBehaviour {
 						
 						break;
 					case "More_PowerUps":
-
-						
+						Garaje(true);
+						garage_manager.LayoutChanger("PowerUps");
 						break;	
 			
 					default :
