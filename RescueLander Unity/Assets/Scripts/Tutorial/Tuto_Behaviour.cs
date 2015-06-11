@@ -40,19 +40,31 @@ public class Tuto_Behaviour : MonoBehaviour {
 	
 		if(Input.touchCount > 0  & step !=7 & step !=9 & step != 10 & step != 11
 		   || Input.GetMouseButtonUp(0)& step !=7 & step !=9 & step != 10 & step != 11){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
+			//if(Input.GetTouch(0).phase == TouchPhase.Began){
 				step++;
 				first = true;
 				nextStep();
-			}
+				transform.FindChild("ObjectiveArea").gameObject.SetActive(false);
+				transform.FindChild("ObjectiveArea1").gameObject.SetActive(false);
+				tuto.gameObject.SetActive(true);
+			//}
 
 		}
-
+		if(Input.touchCount > 0 &step == 7
+		   || Input.GetMouseButtonUp(0)&step == 7){
+			//if(Input.GetTouch(0).phase == TouchPhase.Began){
+				if(ship.GetComponent<Rigidbody2D>().isKinematic)
+					ship.GetComponent<Rigidbody2D>().isKinematic = false;
+				tuto.SetActive(false);
+			//}
+			
+		}
 
 		if(step == 7){
-			if(once){
+			if(once & ship != null){
 				zoom.enabled = false;
 				ship.GetComponent<Rigidbody2D>().isKinematic = false;
+				transform.FindChild("ObjectiveArea").gameObject.SetActive(true);
 				zoom.zoom = "out";
 				zoom.CheckInvoke();
 				once = false;
@@ -62,9 +74,11 @@ public class Tuto_Behaviour : MonoBehaviour {
 		}
 
 		if(step == 9){
-			if(once){
+			if(once & ship != null){
 			ship.GetComponent<Rigidbody2D>().isKinematic = false;
 			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
+				transform.FindChild("ObjectiveArea1").gameObject.SetActive(true);
+				tuto.gameObject.SetActive(false);
 				once = false;
 			}
 		}
@@ -75,13 +89,13 @@ public class Tuto_Behaviour : MonoBehaviour {
 			
 		}
 		if(step == 10 & Input.touchCount > 0  || step == 10 & Input.GetMouseButtonUp(0)){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
+			//if(Input.GetTouch(0).phase == TouchPhase.Began){
 			transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
 			step++;
 			first = true;
 			nextStep();
-			}
+			//}
 			
 		}
 	}

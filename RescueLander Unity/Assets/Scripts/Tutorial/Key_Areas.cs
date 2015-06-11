@@ -8,12 +8,13 @@ public class Key_Areas : MonoBehaviour {
 	private bool running;
 	private GameObject ship;
 	private Tuto_Behaviour tuto;
+	private GameObject tutoGameobject;
 
 
 	void Awake(){
 		ship = GameObject.Find("101(Clone)");
 		tuto = GameObject.Find("UI_Camera").GetComponent<Tuto_Behaviour>();
-	
+		tutoGameobject = GameObject.Find("UI_Camera").transform.FindChild("Tutorial").gameObject;
 	}
 
 	void OnTriggerEnter2D(Collider2D coll) {
@@ -43,6 +44,7 @@ public class Key_Areas : MonoBehaviour {
 			tuto.step++;
 			tuto.first = true;
 			tuto.nextStep();
+			tutoGameobject.SetActive(true);
 
 		}
 		if(actualTime + TimerTime < Time.time & running & tuto.step == 9){

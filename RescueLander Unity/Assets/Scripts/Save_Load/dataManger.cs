@@ -60,7 +60,7 @@ public class dataManger : MonoBehaviour {
 	public int coinsSpend;
 	[HideInInspector]
 	public int coinsAcumulated;
-	[HideInInspector]
+	//[HideInInspector]
 	public int tutorial = 1;
 
 	private GameObject temp;

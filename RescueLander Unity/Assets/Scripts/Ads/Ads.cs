@@ -9,6 +9,7 @@ public class Ads : MonoBehaviour {
 	public GameObject Test;
 	void Awake() {
 		touch = GetComponent<Touch_Manager>();
+		if(Application.loadedLevelName == "Menu")
 		if (Advertisement.isSupported) {
 
 			Advertisement.allowPrecache = true;
@@ -53,7 +54,11 @@ public class Ads : MonoBehaviour {
 			ShowOptions options = new ShowOptions();
 			options.resultCallback = HandleResult;
 			options.pause = touch.Pause(null);
-			Advertisement.Show(null,options);
+			if(Advertisement.isReady("rewardedVideoZone")) {
+				Advertisement.Show("rewardedVideoZone",options);
+			}
+
+
 		}else{
 			Debug.Log("Ad not ready");
 		}

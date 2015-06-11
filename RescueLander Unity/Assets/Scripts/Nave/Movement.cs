@@ -43,7 +43,7 @@ public class Movement : MonoBehaviour {
 	private AudioClip clipRealenti;
 	private AudioClip clipMotor;
 	public float [] fuelLevel;
-	private float actualTime;
+	public float actualTime;
 	public float LoseTime;
 	private bool running;
 	private AudioSource audioThruster;
@@ -51,7 +51,7 @@ public class Movement : MonoBehaviour {
 	void Awake() {
 
 		if(Application.loadedLevelName.Contains("Tuto")){
-			fuel = 1000;
+			fuel = 2500;
 		}else{
 			fuel = fuelLevel[dataManger.manager.actualLevel-1];
 		}
@@ -78,13 +78,15 @@ public class Movement : MonoBehaviour {
 
 
 	void FixedUpdate () {
-		if(fuel < 0){
+		if(fuel < 0 & !running){
 			actualTime = Time.time;
 			running = true;
-		}else{
+			Debug.Log("Running: " + running);
+		}else if(fuel > 0){
 			running = false;
 		}
 		if(running & actualTime + LoseTime < Time.time){
+			Debug.Log("Fuel time");
 			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose");
 		}
 		if(animator != null & animator.IsPlaying("Fire_Start")||
@@ -185,7 +187,7 @@ public class Movement : MonoBehaviour {
 					
 					
 					
-					if (Input.touchCount ==2 & fuel > 0){	
+					if (Input.touchCount == 2 & fuel > 0){	
 						touch = Input.GetTouch(1);
 						animator.Stop();
 						Thruster_l.SetActive(false);
@@ -342,7 +344,7 @@ public class Movement : MonoBehaviour {
 		}else{
 			fuel -= fuelConsumption * 1.5f;
 		}
-
+		if(fuel > 0)
 		slicedsprite.dimensions = new Vector2(originlSize * (fuel/originalFuel),slicedsprite.dimensions.y);
 		motor = true;
 		if(Complete){

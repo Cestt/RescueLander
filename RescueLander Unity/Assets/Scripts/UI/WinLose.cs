@@ -163,8 +163,11 @@ public class WinLose : MonoBehaviour {
 		}
 
 		if(result == "Lose"){
-			LoseSprite.transform.FindChild("CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
-			LoseSprite.transform.FindChild("CoinCount/Total Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = dataManger.manager.coins.ToString();
+			if(!Application.loadedLevelName.Contains("Tuto")){
+				LoseSprite.transform.FindChild("CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
+				LoseSprite.transform.FindChild("CoinCount/Total Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = dataManger.manager.coins.ToString();
+			}
+
 			dataManger.manager.Save(true);
 			Lose();
 		}
@@ -224,9 +227,13 @@ public class WinLose : MonoBehaviour {
 		LoseSprite.SetActive (true);
 		UI1.SetActive (false);
 		UI2.SetActive (false);
+		if(!Application.loadedLevelName.Contains("Tuto")){
 		UI3.SetActive (false);
 		UI4.SetActive(true);
 		UI5.SetActive(true);
+		}else{
+			GameObject.Find("UI_Camera").transform.FindChild("Tutorial").gameObject.SetActive(false);
+		}
 
 	}
 

@@ -128,35 +128,35 @@ public class Color_Set : MonoBehaviour {
 					case "Ship01" :
 						tintMask = 
 							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
-						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
-						tintMask.colorMaskRed = new Color32(249,176,0,255);
+						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
+						tintMask.colorMaskRed = new Color32(249,176,1,255);
 						tintMask.colorMaskGreen = new Color32(197,0,0,255);
 						break;
 					case "369" :
 						tintMask = 
 							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
-						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
 						tintMask.colorMaskRed = new Color32(207,207,207,255);
 						tintMask.colorMaskGreen = new Color32(106,161,185,255);
 						break;
 					case "Taboo" :
 						tintMask = 
 							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
-						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
 						tintMask.colorMaskRed = new Color32(247,233,32,255);
 						tintMask.colorMaskGreen = new Color32(255,127,0,255);
 						break;
 					case "UFLO" :
 						tintMask = 
 							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
-						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
 						tintMask.colorMaskRed = new Color32(147,104,181,255);
 						tintMask.colorMaskGreen = new Color32(255,127,0,255);
 						break;
 					case "Box" :
 						tintMask = 
 							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
-						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
 						tintMask.colorMaskRed = new Color32(198,156,109,255);
 						tintMask.colorMaskGreen = new Color32(247,49,56,255);
 						
@@ -164,7 +164,7 @@ public class Color_Set : MonoBehaviour {
 					case "Mush" :
 						tintMask = 
 							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
-						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
 						tintMask.colorMaskRed = new Color32(184,154,121,255);
 						tintMask.colorMaskGreen = new Color32(255,0,0,255);
 						
@@ -172,7 +172,7 @@ public class Color_Set : MonoBehaviour {
 					case "Bow" :
 						tintMask = 
 							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
-						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader", typeof(Texture2D)) as Texture2D;
 						tintMask.colorMaskRed = new Color32(147,104,181,255);
 						tintMask.colorMaskGreen = new Color32(255,127,0,255);
 						
