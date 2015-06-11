@@ -17,6 +17,7 @@ GameObject:
   - 114: {fileID: 11408314}
   - 114: {fileID: 11492234}
   - 114: {fileID: 11407782}
+  - 82: {fileID: 8280792}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -36,6 +37,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!82 &8280792
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102774}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!114 &11407304
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -59,6 +129,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 988202ef84199264881cd3d70f1fc368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alarm: {fileID: 8300000, guid: 64c0cfb3e715169448b21220cf796ae8, type: 3}
+  alarmVolume: .200000003
+  coin: {fileID: 8300000, guid: 7aef3588811333f41a8f992870cfde55, type: 3}
+  coinVolume: .200000003
+  explosion: {fileID: 8300000, guid: 4ed4eb11ddb981e4d94654e71a3da565, type: 3}
+  explosionVolume: .25
+  pickUp: {fileID: 8300000, guid: a29da41f4592e7e42858eaa14d73e8ec, type: 3}
+  pickUpVolume: .5
+  engineStart: {fileID: 8300000, guid: e3cb368a1698f3241bfbc64f41245a0b, type: 3}
+  engineStartVolume: .5
 --- !u!114 &11408314
 MonoBehaviour:
   m_ObjectHideFlags: 1
