@@ -9,11 +9,14 @@ public class Coin_Move : MonoBehaviour {
 	private Coin_Manager coin_manager;
 	private int coinDistance = 65;
 	public int CoinValue;
+	private Sound_Manager soundManager;
+
 	bool first;
 	void Awake(){
 		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		powerManager = GameObject.Find("Game Manager").GetComponent<PowerUp_Manager>();
 		coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
+		soundManager = GameObject.Find("Game Manager").GetComponent<Sound_Manager>();
 	}
 
 	void Update () {
@@ -28,6 +31,7 @@ public class Coin_Move : MonoBehaviour {
 			}
 			if (Vector2.Distance (transform.position, ship.transform.position) < coinDistance ) {
 				coin_manager.LevelCoin(CoinValue);
+				soundManager.PlaySound("Coin");
 				Destroy(gameObject);		
 			}
 			if(!powerManager.On & first){

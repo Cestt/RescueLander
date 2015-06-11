@@ -3,10 +3,16 @@ using System.Collections;
 
 public class Sound_Manager : MonoBehaviour {
 
-	/*public AudioClip alarm;
+	public AudioClip alarm;
+	[Range(0, 1)] public float alarmVolume;
 	public AudioClip coin;
+	[Range(0, 1)] public float coinVolume;
 	public AudioClip explosion;
-	public AudioClip pickUp;*/
+	[Range(0, 1)] public float explosionVolume;
+	public AudioClip pickUp;
+	[Range(0, 1)] public float pickUpVolume;
+	public AudioClip engineStart;
+	[Range(0, 1)] public float engineStartVolume;
 
 	private AudioSource source;
 
@@ -21,17 +27,33 @@ public class Sound_Manager : MonoBehaviour {
 				dataManger.manager.GetComponent<AudioSource>().Pause();
 		}
 
-		//source = GetComponent<AudioSource>();
+		source = GetComponent<AudioSource>();
 	}
 	
 	public void PlaySound(string type){
 		if (!dataManger.manager.Sounds)
 			return;
-		/*switch (type){
-		case "Coin":
-			source.PlayOneShot(coin);
-			break;
-			
-		}*/
+		switch (type){
+			case "Coin":
+				source.volume = coinVolume;
+				source.PlayOneShot(coin);
+				break;
+			case "Explosion":
+				source.volume = explosionVolume;
+				source.PlayOneShot(explosion);
+				break;
+			case "PickUp":
+				source.volume = pickUpVolume;
+				source.PlayOneShot(pickUp);
+				break;
+			case "Alarm":
+				source.volume = alarmVolume;
+				source.PlayOneShot(alarm);
+				break;
+			case "EngineStart":
+				source.volume = engineStartVolume;
+				source.PlayOneShot(engineStart);
+				break;
+		}
 	}
 }

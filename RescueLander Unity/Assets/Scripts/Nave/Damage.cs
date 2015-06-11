@@ -33,6 +33,8 @@ public class Damage : MonoBehaviour {
 	[HideInInspector]
 	public Vector2 saveSpeed;
 	private Touch_Manager touch;
+	private Sound_Manager soundManager;
+	private bool activateAlarm; 
 
 	// Use this for initialization
 	void Awake () {
@@ -51,8 +53,8 @@ public class Damage : MonoBehaviour {
 		lifebarScript = lifeBar.GetComponent<LifeBar>();
 		relation = slicedsprite.dimensions.x/life;
 		winLose = GameManager.GetComponent<WinLose> ();
-
-
+		soundManager = GameManager.GetComponent<Sound_Manager>();
+		activateAlarm = true;
 
 	}
 
@@ -76,11 +78,15 @@ public class Damage : MonoBehaviour {
 			life = -1;
 		}
 
-		if(life <= (maxLife*3)/4 & life >= (maxLife*2)/4){
+		if(life <= (maxLife*0.6f) & life >= (maxLife*0.3f)){
 			slicedsprite.SetSprite("BarraVida_Naranja");
 		}
-		if(life < (maxLife*1)/4){
+		if(life < (maxLife*0.3f)){
 			slicedsprite.SetSprite("BarraVida_Roja");
+			if (activateAlarm){
+				soundManager.PlaySound("Alarm");
+				activateAlarm = false;
+			}
 		}
 
 		if(life < 0){
@@ -94,6 +100,7 @@ public class Damage : MonoBehaviour {
 			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
 			explosion.SetActive(true);
 			animator.Play("Explosion");
+			soundManager.PlaySound("Explosion");
 			animator.AnimationCompleted = DestroyShip;
 
 		}

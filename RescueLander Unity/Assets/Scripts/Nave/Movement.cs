@@ -46,7 +46,7 @@ public class Movement : MonoBehaviour {
 	private float actualTime;
 	public float LoseTime;
 	private bool running;
-
+	private AudioSource audioThruster;
 	// Use this for initialization
 	void Awake() {
 
@@ -69,10 +69,11 @@ public class Movement : MonoBehaviour {
 		originlSize = slicedsprite.dimensions.x;
 		originalFuel = fuel;
 		animator =  Fire.GetComponent<tk2dSpriteAnimator>();
-		//audioSource = GetComponent<AudioSource>();
-		//clipRealenti = Resources.Load ("Sounds/EngineRealenti");
-		//clipMotor = Resources.Load ("Sounds/Motor1");
 
+		audioSource = GetComponent<AudioSource>();
+		clipRealenti = Resources.Load ("Sounds/EngineRealenti(Loop)") as AudioClip;
+		clipMotor = Resources.Load ("Sounds/Motor1(Loop)") as AudioClip;
+		audioThruster = transform.FindChild("Feet").GetComponent<AudioSource>();
 	}
 
 
@@ -91,8 +92,20 @@ public class Movement : MonoBehaviour {
 		   animator != null & animator.IsPlaying("Fire_Loop")){
 			currentFrame = animator.CurrentFrame;
 		}
-
-			if(platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer || platform == RuntimePlatform.WindowsEditor){
+			if(platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer){
+				if (motor & Input.touchCount < 2){
+					motor  = false;
+					if(animator2.IsPlaying("Fire_Start")){
+						animator2.Play("Fire_End");
+						animator2.PlayFromFrame(7-currentFrame);
+					}else{
+						animator2.Play("Fire_End");
+					}
+					if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
+						audioSource.clip = clipRealenti;
+						audioSource.Play();
+					}
+				}
 				if(Input.touchCount > 0) {
 
 				Touch touch;
@@ -103,7 +116,7 @@ public class Movement : MonoBehaviour {
 						
 						
 						if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended){
-							
+
 							Vector3 tempVect = Camera.main.ScreenToWorldPoint(touch.position);
 							
 							if(tempVect.x > Camera.main.transform.position.x){
@@ -154,13 +167,17 @@ public class Movement : MonoBehaviour {
 								
 								animator.AnimationCompleted = ThrusterLoop;
 							}
-							
+
+							if (!audioThruster.isPlaying)
+								audioThruster.Play();
 						}
 						
 						if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended || Input.touchCount == 2){
 							animator.Stop();
 							Thruster_l.SetActive(false);
 							Thruster_r.SetActive(false);
+							if (audioThruster.isPlaying)
+								audioThruster.Stop();
 						}
 						
 						motor  = false;
@@ -170,6 +187,11 @@ public class Movement : MonoBehaviour {
 					
 					if (Input.touchCount ==2 & fuel > 0){	
 						touch = Input.GetTouch(1);
+						animator.Stop();
+						Thruster_l.SetActive(false);
+						Thruster_r.SetActive(false);
+						if (audioThruster.isPlaying)
+							audioThruster.Stop();
 						if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended){
 							
 							Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
@@ -179,7 +201,11 @@ public class Movement : MonoBehaviour {
 								Fire.SetActive(true);
 							ConsumeFuel(true,false);
 							motor = true;
-							
+
+							if (audioSource.clip != clipMotor || ( audioSource.clip == clipMotor && !audioSource.isPlaying)){
+								audioSource.clip = clipMotor;
+								audioSource.Play();
+							}
 						}
 						if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
 							motor  = false;
@@ -188,6 +214,10 @@ public class Movement : MonoBehaviour {
 								animator2.PlayFromFrame(7-currentFrame);
 							}else{
 								animator2.Play("Fire_End");
+							}
+							if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
+								audioSource.clip = clipRealenti;
+								audioSource.Play();
 							}
 						}
 						
@@ -203,7 +233,12 @@ public class Movement : MonoBehaviour {
 			if(!touchmanager.paused){
 
 				if(Input.GetKey(KeyCode.Space) & fuel > 0 & rigid.velocity.magnitude < maxSpeed){
-					
+					animator.Stop();
+					Thruster_l.SetActive(false);
+					Thruster_r.SetActive(false);
+					if (audioThruster.isPlaying)
+						audioThruster.Stop();
+
 					Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
 					rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
 
@@ -211,7 +246,11 @@ public class Movement : MonoBehaviour {
 						Fire.SetActive(true);					
 					ConsumeFuel(true,false);
 					motor = true;
-					
+					if (audioSource.clip != clipMotor || ( audioSource.clip == clipMotor && !audioSource.isPlaying)){
+						audioSource.volume = 0.35f;
+						audioSource.clip = clipMotor;
+						audioSource.Play();
+					}
 				}
 				if(Input.GetKeyUp(KeyCode.Space)){
 					motor = false;
@@ -221,7 +260,11 @@ public class Movement : MonoBehaviour {
 					}else{
 						animator2.Play("Fire_End");
 					}
-					
+					if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
+						audioSource.volume = 0.1f;
+						audioSource.clip = clipRealenti;
+						audioSource.Play();
+					}
 					
 				}
 				
@@ -273,6 +316,9 @@ public class Movement : MonoBehaviour {
 						}
 						animator.AnimationCompleted = ThrusterLoop;
 					}
+
+					if (!audioThruster.isPlaying)
+						audioThruster.Play();
 					motor  = false;
 					
 				}
@@ -280,6 +326,8 @@ public class Movement : MonoBehaviour {
 					animator.Stop();
 					Thruster_l.SetActive(false);
 					Thruster_r.SetActive(false);
+					if (audioThruster.isPlaying)
+						audioThruster.Stop();
 				}
 				
 			}

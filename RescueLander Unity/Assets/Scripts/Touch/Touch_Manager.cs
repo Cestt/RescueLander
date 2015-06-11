@@ -419,11 +419,11 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.Save(false);
 							break;	
 						case "Options_Button" :
+							options.SetActive(true);
 							if (!dataManger.manager.Music)
 								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
 							if (!dataManger.manager.Sounds)
 								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
-							options.SetActive(true);
 							levelEnable = false;
 							break;
 						case "GooglePlayButton":
@@ -797,7 +797,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 
 					case "Options_Button" :
-							options.SetActive(true);
+						options.SetActive(true);
 						if (!dataManger.manager.Music)
 							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
 						if (!dataManger.manager.Sounds)
