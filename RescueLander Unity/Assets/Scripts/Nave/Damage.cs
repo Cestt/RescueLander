@@ -35,7 +35,7 @@ public class Damage : MonoBehaviour {
 	private Touch_Manager touch;
 	private Sound_Manager soundManager;
 	private bool activateAlarm; 
-
+	private bool activateExplosion;
 	// Use this for initialization
 	void Awake () {
 		rigid = GetComponent<Rigidbody2D>();
@@ -55,7 +55,7 @@ public class Damage : MonoBehaviour {
 		winLose = GameManager.GetComponent<WinLose> ();
 		soundManager = GameManager.GetComponent<Sound_Manager>();
 		activateAlarm = true;
-
+		activateExplosion = true;
 	}
 
 
@@ -100,7 +100,10 @@ public class Damage : MonoBehaviour {
 			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
 			explosion.SetActive(true);
 			animator.Play("Explosion");
-			soundManager.PlaySound("Explosion");
+			if (activateExplosion){
+				soundManager.PlaySound("Explosion");
+				activateExplosion = false;
+			}
 			animator.AnimationCompleted = DestroyShip;
 
 		}

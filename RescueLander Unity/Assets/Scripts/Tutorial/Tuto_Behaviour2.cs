@@ -78,6 +78,7 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 				dataManger.manager.coins += 500;
 				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
 				once = false;
+				step++;
 			}
 			
 		}
