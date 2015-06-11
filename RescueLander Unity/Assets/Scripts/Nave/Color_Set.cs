@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class Color_Set : MonoBehaviour {
 	private SpriteColorFX.SpriteColorMasks3 tint;
 	private GameObject ShipGaraje;
@@ -9,6 +10,7 @@ public class Color_Set : MonoBehaviour {
 	private SpriteColorFX.SpriteColorMasks3 tintGaraje;
 
 	void Awake () {
+
 		GameObject uicamera = GameObject.Find("UI_Camera");
 		ShipGaraje = uicamera.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
 		ShipGaraje2 = uicamera.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/TV/Ship01_Garage").gameObject;
@@ -18,7 +20,7 @@ public class Color_Set : MonoBehaviour {
 		}
 		if (dataManger.manager.color1b < 1000) {
 			tintGaraje.GetComponent<SpriteRenderer> ().sprite = Resources.Load ("Sprites/" + dataManger.manager.actualShip + "_High", typeof(Sprite)) as Sprite;
-			tintGaraje.textureMask = Resources.Load ("Sprites/" + dataManger.manager.actualShip + "_Shader_High", typeof(Texture2D)) as Texture2D;
+			tintGaraje.textureMask = Resources.Load ("Sprites/" + dataManger.manager.actualShip + "_Shader", typeof(Texture2D)) as Texture2D;
 			tintGaraje.colorMaskRed = new Color (dataManger.manager.color1r, dataManger.manager.color1g, dataManger.manager.color1b);
 			tintGaraje.colorMaskGreen = new Color (dataManger.manager.color2r, dataManger.manager.color2g, dataManger.manager.color2b);
 		}	
@@ -35,7 +37,7 @@ public class Color_Set : MonoBehaviour {
 			if (Application.loadedLevelName != "Menu") {
 				tint.colorMaskRed = color;
 			}
-			Debug.Log("Color Set");
+
 			dataManger.manager.Save(true);
 		}
 		if (zone == "B") {
@@ -46,7 +48,7 @@ public class Color_Set : MonoBehaviour {
 			if (Application.loadedLevelName != "Menu") {
 				tint.colorMaskGreen = color;
 			}
-			Debug.Log("Color Set");
+
 			dataManger.manager.Save(true);
 		}
 

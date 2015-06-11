@@ -12,7 +12,7 @@ public class Ship_Unlock : MonoBehaviour {
 						Destroy(child.FindChild("Button_Buy").gameObject);
 						child.FindChild("Owned_Label").gameObject.SetActive(true);
 					}
-					Debug.Log("Ships count " + dataManger.manager.shipUnlocks[0]);
+
 				}
 			}
 		}
