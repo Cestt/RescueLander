@@ -611,8 +611,8 @@ Rigidbody2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 118726}
   m_Mass: 3
-  m_LinearDrag: .395999998
-  m_AngularDrag: .733049989
+  m_LinearDrag: .450000018
+  m_AngularDrag: .749249995
   m_GravityScale: 16
   m_FixedAngle: 0
   m_IsKinematic: 0
@@ -707,7 +707,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: db46772aafb2e27479e6da2601e174ef, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 651bb20648f31974b964f2651fe09b75, type: 3}
   m_PlayOnAwake: 0
   m_Volume: .300000012
   m_Pitch: 1
@@ -1010,11 +1010,11 @@ MonoBehaviour:
   sparks: {fileID: 0}
   life: 1000
   maxLife: 0
-  damageThreshold: 65
-  damageThresholdFriction: 225
+  damageThreshold: 67
+  damageThresholdFriction: 275
   DamageVariant: -15
   GameManager: {fileID: 0}
-  thrusterExtra: 600
+  thrusterExtra: 800
   dmgReduction: 0
   saveSpeed: {x: 0, y: 0}
 --- !u!114 &11445732
@@ -1212,36 +1212,36 @@ MonoBehaviour:
   Thruster_r: {fileID: 136506, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
   Thruster_l: {fileID: 109622, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
   Fire: {fileID: 180364, guid: 4f26e48e3c0c1c94382830adf4e0b27c, type: 2}
-  motorForce: 720
+  motorForce: 750
   motor: 0
   speedUpgrade: 0
   maxSpeed: 9999
-  angularForce: 2715
+  angularForce: 2775
   angularSpeedUpgrade: 0
   maxAngularSpeed: 9999
   fuel: 2000
   fuelConsumption: .550000012
-  massMotor: 240
-  massAngular: 905
+  massMotor: 250
+  massAngular: 925
   angularDrag: .00026999999
-  linearDrag: .000549999997
+  linearDrag: .000600000028
   originalFuel: 0
   fuelLevel:
-  - 1100
-  - 1075
-  - 1050
-  - 1250
-  - 1200
-  - 1350
-  - 1100
-  - 1150
-  - 1275
-  - 1250
-  - 1500
-  - 1350
-  - 1350
-  - 1625
+  - 1600
   - 1475
+  - 1350
+  - 1400
+  - 1300
+  - 1425
+  - 1150
+  - 1200
+  - 1325
+  - 1300
+  - 1525
+  - 1375
+  - 1375
+  - 1650
+  - 1500
   - 1950
   - 2100
   - 2225
@@ -1249,7 +1249,7 @@ MonoBehaviour:
   - 3650
   - 3625
   actualTime: 0
-  LoseTime: 0
+  LoseTime: 2.5
 --- !u!114 &11491716
 MonoBehaviour:
   m_ObjectHideFlags: 1
