@@ -51,11 +51,12 @@ public class Social_Manager : MonoBehaviour{
 
 	void Update(){
 		//ACHIEVEMENT
-		if (dataManger.manager.shipUnlocks.Count >= 6){
-			Social.ReportProgress("CgkIuv-YgIkeEAIQAg", 100.0f, (bool success) => {
-				Check("Achievement","CgkIuv-YgIkeEAIQAg",success);
-			});
-		}
+		if(!Application.loadedLevelName.Contains("Tuto"))
+			if (dataManger.manager.shipUnlocks.Count >= 6){
+				Social.ReportProgress("CgkIuv-YgIkeEAIQAg", 100.0f, (bool success) => {
+					Check("Achievement","CgkIuv-YgIkeEAIQAg",success);
+				});
+			}
 	}
 
 	public void Check(string type, bool success){

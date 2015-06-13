@@ -68,7 +68,6 @@ public class Instantiate_Ship : MonoBehaviour {
 				tintMask.colorMaskGreen.g = dataManger.manager.color2g;
 				tintMask.colorMaskGreen.b = dataManger.manager.color2b;
 			}
-			instance.AddComponent<AudioSource>();
 			instance.transform.position = new Vector3(transform.position.x - 7,transform.position.y + 52, transform.position.z - 50);
 		}
 

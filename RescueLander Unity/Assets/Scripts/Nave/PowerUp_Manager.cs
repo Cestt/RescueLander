@@ -20,7 +20,12 @@ public class PowerUp_Manager : MonoBehaviour {
 
 	void Awake () {
 		if (Application.loadedLevelName != "Menu") {
-			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+			if(Application.loadedLevelName.Contains("Tuto")){
+				ship = GameObject.Find("101(Clone)");
+			}else{
+				ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+				
+			}
 			GameObject temp = GameObject.Find("UI_Camera");
 			fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
 			fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;		

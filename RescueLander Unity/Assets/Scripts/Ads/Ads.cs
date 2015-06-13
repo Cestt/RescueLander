@@ -48,15 +48,22 @@ public class Ads : MonoBehaviour {
 			break;
 		}
 	}
-	public void Launch(string Item){
+	public void Launch(string Item,string Type){
 		if(Advertisement.isInitialized){
 			Items = Item;
 			ShowOptions options = new ShowOptions();
 			options.resultCallback = HandleResult;
-			options.pause = touch.Pause(null);
-			if(Advertisement.isReady("rewardedVideoZone")) {
-				Advertisement.Show("rewardedVideoZone",options);
+			options.pause = touch.Pause(null,true);
+			if(Type == "Rewarded"){
+				if(Advertisement.isReady("rewardedVideoZone")) {
+					Advertisement.Show("rewardedVideoZone",options);
+				}
+			}else{
+				if(Advertisement.isReady("pictureZone")) {
+					Advertisement.Show("pictureZone",options);
+				}
 			}
+
 
 
 		}else{

@@ -66,6 +66,8 @@ public class Tuto_Behaviour1 : MonoBehaviour {
 			tuto.SetActive(false);
 			ship.GetComponent<Rigidbody2D>().isKinematic = false;
 			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
+				zoom.enabled = true;
+				tuto.SetActive(false);
 				once = false;
 			}
 		}

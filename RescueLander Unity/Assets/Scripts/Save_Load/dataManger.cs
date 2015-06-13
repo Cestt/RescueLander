@@ -62,6 +62,8 @@ public class dataManger : MonoBehaviour {
 	public int coinsAcumulated;
 	//[HideInInspector]
 	public int tutorial = 1;
+	[HideInInspector]
+	public int partidas;
 
 	private GameObject temp;
 

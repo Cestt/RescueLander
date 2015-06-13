@@ -40,23 +40,23 @@ public class Tuto_Behaviour : MonoBehaviour {
 	
 		if(Input.touchCount > 0  & step !=7 & step !=9 & step != 10 & step != 11
 		   || Input.GetMouseButtonUp(0)& step !=7 & step !=9 & step != 10 & step != 11){
-			//if(Input.GetTouch(0).phase == TouchPhase.Began){
+			if(Input.GetTouch(0).phase == TouchPhase.Began){
 				step++;
 				first = true;
 				nextStep();
 				transform.FindChild("ObjectiveArea").gameObject.SetActive(false);
 				transform.FindChild("ObjectiveArea1").gameObject.SetActive(false);
 				tuto.gameObject.SetActive(true);
-			//}
+			}
 
 		}
 		if(Input.touchCount > 0 &step == 7
 		   || Input.GetMouseButtonUp(0)&step == 7){
-			//if(Input.GetTouch(0).phase == TouchPhase.Began){
+			if(Input.GetTouch(0).phase == TouchPhase.Began){
 				if(ship.GetComponent<Rigidbody2D>().isKinematic)
 					ship.GetComponent<Rigidbody2D>().isKinematic = false;
 				tuto.SetActive(false);
-			//}
+			}
 			
 		}
 
@@ -89,13 +89,13 @@ public class Tuto_Behaviour : MonoBehaviour {
 			
 		}
 		if(step == 10 & Input.touchCount > 0  || step == 10 & Input.GetMouseButtonUp(0)){
-			//if(Input.GetTouch(0).phase == TouchPhase.Began){
+			if(Input.GetTouch(0).phase == TouchPhase.Began){
 			transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
 			step++;
 			first = true;
 			nextStep();
-			//}
+			}
 			
 		}
 	}
@@ -103,7 +103,9 @@ public class Tuto_Behaviour : MonoBehaviour {
 		StartCoroutine("Onestep");
 	}
 	IEnumerator Onestep(){
+		yield return null;
 		if(first){
+			first = false;
 			foreach(GameObject text in texts){
 				if(text.name == "ChatText_"+step){
 					currentText.SetActive(false);
@@ -111,9 +113,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 					currentText = text;
 				}
 			}
-			
-			first = false;
-			yield return null;
+
 		}
 	}
 }
