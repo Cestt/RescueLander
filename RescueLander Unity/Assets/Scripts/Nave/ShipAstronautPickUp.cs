@@ -20,6 +20,7 @@ public class ShipAstronautPickUp : MonoBehaviour {
 		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		rigid = GetComponent<Rigidbody2D>();
 		soundManager = GameObject.Find("Game Manager").GetComponent<Sound_Manager>();
+
 	}
 
 	void Start(){
@@ -28,8 +29,9 @@ public class ShipAstronautPickUp : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
-		if(Pickable = true & rigid.velocity.magnitude <= 0.01 & Astronaut != null & touchmanager.paused ==false){
+
+		if(Pickable = true & rigid.velocity.magnitude <= 0.01 & Astronaut != null & touchmanager.paused ==false &
+		   (gameObject.transform.eulerAngles.magnitude < 50 || gameObject.transform.eulerAngles.magnitude > 320)){
 
 			animator = Astronaut.GetComponent<tk2dSpriteAnimator>();
 			if(!animator.IsPlaying("Halo")){

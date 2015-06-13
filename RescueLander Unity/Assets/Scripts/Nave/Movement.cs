@@ -78,6 +78,11 @@ public class Movement : MonoBehaviour {
 
 
 	void FixedUpdate () {
+		if (!dataManger.manager.Sounds && audioSource.isPlaying){
+			audioSource.Stop ();
+		}else if (dataManger.manager.Sounds && !audioSource.isPlaying){
+			audioSource.Play();
+		}
 		if(fuel < 0 & !running){
 			actualTime = Time.time;
 			running = true;
@@ -103,9 +108,11 @@ public class Movement : MonoBehaviour {
 					}else{
 						animator2.Play("Fire_End");
 					}
-					if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
-						audioSource.clip = clipRealenti;
-						audioSource.Play();
+					if (dataManger.manager.Sounds){
+						if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
+							audioSource.clip = clipRealenti;
+							audioSource.Play();
+						}
 					}
 				}
 				if(Input.touchCount > 0) {
@@ -170,7 +177,7 @@ public class Movement : MonoBehaviour {
 								animator.AnimationCompleted = ThrusterLoop;
 							}
 
-							if (!audioThruster.isPlaying)
+							if (dataManger.manager.Sounds && !audioThruster.isPlaying)
 								audioThruster.Play();
 						}
 						
@@ -204,9 +211,11 @@ public class Movement : MonoBehaviour {
 							ConsumeFuel(true,false);
 							motor = true;
 
-							if (audioSource.clip != clipMotor || ( audioSource.clip == clipMotor && !audioSource.isPlaying)){
-								audioSource.clip = clipMotor;
-								audioSource.Play();
+							if (dataManger.manager.Sounds){
+								if (audioSource.clip != clipMotor || ( audioSource.clip == clipMotor && !audioSource.isPlaying)){
+									audioSource.clip = clipMotor;
+									audioSource.Play();
+								}
 							}
 						}
 						if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
@@ -217,9 +226,11 @@ public class Movement : MonoBehaviour {
 							}else{
 								animator2.Play("Fire_End");
 							}
-							if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
-								audioSource.clip = clipRealenti;
-								audioSource.Play();
+							if (dataManger.manager.Sounds){
+								if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
+									audioSource.clip = clipRealenti;
+									audioSource.Play();
+								}
 							}
 						}
 						
@@ -248,10 +259,12 @@ public class Movement : MonoBehaviour {
 						Fire.SetActive(true);					
 					ConsumeFuel(true,false);
 					motor = true;
-					if (audioSource.clip != clipMotor || ( audioSource.clip == clipMotor && !audioSource.isPlaying)){
-						audioSource.volume = 0.35f;
-						audioSource.clip = clipMotor;
-						audioSource.Play();
+					if (dataManger.manager.Sounds){
+						if (audioSource.clip != clipMotor || ( audioSource.clip == clipMotor && !audioSource.isPlaying)){
+							audioSource.volume = 0.35f;
+							audioSource.clip = clipMotor;
+							audioSource.Play();
+						}
 					}
 				}
 				if(Input.GetKeyUp(KeyCode.Space)){
@@ -262,12 +275,13 @@ public class Movement : MonoBehaviour {
 					}else{
 						animator2.Play("Fire_End");
 					}
-					if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
-						audioSource.volume = 0.1f;
-						audioSource.clip = clipRealenti;
-						audioSource.Play();
+					if (dataManger.manager.Sounds){
+						if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
+							audioSource.volume = 0.1f;
+							audioSource.clip = clipRealenti;
+							audioSource.Play();
+						}
 					}
-					
 				}
 				
 				
@@ -319,7 +333,7 @@ public class Movement : MonoBehaviour {
 						animator.AnimationCompleted = ThrusterLoop;
 					}
 
-					if (!audioThruster.isPlaying)
+					if (dataManger.manager.Sounds && !audioThruster.isPlaying)
 						audioThruster.Play();
 					motor  = false;
 					

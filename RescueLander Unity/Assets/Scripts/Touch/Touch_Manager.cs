@@ -159,6 +159,10 @@ public class Touch_Manager : MonoBehaviour {
 							break;	
 						case "Pause_Button" :
 							Pause(hit.transform.gameObject);
+							if (!dataManger.manager.Music)
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+							if (!dataManger.manager.Sounds)
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 							break;
 						case "Retry_Button" :
 							dataManger.manager.Save(false);
@@ -552,6 +556,10 @@ public class Touch_Manager : MonoBehaviour {
 						break;	
 					case "Pause_Button" :
 						Pause(hit.transform.gameObject);
+						if (!dataManger.manager.Music)
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+						if (!dataManger.manager.Sounds)
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 						break;
 					case "Retry_Button" :
 						dataManger.manager.Save(false);
