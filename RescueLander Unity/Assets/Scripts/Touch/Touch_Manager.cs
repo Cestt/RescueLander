@@ -291,7 +291,7 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							break;
 						case "Button":
-							switch(hit.transform.parent.name.Substring(10)){
+							switch(hit.transform.parent.name.Substring(11)){
 							case "Shield":
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
@@ -707,7 +707,9 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Button":
-						switch(hit.transform.parent.name.Substring(10)){
+
+						switch(hit.transform.parent.name.Substring(11)){
+
 						case "Shield":
 							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);

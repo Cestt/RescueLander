@@ -85,7 +85,7 @@ public class WinLose : MonoBehaviour {
 			}
 			if(MisionAcomplished.activeInHierarchy & Input.touchCount > 0){
 				dataManger.manager.partidas++;
-				if(dataManger.manager.partidas == 3){
+				if(dataManger.manager.partidas >= 3){
 					dataManger.manager.partidas = 0;
 					ads.Launch("Other",null);
 				}
@@ -233,7 +233,7 @@ public class WinLose : MonoBehaviour {
 	}
 	void Lose(){
 		dataManger.manager.partidas++;
-		if(dataManger.manager.partidas == 3){
+		if(dataManger.manager.partidas >= 3){
 			dataManger.manager.partidas = 0;
 			ads.Launch("Other",null);
 		}

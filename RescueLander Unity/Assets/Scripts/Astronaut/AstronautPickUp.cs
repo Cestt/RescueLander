@@ -28,7 +28,7 @@ public class AstronautPickUp : MonoBehaviour {
 				
 				shipastronautpickup.Pickable = true;
 				shipastronautpickup.Astronaut = this.gameObject;
-				Debug.Log ("Astronaut distance reached");
+
 				
 			}else if(shipastronautpickup.Astronaut == this.gameObject){
 				

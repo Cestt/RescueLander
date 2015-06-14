@@ -86,12 +86,11 @@ public class Movement : MonoBehaviour {
 		if(fuel < 0 & !running){
 			actualTime = Time.time;
 			running = true;
-			Debug.Log("Running: " + running);
+
 		}else if(fuel > 0){
 			running = false;
 		}
 		if(running & actualTime + LoseTime < Time.time){
-			Debug.Log("Fuel time");
 			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose");
 		}
 		if(animator != null & animator.IsPlaying("Fire_Start")||

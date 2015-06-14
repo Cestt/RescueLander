@@ -131,9 +131,8 @@ public class Damage : MonoBehaviour {
 				if(totalDamage <= maxLife){
 					totalDamage += (int)realDamage;
 				}
-				Debug.Log("Total Damage: " + totalDamage);
 				lifebarScript.Starter(totalDamage,relation);
-				Debug.Log("Hull Impact damage");
+
 
 			}
 			if(gameObject.transform.eulerAngles.magnitude > 50 & gameObject.transform.eulerAngles.magnitude < 320 & first == true ){
@@ -166,9 +165,8 @@ public class Damage : MonoBehaviour {
 				if(totalDamage <= maxLife){
 					totalDamage += (int)realDamage;
 				}
-				Debug.Log("Total Damage: " + totalDamage);
 				lifebarScript.Starter(totalDamage,relation);
-				Debug.Log("Hull friction damage");
+
 				
 			}
 
