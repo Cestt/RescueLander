@@ -13,6 +13,13 @@ public class Sound_Manager : MonoBehaviour {
 	[Range(0, 1)] public float pickUpVolume;
 	public AudioClip engineStart;
 	[Range(0, 1)] public float engineStartVolume;
+	public AudioClip win;
+	[Range(0, 1)] public float winVolume;
+	public AudioClip lose;
+	[Range(0, 1)] public float loseVolume;
+
+
+
 
 	private AudioSource source;
 
@@ -53,6 +60,14 @@ public class Sound_Manager : MonoBehaviour {
 			case "EngineStart":
 				source.volume = engineStartVolume;
 				source.PlayOneShot(engineStart);
+				break;
+			case "Win":
+				source.volume = winVolume;
+				source.PlayOneShot(win);
+				break;
+			case "Lose":
+				source.volume = loseVolume;
+				source.PlayOneShot(lose);
 				break;
 		}
 	}

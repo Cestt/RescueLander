@@ -39,6 +39,7 @@ public class WinLose : MonoBehaviour {
 	private GameObject ship;
 	public int lifeThrdStarPercent = 90;
 	Ads ads;
+	private Sound_Manager soundManager;
 
 	void Awake () {
 	
@@ -70,6 +71,7 @@ public class WinLose : MonoBehaviour {
 			ads = GetComponent<Ads>();
 
 			socialManager = GameObject.Find ("Game Manager").GetComponent<Social_Manager>();
+			soundManager = GameObject.Find ("Game Manager").GetComponent<Sound_Manager>();
 			first = true;	
 		}
 
@@ -113,7 +115,7 @@ public class WinLose : MonoBehaviour {
 						scoreManager.stopScore();
 						totalScore = (int)scoreManager.timeScore;
 						
-						if(totalScore > 500 & damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
+						if(damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
 							dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;
 							dataManger.manager.coins += coin_manager.ThreeStarCoin;
 							stars[1].SetActive(true);
@@ -127,7 +129,7 @@ public class WinLose : MonoBehaviour {
 								socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
 							});
 						}
-						else if(totalScore > 300 & damage.life >= (((float)damage.maxLife*50)/100f)){
+						else if(damage.life >= (((float)damage.maxLife*50)/100f)){
 							dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 2;
 							dataManger.manager.coins += coin_manager.TwoStarCoin;
 							stars[1].SetActive(true);
@@ -189,6 +191,7 @@ public class WinLose : MonoBehaviour {
 	void Win(){
 
 		//haloanim.Win =true;
+		soundManager.PlaySound("Win");
 		WinSprite.SetActive(true);
 		LoseSprite.SetActive(false);
 		WinSprite.transform.FindChild("Resume").gameObject.SetActive (false);
@@ -232,6 +235,7 @@ public class WinLose : MonoBehaviour {
 		});
 	}
 	void Lose(){
+		soundManager.PlaySound("Lose");
 		dataManger.manager.partidas++;
 		if(dataManger.manager.partidas >= 3){
 			dataManger.manager.partidas = 0;
