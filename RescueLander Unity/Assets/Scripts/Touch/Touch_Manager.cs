@@ -44,6 +44,8 @@ public class Touch_Manager : MonoBehaviour {
 	private bool levelEnable = true;
 	private tk2dUIToggleButton[] buttonsPaint = new tk2dUIToggleButton[2];
 	private tk2dUIToggleButton[] buttonsGarage = new tk2dUIToggleButton[3];
+	private tk2dUIToggleButton[] buttonsPowerUps = new tk2dUIToggleButton[3];
+	private tk2dUIToggleButton[] buttonsShips = new tk2dUIToggleButton[7];
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
 	[HideInInspector]
 	public GameObject actualPrompt;
@@ -107,6 +109,16 @@ public class Touch_Manager : MonoBehaviour {
 		buttonsGarage[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/ShipsButton").GetComponent<tk2dUIToggleButton>();
 		buttonsGarage[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/PowerUps_Button").GetComponent<tk2dUIToggleButton>();
 		buttonsGarage[2] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/Coins_Button").GetComponent<tk2dUIToggleButton>();
+		buttonsPowerUps[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Shield").GetComponent<tk2dUIToggleButton>();
+		buttonsPowerUps[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Fuel").GetComponent<tk2dUIToggleButton>();
+		buttonsPowerUps[2] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Magnet").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Ship01").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Taboo").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[2] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_369").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[3] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Box").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[4] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_UFLO").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[5] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Mush").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[6] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Bow").GetComponent<tk2dUIToggleButton>();
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
@@ -352,7 +364,12 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Ship01");
 							}
-							
+							for (int i=0; i < 7; i++){
+								if (i == 0 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
 							break;
 						case "Button_369" :
 							if(dataManger.manager.shipUnlocks.Contains("369")){
@@ -361,6 +378,12 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(true,"369");
 							}else{
 								colorSet.SpriteSet(false,"369");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 2 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
 							}
 							break;
 						case "Button_Taboo" :
@@ -371,6 +394,12 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Taboo");
 							}
+							for (int i=0; i < 7; i++){
+								if (i == 1 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
 							break;
 						case "Button_UFLO" :
 							if(dataManger.manager.shipUnlocks.Contains("UFLO")){
@@ -379,6 +408,12 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(true,"UFLO");
 							}else{
 								colorSet.SpriteSet(false,"UFLO");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 4 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
 							}
 							break;
 						case "Button_Box" :
@@ -389,6 +424,12 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Box");
 							}
+							for (int i=0; i < 7; i++){
+								if (i == 3 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
 							break;
 						case "Button_Mush" :
 							if(dataManger.manager.shipUnlocks.Contains("Mush")){
@@ -398,6 +439,12 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Mush");
 							}
+							for (int i=0; i < 7; i++){
+								if (i == 5 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
 							break;
 						case "Button_Bow" :
 							if(dataManger.manager.shipUnlocks.Contains("Bow")){
@@ -406,6 +453,12 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(true,"Bow");
 							}else{
 								colorSet.SpriteSet(false,"Bow");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 6 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
 							}
 							break;
 						case "Button_Buy" :
@@ -440,6 +493,10 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
 							PUilustration.SetActive(true);
+							if (buttonsPowerUps[0].IsOn)
+								buttonsPowerUps[0].IsOn = false;
+							buttonsPowerUps[1].IsOn = false;
+							buttonsPowerUps[2].IsOn = false;
 							break;
 							
 						case "Button_Magnet" :
@@ -448,6 +505,10 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Magnet").gameObject;
 							PUilustration.SetActive(true);
+							buttonsPowerUps[0].IsOn = false;
+							buttonsPowerUps[1].IsOn = false;
+							if (buttonsPowerUps[2].IsOn)
+								buttonsPowerUps[2].IsOn = false;
 							break;
 							
 						case "Button_Fuel" :
@@ -456,6 +517,10 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Fuel").gameObject;
 							PUilustration.SetActive(true);
+							buttonsPowerUps[0].IsOn = false;
+							if (buttonsPowerUps[1].IsOn)
+								buttonsPowerUps[1].IsOn = false;
+							buttonsPowerUps[2].IsOn = false;
 							break;
 						
 						case "Check_Frame" :
@@ -797,7 +862,12 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							colorSet.SpriteSet(false,"Ship01");
 						}
-						
+						for (int i=0; i < 7; i++){
+							if (i == 0 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
 						break;
 					case "Button_369" :
 						if(dataManger.manager.shipUnlocks.Contains("369")){
@@ -806,6 +876,12 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(true,"369");
 						}else{
 							colorSet.SpriteSet(false,"369");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 2 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
 						}
 						break;
 					case "Button_Taboo" :
@@ -816,6 +892,12 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							colorSet.SpriteSet(false,"Taboo");
 						}
+						for (int i=0; i < 7; i++){
+							if (i == 1 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
 						break;
 					case "Button_UFLO" :
 						if(dataManger.manager.shipUnlocks.Contains("UFLO")){
@@ -824,6 +906,12 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(true,"UFLO");
 						}else{
 							colorSet.SpriteSet(false,"UFLO");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 4 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
 						}
 						break;
 					case "Button_Box" :
@@ -834,6 +922,12 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							colorSet.SpriteSet(false,"Box");
 						}
+						for (int i=0; i < 7; i++){
+							if (i == 3 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
 						break;
 					case "Button_Mush" :
 						if(dataManger.manager.shipUnlocks.Contains("Mush")){
@@ -843,6 +937,12 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							colorSet.SpriteSet(false,"Mush");
 						}
+						for (int i=0; i < 7; i++){
+							if (i == 5 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
 						break;
 					case "Button_Bow" :
 						if(dataManger.manager.shipUnlocks.Contains("Bow")){
@@ -851,6 +951,12 @@ public class Touch_Manager : MonoBehaviour {
 							colorSet.SpriteSet(true,"Bow");
 						}else{
 							colorSet.SpriteSet(false,"Bow");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 6 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
 						}
 						break;
 					case "Button_Buy" :
@@ -882,8 +988,12 @@ public class Touch_Manager : MonoBehaviour {
 						if(PUilustration != null){
 							PUilustration.SetActive(false);
 						}
-						PUilustration = garaje.transform.Find("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
+						PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
 						PUilustration.SetActive(true);
+						if (buttonsPowerUps[0].IsOn)
+							buttonsPowerUps[0].IsOn = false;
+						buttonsPowerUps[1].IsOn = false;
+						buttonsPowerUps[2].IsOn = false;
 						break;
 						
 					case "Button_Magnet" :
@@ -892,6 +1002,10 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Magnet").gameObject;
 						PUilustration.SetActive(true);
+						buttonsPowerUps[0].IsOn = false;
+						buttonsPowerUps[1].IsOn = false;
+						if (buttonsPowerUps[2].IsOn)
+							buttonsPowerUps[2].IsOn = false;
 						break;
 						
 					case "Button_Fuel" :
@@ -900,6 +1014,10 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Fuel").gameObject;
 						PUilustration.SetActive(true);
+						buttonsPowerUps[0].IsOn = false;
+						if (buttonsPowerUps[1].IsOn)
+							buttonsPowerUps[1].IsOn = false;
+						buttonsPowerUps[2].IsOn = false;
 						break;
 					case "Check_Frame" :
 						dataManger.manager.inverted = !dataManger.manager.inverted;
