@@ -45,7 +45,9 @@ public class Touch_Manager : MonoBehaviour {
 	private tk2dUIToggleButton[] buttonsPaint = new tk2dUIToggleButton[2];
 	private tk2dUIToggleButton[] buttonsGarage = new tk2dUIToggleButton[3];
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
-	private GameObject actualPrompt;
+	[HideInInspector]
+	public GameObject actualPrompt;
+	private int adLimit = 0;
 
 
 	void Awake(){
@@ -254,7 +256,8 @@ public class Touch_Manager : MonoBehaviour {
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else{
+								}else if(adLimit < 1){
+									adLimit++;
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
 									actualPrompt.SetActive(true);
@@ -270,7 +273,8 @@ public class Touch_Manager : MonoBehaviour {
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else{
+								}else  if(adLimit < 1){
+									adLimit++;
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);
@@ -285,7 +289,8 @@ public class Touch_Manager : MonoBehaviour {
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else{
+								}else  if(adLimit < 1){
+									adLimit++;
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);
@@ -494,11 +499,9 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "RateUsButton":
 							if (platform == RuntimePlatform.Android){
-								Debug.Log ("Rate Android");
-								Application.OpenURL("market://details?id=YOUR_ID");
+								Application.OpenURL("market://details?id=com.EvolveGames.RescueLander");
 							}
 							else if (platform == RuntimePlatform.IPhonePlayer){
-								Debug.Log ("Rade Iphone");
 								Application.OpenURL("itms-apps://itunes.apple.com/app/idYOUR_ID");
 							}
 							break;
@@ -521,8 +524,12 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.Save(false);
 							Application.LoadLevel("Menu");
 							break;
+						case "MoreCoins_Button":
+							Garaje(true);
+							garage_manager.LayoutChanger("Coins");
+							break;
 						default :
-							
+
 							break;
 							
 						}
@@ -953,9 +960,12 @@ public class Touch_Manager : MonoBehaviour {
 						Application.LoadLevel("Menu");
 						break;
 					case "HelpButton":
-						dataManger.manager.tutorial = 4;
-						dataManger.manager.Save(false);
-						Application.LoadLevel("Menu");
+						actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Help").gameObject;
+						actualPrompt.SetActive(true);
+						break;	
+					case "MoreCoins_Button":
+						Garaje(true);
+						garage_manager.LayoutChanger("Coins");
 						break;
 					default :
 						

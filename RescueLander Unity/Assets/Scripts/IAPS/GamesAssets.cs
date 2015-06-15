@@ -74,7 +74,7 @@ public class GameAssets:IStoreAssets {
 	public static VirtualCurrencyPack COINS_30000 = new VirtualCurrencyPack(
 		"30000 coins",
 		"Buy 30000 coins",
-		COINS_5000_ID,
+		COINS_30000_ID,
 		30000,
 		COINS_ID,
 		new PurchaseWithMarket(COINS_30000_ID,0.5));
@@ -88,14 +88,14 @@ public class GameAssets:IStoreAssets {
 	public static VirtualCurrencyPack COINS_250000 = new VirtualCurrencyPack(
 		"250000 coins",
 		"Buy 250000 coins",
-		COINS_5000_ID,
+		COINS_250000_ID,
 		250000,
 		COINS_ID,
 		new PurchaseWithMarket(COINS_250000_ID,0.5));
 	public static VirtualCurrencyPack COINS_575000 = new VirtualCurrencyPack(
 		"575000 coins",
 		"Buy 575000 coins",
-		COINS_5000_ID,
+		COINS_575000_ID,
 		575000,
 		COINS_ID,
 		new PurchaseWithMarket(COINS_575000_ID,0.5));

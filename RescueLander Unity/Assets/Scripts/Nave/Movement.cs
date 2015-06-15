@@ -47,6 +47,7 @@ public class Movement : MonoBehaviour {
 	public float LoseTime;
 	private bool running;
 	private AudioSource audioThruster;
+	private bool once = false;
 	// Use this for initialization
 	void Awake() {
 
@@ -91,7 +92,11 @@ public class Movement : MonoBehaviour {
 			running = false;
 		}
 		if(running & actualTime + LoseTime < Time.time){
-			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose");
+			if(!once){
+				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose");
+				once = true;
+			}
+
 		}
 		if(animator != null & animator.IsPlaying("Fire_Start")||
 		   animator != null & animator.IsPlaying("Fire_End")||

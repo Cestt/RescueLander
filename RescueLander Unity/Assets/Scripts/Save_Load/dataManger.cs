@@ -65,13 +65,14 @@ public class dataManger : MonoBehaviour {
 	[HideInInspector]
 	public int partidas;
 
+
 	private GameObject temp;
 
 
 
 	void Awake () {
 
-
+		Screen.sleepTimeout = SleepTimeout.SystemSetting;
 		if(manager == null){
 
 			manager = this;
@@ -123,6 +124,7 @@ public class dataManger : MonoBehaviour {
 			if(complete){
 				for(int i = 1; i <= levels; i++){
 					if(stars["Level_"+i] > data.stars["Level_"+i]){
+						totalStars -= data.stars["Level_"+i];
 						data.stars["Level_"+i] = stars["Level_"+i];
 						totalStars += stars["Level_"+i];
 						data.totalStars = totalStars;

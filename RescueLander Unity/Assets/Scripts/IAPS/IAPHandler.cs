@@ -6,7 +6,8 @@ public class IAPHandler : MonoBehaviour {
 	
 	private static IAPHandler iapHandler;
 	public static string errorMsg = "Status:";
-	
+	private Touch_Manager touch;
+
 
 
 	
@@ -28,7 +29,8 @@ public class IAPHandler : MonoBehaviour {
 		StoreEvents.OnMarketPurchaseCancelled += onMarketPurchaseCancelled;
 		StoreEvents.OnRestoreTransactionsStarted += onRestoreTransactionsStarted;
 		StoreEvents.OnRestoreTransactionsFinished += onRestoreTransactionsFinished;
-		
+
+		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		StoreEvents.OnIabServiceStarted += onIabServiceStarted;
 		StoreEvents.OnIabServiceStopped += onIabServiceStopped;
@@ -135,8 +137,10 @@ public class IAPHandler : MonoBehaviour {
 	/// </summary>
 	/// <param name="message">Error message.</param>
 	public void onUnexpectedErrorInStore(string message) {
-		
-
+		GameObject uicameraGameobject = GameObject.Find("UI_Camera");
+		uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+		touch.actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_ErrorIAP").gameObject;
+		touch.actualPrompt.SetActive(true);
 		
 	}
 	
@@ -148,6 +152,7 @@ public class IAPHandler : MonoBehaviour {
 	/// <param name="amountAdded">Amount added to the balance.</param>
 	public void onCurrencyBalanceChanged(VirtualCurrency virtualCurrency, int balance, int amountAdded) {
 		dataManger.manager.coins += amountAdded;
+		dataManger.manager.Save(false);
 
 	}
 	
