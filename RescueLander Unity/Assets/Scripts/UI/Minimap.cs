@@ -13,11 +13,19 @@ public class Minimap : MonoBehaviour {
 	public GameObject Ship_Ico;
 	private GameObject Platform;
 	private GameObject Platform_Ico;
+	private GameObject PlatformFinish;
+	private GameObject PlatformFinish_Ico;
 
 	// Use this for initialization
 	void Awake () {
+
 		Platform = GameObject.Find("Landing Platform");
 		Platform_Ico = transform.FindChild("Minimap_PlatformIco").gameObject;
+		if(Application.loadedLevelName.Contains("Tuto")){
+			PlatformFinish_Ico = transform.FindChild("Minimap_PlatformIco 1").gameObject;
+			PlatformFinish = GameObject.Find("Finishing Platform");
+		}
+
 		if(Application.loadedLevelName.Contains("Tuto")){
 			ship = GameObject.Find("101(Clone)");
 		}else{
@@ -34,6 +42,13 @@ public class Minimap : MonoBehaviour {
 		float mapx;
 		float mapy;
 		Vector2 tempVector;
+		if(Application.loadedLevelName.Contains("Tuto")){
+		mapx = (100 * PlatformFinish.transform.position.x)/MapWidth;
+		mapy = (100 * PlatformFinish.transform.position.y)/MapHeight;
+		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
+		tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
+		PlatformFinish_Ico.transform.position = tempVector; 
+		}
 		mapx = (100 * Platform.transform.position.x)/MapWidth;
 		mapy = (100 * Platform.transform.position.y)/MapHeight;
 		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);

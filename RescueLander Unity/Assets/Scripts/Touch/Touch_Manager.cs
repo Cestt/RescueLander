@@ -64,6 +64,7 @@ public class Touch_Manager : MonoBehaviour {
 			}else{
 				ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 				pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
+				animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_02").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_03").GetComponent<tk2dSpriteAnimator>());
 
@@ -179,6 +180,10 @@ public class Touch_Manager : MonoBehaviour {
 							break;	
 						case "Pause_Button" :
 							Pause(hit.transform.gameObject,false);
+							if (!dataManger.manager.Music)
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+							if (!dataManger.manager.Sounds)
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 							break;
 						case "Retry_Button" :
 							dataManger.manager.Save(false);
@@ -593,6 +598,12 @@ public class Touch_Manager : MonoBehaviour {
 							Garaje(true);
 							garage_manager.LayoutChanger("Coins");
 							break;
+						case "FacebookButton":
+							Application.OpenURL("https://www.facebook.com/EvolveGames.dev");
+							break;
+						case "TwitterButton":
+							Application.OpenURL("https://twitter.com/EvolveGames_");
+							break;
 						default :
 
 							break;
@@ -684,6 +695,10 @@ public class Touch_Manager : MonoBehaviour {
 						break;	
 					case "Pause_Button" :
 						Pause(hit.transform.gameObject,false);
+						if (!dataManger.manager.Music)
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+						if (!dataManger.manager.Sounds)
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 						break;
 					case "Retry_Button" :
 						dataManger.manager.Save(false);
@@ -1085,6 +1100,12 @@ public class Touch_Manager : MonoBehaviour {
 						Garaje(true);
 						garage_manager.LayoutChanger("Coins");
 						break;
+					case "FacebookButton":
+						Application.OpenURL("https://www.facebook.com/EvolveGames.dev");
+						break;
+					case "TwitterButton":
+						Application.OpenURL("https://twitter.com/EvolveGames_");
+						break;
 					default :
 						
 						break;
@@ -1158,6 +1179,7 @@ public class Touch_Manager : MonoBehaviour {
 				animation.Play("UIBase_RightCol_extended_UpDown");
 				if(!Application.loadedLevelName.Contains("Tuto"))
 				pauseText.SetActive(true);
+
 				for (int i=0; i< animators.Count; i++){
 					if (animators[i] != null)
 						animators[i].Pause();

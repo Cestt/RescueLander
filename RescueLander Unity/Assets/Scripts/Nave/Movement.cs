@@ -84,6 +84,9 @@ public class Movement : MonoBehaviour {
 		}else if (dataManger.manager.Sounds && !audioSource.isPlaying){
 			audioSource.Play();
 		}
+		if (!dataManger.manager.Sounds & audioThruster.isPlaying){
+			audioThruster.Stop();
+		}
 		if(fuel < 0 & !running){
 			actualTime = Time.time;
 			running = true;

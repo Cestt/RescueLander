@@ -10,13 +10,19 @@ public class Coin_Manager : MonoBehaviour {
 	[HideInInspector]
 	public int levelCoins;
 	private Social_Manager socialManager;
+	Touch_Manager touch;
 
 	void Awake(){
 		socialManager = GameObject.Find ("Game Manager").GetComponent<Social_Manager>();
+		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 	}
 	public bool Compra(int Coins,string Type,string Item){
 		try{
 			if(Coins > dataManger.manager.coins){
+				GameObject uicameraGameobject = GameObject.Find("UI_Camera");
+				uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+				touch.actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_MoreMoney").gameObject;
+				touch.actualPrompt.SetActive(true);
 				return false;
 			}else{
 				dataManger.manager.coins -= Coins;

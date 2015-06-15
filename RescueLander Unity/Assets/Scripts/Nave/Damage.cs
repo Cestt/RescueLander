@@ -100,6 +100,10 @@ public class Damage : MonoBehaviour {
 			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
 			explosion.SetActive(true);
 			animator.Play("Explosion");
+			GetComponent<SpriteRenderer>().sprite = null;
+			GameObject temp = transform.FindChild("Ship_Window").gameObject;
+			if(temp != null)
+				temp.SetActive(false);
 			if (activateExplosion){
 				soundManager.PlaySound("Explosion");
 				activateExplosion = false;
