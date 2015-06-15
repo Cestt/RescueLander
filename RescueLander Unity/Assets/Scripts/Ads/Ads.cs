@@ -11,11 +11,18 @@ public class Ads : MonoBehaviour {
 		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		if(Application.loadedLevelName == "Menu")
 		if (Advertisement.isSupported) {
-
+			Debug.Log("Ads supported");
 			Advertisement.allowPrecache = true;
-			Advertisement.Initialize ("37545",true);
+			Advertisement.Initialize ("37545",false);
 		} else {
-			Test.GetComponent<tk2dTextMesh>().text = "Ads not supported";
+			//Test.GetComponent<tk2dTextMesh>().text = "Ads not supported";
+		}
+	}
+	void Update(){
+		if(Advertisement.isInitialized){
+			Debug.Log("initialized");
+		}else{
+			Debug.Log("Not initialized");
 		}
 	}
 
@@ -59,9 +66,9 @@ public class Ads : MonoBehaviour {
 					Advertisement.Show("rewardedVideoZone",options);
 				}
 			}else{
-				if(Advertisement.isReady("pictureZone")) {
-					Advertisement.Show("pictureZone",options);
-				}
+
+					Advertisement.Show(null,options);
+
 			}
 
 

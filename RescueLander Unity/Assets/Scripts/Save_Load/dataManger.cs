@@ -133,6 +133,8 @@ public class dataManger : MonoBehaviour {
 					if(scores["Level_"+i] > data.scores["Level_"+i]){
 						data.scores["Level_"+i] = scores["Level_"+i];
 						Debug.Log("Save Scores");
+					}else{
+						scores["Level_"+i] = data.scores["Level_"+i];
 					}
 					
 					

@@ -40,6 +40,9 @@ public class WinLose : MonoBehaviour {
 	public int lifeThrdStarPercent = 90;
 	Ads ads;
 	private Sound_Manager soundManager;
+	Touch_Manager touch;
+	private int adsInters = 0;
+	private GameObject new_record;
 
 	void Awake () {
 	
@@ -55,6 +58,7 @@ public class WinLose : MonoBehaviour {
 			if (Application.loadedLevelName.Contains ("Tuto")){
 				ship = GameObject.Find ("101(Clone)");
 			}else{
+				new_record = MisionAcomplished.transform.FindChild("Score_Resumen/New Record").gameObject;
 				ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
 				UI3 =  uicamera.transform.FindChild("Anchor (LowerCenter)").gameObject;
 				UI4 =  uicamera.transform.FindChild("Anchor (LowerLeft)").gameObject;
@@ -63,12 +67,13 @@ public class WinLose : MonoBehaviour {
 				scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
 				scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
 			}
+			touch = GetComponent<Touch_Manager>();
 			damage = ship.GetComponent<Damage>();
 			LoseSprite = uicamera.transform.FindChild("LoseLayout").gameObject;
 			UI1 =  uicamera.transform.FindChild("Anchor (UpperLeft)").gameObject;
 			UI2 =  uicamera.transform.FindChild("Anchor (UpperRight)").gameObject;
 			text = winText.GetComponent<tk2dTextMesh> ();
-			ads = GetComponent<Ads>();
+			ads = GameObject.Find("Data Manager"). GetComponent<Ads>();
 
 			socialManager = GameObject.Find ("Game Manager").GetComponent<Social_Manager>();
 			soundManager = GameObject.Find ("Game Manager").GetComponent<Sound_Manager>();
@@ -87,19 +92,20 @@ public class WinLose : MonoBehaviour {
 			}
 			if(MisionAcomplished.activeInHierarchy & Input.touchCount > 0){
 				dataManger.manager.partidas++;
-				if(dataManger.manager.partidas >= 3){
+				if(dataManger.manager.partidas >= 5){
 					dataManger.manager.partidas = 0;
-					ads.Launch("Other",null);
+					ads.Launch("Other","Other");
 				}
 				WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
 				MisionAcomplished.SetActive (false);
+
 			}	
 		}
 
 	}
 
 	public void End(string result){
-
+		touch.adLimit = 0;
 		if(first){
 
 			if(result == "Win"){
@@ -147,6 +153,8 @@ public class WinLose : MonoBehaviour {
 								= "1 Star:";
 						}
 						
+						if ((int)scoreManager.scoreCalc() > dataManger.manager.scores["Level_"+dataManger.manager.actualLevel])
+							new_record.SetActive(true);
 						
 						dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = (int)scoreManager.scoreCalc();
 						WinSprite.transform.FindChild("Resume/CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level "+dataManger.manager.actualLevel.ToString();
@@ -235,11 +243,12 @@ public class WinLose : MonoBehaviour {
 		});
 	}
 	void Lose(){
+
 		soundManager.PlaySound("Lose");
 		dataManger.manager.partidas++;
-		if(dataManger.manager.partidas >= 3){
+		if(dataManger.manager.partidas >= 5){
 			dataManger.manager.partidas = 0;
-			ads.Launch("Other",null);
+			ads.Launch("Other","Other");
 		}
 		LoseSprite.SetActive (true);
 		UI1.SetActive (false);

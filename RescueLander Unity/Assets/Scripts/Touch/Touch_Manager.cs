@@ -49,11 +49,12 @@ public class Touch_Manager : MonoBehaviour {
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
 	[HideInInspector]
 	public GameObject actualPrompt;
-	private int adLimit = 0;
+	public int adLimit = 0;
 
 
 	void Awake(){
 		uicameraGameobject = GameObject.Find("UI_Camera");
+		adLimit = 0;
 		if(Application.loadedLevelName != "Menu"){
 			uiColumnExtended = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/UIBase_RightCol/UIBase_RightCol_Extended").gameObject;
 			if(Application.loadedLevelName.Contains("Tuto")){
@@ -275,6 +276,7 @@ public class Touch_Manager : MonoBehaviour {
 									});
 								}else if(adLimit < 1){
 									adLimit++;
+
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
 									actualPrompt.SetActive(true);
@@ -290,8 +292,9 @@ public class Touch_Manager : MonoBehaviour {
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else  if(adLimit < 1){
+								}else  if(adLimit < 1 & Input.touchCount == 1){
 									adLimit++;
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);
@@ -308,6 +311,7 @@ public class Touch_Manager : MonoBehaviour {
 									});
 								}else  if(adLimit < 1){
 									adLimit++;
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);
@@ -597,7 +601,13 @@ public class Touch_Manager : MonoBehaviour {
 						case "MoreCoins_Button":
 							Garaje(true);
 							garage_manager.LayoutChanger("Coins");
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							actualPrompt.SetActive(false);
 							break;
+						case "HelpButton":
+							actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Help").gameObject;
+							actualPrompt.SetActive(true);
+							break;	
 						case "FacebookButton":
 							Application.OpenURL("https://www.facebook.com/EvolveGames.dev");
 							break;
@@ -702,6 +712,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Retry_Button" :
 						dataManger.manager.Save(false);
+						adLimit = 0;
 						Application.LoadLevel (Application.loadedLevel);
 						break;	
 					case "Levels_Button" :
@@ -1099,6 +1110,8 @@ public class Touch_Manager : MonoBehaviour {
 					case "MoreCoins_Button":
 						Garaje(true);
 						garage_manager.LayoutChanger("Coins");
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+						actualPrompt.SetActive(false);
 						break;
 					case "FacebookButton":
 						Application.OpenURL("https://www.facebook.com/EvolveGames.dev");
@@ -1171,7 +1184,7 @@ public class Touch_Manager : MonoBehaviour {
 	public bool Pause(GameObject temp, bool Ads){
 
 
-		if(!paused & !Ads || Ads){
+		if(!paused){
 			paused = true;
 			if(!Ads){
 				rigid.isKinematic = true;
@@ -1193,24 +1206,27 @@ public class Touch_Manager : MonoBehaviour {
 		}else{
 
 			paused = false;
-			rigid.isKinematic = false;
-			rigid.velocity = ship.GetComponent<Damage>().saveSpeed;
-			animation["UIBase_RightCol_extended_UpDown"].speed = -1;
-			animation.Play("UIBase_RightCol_extended_UpDown");
-			animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
-			if(!Application.loadedLevelName.Contains("Tuto"))
-				pauseText.SetActive(false);
+			if(!Ads){
+				rigid.isKinematic = false;
+				rigid.velocity = ship.GetComponent<Damage>().saveSpeed;
+				animation["UIBase_RightCol_extended_UpDown"].speed = -1;
+				animation.Play("UIBase_RightCol_extended_UpDown");
+				animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
+				if(!Application.loadedLevelName.Contains("Tuto"))
+					pauseText.SetActive(false);
+				
+				if(Application.loadedLevelName.Contains("Level")){
+					uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
+					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
+					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(false);
+				}
+				for (int i=0; i< animators.Count; i++){
+					if (animators[i] != null)
+						animators[i].Resume();
+				}
+			}
 
-			if(Application.loadedLevelName.Contains("Level")){
-				uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-				uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
-				uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
-				uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(false);
-			}
-			for (int i=0; i< animators.Count; i++){
-				if (animators[i] != null)
-					animators[i].Resume();
-			}
 			return false;
 		}
 	}

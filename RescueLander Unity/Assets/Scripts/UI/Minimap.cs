@@ -21,7 +21,7 @@ public class Minimap : MonoBehaviour {
 
 		Platform = GameObject.Find("Landing Platform");
 		Platform_Ico = transform.FindChild("Minimap_PlatformIco").gameObject;
-		if(Application.loadedLevelName.Contains("Tuto")){
+		if(Application.loadedLevelName =="Tuto_2"){
 			PlatformFinish_Ico = transform.FindChild("Minimap_PlatformIco 1").gameObject;
 			PlatformFinish = GameObject.Find("Finishing Platform");
 		}
@@ -42,7 +42,7 @@ public class Minimap : MonoBehaviour {
 		float mapx;
 		float mapy;
 		Vector2 tempVector;
-		if(Application.loadedLevelName.Contains("Tuto")){
+		if(Application.loadedLevelName =="Tuto_2"){
 		mapx = (100 * PlatformFinish.transform.position.x)/MapWidth;
 		mapy = (100 * PlatformFinish.transform.position.y)/MapHeight;
 		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);

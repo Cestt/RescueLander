@@ -79,12 +79,12 @@ public class Movement : MonoBehaviour {
 
 
 	void FixedUpdate () {
-		if (!dataManger.manager.Sounds && audioSource.isPlaying){
+		if ((!dataManger.manager.Sounds || touchmanager.paused) && audioSource.isPlaying){
 			audioSource.Stop ();
-		}else if (dataManger.manager.Sounds && !audioSource.isPlaying){
+		}else if (dataManger.manager.Sounds & !touchmanager.paused && !audioSource.isPlaying){
 			audioSource.Play();
 		}
-		if (!dataManger.manager.Sounds & audioThruster.isPlaying){
+		if ((!dataManger.manager.Sounds  || touchmanager.paused) & audioThruster.isPlaying){
 			audioThruster.Stop();
 		}
 		if(fuel < 0 & !running){
