@@ -49,7 +49,18 @@ public class Coin_Manager : MonoBehaviour {
 					dataManger.manager.Save(false);
 				}
 				if(Type == "IAP"){
-					Debug.Log("iap");
+					if(Item.Contains("1"))
+					   StoreInventory.BuyItem(GameAssets.COINS_5000.ItemId);
+					else if(Item.Contains("2"))
+						StoreInventory.BuyItem(GameAssets.COINS_11000.ItemId);
+					else if(Item.Contains("3"))
+						StoreInventory.BuyItem(GameAssets.COINS_30000.ItemId);
+					else if(Item.Contains("4"))
+						StoreInventory.BuyItem(GameAssets.COINS_80000.ItemId);
+					else if(Item.Contains("5"))
+						StoreInventory.BuyItem(GameAssets.COINS_250000.ItemId);
+					else if(Item.Contains("6"))
+						StoreInventory.BuyItem(GameAssets.COINS_575000.ItemId);
 
 				}
 
