@@ -151,8 +151,12 @@ public class IAPHandler : MonoBehaviour {
 	/// <param name="balance">Balance of the given virtual currency.</param>
 	/// <param name="amountAdded">Amount added to the balance.</param>
 	public void onCurrencyBalanceChanged(VirtualCurrency virtualCurrency, int balance, int amountAdded) {
-		dataManger.manager.coins += amountAdded;
-		dataManger.manager.Save(false);
+		if(amountAdded >0){
+			dataManger.manager.coins += amountAdded;
+			dataManger.manager.Save(false);
+			StoreInventory.TakeItem(GameAssets.COINS.ItemId,StoreInventory.GetItemBalance(GameAssets.COINS.ItemId));
+		}
+
 
 	}
 	
