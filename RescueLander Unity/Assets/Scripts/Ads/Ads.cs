@@ -8,7 +8,7 @@ public class Ads : MonoBehaviour {
 	private Touch_Manager touch;
 	public GameObject Test;
 	void Awake() {
-		touch = GetComponent<Touch_Manager>();
+		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		if(Application.loadedLevelName == "Menu")
 		if (Advertisement.isSupported) {
 

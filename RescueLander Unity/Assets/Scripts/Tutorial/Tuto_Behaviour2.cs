@@ -73,7 +73,7 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 		}
 
 		if(step == 5){
-			if(once){
+			if(once & Input.GetTouch(0).phase == TouchPhase.Began){
 				tuto.SetActive(false);
 				transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 				dataManger.manager.coins += 500;
@@ -84,7 +84,7 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 			
 		}
 		if(step == 6){
-			if(once){
+			if(once & Input.GetTouch(0).phase == TouchPhase.Began){
 				Application.LoadLevel("Menu");
 				once = false;
 			}

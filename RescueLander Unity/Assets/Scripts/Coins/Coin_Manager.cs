@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using Soomla.Store;
 
 public class Coin_Manager : MonoBehaviour {
 
@@ -46,6 +47,10 @@ public class Coin_Manager : MonoBehaviour {
 				if(Type == "Ship"){
 					dataManger.manager.shipUnlocks.Add(Item);
 					dataManger.manager.Save(false);
+				}
+				if(Type == "IAP"){
+					Debug.Log("iap");
+
 				}
 
 				

@@ -45,6 +45,7 @@ public class Touch_Manager : MonoBehaviour {
 	private tk2dUIToggleButton[] buttonsPaint = new tk2dUIToggleButton[2];
 	private tk2dUIToggleButton[] buttonsGarage = new tk2dUIToggleButton[3];
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
+	private GameObject actualPrompt;
 
 
 	void Awake(){
@@ -91,7 +92,7 @@ public class Touch_Manager : MonoBehaviour {
 		}
 		if(!Application.loadedLevelName.Contains("Tuto"))
 		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
-		ads = GetComponent<Ads>();
+		ads = GameObject.Find("Data Manager").GetComponent<Ads>();
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
 		PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
@@ -222,12 +223,12 @@ public class Touch_Manager : MonoBehaviour {
 							if(Application.loadedLevelName == "Menu"){
 								options.SetActive(false);
 							}
-							if(Application.loadedLevelName.Contains("Level")){
+
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
-								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
-								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(false);
-							}
+							if(actualPrompt != null)
+								actualPrompt.SetActive(false);
+
+							
 							levelEnable = true;
 							break;
 						case "A_Button" :
@@ -255,7 +256,8 @@ public class Touch_Manager : MonoBehaviour {
 									});
 								}else{
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-									uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
+									actualPrompt.SetActive(true);
 									Pause(null,false);
 								}
 							}
@@ -269,8 +271,8 @@ public class Touch_Manager : MonoBehaviour {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
 								}else{
-									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-									uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
+									actualPrompt.SetActive(true);
 									Pause(null,false);
 								}
 							}
@@ -284,8 +286,8 @@ public class Touch_Manager : MonoBehaviour {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
 								}else{
-									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-									uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+									actualPrompt.SetActive(true);
 									Pause(null,false);
 								}
 							}
@@ -404,6 +406,11 @@ public class Touch_Manager : MonoBehaviour {
 						case "Button_Buy" :
 							if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
 								Value value = hit.collider.gameObject.GetComponent<Value>();
+								if(value == null & hit.transform.parent.name.Contains("IAP")){
+									if(coin_manager.Compra(0,"IAP",hit.transform.parent.name)){
+
+									}
+								}
 								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
 									if(value._Type == "Ship" || value._Type == "World"){
 										Destroy(hit.collider.gameObject);
@@ -499,6 +506,21 @@ public class Touch_Manager : MonoBehaviour {
 							Garaje(true);
 							garage_manager.LayoutChanger("PowerUps");
 							break;	
+							
+						case "SkipButton":
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+
+							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(true);
+							break;
+						case "Button_Later":
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(false);
+							break;
+						case "Button_Never":
+							dataManger.manager.tutorial = 4;
+							dataManger.manager.Save(false);
+							Application.LoadLevel("Menu");
+							break;
 						default :
 							
 							break;
@@ -648,13 +670,10 @@ public class Touch_Manager : MonoBehaviour {
 						if(Application.loadedLevelName == "Menu"){
 							options.SetActive(false);
 						}
-						if(Application.loadedLevelName.Contains("Level")){
-							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
-							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
-							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(false);
-						}
-						   
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+						if(actualPrompt != null)
+							actualPrompt.SetActive(false);
+						
 						levelEnable = true;
 						break;
 					case "A_Button" :
@@ -677,9 +696,11 @@ public class Touch_Manager : MonoBehaviour {
 						if (!paused){
 							if(dataManger.manager.shieldPowerUps >= 1){
 								powerManager.PowerUp("Shield");
+
 							}else{
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(true);
+								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
+								actualPrompt.SetActive(true);
 								Pause(null,false);
 							}
 						}
@@ -688,26 +709,31 @@ public class Touch_Manager : MonoBehaviour {
 						if (!paused){
 							if(dataManger.manager.magnetPowerUps >= 1 & Input.touchCount == 1){
 								powerManager.PowerUp("Magnet");
+
 							}else{
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(true);
+								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
+								actualPrompt.SetActive(true);
 								Pause(null,false);
 							}
 						}
 						break;
 					case "PowerUp_Fuel" :
 						if (!paused){
-							if(dataManger.manager.fuelPowerUps >= 1){
+							if(dataManger.manager.fuelPowerUps >= 1 ){
 								powerManager.PowerUp("Fuel");
+
 							}else{
+								Debug.Log("PU_Global");
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(true);
+								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+								actualPrompt.SetActive(true);
 								Pause(null,false);
 							}
 						}
 						break;
 					case "Button":
-
+						
 						switch(hit.transform.parent.name.Substring(11)){
 
 						case "Shield":
@@ -721,6 +747,7 @@ public class Touch_Manager : MonoBehaviour {
 							ads.Launch("Magnet","Rewarded");
 							break;
 						case "Fuel":
+
 							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
 							ads.Launch("Fuel","Rewarded");
@@ -822,14 +849,22 @@ public class Touch_Manager : MonoBehaviour {
 					case "Button_Buy" :
 						if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
 							Value value = hit.collider.gameObject.GetComponent<Value>();
-							if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
-								if(value._Type == "Ship" || value._Type == "World"){
-									Destroy(hit.collider.gameObject);
+							if(value == null & hit.transform.parent.name.Contains("IAP")){
+								if(coin_manager.Compra(0,"IAP",hit.transform.parent.name)){
+									
+								}else{
+									Debug.Log("Algo falla");
 								}
-								Debug.Log("Comprado " + hit.transform.parent.name.Substring(7));
-							}else{
-								Debug.Log("Algo falla joder");
 							}
+							if(value != null)
+								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
+									if(value._Type == "Ship" || value._Type == "World"){
+										Destroy(hit.collider.gameObject);
+									}
+									Debug.Log("Comprado " + hit.transform.parent.name.Substring(7));
+								}else{
+									Debug.Log("Algo falla");
+								}
 						}
 						break;
 					case "Cheat" :
@@ -904,7 +939,24 @@ public class Touch_Manager : MonoBehaviour {
 						Garaje(true);
 						garage_manager.LayoutChanger("PowerUps");
 						break;	
-			
+					case "SkipButton":
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+						uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(true);
+						break;
+					case "Button_Later":
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+						uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(false);
+						break;
+					case "Button_Never":
+						dataManger.manager.tutorial = 4;
+						dataManger.manager.Save(false);
+						Application.LoadLevel("Menu");
+						break;
+					case "HelpButton":
+						dataManger.manager.tutorial = 4;
+						dataManger.manager.Save(false);
+						Application.LoadLevel("Menu");
+						break;
 					default :
 						
 						break;
@@ -972,15 +1024,21 @@ public class Touch_Manager : MonoBehaviour {
 
 		if(!paused & !Ads || Ads){
 			paused = true;
-			rigid.isKinematic = true;
-			animation["UIBase_RightCol_extended_UpDown"].speed = 1;
-			animation.Play("UIBase_RightCol_extended_UpDown");
-			if(!Application.loadedLevelName.Contains("Tuto"))
+			if(!Ads){
+				rigid.isKinematic = true;
+				animation["UIBase_RightCol_extended_UpDown"].speed = 1;
+				animation.Play("UIBase_RightCol_extended_UpDown");
+				if(!Application.loadedLevelName.Contains("Tuto"))
 				pauseText.SetActive(true);
-			for (int i=0; i< animators.Count; i++){
-				if (animators[i] != null)
-					animators[i].Pause();
+				for (int i=0; i< animators.Count; i++){
+					if (animators[i] != null)
+						animators[i].Pause();
+				}
 			}
+
+
+
+
 			return true;
 		}else{
 
