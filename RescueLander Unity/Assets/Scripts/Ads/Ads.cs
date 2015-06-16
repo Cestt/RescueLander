@@ -1,13 +1,16 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using GoogleMobileAds.Api;
 
 public class Ads : MonoBehaviour {
 
 	private string Items;
 	private Touch_Manager touch;
 	public GameObject Test;
+	InterstitialAd interstitial;
 	void Awake() {
+		interstitial = new InterstitialAd("ca-app-pub-6225305526112070/2285766744");
 		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		if(Application.loadedLevelName == "Menu")
 		if (Advertisement.isSupported) {
@@ -17,6 +20,16 @@ public class Ads : MonoBehaviour {
 		} else {
 			//Test.GetComponent<tk2dTextMesh>().text = "Ads not supported";
 		}
+
+	}
+	void OnLevelWasLoaded(int level) {
+		if(Application.loadedLevelName != "Menu"){
+
+			AdRequest request = new AdRequest.Builder().Build();
+			interstitial.LoadAd(request);
+		}
+
+		
 	}
 	void Update(){
 		if(Advertisement.isInitialized){
@@ -77,6 +90,11 @@ public class Ads : MonoBehaviour {
 			Debug.Log("Ad not ready");
 		}
 
+	}
+	public void LaunchInterstital(){
+		if (interstitial.IsLoaded()) {
+			interstitial.Show();
+		}
 	}
 
 }

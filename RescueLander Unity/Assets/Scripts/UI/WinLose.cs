@@ -41,7 +41,7 @@ public class WinLose : MonoBehaviour {
 	Ads ads;
 	private Sound_Manager soundManager;
 	Touch_Manager touch;
-	private int adsInters = 0;
+	private bool adsInters = false;
 	private GameObject new_record;
 
 	void Awake () {
@@ -85,16 +85,23 @@ public class WinLose : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Application.loadedLevelName != "Menu" & !Application.loadedLevelName.Contains("Tuto")) {
-			if(Time.time > actualTime + WinTimer ){
+		if (Application.loadedLevelName != "Menu" & !Application.loadedLevelName.Contains("Tuto") & !adsInters) {
+			if(Time.time > actualTime + WinTimer & WinSprite.activeInHierarchy ){
+				adsInters = true;
 				WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
 				MisionAcomplished.SetActive (false);
+				dataManger.manager.partidas++;
+				if(dataManger.manager.partidas >= 3){
+					dataManger.manager.partidas = 0;
+					ads.LaunchInterstital();
+				}
 			}
 			if(MisionAcomplished.activeInHierarchy & Input.touchCount > 0){
+				adsInters = true;
 				dataManger.manager.partidas++;
-				if(dataManger.manager.partidas >= 5){
+				if(dataManger.manager.partidas >= 3){
 					dataManger.manager.partidas = 0;
-					ads.Launch("Other","Other");
+					ads.LaunchInterstital();
 				}
 				WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
 				MisionAcomplished.SetActive (false);
@@ -246,9 +253,9 @@ public class WinLose : MonoBehaviour {
 
 		soundManager.PlaySound("Lose");
 		dataManger.manager.partidas++;
-		if(dataManger.manager.partidas >= 5){
+		if(dataManger.manager.partidas >= 3){
 			dataManger.manager.partidas = 0;
-			ads.Launch("Other","Other");
+			ads.LaunchInterstital();
 		}
 		LoseSprite.SetActive (true);
 		UI1.SetActive (false);

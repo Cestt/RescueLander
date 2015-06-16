@@ -43,6 +43,7 @@ public class Movement : MonoBehaviour {
 	private AudioClip clipRealenti;
 	private AudioClip clipMotor;
 	public float [] fuelLevel;
+	public float [] gravityLevel;
 	public float actualTime;
 	public float LoseTime;
 	private bool running;
@@ -50,7 +51,9 @@ public class Movement : MonoBehaviour {
 	private bool once = false;
 	// Use this for initialization
 	void Awake() {
-
+		if(!Application.loadedLevelName.Contains("Tuto") & dataManger.manager.actualLevel -1 <= gravityLevel.Length){
+			rigid.gravityScale = gravityLevel[dataManger.manager.actualLevel-1];
+		}
 		if(Application.loadedLevelName.Contains("Tuto")){
 			fuel = 2500;
 		}else{
