@@ -56,13 +56,15 @@ public class Minimap : MonoBehaviour {
 		Platform_Ico.transform.position = tempVector; 
 		if(Astronauts[0] != null){
 			for(int i = 0; i < Astronauts.Count;i++) {
-				
-				mapx = (100 * Astronauts[i].transform.position.x)/MapWidth;
-				mapy = (100 * Astronauts[i].transform.position.y)/MapHeight;
-				tempVector = gameObject.transform.position;
-				tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
-				tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
-				AstronautsIco[i].transform.position = tempVector; 
+				if(Astronauts[i] != null){
+					mapx = (100 * Astronauts[i].transform.position.x)/MapWidth;
+					mapy = (100 * Astronauts[i].transform.position.y)/MapHeight;
+					tempVector = gameObject.transform.position;
+					tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
+					tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
+					AstronautsIco[i].transform.position = tempVector;
+				}
+				 
 				
 			}
 		}

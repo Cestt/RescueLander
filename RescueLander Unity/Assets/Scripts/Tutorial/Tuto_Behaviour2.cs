@@ -40,8 +40,8 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 			prevStep = step;
 		}
 	
-		if(Input.touchCount > 0 & step != 3 
-		   || Input.GetMouseButtonUp(0) & step != 3 ){
+		if(Input.touchCount > 0 & step != 3 & step != 6
+		   || Input.GetMouseButtonUp(0) & step != 3 & step != 6){
 			if(Input.GetTouch(0).phase == TouchPhase.Began){
 			step++;
 			first = true;

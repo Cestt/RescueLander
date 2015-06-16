@@ -8,7 +8,7 @@ public class GameAssets:IStoreAssets {
 	//Update the 0 if you add more avaialbe items later, or else you will get errors.
 	
 	public int GetVersion() {
-		return 1;
+		return 3;
 	}
 	
 	public VirtualCurrency[] GetCurrencies ()
