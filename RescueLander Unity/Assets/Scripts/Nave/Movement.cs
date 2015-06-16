@@ -51,9 +51,7 @@ public class Movement : MonoBehaviour {
 	private bool once = false;
 	// Use this for initialization
 	void Awake() {
-		if(!Application.loadedLevelName.Contains("Tuto") & dataManger.manager.actualLevel -1 <= gravityLevel.Length){
-			rigid.gravityScale = gravityLevel[dataManger.manager.actualLevel-1];
-		}
+
 		if(Application.loadedLevelName.Contains("Tuto")){
 			fuel = 2500;
 		}else{
@@ -78,6 +76,10 @@ public class Movement : MonoBehaviour {
 		clipRealenti = Resources.Load ("Sounds/EngineRealenti(Loop)") as AudioClip;
 		clipMotor = Resources.Load ("Sounds/Motor1(Loop)") as AudioClip;
 		audioThruster = transform.FindChild("Feet").GetComponent<AudioSource>();
+		if(!Application.loadedLevelName.Contains("Tuto") & dataManger.manager.actualLevel -1 <= gravityLevel.Length){
+			Debug.Log(gravityLevel[dataManger.manager.actualLevel-1]);
+			rigid.gravityScale = gravityLevel[dataManger.manager.actualLevel-1];
+		}
 	}
 
 
