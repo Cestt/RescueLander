@@ -89,7 +89,7 @@ public class Damage : MonoBehaviour {
 			}
 		}
 
-		if(life < 0){
+		if(life < 0 & activateExplosion){
 
 			if(shipastronautpickup.Astronaut != null){
 
@@ -100,16 +100,19 @@ public class Damage : MonoBehaviour {
 			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
 			explosion.SetActive(true);
 			animator.Play("Explosion");
-			GetComponent<SpriteRenderer>().sprite = null;
+			if(Application.loadedLevelName.Contains("Tuto")){
+				GetComponent<tk2dSprite>().enabled = false;
+			}else{
+				GetComponent<SpriteRenderer>().sprite = null;
+			}
+
 			GameObject temp = transform.FindChild("Ship_Window").gameObject;
 			if(temp != null)
 				temp.SetActive(false);
-			if (activateExplosion){
-				soundManager.PlaySound("Explosion");
-				activateExplosion = false;
-			}
-			animator.AnimationCompleted = DestroyShip;
 
+			soundManager.PlaySound("Explosion");
+			animator.AnimationCompleted = DestroyShip;
+			activateExplosion = false;
 		}
 
 	

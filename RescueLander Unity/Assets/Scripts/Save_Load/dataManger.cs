@@ -4,6 +4,7 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Collections.Generic;
+using GooglePlayGames;
 
 public class dataManger : MonoBehaviour {
 
@@ -60,7 +61,7 @@ public class dataManger : MonoBehaviour {
 	public int coinsSpend;
 	[HideInInspector]
 	public int coinsAcumulated;
-	[HideInInspector]
+	//[HideInInspector]
 	public int tutorial = 1;
 	[HideInInspector]
 	public int partidas;
@@ -87,8 +88,18 @@ public class dataManger : MonoBehaviour {
 		if(Application.loadedLevelName == "Menu"){
 			Initialize();
 		}
+		// recommended for debugging:
+		PlayGamesPlatform.DebugLogEnabled = true;
+		// Activate the Google Play Games platform
+		PlayGamesPlatform.Activate();
 
+		StartCoroutine("tryLogin");
+	}
+	private IEnumerator tryLogin(){
+		yield return null;
+		Social.localUser.Authenticate((bool success) => {
 
+		});
 	}
 
 	

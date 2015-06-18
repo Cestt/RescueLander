@@ -6,27 +6,11 @@ using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
 
 
+
 public class Social_Manager : MonoBehaviour{
 
 
-	void Awake(){
-		//SocialPending();
-		if(Application.loadedLevelName == "Menu"){
-			// recommended for debugging:
-			PlayGamesPlatform.DebugLogEnabled = true;
-			// Activate the Google Play Games platform
-			PlayGamesPlatform.Activate();
 
-			StartCoroutine("tryLogin");
-		}
-	}
-
-	private IEnumerator tryLogin(){
-		yield return null;
-		Social.localUser.Authenticate((bool success) => {
-			Check("Login",success);
-		});
-	}
 
 	private void SocialPending(){
 		List<string> notPending = new List<string>();
