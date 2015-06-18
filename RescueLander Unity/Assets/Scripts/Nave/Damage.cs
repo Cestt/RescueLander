@@ -21,6 +21,7 @@ public class Damage : MonoBehaviour {
 	private tk2dSlicedSprite slicedsprite;
 	private LifeBar lifebarScript;
 	private tk2dSpriteAnimator animator;
+	private tk2dSpriteAnimator animator2;
 	private float realDamage;
 	WinLose winLose;
 	Movement movement;
@@ -36,6 +37,8 @@ public class Damage : MonoBehaviour {
 	private Sound_Manager soundManager;
 	private bool activateAlarm; 
 	private bool activateExplosion;
+	private float actualTime;
+	private bool once = false;
 	// Use this for initialization
 	void Awake () {
 		rigid = GetComponent<Rigidbody2D>();
@@ -56,6 +59,8 @@ public class Damage : MonoBehaviour {
 		soundManager = GameManager.GetComponent<Sound_Manager>();
 		activateAlarm = true;
 		activateExplosion = true;
+		animator = sparks.GetComponent<tk2dSpriteAnimator>();
+		animator2 = explosion.GetComponent<tk2dSpriteAnimator>();
 	}
 
 
@@ -96,10 +101,10 @@ public class Damage : MonoBehaviour {
 				shipastronautpickup.Astronaut = null;
 
 			}
-			animator = explosion.GetComponent<tk2dSpriteAnimator>();
+
 			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
 			explosion.SetActive(true);
-			animator.Play("Explosion");
+			animator2.Play("Explosion");
 			if(Application.loadedLevelName.Contains("Tuto")){
 				GetComponent<tk2dSprite>().enabled = false;
 			}else{
@@ -111,11 +116,13 @@ public class Damage : MonoBehaviour {
 					temp.SetActive(false);
 			}
 
-
-
-			soundManager.PlaySound("Explosion");
-			animator.AnimationCompleted = DestroyShip;
 			activateExplosion = false;
+
+
+			Debug.Log("Last instruction");
+			animator2.AnimationCompleted = DestroyShip;
+
+
 		}
 
 	
@@ -130,7 +137,7 @@ public class Damage : MonoBehaviour {
 				sparks.transform.position = contactpoint.point;
 				Quaternion rot = Quaternion.FromToRotation(Vector3.up, contactpoint.normal);
 				sparks.transform.rotation = rot;
-				animator = sparks.GetComponent<tk2dSpriteAnimator>();
+
 				animator.Play("Sparks");
 				animator.AnimationCompleted = ResetSparks;
 				
@@ -185,8 +192,9 @@ public class Damage : MonoBehaviour {
 
 
 	void DestroyShip(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
-		animator.AnimationCompleted = null;
+		Debug.Log("Show Lose");
 		winLose.End("Lose");
+		Debug.Log("Destroy ship");
 		Destroy(gameObject);
 	}
 	void ResetSparks(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
