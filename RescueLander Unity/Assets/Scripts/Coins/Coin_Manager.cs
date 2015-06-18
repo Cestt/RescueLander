@@ -81,7 +81,6 @@ public class Coin_Manager : MonoBehaviour {
 		}
 	}
 	public void LevelCoin(int coin){
-		levelCoins += coin;
 		dataManger.manager.coins += coin;
 		dataManger.manager.coinsAcumulated += coin;
 		//ACHIEVEMENT
@@ -90,5 +89,9 @@ public class Coin_Manager : MonoBehaviour {
 				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQEQ",success);
 			});
 		}
+	}
+	public void LevelCoin(float coin){
+		levelCoins += (int)coin;
+
 	}
 }

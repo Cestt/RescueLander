@@ -105,10 +105,13 @@ public class Damage : MonoBehaviour {
 			}else{
 				GetComponent<SpriteRenderer>().sprite = null;
 			}
+			if(transform.FindChild("Ship_Window") != null){
+				GameObject temp = transform.FindChild("Ship_Window").gameObject;
+				if(temp != null)
+					temp.SetActive(false);
+			}
 
-			GameObject temp = transform.FindChild("Ship_Window").gameObject;
-			if(temp != null)
-				temp.SetActive(false);
+
 
 			soundManager.PlaySound("Explosion");
 			animator.AnimationCompleted = DestroyShip;

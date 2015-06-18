@@ -120,11 +120,13 @@ public class WinLose : MonoBehaviour {
 					Movement mov = ship.GetComponent<Movement>();
 					float fuel = mov.GetComponent<Movement>().fuel;
 					float maxFuel = mov.GetComponent<Movement>().originalFuel;
+
 					
 					if(dataManger.manager.actualLevel == dataManger.manager.unlocks & !Application.loadedLevelName.Contains("Tuto")){
 						dataManger.manager.unlocks++;
 					}
 					if(!Application.loadedLevelName.Contains("Tuto")){
+						coin_manager.LevelCoin(coin_manager.levelCoins);
 						scoreManager.stopScore();
 						totalScore = (int)scoreManager.timeScore;
 						
@@ -188,11 +190,7 @@ public class WinLose : MonoBehaviour {
 			}
 
 			if(result == "Lose"){
-				if(!Application.loadedLevelName.Contains("Tuto")){
-					LoseSprite.transform.FindChild("CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
-					LoseSprite.transform.FindChild("CoinCount/Total Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = dataManger.manager.coins.ToString();
-					LoseSprite.transform.FindChild("CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level " + dataManger.manager.actualLevel.ToString();
-				}
+
 
 				dataManger.manager.Save(true);
 				Lose();

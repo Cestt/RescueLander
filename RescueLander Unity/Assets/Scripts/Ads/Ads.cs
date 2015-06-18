@@ -14,7 +14,6 @@ public class Ads : MonoBehaviour {
 		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		if(Application.loadedLevelName == "Menu")
 		if (Advertisement.isSupported) {
-			Debug.Log("Ads supported");
 			Advertisement.allowPrecache = true;
 			Advertisement.Initialize ("37545",false);
 		} else {
@@ -32,11 +31,7 @@ public class Ads : MonoBehaviour {
 		
 	}
 	void Update(){
-		if(Advertisement.isInitialized){
-			Debug.Log("initialized");
-		}else{
-			Debug.Log("Not initialized");
-		}
+	
 	}
 
 	void HandleResult (ShowResult result){

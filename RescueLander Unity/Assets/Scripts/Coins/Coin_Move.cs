@@ -8,7 +8,7 @@ public class Coin_Move : MonoBehaviour {
 	private PowerUp_Manager powerManager;
 	private Coin_Manager coin_manager;
 	private int coinDistance = 65;
-	public int CoinValue;
+	public float CoinValue;
 	private Sound_Manager soundManager;
 
 	bool first;

@@ -188,6 +188,11 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "Retry_Button" :
 							dataManger.manager.Save(false);
+							dataManger.manager.partidas++;
+							if(dataManger.manager.partidas >= 3){
+								dataManger.manager.partidas = 0;
+								ads.LaunchInterstital();
+							}
 							Application.LoadLevel (Application.loadedLevel);
 							break;	
 						case "Levels_Button" :
@@ -275,7 +280,7 @@ public class Touch_Manager : MonoBehaviour {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
 								}else if(adLimit < 1){
-									adLimit++;
+								
 
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
@@ -293,7 +298,7 @@ public class Touch_Manager : MonoBehaviour {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
 								}else  if(adLimit < 1 & Input.touchCount == 1){
-									adLimit++;
+
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
 									actualPrompt.SetActive(true);
@@ -310,7 +315,7 @@ public class Touch_Manager : MonoBehaviour {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
 								}else  if(adLimit < 1){
-									adLimit++;
+								
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
 									actualPrompt.SetActive(true);
@@ -319,6 +324,7 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							break;
 						case "Button":
+							adLimit++;
 							switch(hit.transform.parent.name.Substring(11)){
 							case "Shield":
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
@@ -712,7 +718,11 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Retry_Button" :
 						dataManger.manager.Save(false);
-						adLimit = 0;
+						dataManger.manager.partidas++;
+						if(dataManger.manager.partidas >= 3){
+							dataManger.manager.partidas = 0;
+							ads.LaunchInterstital();
+						}
 						Application.LoadLevel (Application.loadedLevel);
 						break;	
 					case "Levels_Button" :
