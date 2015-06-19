@@ -11,11 +11,8 @@ public class Coin_Level : MonoBehaviour {
 		coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 		
 	}
-	IEnumerator Start () {
-		while (true) {
+	void Update() {
 			text.text = coin_manager.levelCoins.ToString();
-			yield return new WaitForSeconds(0.5f);
-		}
 	}
 
 

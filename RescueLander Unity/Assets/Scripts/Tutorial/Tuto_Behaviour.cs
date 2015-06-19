@@ -38,25 +38,25 @@ public class Tuto_Behaviour : MonoBehaviour {
 			once = true;
 		}
 	
-		if(Input.touchCount > 0  & step !=7 & step !=9 & step != 10 & step != 11
-		   || Input.GetMouseButtonUp(0)& step !=7 & step !=9 & step != 10 & step != 11){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
+		if(Input.touchCount > 0  & step !=7 & step !=10 & step != 11 & step != 12
+		   || Input.GetMouseButtonUp(0)& step !=7 & step !=10 & step != 11 & step != 12){
+			//if(Input.GetTouch(0).phase == TouchPhase.Began){
 				step++;
 				first = true;
 				nextStep();
 				transform.FindChild("ObjectiveArea").gameObject.SetActive(false);
 				transform.FindChild("ObjectiveArea1").gameObject.SetActive(false);
 				tuto.gameObject.SetActive(true);
-			}
+			//}
 
 		}
 		if(Input.touchCount > 0 &step == 7
 		   || Input.GetMouseButtonUp(0)&step == 7){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
+			//if(Input.GetTouch(0).phase == TouchPhase.Began){
 				if(ship.GetComponent<Rigidbody2D>().isKinematic)
 					ship.GetComponent<Rigidbody2D>().isKinematic = false;
 				tuto.SetActive(false);
-			}
+			//}
 			
 		}
 
@@ -73,7 +73,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 
 		}
 
-		if(step == 9){
+		if(step == 10){
 			if(once & ship != null){
 			ship.GetComponent<Rigidbody2D>().isKinematic = false;
 			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
@@ -82,22 +82,23 @@ public class Tuto_Behaviour : MonoBehaviour {
 				once = false;
 			}
 		}
-		if(step == 11 & Input.touchCount > 0 || step == 11 & Input.GetMouseButtonUp(0)){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
+		if(step == 12 & Input.touchCount > 0 || step == 12 & Input.GetMouseButtonUp(0)){
+			//if(Input.GetTouch(0).phase == TouchPhase.Began){
 			Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
-			}
+			//}
 			
 		}
-		if(step == 10 & Input.touchCount > 0  || step == 10 & Input.GetMouseButtonUp(0)){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
+		if(step == 11 & Input.touchCount > 0  || step == 11 & Input.GetMouseButtonUp(0)){
+			//if(Input.GetTouch(0).phase == TouchPhase.Began){
 			transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+			transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.SetActive(false);
 			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
 			step++;
 			first = true;
 			nextStep();
 			}
 			
-		}
+		//}
 	}
 	public void nextStep(){
 		StartCoroutine("Onestep");

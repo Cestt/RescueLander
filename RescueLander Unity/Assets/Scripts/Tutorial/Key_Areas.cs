@@ -22,7 +22,7 @@ public class Key_Areas : MonoBehaviour {
 			running = true;
 			StartTimer();
 		}
-		if(tuto.step == 9){
+		if(tuto.step == 10){
 			running = true;
 			StartTimer();
 		}
@@ -47,7 +47,7 @@ public class Key_Areas : MonoBehaviour {
 			tutoGameobject.SetActive(true);
 
 		}
-		if(actualTime + TimerTime < Time.time & running & tuto.step == 9){
+		if(actualTime + TimerTime < Time.time & running & tuto.step == 10){
 			ship.GetComponent<Rigidbody2D>().isKinematic = true;
 			running = false;
 			GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);

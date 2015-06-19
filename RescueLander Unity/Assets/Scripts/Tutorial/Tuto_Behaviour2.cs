@@ -76,7 +76,6 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 			if(once & Input.GetTouch(0).phase == TouchPhase.Began){
 				tuto.SetActive(false);
 				transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-				dataManger.manager.coins += 500;
 				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
 				once = false;
 				step++;
@@ -85,6 +84,7 @@ public class Tuto_Behaviour2 : MonoBehaviour {
 		}
 		if(step == 6){
 			if(once & Input.GetTouch(0).phase == TouchPhase.Began){
+				dataManger.manager.coins += 500;
 				Application.LoadLevel("Menu");
 				once = false;
 			}

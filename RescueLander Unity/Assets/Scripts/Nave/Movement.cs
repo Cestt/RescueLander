@@ -49,6 +49,7 @@ public class Movement : MonoBehaviour {
 	private bool running;
 	private AudioSource audioThruster;
 	private bool once = false;
+	private Damage damage;
 	// Use this for initialization
 	void Awake() {
 
@@ -71,7 +72,7 @@ public class Movement : MonoBehaviour {
 		originlSize = slicedsprite.dimensions.x;
 		originalFuel = fuel;
 		animator =  Fire.GetComponent<tk2dSpriteAnimator>();
-
+		damage = GetComponent<Damage>();
 		audioSource = GetComponent<AudioSource>();
 		clipRealenti = Resources.Load ("Sounds/EngineRealenti(Loop)") as AudioClip;
 		clipMotor = Resources.Load ("Sounds/Motor1(Loop)") as AudioClip;
@@ -130,7 +131,7 @@ public class Movement : MonoBehaviour {
 				if(Input.touchCount > 0) {
 
 				Touch touch;
-				if(!touchmanager.paused){
+				if(!touchmanager.paused & damage.life > 0){
 					if (Input.touchCount == 1){
 						
 						touch = Input.GetTouch(0);
@@ -255,7 +256,7 @@ public class Movement : MonoBehaviour {
 		}
 		if(platform == RuntimePlatform.WindowsEditor){
 
-			if(!touchmanager.paused){
+			if(!touchmanager.paused & damage.life > 0){
 
 				if(Input.GetKey(KeyCode.Space) & fuel > 0 & rigid.velocity.magnitude < maxSpeed){
 					animator.Stop();

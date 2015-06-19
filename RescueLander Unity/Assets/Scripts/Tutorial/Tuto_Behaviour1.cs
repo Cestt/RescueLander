@@ -77,9 +77,7 @@ public class Tuto_Behaviour1 : MonoBehaviour {
 				ship.GetComponent<Rigidbody2D>().isKinematic = false;
 				ship.GetComponent<Rigidbody2D>().fixedAngle = false;
 				transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-				dataManger.manager.shieldPowerUps++;
-				dataManger.manager.magnetPowerUps++;
-				dataManger.manager.fuelPowerUps++;
+
 				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
 				once = false;
 				step++;
@@ -89,9 +87,12 @@ public class Tuto_Behaviour1 : MonoBehaviour {
 
 			
 		}
-		if(step == 8 & Input.touchCount > 0 || step == 8 & Input.GetMouseButtonUp(0)){
+		if(step == 9 & Input.touchCount > 0 || step == 9 & Input.GetMouseButtonUp(0)){
 			if(Input.GetTouch(0).phase == TouchPhase.Began){
-			Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
+				dataManger.manager.shieldPowerUps++;
+				dataManger.manager.magnetPowerUps++;
+				dataManger.manager.fuelPowerUps++;
+				Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 			}
 			
 		}

@@ -161,6 +161,13 @@ public class Touch_Manager : MonoBehaviour {
 									}else{
 										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
 									}
+									if(PlayerPrefs.GetInt("Garaje") == 0){
+										actualPrompt = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Garage").gameObject;
+										actualPrompt.SetActive(true);
+										GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+										PlayerPrefs.SetInt("Garaje",1);
+									}
+
 								}else{
 									Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 								}
@@ -273,7 +280,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 						case "PowerUp_Shield" :
 							if (!paused){
-								if(dataManger.manager.shieldPowerUps >= 1){
+								if(dataManger.manager.shieldPowerUps >= 1 & Input.touchCount == 1){
 									powerManager.PowerUp("Shield");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
@@ -585,7 +592,7 @@ public class Touch_Manager : MonoBehaviour {
 								Application.OpenURL("itms-apps://itunes.apple.com/app/idYOUR_ID");
 							}
 							break;
-						case "More_PowerUps":
+						case "MorePowerUps_Button":
 							Garaje(true);
 							garage_manager.LayoutChanger("PowerUps");
 							break;	
@@ -619,6 +626,10 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "TwitterButton":
 							Application.OpenURL("https://twitter.com/EvolveGames_");
+							break;
+						case "Reset_Button" :
+
+							Application.LoadLevel (Application.loadedLevel);
 							break;
 						default :
 
@@ -687,12 +698,21 @@ public class Touch_Manager : MonoBehaviour {
 						if(levelEnable){
 
 							if(dataManger.manager.tutorial >= 4){
-								if(IsInvoking("MoveCamera")){
-									CancelInvoke("MoveCamera");
-									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+								if(PlayerPrefs.GetInt("Garaje") == 0){
+									actualPrompt = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Garage").gameObject;
+									actualPrompt.SetActive(true);
+									GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									PlayerPrefs.SetInt("Garaje",1);
+									PlayerPrefs.Save();
 								}else{
-									InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									if(IsInvoking("MoveCamera")){
+										CancelInvoke("MoveCamera");
+										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									}else{
+										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									}
 								}
+
 							}else{
 								Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 							}
@@ -1009,6 +1029,9 @@ public class Touch_Manager : MonoBehaviour {
 								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
 									if(value._Type == "Ship" || value._Type == "World"){
 										Destroy(hit.collider.gameObject);
+										if(value._Type == "Ship"){
+										hit.transform.parent.FindChild("Owned_Label").gameObject.SetActive(true);
+										}
 									}
 									Debug.Log("Comprado " + hit.transform.parent.name.Substring(7));
 								}else{
@@ -1096,7 +1119,7 @@ public class Touch_Manager : MonoBehaviour {
 						Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
 						
 						break;
-					case "More_PowerUps":
+					case "MorePowerUps_Button":
 						Garaje(true);
 						garage_manager.LayoutChanger("PowerUps");
 						break;	
@@ -1121,13 +1144,19 @@ public class Touch_Manager : MonoBehaviour {
 						Garaje(true);
 						garage_manager.LayoutChanger("Coins");
 						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-						actualPrompt.SetActive(false);
+						if(actualPrompt != null)
+							actualPrompt.SetActive(false);
 						break;
 					case "FacebookButton":
 						Application.OpenURL("https://www.facebook.com/EvolveGames.dev");
 						break;
 					case "TwitterButton":
 						Application.OpenURL("https://twitter.com/EvolveGames_");
+						break;
+						
+					case "Reset_Button" :
+						
+						Application.LoadLevel (Application.loadedLevel);
 						break;
 					default :
 						
@@ -1274,6 +1303,12 @@ public class Touch_Manager : MonoBehaviour {
 					Result = "Lose";
 					Lose.SetActive(false);
 				}
+			}else{
+				GameObject.Find("UI_Camera").transform.FindChild("Options_Menu").gameObject.SetActive(false);
+			}
+			if(actualPrompt != null){
+				actualPrompt.SetActive(false);
+				GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 			}
 			garaje.SetActive(true);
 			levelEnable = false;

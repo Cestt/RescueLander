@@ -224,6 +224,12 @@ public class dataManger : MonoBehaviour {
 			Load();
 			
 		}else{
+			if(PlayerPrefs.GetInt("Ads") == null){
+				PlayerPrefs.SetInt("Ads",0);
+			}
+			if(PlayerPrefs.GetInt("Garaje") == null){
+				PlayerPrefs.SetInt("Garaje",0);
+			}
 
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");

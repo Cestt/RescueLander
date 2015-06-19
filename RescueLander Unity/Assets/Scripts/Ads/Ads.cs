@@ -87,9 +87,14 @@ public class Ads : MonoBehaviour {
 
 	}
 	public void LaunchInterstital(){
-		if (interstitial.IsLoaded()) {
-			interstitial.Show();
+
+	if(PlayerPrefs.GetInt("Ads") != null)
+		if(PlayerPrefs.GetInt("Ads") == 0){
+			if (interstitial.IsLoaded()) {
+				interstitial.Show();
+			}
 		}
+
 	}
 
 }
