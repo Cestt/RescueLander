@@ -6,11 +6,11 @@ public class Localization_Bridge : MonoBehaviour {
 
 	 
 	public static Localization_Bridge loc;
-	[HideInInspector]
-	public string Score;
+	public static LanguageManager manager;
+
 
 	void Awake () {
-		LanguageManager manager = LanguageManager.Instance;
+		 manager = LanguageManager.Instance;
 		if(loc == null){
 			
 			loc = this;
@@ -18,8 +18,13 @@ public class Localization_Bridge : MonoBehaviour {
 			manager.OnChangeLanguage += OnChangeLanguaje;
 			SmartCultureInfo systemLanguaje = manager.GetSupportedSystemLanguage();
 			
-			if(manager.IsLanguageSupported(systemLanguaje)){
+			if(systemLanguaje!= null){
+				Debug.Log("Languaje supported");
 				manager.ChangeLanguage(systemLanguaje);
+			}else{
+				Debug.Log("Languaje not supported");
+				manager.ChangeLanguage("en");
+
 			}
 			
 		}else if(loc != this){
@@ -43,6 +48,12 @@ public class Localization_Bridge : MonoBehaviour {
 			}
 	}
 	void OnChangeLanguaje(LanguageManager langManager){
-		Score = langManager.GetTextValue("RescueLander.Score");
+
+	}
+	void OnLevelWasLoaded(int level) {
+		if(Application.loadedLevelName == "Menu"){
+			GameObject.Find("Button_Garage").transform.FindChild("GarageButton_Graphic/TextGarage").GetComponent<tk2dTextMesh>().text = 
+				Localization_Bridge.manager.GetTextValue("RescueLander.garage");
+		}
 	}
 }
