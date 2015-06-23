@@ -51,9 +51,18 @@ public class Localization_Bridge : MonoBehaviour {
 
 	}
 	void OnLevelWasLoaded(int level) {
+		GameObject UICamera = GameObject.Find("UI_Camera");
 		if(Application.loadedLevelName == "Menu"){
 			GameObject.Find("Button_Garage").transform.FindChild("GarageButton_Graphic/TextGarage").GetComponent<tk2dTextMesh>().text = 
 				Localization_Bridge.manager.GetTextValue("RescueLander.garage");
 		}
+		UICamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/ShipsButton/ShipsButton_Text").GetComponent<tk2dTextMesh>().text = 
+			Localization_Bridge.manager.GetTextValue("RescueLander.ships");
+		UICamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/PowerUps_Button/PowerUps_Text").GetComponent<tk2dTextMesh>().text = 
+			Localization_Bridge.manager.GetTextValue("RescueLander.powerups");
+		UICamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/Coins_Button/Coins_Text").GetComponent<tk2dTextMesh>().text = 
+			Localization_Bridge.manager.GetTextValue("RescueLander.coins");
+		UICamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/GarageHeader_Button/GarageHeader_Text").GetComponent<tk2dTextMesh>().text = 
+			Localization_Bridge.manager.GetTextValue("RescueLander.garage");
 	}
 }
