@@ -239,7 +239,7 @@ public class WinLose : MonoBehaviour {
 		}
 		//Sumamos las puntuaciones totales y se publica en el leaderboard
 		int new_score = 0;
-		for (int i=1; i<=dataManger.manager.actualLevel; i++){
+		for (int i=1; i<dataManger.manager.unlocks; i++){
 			new_score += dataManger.manager.scores["Level_"+i];
 		}
 		Debug.Log ("Leaderboard nueva puntuacion: "+ new_score);
