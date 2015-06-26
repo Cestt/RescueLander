@@ -43,7 +43,8 @@ public class WinLose : MonoBehaviour {
 	Touch_Manager touch;
 	private bool adsInters = false;
 	private GameObject new_record;
-
+	private GameObject promptWorldComplete;
+	private bool worldComplete = false;
 	void Awake () {
 	
 //		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
@@ -66,6 +67,8 @@ public class WinLose : MonoBehaviour {
 				coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 				scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
 				scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
+				if (dataManger.manager.actualLevel <= 21)
+					promptWorldComplete = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_MarsFinished").gameObject;
 			}
 			touch = GetComponent<Touch_Manager>();
 			damage = ship.GetComponent<Damage>();
@@ -86,7 +89,8 @@ public class WinLose : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Application.loadedLevelName != "Menu" & !Application.loadedLevelName.Contains("Tuto") & !adsInters) {
-			if(Time.time > actualTime + WinTimer & WinSprite.activeInHierarchy ){
+			if(Time.time > actualTime + WinTimer & WinSprite.activeInHierarchy & dataManger.manager.actualLevel < 21
+			   ){
 				adsInters = true;
 				WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
 				MisionAcomplished.SetActive (false);
@@ -96,7 +100,9 @@ public class WinLose : MonoBehaviour {
 					ads.LaunchInterstital();
 				}
 			}
-			if(MisionAcomplished.activeInHierarchy & Input.touchCount > 0){
+			if((MisionAcomplished.activeInHierarchy & Input.touchCount > 0 
+			    && dataManger.manager.actualLevel < 21) || (dataManger.manager.actualLevel == 21 && worldComplete && !promptWorldComplete.activeInHierarchy
+			    )){
 				adsInters = true;
 				dataManger.manager.partidas++;
 				if(dataManger.manager.partidas >= 3){
@@ -106,7 +112,19 @@ public class WinLose : MonoBehaviour {
 				WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
 				MisionAcomplished.SetActive (false);
 
-			}	
+			}
+			/*Debug.Log(dataManger.manager.actualLevel );
+			if (dataManger.manager.actualLevel == 21)
+			Debug.Log ("WIN: "+ WinSprite.activeInHierarchy +", MISION: "+ MisionAcomplished.activeInHierarchy + 
+			           "TIME: " + Time.time + "ACTUAL: " + actualTime + "Timer: "+WinTimer);*/
+			if (MisionAcomplished.activeInHierarchy & (Input.touchCount > 0 || Time.time > actualTime + WinTimer) && 
+			    dataManger.manager.actualLevel == 21 && !worldComplete){
+				GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+				touch.actualPrompt = promptWorldComplete;
+				touch.actualPrompt.SetActive(true);
+				MisionAcomplished.SetActive (false);
+				worldComplete = true;
+			}
 		}
 
 	}

@@ -105,6 +105,7 @@ public class Damage : MonoBehaviour {
 			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
 			explosion.SetActive(true);
 			animator2.Play("Explosion");
+			gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 			if(Application.loadedLevelName.Contains("Tuto")){
 				GetComponent<tk2dSprite>().enabled = false;
 			}else{
@@ -115,7 +116,26 @@ public class Damage : MonoBehaviour {
 				if(temp != null)
 					temp.SetActive(false);
 			}
-
+			if (transform.FindChild("Fire") != null){
+				GameObject temp = transform.FindChild("Fire").gameObject;
+				if(temp != null)
+					temp.SetActive(false);
+			}
+			if (transform.FindChild("Fire_Smoke") != null){
+				GameObject temp = transform.FindChild("Fire_Smoke").gameObject;
+				if(temp != null)
+					temp.SetActive(false);
+			}
+			if (transform.FindChild("Thruster_R") != null){
+				GameObject temp = transform.FindChild("Thruster_R").gameObject;
+				if(temp != null)
+					temp.SetActive(false);
+			} 
+			if (transform.FindChild("Thruster_L") != null){
+				GameObject temp = transform.FindChild("Thruster_L").gameObject;
+				if(temp != null)
+					temp.SetActive(false);
+			} 
 			activateExplosion = false;
 
 
