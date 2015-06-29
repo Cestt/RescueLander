@@ -43,8 +43,11 @@ public class WinLose : MonoBehaviour {
 	Touch_Manager touch;
 	private bool adsInters = false;
 	private GameObject new_record;
+	private GameObject new_color;
 	private GameObject promptWorldComplete;
 	private bool worldComplete = false;
+	private int starsNewColor;
+
 	void Awake () {
 	
 //		haloanim = WinSprite.GetComponentInChildren<WinHalo_Anim>();
@@ -60,6 +63,7 @@ public class WinLose : MonoBehaviour {
 				ship = GameObject.Find ("101(Clone)");
 			}else{
 				new_record = MisionAcomplished.transform.FindChild("Score_Resumen/New Record").gameObject;
+				new_color = MisionAcomplished.transform.FindChild("Score_Resumen/New Record").gameObject;
 				ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
 				UI3 =  uicamera.transform.FindChild("Anchor (LowerCenter)").gameObject;
 				UI4 =  uicamera.transform.FindChild("Anchor (LowerLeft)").gameObject;
@@ -69,6 +73,16 @@ public class WinLose : MonoBehaviour {
 				scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
 				if (dataManger.manager.actualLevel <= 21)
 					promptWorldComplete = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_MarsFinished").gameObject;
+				//Se obtiene el numero de estrellas necesario para obtener el siguiente color
+
+				GameObject colorbuttons = uicamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/Color_Buttons").gameObject;
+				starsNewColor = 10000;
+				foreach (Transform child in colorbuttons.transform) {
+					int starAct = child.gameObject.GetComponent<Color_Enabled>().StarsRequired;
+					if (dataManger.manager.totalStars < starAct && starAct < starsNewColor)
+						starsNewColor = starAct;
+				}
+				starsNewColor += dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
 			}
 			touch = GetComponent<Touch_Manager>();
 			damage = ship.GetComponent<Damage>();
@@ -182,7 +196,11 @@ public class WinLose : MonoBehaviour {
 						
 						if ((int)scoreManager.scoreCalc() > dataManger.manager.scores["Level_"+dataManger.manager.actualLevel])
 							new_record.SetActive(true);
-						
+
+						if (starsNewColor <= (dataManger.manager.totalStars + dataManger.manager.stars["Level_"+dataManger.manager.actualLevel])){
+							new_color.SetActive(true);
+							Debug.Log ("NUEVO COLOR!!!");
+						}
 						dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = (int)scoreManager.scoreCalc();
 						WinSprite.transform.FindChild("Resume/CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level "+dataManger.manager.actualLevel.ToString();
 						WinSprite.transform.FindChild("Resume/CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
