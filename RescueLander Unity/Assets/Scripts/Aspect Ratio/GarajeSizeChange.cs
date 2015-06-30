@@ -11,7 +11,6 @@ public class GarajeSizeChange : MonoBehaviour {
 		Aspect =  AspectRatio.GetAspectRatio(Screen.width,Screen.height);
 		AspectCalc = Aspect.x/Aspect.y;
 		Resize();
-		Debug.Log(AspectCalc);
 	}
 	
 	// Update is called once per frame

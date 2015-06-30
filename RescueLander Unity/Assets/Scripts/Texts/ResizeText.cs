@@ -5,6 +5,8 @@ public class ResizeText : MonoBehaviour {
 
 	float widthIni;
 	float heightIni;
+	string newText;
+	string apendText;
 	tk2dTextMesh textMesh;
 	public bool button;
 	
@@ -13,9 +15,8 @@ public class ResizeText : MonoBehaviour {
 		widthIni = textMesh.GetEstimatedMeshBoundsForString(textMesh.text).size.x;
 		heightIni = textMesh.GetEstimatedMeshBoundsForString(textMesh.text).size.y;
 	}
-	
-	
-	public void ChangeText(string newText){
+	IEnumerator FinalText(){
+		yield return new WaitForEndOfFrame();
 		float newWidth = textMesh.GetEstimatedMeshBoundsForString(newText).size.x;
 		float percentX = widthIni/newWidth;
 		if (button){
@@ -31,6 +32,24 @@ public class ResizeText : MonoBehaviour {
 				percentY = 1;
 			textMesh.scale = new Vector3(textMesh.scale.x*percentX,textMesh.scale.y*percentY,1);
 		}
-		textMesh.text = newText;
+		if(apendText != null){
+			textMesh.text = newText + apendText;
+		}else{
+			textMesh.text = newText;
+		}
+
+		Debug.Log("Text changed to: " + newText);
 	}
+	
+	public void ChangeText(string Text){
+		newText = Text;
+		apendText = null;
+		StartCoroutine("FinalText");
+	}
+	public void ChangeText(string Text, string AppendText){
+		apendText = AppendText;
+		newText = Text;
+		StartCoroutine("FinalText");
+	}
+
 }
