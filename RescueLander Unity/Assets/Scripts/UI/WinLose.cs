@@ -63,7 +63,7 @@ public class WinLose : MonoBehaviour {
 				ship = GameObject.Find ("101(Clone)");
 			}else{
 				new_record = MisionAcomplished.transform.FindChild("Score_Resumen/New Record").gameObject;
-				new_color = MisionAcomplished.transform.FindChild("Score_Resumen/New Record").gameObject;
+				new_color = WinSprite.transform.FindChild("Resume/NewColor_Unlocked").gameObject;
 				ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
 				UI3 =  uicamera.transform.FindChild("Anchor (LowerCenter)").gameObject;
 				UI4 =  uicamera.transform.FindChild("Anchor (LowerLeft)").gameObject;
@@ -82,7 +82,7 @@ public class WinLose : MonoBehaviour {
 					if (dataManger.manager.totalStars < starAct && starAct < starsNewColor)
 						starsNewColor = starAct;
 				}
-				starsNewColor += dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
+				//starsNewColor += dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
 			}
 			touch = GetComponent<Touch_Manager>();
 			damage = ship.GetComponent<Damage>();
@@ -161,7 +161,8 @@ public class WinLose : MonoBehaviour {
 						coin_manager.LevelCoin(coin_manager.levelCoins);
 						scoreManager.stopScore();
 						totalScore = (int)scoreManager.timeScore;
-						
+
+						dataManger.manager.totalStars -= dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
 						if(damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
 							dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;
 							dataManger.manager.coins += coin_manager.ThreeStarCoin;
@@ -193,11 +194,11 @@ public class WinLose : MonoBehaviour {
 							WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
 								= "1 Star:";
 						}
-						
+						dataManger.manager.totalStars += dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
 						if ((int)scoreManager.scoreCalc() > dataManger.manager.scores["Level_"+dataManger.manager.actualLevel])
 							new_record.SetActive(true);
 
-						if (starsNewColor <= (dataManger.manager.totalStars + dataManger.manager.stars["Level_"+dataManger.manager.actualLevel])){
+						if (starsNewColor <= dataManger.manager.totalStars ){
 							new_color.SetActive(true);
 							Debug.Log ("NUEVO COLOR!!!");
 						}
