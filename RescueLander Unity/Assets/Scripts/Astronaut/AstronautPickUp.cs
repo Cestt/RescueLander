@@ -6,7 +6,7 @@ public class AstronautPickUp : MonoBehaviour {
 	private GameObject ship;
 	public float pickUpDistance = 200f;
 	private ShipAstronautPickUp shipastronautpickup;
-
+	private GameObject iceCube;
 
 	void Awake () {
 		if (Application.loadedLevelName.Contains ("Tuto")){
@@ -15,7 +15,7 @@ public class AstronautPickUp : MonoBehaviour {
 			ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
 		}
 		shipastronautpickup = ship.GetComponent<ShipAstronautPickUp>();
-
+		iceCube = transform.FindChild ("IceCube").gameObject;
 
 	}
 	
@@ -24,7 +24,7 @@ public class AstronautPickUp : MonoBehaviour {
 
 		if(ship !=null){
 
-			if(Vector2.Distance(this.transform.position,ship.transform.position) < pickUpDistance * 100f ){
+			if(Vector2.Distance(this.transform.position,ship.transform.position) < pickUpDistance * 100f & !iceCube.activeInHierarchy){
 				
 				shipastronautpickup.Pickable = true;
 				shipastronautpickup.Astronaut = this.gameObject;

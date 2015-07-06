@@ -11,6 +11,7 @@ public class Damage : MonoBehaviour {
 	public int maxLife;
 	public int damageThreshold = 0;
 	public int damageThresholdFriction = 0;
+	public int damageThresholdFrictionIce = 0;
 	public float DamageVariant;
 	private ShipAstronautPickUp shipastronautpickup;
 	private GameObject lifeBar;
@@ -184,8 +185,15 @@ public class Damage : MonoBehaviour {
 	}
 	void OnCollisionStay2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Floor"){
-			
-			if(coll.relativeVelocity.magnitude > damageThresholdFriction){
+			//Caso normal, el limite normal
+			int damageThresholdFrictionAct = damageThresholdFriction;
+			//Si el material es hielo se asigna el limite de hielo
+			if (coll.gameObject.name == "BezierCurve"){
+				PhysicsMaterial2D  floorMat = coll.gameObject.GetComponent<EdgeCollider2D>().sharedMaterial;
+				if (floorMat != null && floorMat.name == "IceMaterial")
+					damageThresholdFrictionAct = damageThresholdFrictionIce;
+			}
+			if(coll.relativeVelocity.magnitude > damageThresholdFrictionAct){
 
 				ContactPoint2D contactpoint = coll.contacts[0];
 				sparks.transform.position = contactpoint.point;
