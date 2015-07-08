@@ -15,7 +15,7 @@ public class AstronautPickUp : MonoBehaviour {
 			ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
 		}
 		shipastronautpickup = ship.GetComponent<ShipAstronautPickUp>();
-		iceCube = transform.FindChild ("IceCube").gameObject;
+		//iceCube = transform.FindChild ("IceCube").gameObject;
 
 	}
 	

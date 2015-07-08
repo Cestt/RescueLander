@@ -199,8 +199,7 @@ public class dataManger : MonoBehaviour {
 				temp = GameObject.Find("Level_"+i);
 				Transform tempChild;
 				tempChild =  temp.transform.FindChild("Level_Score");
-				tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.score")," "
-				                                                + scores["Level_"+i].ToString());
+				tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
 				if(i<=unlocks){
 
 					tempChild =  temp.transform.FindChild("Level_Number");
@@ -213,8 +212,7 @@ public class dataManger : MonoBehaviour {
 						
 					}
 					tempChild =  temp.transform.FindChild("Level_Score");
-					tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.score")," "
-					                                                + scores["Level_"+i].ToString());
+					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
 				}
 			}
 			file.Close();
