@@ -24,7 +24,7 @@ public class AstronautPickUp : MonoBehaviour {
 
 		if(ship !=null){
 
-			if(Vector2.Distance(this.transform.position,ship.transform.position) < pickUpDistance * 100f & !iceCube.activeInHierarchy){
+			if(Vector2.Distance(this.transform.position,ship.transform.position) < pickUpDistance * 100f){
 				
 				shipastronautpickup.Pickable = true;
 				shipastronautpickup.Astronaut = this.gameObject;
