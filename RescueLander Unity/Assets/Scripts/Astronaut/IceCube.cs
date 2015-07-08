@@ -2,33 +2,31 @@
 using System.Collections;
 
 public class IceCube : MonoBehaviour {
-
+	
 	tk2dSpriteAnimator animator;
 	tk2dSpriteAnimator animatorAstronaut;
 	Movement move;
 	public float timeCube = 3; 
-
+	GameObject ship;
+	
 	void Awake () {
 		animator = GetComponent<tk2dSpriteAnimator> ();
 		animatorAstronaut = transform.parent.GetComponent<tk2dSpriteAnimator> ();
 		animator.AnimationCompleted = IceCubeLoop;
-		move = GameObject.Find (dataManger.manager.actualShip + "(Clone)").GetComponent<Movement> ();
+		ship = GameObject.Find (dataManger.manager.actualShip + "(Clone)");
+		move = ship.GetComponent<Movement> ();
 	}
 	
-	// Update is called once per frame
-	void Update () {
 	
-	}
-
 	private void IceCubeLoop(tk2dSpriteAnimator animatorSprite, tk2dSpriteAnimationClip clip){
 		animatorAstronaut.Play ();
 		gameObject.SetActive (false);
 	}
 	
 	void OnTriggerStay2D(Collider2D coll) {
-		if (coll.gameObject.name == "Fire"){
+		if (coll.gameObject.name == "Fire" & (ship.gameObject.transform.eulerAngles.magnitude < 50 || ship.gameObject.transform.eulerAngles.magnitude > 320)){
 			if (move.motor){
-					timeCube -= Time.deltaTime;
+				timeCube -= Time.deltaTime;
 				Debug.Log ("TIEMPO RESTANTE: "+ timeCube);
 				if (timeCube <= 0){
 					animatorAstronaut.Play ();
@@ -38,7 +36,7 @@ public class IceCube : MonoBehaviour {
 			}else if (animator.Playing){
 				animator.Pause();
 			}
-
+			
 		}
 	}
 	
