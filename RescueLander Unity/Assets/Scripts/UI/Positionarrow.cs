@@ -32,6 +32,12 @@ public class Positionarrow : MonoBehaviour {
 	
 
 	void Update () {
+		if(distance/10 > 100 & distance/10 < 150 & ship != null){
+
+		}
+		if(distance/10 > 200  & ship !=null){
+			ship.GetComponent<Damage>().life = -1;
+		}
 
 		if(ship != null){
 			if(render.isVisible){

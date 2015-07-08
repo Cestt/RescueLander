@@ -52,10 +52,12 @@ public class Touch_Manager : MonoBehaviour {
 	public int adLimit = 0;
 
 
+
 	void Awake(){
 		uicameraGameobject = GameObject.Find("UI_Camera");
 		adLimit = 0;
 		if(Application.loadedLevelName != "Menu"){
+
 			uiColumnExtended = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/UIBase_RightCol/UIBase_RightCol_Extended").gameObject;
 			if(Application.loadedLevelName.Contains("Tuto")){
 				if(Application.loadedLevelName == "Tuto_3"){
@@ -280,15 +282,23 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 						case "PowerUp_Shield" :
 							if (!paused){
-								if(dataManger.manager.shieldPowerUps >= 1 & Input.touchCount == 1){
+								if(dataManger.manager.shieldPowerUps > 1 & Input.touchCount == 1){
 									powerManager.PowerUp("Shield");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else if(adLimit < 1){
-								
-
+								}else if(adLimit < 1 & dataManger.manager.shieldPowerUps == 1){
+									powerManager.PowerUp("Shield");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);
+								}else if(adLimit <= 0){
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
 									actualPrompt.SetActive(true);
@@ -298,14 +308,23 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "PowerUp_Magnet" :
 							if (!paused){
-								if(dataManger.manager.magnetPowerUps >= 1 & Input.touchCount == 1){
+								if(dataManger.manager.magnetPowerUps > 1 & Input.touchCount == 1){
 									powerManager.PowerUp("Magnet");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else  if(adLimit < 1 & Input.touchCount == 1){
-
+								}else  if(adLimit < 1 & Input.touchCount == 1 & dataManger.manager.magnetPowerUps == 1){
+									powerManager.PowerUp("Magnet");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);
+								}else if(adLimit <= 0){
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
 									actualPrompt.SetActive(true);
@@ -315,18 +334,27 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "PowerUp_Fuel" :
 							if (!paused){
-								if(dataManger.manager.fuelPowerUps >= 1 ){
+								if(dataManger.manager.fuelPowerUps > 1 ){
 									powerManager.PowerUp("Fuel");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else  if(adLimit < 1){
-								
+								}else  if(adLimit < 1 & dataManger.manager.fuelPowerUps == 1 ){
+									powerManager.PowerUp("Fuel");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);
+								}else if(adLimit <= 0){
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);		
 								}
 							}
 							break;
@@ -822,7 +850,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "PowerUp_Shield" :
 						if (!paused){
-							if(dataManger.manager.shieldPowerUps >= 1){
+							if(dataManger.manager.shieldPowerUps > 1){
 								powerManager.PowerUp("Shield");
 
 							}else{
@@ -835,7 +863,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "PowerUp_Magnet" :
 						if (!paused){
-							if(dataManger.manager.magnetPowerUps >= 1 & Input.touchCount == 1){
+							if(dataManger.manager.magnetPowerUps > 1 & Input.touchCount == 1){
 								powerManager.PowerUp("Magnet");
 
 							}else{
@@ -848,7 +876,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "PowerUp_Fuel" :
 						if (!paused){
-							if(dataManger.manager.fuelPowerUps >= 1 ){
+							if(dataManger.manager.fuelPowerUps > 1 ){
 								powerManager.PowerUp("Fuel");
 
 							}else{

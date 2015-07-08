@@ -87,17 +87,22 @@ public class Minimap : MonoBehaviour {
 		float mapy;
 		Vector2 tempVector;
 
-		if(ship.GetComponent<Renderer>().isVisible){
-			Ship_Ico.SetActive(true);
-		}else{
-			Ship_Ico.SetActive(false);
+		if( ship != null){
+			if(ship.GetComponent<Renderer>().isVisible){
+				Ship_Ico.SetActive(true);
+			}else{
+				Ship_Ico.SetActive(false);
+			}
+		} 
+		   
+		if(ship != null){
+			mapx = (100 * ship.transform.position.x)/MapWidth;
+			mapy = (100 * ship.transform.position.y)/MapHeight;
+			tempVector = gameObject.transform.position;
+			tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
+			tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
+			Ship_Ico.transform.position = tempVector; 
 		}
-
-		mapx = (100 * ship.transform.position.x)/MapWidth;
-		mapy = (100 * ship.transform.position.y)/MapHeight;
-		tempVector = gameObject.transform.position;
-		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
-		tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
-		Ship_Ico.transform.position = tempVector; 
+	
 	}
 }
