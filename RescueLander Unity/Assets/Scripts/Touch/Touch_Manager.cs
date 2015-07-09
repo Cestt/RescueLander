@@ -47,6 +47,8 @@ public class Touch_Manager : MonoBehaviour {
 	private tk2dUIToggleButton[] buttonsPowerUps = new tk2dUIToggleButton[3];
 	private tk2dUIToggleButton[] buttonsShips = new tk2dUIToggleButton[7];
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
+	private GameObject coinCount;
+	private bool backCoins = false;
 	[HideInInspector]
 	public GameObject actualPrompt;
 	public int adLimit = 0;
@@ -70,7 +72,6 @@ public class Touch_Manager : MonoBehaviour {
 				animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_02").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_03").GetComponent<tk2dSpriteAnimator>());
-
 			}
 
 			rigid = ship.GetComponent<Rigidbody2D>();
@@ -79,7 +80,8 @@ public class Touch_Manager : MonoBehaviour {
 			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
-
+			coinCount = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/CoinCount_Ico").gameObject;
+	
 			animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
 
 			if(!Application.loadedLevelName.Contains("Tuto"))
@@ -1244,7 +1246,10 @@ public class Touch_Manager : MonoBehaviour {
 			}
 
 		}
-
+	
+		if (backCoins && !animation.IsPlaying("UIBase_RightCol_extended_UpDown")) {
+			coinCount.transform.localPosition = new Vector3 (72, coinCount.transform.localPosition.y);
+		}
 	}
 
 
@@ -1259,7 +1264,8 @@ public class Touch_Manager : MonoBehaviour {
 				animation.Play("UIBase_RightCol_extended_UpDown");
 				if(!Application.loadedLevelName.Contains("Tuto"))
 				pauseText.SetActive(true);
-
+				backCoins = false;
+				coinCount.transform.localPosition = new Vector3(-72,coinCount.transform.localPosition.y);
 				for (int i=0; i< animators.Count; i++){
 					if (animators[i] != null)
 						animators[i].Pause();
@@ -1279,6 +1285,8 @@ public class Touch_Manager : MonoBehaviour {
 				animation["UIBase_RightCol_extended_UpDown"].speed = -1;
 				animation.Play("UIBase_RightCol_extended_UpDown");
 				animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
+				backCoins = true;
+		
 				if(!Application.loadedLevelName.Contains("Tuto"))
 					pauseText.SetActive(false);
 				
@@ -1363,6 +1371,7 @@ public class Touch_Manager : MonoBehaviour {
 		yield return async;
 		Debug.Log("Loading complete");
 	}
+
 
 	string MyEscapeURL (string url)
 	{
