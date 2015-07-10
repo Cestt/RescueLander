@@ -16,21 +16,22 @@ public class Share : MonoBehaviour {
 	public void ShareScreenshot(){
 		Debug.Log("Share");
 		isProcessing = true;
-
-		screenshoter.LaunchScreenshot(Screen.width, Screen.height, false);
-
+		
 		string destination = Path.Combine(Application.persistentDataPath,"Screenshot.png");
 
-		byte[] bytes = File.ReadAllBytes(Application.persistentDataPath + "/Screenshot.png");
-		Texture2D texture = new Texture2D(125, 125, TextureFormat.DXT1,false);
-		texture.filterMode = FilterMode.Trilinear;
-		texture.LoadImage(bytes);
-
-
-		Sprite sprite = Sprite.Create(texture, new Rect(0,0,125, 125), new Vector2(0.0f,0.0f), 1.0f);
-		screenshotSprite.GetComponent<SpriteRenderer> ().sprite = sprite;
-		screenshotSprite.transform.localScale = new Vector3(2,2,1);
+		Texture2D screenTexture = new Texture2D(Screen.width, Screen.height,TextureFormat.RGB24,true);
+		screenTexture.ReadPixels(new Rect(0f, 0f, Screen.width, Screen.height),0,0);
+		screenTexture.Apply();
+	
+		byte[] dataToSave = screenTexture.EncodeToPNG();
+		File.WriteAllBytes(destination, dataToSave);
 		
+
+		
+
+		
+		
+
 		if(!Application.isEditor)
 		{
 			// block to open the file and share it ------------START

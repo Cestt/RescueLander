@@ -9,7 +9,11 @@ public class AstronautPickUp : MonoBehaviour {
 
 
 	void Awake () {
-		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+		if (Application.loadedLevelName.Contains ("Tuto")){
+			ship = GameObject.Find ("101(Clone)");
+		}else{
+			ship = GameObject.Find (dataManger.manager.actualShip+"(Clone)");
+		}
 		shipastronautpickup = ship.GetComponent<ShipAstronautPickUp>();
 
 
@@ -24,7 +28,7 @@ public class AstronautPickUp : MonoBehaviour {
 				
 				shipastronautpickup.Pickable = true;
 				shipastronautpickup.Astronaut = this.gameObject;
-				Debug.Log ("Astronaut distance reached");
+
 				
 			}else if(shipastronautpickup.Astronaut == this.gameObject){
 				

@@ -9,12 +9,22 @@ public class ScoreManager : MonoBehaviour {
 	private GameObject ship;
 	private Damage damage;
 	private Movement movement;
-	public int test;
+	private Touch_Manager touch;
+
 
 	void Awake(){
-		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
-		damage = ship.GetComponent<Damage>();
-		movement = ship.GetComponent<Movement>();
+		if (Application.loadedLevelName != "Menu") {
+			if(Application.loadedLevelName.Contains("Tuto")){
+				ship = GameObject.Find("101(Clone)");
+			}else{
+				ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+			}
+			damage = ship.GetComponent<Damage>();
+			movement = ship.GetComponent<Movement>();
+
+		}
+		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
+
 	}
 
 	void Start () {
@@ -25,11 +35,17 @@ public class ScoreManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		if(touch.paused){
+			CancelInvoke("timeScoreCalc");
+		}else if(!touch.paused & !IsInvoking("timeScoreCalc")){
+			InvokeRepeating("timeScoreCalc",0,scoreReductionTime);
+		}
 
 
 	}
-
+	public void stopScore(){
+		CancelInvoke("timeScoreCalc");
+	}
 	void timeScoreCalc(){
 
 		if(timeScore > 0){

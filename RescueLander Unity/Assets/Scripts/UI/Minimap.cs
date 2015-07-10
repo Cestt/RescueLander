@@ -9,14 +9,31 @@ public class Minimap : MonoBehaviour {
 	private BoxCollider2D coll;
 	public List<GameObject> Astronauts = new List<GameObject>();
 	public List<GameObject> AstronautsIco = new List<GameObject>();
-	private GameObject Ship;
+	private GameObject ship;
 	public GameObject Ship_Ico;
+	private GameObject Platform;
+	private GameObject Platform_Ico;
+	private GameObject PlatformFinish;
+	private GameObject PlatformFinish_Ico;
 
 	// Use this for initialization
 	void Awake () {
-		Ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+
+		Platform = GameObject.Find("Landing Platform");
+		Platform_Ico = transform.FindChild("Minimap_PlatformIco").gameObject;
+		if(Application.loadedLevelName =="Tuto_2"){
+			PlatformFinish_Ico = transform.FindChild("Minimap_PlatformIco 1").gameObject;
+			PlatformFinish = GameObject.Find("Finishing Platform");
+		}
+
+		if(Application.loadedLevelName.Contains("Tuto")){
+			ship = GameObject.Find("101(Clone)");
+		}else{
+			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+
+		}
 		coll = GetComponent<BoxCollider2D>();
-		for (int i = 1; i<= Ship.GetComponent<ShipAstronautDrop>().totalAstronauts; i++) {
+		for (int i = 1; i<= ship.GetComponent<ShipAstronautDrop>().totalAstronauts; i++) {
 			Astronauts[i-1]= GameObject.Find("Astronaut_0"+i);
 		}
 
@@ -25,34 +42,59 @@ public class Minimap : MonoBehaviour {
 		float mapx;
 		float mapy;
 		Vector2 tempVector;
-
-		for(int i = 0; i < Astronauts.Count;i++) {
-
-			mapx = (100 * Astronauts[i].transform.position.x)/MapWidth;
-			mapy = (100 * Astronauts[i].transform.position.y)/MapHeight;
-			tempVector = gameObject.transform.position;
-			tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
-			tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
-			AstronautsIco[i].transform.position = tempVector; 
-
+		if(Application.loadedLevelName =="Tuto_2"){
+		mapx = (100 * PlatformFinish.transform.position.x)/MapWidth;
+		mapy = (100 * PlatformFinish.transform.position.y)/MapHeight;
+		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
+		tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
+		PlatformFinish_Ico.transform.position = tempVector; 
 		}
-		
+		mapx = (100 * Platform.transform.position.x)/MapWidth;
+		mapy = (100 * Platform.transform.position.y)/MapHeight;
+		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
+		tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
+		Platform_Ico.transform.position = tempVector; 
+		if(Astronauts[0] != null){
+			for(int i = 0; i < Astronauts.Count;i++) {
+				if(Astronauts[i] != null){
+					mapx = (100 * Astronauts[i].transform.position.x)/MapWidth;
+					mapy = (100 * Astronauts[i].transform.position.y)/MapHeight;
+					tempVector = gameObject.transform.position;
+					tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
+					tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);
+					AstronautsIco[i].transform.position = tempVector;
+				}
+				 
+				
+			}
+		}
+
+
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		if(Astronauts[0] == null){
+			Destroy(AstronautsIco[0]);
+		}
+		if(Astronauts[1] == null){
+			Destroy(AstronautsIco[1]);
+		}
+		if(Astronauts[2] == null){
+			Destroy(AstronautsIco[2]);
+		}
 		float mapx;
 		float mapy;
 		Vector2 tempVector;
 
-		if(Ship.GetComponent<Renderer>().isVisible){
+		if(ship.GetComponent<Renderer>().isVisible){
 			Ship_Ico.SetActive(true);
 		}else{
 			Ship_Ico.SetActive(false);
 		}
 
-		mapx = (100 * Ship.transform.position.x)/MapWidth;
-		mapy = (100 * Ship.transform.position.y)/MapHeight;
+		mapx = (100 * ship.transform.position.x)/MapWidth;
+		mapy = (100 * ship.transform.position.y)/MapHeight;
 		tempVector = gameObject.transform.position;
 		tempVector.x = transform.position.x + ((coll.size.x * mapx)/100);
 		tempVector.y = transform.position.y + ((coll.size.y * mapy)/100);

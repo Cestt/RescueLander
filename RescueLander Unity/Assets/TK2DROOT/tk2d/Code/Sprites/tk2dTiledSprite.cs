@@ -82,6 +82,17 @@ public class tk2dTiledSprite : tk2dBaseSprite
 		}
 	}
 	
+#if UNITY_EDITOR
+	void OnValidate()
+	{
+		MeshFilter meshFilter = GetComponent<MeshFilter>();
+		if (meshFilter != null)
+		{
+			meshFilter.sharedMesh = mesh;
+		}
+	}
+#endif
+	
 	new void Awake()
 	{
 		base.Awake();

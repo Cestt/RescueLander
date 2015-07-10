@@ -347,10 +347,12 @@ public class tk2dUIManager : MonoBehaviour
 
         if (inputEnabled)
         {
+            int touchCount = Input.touchCount;
             if (Input.touchCount > 0)
             {
-                foreach (Touch touch in Input.touches)
+                for (int touchIndex = 0; touchIndex < touchCount; ++touchIndex)
                 {
+                    Touch touch = Input.GetTouch(touchIndex);
                     if (touch.phase == TouchPhase.Began)
                     {
                         primaryTouch = new tk2dUITouch(touch);

@@ -138,6 +138,13 @@ public class tk2dSpriteDefinition
 	/// Array of UVs for sprite geometry, will match the position count.
 	/// </summary>
     public Vector2[] uvs;
+
+
+	/// <summary>
+	/// Array of normalized (0..1) space UVs matching above
+	/// </summary>
+    public Vector2[] normalizedUvs = new Vector2[0];
+
 	/// <summary>
 	/// Array of indices for sprite geometry.
 	/// </summary>

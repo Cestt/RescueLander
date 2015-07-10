@@ -482,7 +482,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 		{
 			BeginHeader("Atlas Settings");
 
+#if (UNITY_3_5 || UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9)
 			int[] allowedAtlasSizes = { 64, 128, 256, 512, 1024, 2048, 4096 };
+#else
+			int[] allowedAtlasSizes = { 64, 128, 256, 512, 1024, 2048, 4096, 8192 };
+#endif
 			string[] allowedAtlasSizesString = new string[allowedAtlasSizes.Length];
 			for (int i = 0; i < allowedAtlasSizes.Length; ++i)
 				allowedAtlasSizesString[i] = allowedAtlasSizes[i].ToString();

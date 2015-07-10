@@ -13,7 +13,12 @@ public class Cameraposition : MonoBehaviour {
 	public bool BoundedScroll = true;
 	// Use this for initialization
 	void Awake () {
-		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+
+		if(Application.loadedLevelName.Contains("Tuto")){
+			ship = GameObject.Find("101(Clone)");
+		}else{
+			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+		}
 		camera = this.GetComponent<tk2dCamera>();
 		cam = Camera.main;
 		shipPos = ship.transform;

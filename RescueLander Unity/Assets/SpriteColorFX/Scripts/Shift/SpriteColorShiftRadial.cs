@@ -62,7 +62,7 @@ namespace SpriteColorFX
 
     private void OnDisable()
     {
-      if (spriteRenderer != null && spriteRenderer.sharedMaterial != null && string.CompareOrdinal(spriteRenderer.sharedMaterial.name, @"Sprites/Default") == 0)
+      if (spriteRenderer != null && spriteRenderer.sharedMaterial != null && string.CompareOrdinal(spriteRenderer.sharedMaterial.name, @"Sprites/Default") != 0)
         spriteRenderer.sharedMaterial = new Material(Shader.Find(@"Sprites/Default"));
     }
 

@@ -56,62 +56,13 @@ Shader "Sprites/Sprite Color FX/Sprite Color Dissolve Border Color Lighten"
       #pragma fragment frag
       #pragma fragmentoption ARB_precision_hint_fastest
 	  #pragma multi_compile DUMMY PIXELSNAP_ON
-      #pragma target 2.0
+      #pragma target 3.0
 
 	  #include "UnityCG.cginc"
-      #include "../SpriteColorFXCG.cginc"
+	  #include "../SpriteColorFXCG.cginc"
 
-      struct appdata_t
-      {
-        float4 vertex   : POSITION;
-        float4 color    : COLOR;
-        float2 texcoord : TEXCOORD0;
-      };
+	  DISSOLVE_COLOR_FRAG(Lighten)
 
-      struct v2f
-      {
-        float4 vertex   : SV_POSITION;
-        fixed4 color    : COLOR;
-        fixed2 texcoord : TEXCOORD0;
-      };
-
-      uniform fixed4 _Color;
-
-      v2f vert(appdata_t i)
-      {
-        v2f o;
-        o.vertex = mul(UNITY_MATRIX_MVP, i.vertex);
-        o.texcoord = i.texcoord;
-        o.color = i.color * _Color;
-#ifdef PIXELSNAP_ON
-        o.vertex = UnityPixelSnap(o.vertex);
-#endif
-
-        return o;
-      }
-
-      uniform sampler2D _MainTex;
-      uniform sampler2D _DissolveTex;
-
-      uniform float _DissolveAmount;
-      uniform float _DissolveLineWitdh;
-      uniform float4 _DissolveLineColor;
-	  uniform float _DissolveUVScale;
-      uniform float _DissolveInverseOne;
-      uniform float _DissolveInverseTwo;
-
-      float4 frag(v2f i) : COLOR
-      {
-		float4 pixel = tex2D(_MainTex, i.texcoord) * i.color;
-        
-		float4 dissolve = _DissolveInverseOne - tex2D(_DissolveTex, i.texcoord * _DissolveUVScale) * _DissolveInverseTwo;
-
-        int isClear = int(dissolve.r + _DissolveAmount);
-
-		float3 border = lerp(0.0, max(_DissolveLineColor, pixel.rgb), isClear);
-
-		return float4(lerp(border, pixel.rgb, int(dissolve.r + _DissolveAmount - _DissolveLineWitdh)) * pixel.a, lerp(0.0, 1.0, isClear) * pixel.a);
-	  }
 	  ENDCG
 	}
   }

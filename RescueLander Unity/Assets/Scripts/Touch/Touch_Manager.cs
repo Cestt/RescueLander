@@ -1,5 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
+using Soomla.Store;
+using System;
+
 
 public class Touch_Manager : MonoBehaviour {
 	RuntimePlatform platform = Application.platform;
@@ -8,7 +14,7 @@ public class Touch_Manager : MonoBehaviour {
 	public Camera uicamera;
 	[HideInInspector]
 	public bool paused;
-	private GameObject ship;
+	public GameObject ship;
 	private Rigidbody2D rigid;
 	public GameObject uiColumnExtended;
 	private Animation animation;
@@ -24,26 +30,105 @@ public class Touch_Manager : MonoBehaviour {
 	private FacebookSocial faceBook;
 	private string selectedZone = "A";
 	private Color_Set colorSet;
-	private SpriteColorFX.SpriteColorTintMask3 colorChange;
-	public GameObject ShipGaraje;
-
-
+	private SpriteColorFX.SpriteColorMasks3 colorChange;
+	private GameObject ShipGaraje;
+	private PowerUp_Manager powerManager;
+	private Garaje_Manager garage_manager;
+	private Coin_Manager coin_manager;
+	private Social_Manager socialManager;
+	private GameObject PUilustration;
+	private GameObject pauseText;
+	private Ads ads;
+	private GameObject check;
+	private GameObject options;
+	private bool levelEnable = true;
+	private tk2dUIToggleButton[] buttonsPaint = new tk2dUIToggleButton[2];
+	private tk2dUIToggleButton[] buttonsGarage = new tk2dUIToggleButton[3];
+	private tk2dUIToggleButton[] buttonsPowerUps = new tk2dUIToggleButton[3];
+	private tk2dUIToggleButton[] buttonsShips = new tk2dUIToggleButton[7];
+	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
+	[HideInInspector]
+	public GameObject actualPrompt;
+	public int adLimit = 0;
 
 
 	void Awake(){
-		if(uiColumnExtended != null){
-			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+		uicameraGameobject = GameObject.Find("UI_Camera");
+		adLimit = 0;
+		if(Application.loadedLevelName != "Menu"){
+			uiColumnExtended = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/UIBase_RightCol/UIBase_RightCol_Extended").gameObject;
+			if(Application.loadedLevelName.Contains("Tuto")){
+				if(Application.loadedLevelName == "Tuto_3"){
+					animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
+				}
+				ship = GameObject.Find("101(Clone)");
+			}else{
+				ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+				pauseText = uicameraGameobject.transform.FindChild("Anchor (LowerCenter)/Paused").gameObject;
+				animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
+				animators.Add(GameObject.Find("Astronaut_02").GetComponent<tk2dSpriteAnimator>());
+				animators.Add(GameObject.Find("Astronaut_03").GetComponent<tk2dSpriteAnimator>());
+
+			}
+
 			rigid = ship.GetComponent<Rigidbody2D>();
 			animation = uiColumnExtended.GetComponent<Animation>();
+			sounds = uiColumnExtended.transform.FindChild("Sound_Button").gameObject;
+			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
+			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
+			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
+
+			animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
+
+			if(!Application.loadedLevelName.Contains("Tuto"))
+			foreach (tk2dSpriteAnimator animat in GameObject.Find("Coins").GetComponentsInChildren<tk2dSpriteAnimator>())
+				animators.Add(animat);
+		}else{
+		
+			options = uicameraGameobject.transform.FindChild("Options_Menu").gameObject;
+			sounds = options.transform.FindChild("Shop_Bg_01/Sound_Button").gameObject;
+			music = options.transform.FindChild("Shop_Bg_01/Music_Button").gameObject;
+			check = options.transform.FindChild("Shop_Bg_01/Invert Rotation/Check").gameObject;
+			if(dataManger.manager.inverted){
+				check.SetActive(true);
+			}else{
+				check.SetActive(false);
+			}
+
 		}
-		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorTintMask3>();
+		if(!Application.loadedLevelName.Contains("Tuto"))
+		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
+		ads = GameObject.Find("Data Manager").GetComponent<Ads>();
+		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
+		PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
+		garage_manager = GetComponent<Garaje_Manager>();
+		powerManager = GetComponent<PowerUp_Manager>();
+		socialManager = GetComponent<Social_Manager>();
 		colorSet = GetComponent<Color_Set>();
-		uicameraGameobject = GameObject.Find("UI_Camera");
+		ShipGaraje = uicameraGameobject.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
+		buttonsPaint[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/A_Button").GetComponent<tk2dUIToggleButton>();
+		buttonsPaint[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/B_Button").GetComponent<tk2dUIToggleButton>();
+		buttonsGarage[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/ShipsButton").GetComponent<tk2dUIToggleButton>();
+		buttonsGarage[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/PowerUps_Button").GetComponent<tk2dUIToggleButton>();
+		buttonsGarage[2] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/Coins_Button").GetComponent<tk2dUIToggleButton>();
+		buttonsPowerUps[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Shield").GetComponent<tk2dUIToggleButton>();
+		buttonsPowerUps[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Fuel").GetComponent<tk2dUIToggleButton>();
+		buttonsPowerUps[2] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Magnet").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Ship01").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Taboo").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[2] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_369").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[3] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Box").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[4] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_UFLO").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[5] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Mush").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[6] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Bow").GetComponent<tk2dUIToggleButton>();
+		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
 		faceBook = GetComponent<FacebookSocial>();
 
+
 	}
+
 
 
 
@@ -65,13 +150,30 @@ public class Touch_Manager : MonoBehaviour {
 						
 						switch(hit.collider.name ){
 						case "Play" :
+
 							forward = true;
-							if(IsInvoking("MoveCamera")){
-								CancelInvoke("MoveCamera");
-								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
-							}else{
-								InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+							if(levelEnable){
+
+								if(dataManger.manager.tutorial >= 4){
+									if(IsInvoking("MoveCamera")){
+										CancelInvoke("MoveCamera");
+										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									}else{
+										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									}
+									if(PlayerPrefs.GetInt("Garaje") == 0){
+										actualPrompt = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Garage").gameObject;
+										actualPrompt.SetActive(true);
+										GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+										PlayerPrefs.SetInt("Garaje",1);
+									}
+
+								}else{
+									Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
+								}
 							}
+
+
 							
 							break;	
 						case "Back_Button" :
@@ -85,42 +187,58 @@ public class Touch_Manager : MonoBehaviour {
 							
 							break;	
 						case "Pause_Button" :
-							Pause(hit.transform.gameObject);
+							Pause(hit.transform.gameObject,false);
+							if (!dataManger.manager.Music)
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+							if (!dataManger.manager.Sounds)
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 							break;
 						case "Retry_Button" :
 							dataManger.manager.Save(false);
+							dataManger.manager.partidas++;
+							if(dataManger.manager.partidas >= 3){
+								dataManger.manager.partidas = 0;
+								ads.LaunchInterstital();
+							}
 							Application.LoadLevel (Application.loadedLevel);
 							break;	
 						case "Levels_Button" :
 							Application.LoadLevel ("Menu");
-							dataManger.manager.Camposition = "Forward";
+							if(dataManger.manager.tutorial >= 3){
+								dataManger.manager.Camposition = "Forward";
+							}
+							dataManger.manager.Save(false);
 							break;
 						case "Sound_Button" :
 							if(dataManger.manager.Sounds){
 								dataManger.manager.Sounds = false;
-								sounds.GetComponent<tk2dSprite>().SetSprite("VolumeIco_Off");
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 								Debug.Log("Sound off");
 							}else{
 								dataManger.manager.Sounds = true;
-								sounds.GetComponent<tk2dSprite>().SetSprite("VolumeIco_On");
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_On");
 								Debug.Log("Sound on");
 							}
 							break;
 						case "Music_Button" :
 							if(dataManger.manager.Music){
 								dataManger.manager.Music = false;
-								music.GetComponent<tk2dSprite>().SetSprite("MusciIco_Off");
+								dataManger.manager.GetComponent<AudioSource>().Pause();
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
 								Debug.Log("Music off");
 							}else{
 								dataManger.manager.Music = true;
-								music.GetComponent<tk2dSprite>().SetSprite("MusciIco_On");
+								dataManger.manager.GetComponent<AudioSource>().Play();
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_On");
 								Debug.Log("Music on");
 							}
 							break;
-							
-						case "NextLvl_Button" :
-							Application.LoadLevel("Menu");
-							dataManger.manager.Camposition = "Forward";
+						
+						case "Next_Button" :
+							int Level = dataManger.manager.actualLevel;
+							dataManger.manager.actualLevel ++;
+							dataManger.manager.Save(false);
+							Application.LoadLevel("Level_"+(Level + 1));
 							break;
 						case "Share_Button" :
 							share.ShareScreenshot();
@@ -128,46 +246,427 @@ public class Touch_Manager : MonoBehaviour {
 						case "Social Media Buttons" :
 							faceBook.FBLogin();
 							break;
-						case "Button_Garaje" :
+						case "Button_Garage" :
 							Garaje(true);
 							break;
 						case "Exit_Button" :
 							dataManger.manager.Save(false);
 							Garaje(false);
+							if(Application.loadedLevelName == "Menu"){
+								options.SetActive(false);
+							}
+
+								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							if(actualPrompt != null)
+								actualPrompt.SetActive(false);
+
+							
+							levelEnable = true;
 							break;
 						case "A_Button" :
 							selectedZone = "A";
+							if (buttonsPaint[0].IsOn)
+								buttonsPaint[0].IsOn = false;
+							buttonsPaint[1].IsOn = false;
 							Debug.Log("Zone A selected");
 							break;
 						case "B_Button" :
 							selectedZone = "B";
+							buttonsPaint[0].IsOn = false;
+							if (buttonsPaint[1].IsOn){
+								buttonsPaint[1].IsOn = false;
+							}
 							Debug.Log("Zone B selected");
+						break;
+						case "PowerUp_Shield" :
+							if (!paused){
+								if(dataManger.manager.shieldPowerUps >= 1 & Input.touchCount == 1){
+									powerManager.PowerUp("Shield");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
+								}else if(adLimit < 1){
+								
+
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);
+								}
+							}
+							break;
+						case "PowerUp_Magnet" :
+							if (!paused){
+								if(dataManger.manager.magnetPowerUps >= 1 & Input.touchCount == 1){
+									powerManager.PowerUp("Magnet");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
+								}else  if(adLimit < 1 & Input.touchCount == 1){
+
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);
+								}
+							}
+							break;
+						case "PowerUp_Fuel" :
+							if (!paused){
+								if(dataManger.manager.fuelPowerUps >= 1 ){
+									powerManager.PowerUp("Fuel");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
+								}else  if(adLimit < 1){
+								
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);
+								}
+							}
+							break;
+						case "Button":
+							adLimit++;
+							switch(hit.transform.parent.name.Substring(11)){
+							case "Shield":
+								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
+								ads.Launch("Shield","Rewarded");
+								break;
+							case "Magnet":
+								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
+								ads.Launch("Magnet","Rewarded");
+								break;
+							case "Fuel":
+								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
+								ads.Launch("Fuel","Rewarded");
+								break;
+								
+							}
+							break;
+						case "GarageHeader_Button" :
+							garage_manager.LayoutChanger("Paint");
+							buttonsGarage[0].IsOn = false;
+							buttonsGarage[1].IsOn = false;
+							buttonsGarage[2].IsOn = false;
+							break;
+						case "ShipsButton" :
+							garage_manager.LayoutChanger("Ships");
+							if (buttonsGarage[0].IsOn)
+								buttonsGarage[0].IsOn = false;
+							buttonsGarage[1].IsOn = false;
+							buttonsGarage[2].IsOn = false;
+							break;
+						case "PowerUps_Button" :
+							garage_manager.LayoutChanger("PowerUps");
+							buttonsGarage[0].IsOn = false;
+							if (buttonsGarage[1].IsOn)
+								buttonsGarage[1].IsOn = false;
+							buttonsGarage[2].IsOn = false;
+							break;
+						case "Coins_Button" :
+							garage_manager.LayoutChanger("Coins");
+							buttonsGarage[0].IsOn = false;
+							buttonsGarage[1].IsOn = false;
+							if (buttonsGarage[2].IsOn)
+								buttonsGarage[2].IsOn = false;
+							break;
+						case "Button_Ship01" :
+							if(dataManger.manager.shipUnlocks.Contains("Ship01")){
+								dataManger.manager.actualShip = "Ship01";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Ship01");
+							}else{
+								colorSet.SpriteSet(false,"Ship01");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 0 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_369" :
+							if(dataManger.manager.shipUnlocks.Contains("369")){
+								dataManger.manager.actualShip = "369";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"369");
+							}else{
+								colorSet.SpriteSet(false,"369");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 2 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_Taboo" :
+							if(dataManger.manager.shipUnlocks.Contains("Taboo")){
+								dataManger.manager.actualShip = "Taboo";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Taboo");
+							}else{
+								colorSet.SpriteSet(false,"Taboo");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 1 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_UFLO" :
+							if(dataManger.manager.shipUnlocks.Contains("UFLO")){
+								dataManger.manager.actualShip = "UFLO";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"UFLO");
+							}else{
+								colorSet.SpriteSet(false,"UFLO");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 4 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_Box" :
+							if(dataManger.manager.shipUnlocks.Contains("Box")){
+								dataManger.manager.actualShip = "Box";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Box");
+							}else{
+								colorSet.SpriteSet(false,"Box");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 3 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_Mush" :
+							if(dataManger.manager.shipUnlocks.Contains("Mush")){
+								dataManger.manager.actualShip = "Mush";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Mush");
+							}else{
+								colorSet.SpriteSet(false,"Mush");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 5 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_Bow" :
+							if(dataManger.manager.shipUnlocks.Contains("Bow")){
+								dataManger.manager.actualShip = "Bow";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Bow");
+							}else{
+								colorSet.SpriteSet(false,"Bow");
+							}
+							for (int i=0; i < 7; i++){
+								if (i == 6 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_Buy" :
+							if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
+								Value value = hit.collider.gameObject.GetComponent<Value>();
+								if(value == null & hit.transform.parent.name.Contains("IAP")){
+									if(coin_manager.Compra(0,"IAP",hit.transform.parent.name)){
+
+									}
+								}
+								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
+									if(value._Type == "Ship" || value._Type == "World"){
+										Destroy(hit.collider.gameObject);
+									}
+									Debug.Log("Comprado " + hit.transform.parent.name.Substring(7));
+									//ACHIEVEMENT: 
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBA", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBA",success);
+									});
+								}else{
+									Debug.Log("Algo falla joder");
+								}
+							}
+							break;
+						case "Cheat" :
+							dataManger.manager.coins += 50000;
+							dataManger.manager.Save(false);
+							break;
+						case "Button_Shield" :
+							if(PUilustration != null){
+								PUilustration.SetActive(false);
+							}
+							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
+							PUilustration.SetActive(true);
+							if (buttonsPowerUps[0].IsOn)
+								buttonsPowerUps[0].IsOn = false;
+							buttonsPowerUps[1].IsOn = false;
+							buttonsPowerUps[2].IsOn = false;
+							break;
+							
+						case "Button_Magnet" :
+							if(PUilustration != null){
+								PUilustration.SetActive(false);
+							}
+							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Magnet").gameObject;
+							PUilustration.SetActive(true);
+							buttonsPowerUps[0].IsOn = false;
+							buttonsPowerUps[1].IsOn = false;
+							if (buttonsPowerUps[2].IsOn)
+								buttonsPowerUps[2].IsOn = false;
+							break;
+							
+						case "Button_Fuel" :
+							if(PUilustration != null){
+								PUilustration.SetActive(false);
+							}
+							PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Fuel").gameObject;
+							PUilustration.SetActive(true);
+							buttonsPowerUps[0].IsOn = false;
+							if (buttonsPowerUps[1].IsOn)
+								buttonsPowerUps[1].IsOn = false;
+							buttonsPowerUps[2].IsOn = false;
+							break;
+						
+						case "Check_Frame" :
+							dataManger.manager.inverted = !dataManger.manager.inverted;
+							if(dataManger.manager.inverted){
+								check.SetActive(true);
+							}else{
+								check.SetActive(false);
+							}
+							dataManger.manager.Save(false);
+							break;	
+						case "Options_Button" :
+							options.SetActive(true);
+							if (!dataManger.manager.Music)
+								music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+							if (!dataManger.manager.Sounds)
+								sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
+							levelEnable = false;
+							break;
+						case "GooglePlayButton":
+							// authenticate user:
+							Social.localUser.Authenticate((bool success) => {
+								socialManager.Check("Login",success);
+							});
+							break;
+						case "LeaderboardButton":
+							// show leaderboard UI
+							Social.ShowLeaderboardUI();
+							break;
+						case "AchievmentsButton":
+							// show achievements UI
+							Social.ShowAchievementsUI();
+							break;	
+						case "FeedbackButton":
+							string email = "info@evolvegames.es";
+							string subject = MyEscapeURL("FeedBack Rescue Lander");
+							string body = MyEscapeURL("");
+							
+							Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
+						
+							break;
+						case "RateUsButton":
+							if (platform == RuntimePlatform.Android){
+								Application.OpenURL("market://details?id=com.EvolveGames.RescueLander");
+							}
+							else if (platform == RuntimePlatform.IPhonePlayer){
+								Application.OpenURL("itms-apps://itunes.apple.com/app/idYOUR_ID");
+							}
+							break;
+						case "MorePowerUps_Button":
+							Garaje(true);
+							garage_manager.LayoutChanger("PowerUps");
+							break;	
+							
+						case "SkipButton":
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+
+							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(true);
+							break;
+						case "Button_Later":
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(false);
+							break;
+						case "Button_Never":
+							dataManger.manager.tutorial = 4;
+							dataManger.manager.Save(false);
+							Application.LoadLevel("Menu");
+							break;
+						case "MoreCoins_Button":
+							Garaje(true);
+							garage_manager.LayoutChanger("Coins");
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							actualPrompt.SetActive(false);
+							break;
+						case "HelpButton":
+							actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Help").gameObject;
+							actualPrompt.SetActive(true);
+							break;	
+						case "FacebookButton":
+							Application.OpenURL("https://www.facebook.com/EvolveGames.dev");
+							break;
+						case "TwitterButton":
+							Application.OpenURL("https://twitter.com/EvolveGames_");
+							break;
+						case "Reset_Button" :
+
+							Application.LoadLevel (Application.loadedLevel);
 							break;
 						default :
-							
+
 							break;
 							
 						}
-						if(hit.collider.tag == "Level_Ico"){
+						if(hit.collider.tag == "Level_Ico" & levelEnable){
 							string tempString = hit.collider.name.Substring(6);
 							int tempInt = int.Parse(tempString);
-							
+							Debug.Log("Clicked Level: "+tempInt);
 							if(dataManger.manager.unlocks >= tempInt){
+								uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
 								dataManger.manager.actualLevel = tempInt;
-								Debug.Log("Loading Level: " + tempInt);
-								Application.LoadLevel("Level_"+tempInt);
+								StartCoroutine(LoadLevelAsync(tempInt));
+								levelEnable = false;
 							}
 						}
 						if(hit.collider.name.Contains("Color")){
 							if(hit.collider.gameObject.GetComponent<Color_Enabled>().enabled == true){
 								Color colorApply = hit.collider.gameObject.GetComponentInChildren<tk2dSprite>().color;
+								bool changeColor = false;
 								if(selectedZone == "A"){
 									colorChange.colorMaskRed = colorApply;
 									colorSet.ColorSet(colorApply,"A");
+									changeColor = true;
 								}
 								if(selectedZone == "B"){
 									colorChange.colorMaskGreen = colorApply;
 									colorSet.ColorSet(colorApply,"B");
+									changeColor = true;
+								}
+								dataManger.manager.Save(false);
+								//ACHIEVEMENT
+								if (changeColor){
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBQ", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBQ",success);
+									});
 								}
 							}
 							
@@ -192,16 +691,31 @@ public class Touch_Manager : MonoBehaviour {
 				if (Physics.Raycast(ray.origin,ray.direction * 100, out hit) 
 				    || Physics.Raycast(ray2.origin,ray.direction * 100, out hit)) {
 		
-					Debug.Log("Hit");
 
 					switch(hit.collider.name ){
 					case "Play" :
 						forward = true;
-						if(IsInvoking("MoveCamera")){
-							CancelInvoke("MoveCamera");
-							InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
-						}else{
-							InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+						if(levelEnable){
+
+							if(dataManger.manager.tutorial >= 4){
+								if(PlayerPrefs.GetInt("Garaje") == 0){
+									actualPrompt = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Garage").gameObject;
+									actualPrompt.SetActive(true);
+									GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									PlayerPrefs.SetInt("Garaje",1);
+									PlayerPrefs.Save();
+								}else{
+									if(IsInvoking("MoveCamera")){
+										CancelInvoke("MoveCamera");
+										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									}else{
+										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+									}
+								}
+
+							}else{
+								Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
+							}
 						}
 
 						break;	
@@ -216,41 +730,57 @@ public class Touch_Manager : MonoBehaviour {
 						
 						break;	
 					case "Pause_Button" :
-						Pause(hit.transform.gameObject);
+						Pause(hit.transform.gameObject,false);
+						if (!dataManger.manager.Music)
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+						if (!dataManger.manager.Sounds)
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 						break;
 					case "Retry_Button" :
 						dataManger.manager.Save(false);
+						dataManger.manager.partidas++;
+						if(dataManger.manager.partidas >= 3){
+							dataManger.manager.partidas = 0;
+							ads.LaunchInterstital();
+						}
 						Application.LoadLevel (Application.loadedLevel);
 						break;	
 					case "Levels_Button" :
 						Application.LoadLevel ("Menu");
-						dataManger.manager.Camposition = "Forward";
+						if(dataManger.manager.tutorial >= 3){
+							dataManger.manager.Camposition = "Forward";
+						}
+						dataManger.manager.Save(false);
 						break;
 					case "Sound_Button" :
 						if(dataManger.manager.Sounds){
 							dataManger.manager.Sounds = false;
-							sounds.GetComponent<tk2dSprite>().SetSprite("VolumeIco_Off");
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
 							Debug.Log("Sound off");
 						}else{
 							dataManger.manager.Sounds = true;
-							sounds.GetComponent<tk2dSprite>().SetSprite("VolumeIco_On");
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_On");
 							Debug.Log("Sound on");
 						}
 						break;
 					case "Music_Button" :
 						if(dataManger.manager.Music){
 							dataManger.manager.Music = false;
-							music.GetComponent<tk2dSprite>().SetSprite("MusciIco_Off");
+							dataManger.manager.GetComponent<AudioSource>().Pause();
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
 							Debug.Log("Music off");
 						}else{
 							dataManger.manager.Music = true;
-							music.GetComponent<tk2dSprite>().SetSprite("MusciIco_On");
+							dataManger.manager.GetComponent<AudioSource>().Play();
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_On");
 							Debug.Log("Music on");
 						}
 						break;
-					case "NextLvl_Button" :
-						Application.LoadLevel("Menu");
-						dataManger.manager.Camposition = "Forward";
+					case "Next_Button" :
+						int Level = dataManger.manager.actualLevel;
+						dataManger.manager.actualLevel ++;
+						dataManger.manager.Save(false);
+						Application.LoadLevel("Level_"+(Level + 1));
 						break;
 					case "Share_Button" :
 						share.ShareScreenshot();
@@ -259,37 +789,392 @@ public class Touch_Manager : MonoBehaviour {
 					case "Social Media Buttons" :
 						faceBook.FBLogin();
 						break;
-					case "Button_Garaje" :
+					case "Button_Garage" :
 						Garaje(true);
 						break;
 					case "Exit_Button" :
 						Garaje(false);
 						dataManger.manager.Save(false);
+						if(Application.loadedLevelName == "Menu"){
+							options.SetActive(false);
+						}
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+						if(actualPrompt != null)
+							actualPrompt.SetActive(false);
+						
+						levelEnable = true;
 						break;
 					case "A_Button" :
 						selectedZone = "A";
+						if (buttonsPaint[0].IsOn){
+							buttonsPaint[0].IsOn = false;
+						}
+						buttonsPaint[1].IsOn = false;
 						Debug.Log("Zone A selected");
 						break;
 					case "B_Button" :
 						selectedZone = "B";
+						buttonsPaint[0].IsOn = false;
+						if (buttonsPaint[1].IsOn){
+							buttonsPaint[1].IsOn = false;
+						}
 						Debug.Log("Zone B selected");
+						break;
+					case "PowerUp_Shield" :
+						if (!paused){
+							if(dataManger.manager.shieldPowerUps >= 1){
+								powerManager.PowerUp("Shield");
+
+							}else{
+								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
+								actualPrompt.SetActive(true);
+								Pause(null,false);
+							}
+						}
+						break;
+					case "PowerUp_Magnet" :
+						if (!paused){
+							if(dataManger.manager.magnetPowerUps >= 1 & Input.touchCount == 1){
+								powerManager.PowerUp("Magnet");
+
+							}else{
+								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
+								actualPrompt.SetActive(true);
+								Pause(null,false);
+							}
+						}
+						break;
+					case "PowerUp_Fuel" :
+						if (!paused){
+							if(dataManger.manager.fuelPowerUps >= 1 ){
+								powerManager.PowerUp("Fuel");
+
+							}else{
+								Debug.Log("PU_Global");
+								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+								actualPrompt.SetActive(true);
+								Pause(null,false);
+							}
+						}
+						break;
+					case "Button":
+						
+						switch(hit.transform.parent.name.Substring(11)){
+
+						case "Shield":
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
+							ads.Launch("Shield","Rewarded");
+								break;
+						case "Magnet":
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
+							ads.Launch("Magnet","Rewarded");
+							break;
+						case "Fuel":
+
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
+							ads.Launch("Fuel","Rewarded");
+							break;
+
+						}
+						break;
+					case "GarageHeader_Button" :
+						garage_manager.LayoutChanger("Paint");
+						buttonsGarage[0].IsOn = false;
+						buttonsGarage[1].IsOn = false;
+						buttonsGarage[2].IsOn = false;
+						break;
+					case "ShipsButton" :
+						garage_manager.LayoutChanger("Ships");
+						if (buttonsGarage[0].IsOn)
+							buttonsGarage[0].IsOn = false;
+						buttonsGarage[1].IsOn = false;
+						buttonsGarage[2].IsOn = false;
+						break;
+					case "PowerUps_Button" :
+						garage_manager.LayoutChanger("PowerUps");
+						buttonsGarage[0].IsOn = false;
+						if (buttonsGarage[1].IsOn)
+							buttonsGarage[1].IsOn = false;
+						buttonsGarage[2].IsOn = false;
+						break;
+					case "Coins_Button" :
+						garage_manager.LayoutChanger("Coins");
+						buttonsGarage[0].IsOn = false;
+						buttonsGarage[1].IsOn = false;
+						if (buttonsGarage[2].IsOn)
+							buttonsGarage[2].IsOn = false;
+						break;
+					case "Button_Ship01" :
+						if(dataManger.manager.shipUnlocks.Contains("Ship01")){
+							dataManger.manager.actualShip = "Ship01";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"Ship01");
+						}else{
+							colorSet.SpriteSet(false,"Ship01");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 0 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_369" :
+						if(dataManger.manager.shipUnlocks.Contains("369")){
+							dataManger.manager.actualShip = "369";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"369");
+						}else{
+							colorSet.SpriteSet(false,"369");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 2 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_Taboo" :
+						if(dataManger.manager.shipUnlocks.Contains("Taboo")){
+							dataManger.manager.actualShip = "Taboo";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"Taboo");
+						}else{
+							colorSet.SpriteSet(false,"Taboo");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 1 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_UFLO" :
+						if(dataManger.manager.shipUnlocks.Contains("UFLO")){
+							dataManger.manager.actualShip = "UFLO";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"UFLO");
+						}else{
+							colorSet.SpriteSet(false,"UFLO");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 4 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_Box" :
+						if(dataManger.manager.shipUnlocks.Contains("Box")){
+							dataManger.manager.actualShip = "Box";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"Box");
+						}else{
+							colorSet.SpriteSet(false,"Box");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 3 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_Mush" :
+						if(dataManger.manager.shipUnlocks.Contains("Mush")){
+							dataManger.manager.actualShip = "Mush";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"Mush");
+						}else{
+							colorSet.SpriteSet(false,"Mush");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 5 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_Bow" :
+						if(dataManger.manager.shipUnlocks.Contains("Bow")){
+							dataManger.manager.actualShip = "Bow";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"Bow");
+						}else{
+							colorSet.SpriteSet(false,"Bow");
+						}
+						for (int i=0; i < 7; i++){
+							if (i == 6 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_Buy" :
+						if(hit.collider.transform.FindChild("Button_Buy_Down").gameObject.activeInHierarchy){
+							Value value = hit.collider.gameObject.GetComponent<Value>();
+							if(value == null & hit.transform.parent.name.Contains("IAP")){
+								if(coin_manager.Compra(0,"IAP",hit.transform.parent.name)){
+									
+								}else{
+									Debug.Log("Algo falla");
+								}
+							}
+							if(value != null)
+								if(coin_manager.Compra(value.Cost,value._Type,hit.transform.parent.name.Substring(7))){
+									if(value._Type == "Ship" || value._Type == "World"){
+										Destroy(hit.collider.gameObject);
+										if(value._Type == "Ship"){
+										hit.transform.parent.FindChild("Owned_Label").gameObject.SetActive(true);
+										}
+									}
+									Debug.Log("Comprado " + hit.transform.parent.name.Substring(7));
+								}else{
+									Debug.Log("Algo falla");
+								}
+						}
+						break;
+					case "Cheat" :
+						dataManger.manager.coins += 50000;
+						dataManger.manager.Save(false);
+						break;
+					case "Button_Shield" :
+						if(PUilustration != null){
+							PUilustration.SetActive(false);
+						}
+						PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
+						PUilustration.SetActive(true);
+						if (buttonsPowerUps[0].IsOn)
+							buttonsPowerUps[0].IsOn = false;
+						buttonsPowerUps[1].IsOn = false;
+						buttonsPowerUps[2].IsOn = false;
+						break;
+						
+					case "Button_Magnet" :
+						if(PUilustration != null){
+							PUilustration.SetActive(false);
+						}
+						PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Magnet").gameObject;
+						PUilustration.SetActive(true);
+						buttonsPowerUps[0].IsOn = false;
+						buttonsPowerUps[1].IsOn = false;
+						if (buttonsPowerUps[2].IsOn)
+							buttonsPowerUps[2].IsOn = false;
+						break;
+						
+					case "Button_Fuel" :
+						if(PUilustration != null){
+							PUilustration.SetActive(false);
+						}
+						PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Fuel").gameObject;
+						PUilustration.SetActive(true);
+						buttonsPowerUps[0].IsOn = false;
+						if (buttonsPowerUps[1].IsOn)
+							buttonsPowerUps[1].IsOn = false;
+						buttonsPowerUps[2].IsOn = false;
+						break;
+					case "Check_Frame" :
+						dataManger.manager.inverted = !dataManger.manager.inverted;
+						if(dataManger.manager.inverted){
+							check.SetActive(true);
+						}else{
+							check.SetActive(false);
+						}
+						dataManger.manager.Save(false);
+						break;
+
+					case "Options_Button" :
+						options.SetActive(true);
+						if (!dataManger.manager.Music)
+							music.GetComponentInChildren<tk2dSprite>().SetSprite("MusciIco_Off");
+						if (!dataManger.manager.Sounds)
+							sounds.GetComponentInChildren<tk2dSprite>().SetSprite("VolumeIco_Off");
+						levelEnable = false;
+						break;
+
+					case "GooglePlayButton":
+						// authenticate user:
+						Social.localUser.Authenticate((bool success) => {
+							socialManager.Check("Login",success);
+						});
+						break;
+					case "LeaderboardButton":
+						// show leaderboard UI
+						Social.ShowLeaderboardUI();
+						break;
+					case "AchievmentsButton":
+						// show achievements UI
+						Social.ShowAchievementsUI();
+						break;	
+					case "FeedbackButton":
+						string email = "info@evolvegames.es";
+						string subject = MyEscapeURL("FeedBack Rescue Lander");
+						string body = MyEscapeURL("");
+						
+						Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
+						
+						break;
+					case "MorePowerUps_Button":
+						Garaje(true);
+						garage_manager.LayoutChanger("PowerUps");
+						break;	
+					case "SkipButton":
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+						uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(true);
+						break;
+					case "Button_Later":
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+						uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(false);
+						break;
+					case "Button_Never":
+						dataManger.manager.tutorial = 4;
+						dataManger.manager.Save(false);
+						Application.LoadLevel("Menu");
+						break;
+					case "HelpButton":
+						actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Help").gameObject;
+						actualPrompt.SetActive(true);
+						break;	
+					case "MoreCoins_Button":
+						Garaje(true);
+						garage_manager.LayoutChanger("Coins");
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+						if(actualPrompt != null)
+							actualPrompt.SetActive(false);
+						break;
+					case "FacebookButton":
+						Application.OpenURL("https://www.facebook.com/EvolveGames.dev");
+						break;
+					case "TwitterButton":
+						Application.OpenURL("https://twitter.com/EvolveGames_");
+						break;
+						
+					case "Reset_Button" :
+						
+						Application.LoadLevel (Application.loadedLevel);
 						break;
 					default :
 						
 						break;
 						
 					}
-					if(hit.collider.tag == "Level_Ico"){
+					if(hit.collider.tag == "Level_Ico" & levelEnable){
 						string tempString = hit.collider.name.Substring(6);
 						int tempInt = int.Parse(tempString);
-						
+						Debug.Log("Clicked Level: "+tempInt);
 						if(dataManger.manager.unlocks >= tempInt){
+							uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
 							dataManger.manager.actualLevel = tempInt;
-							Debug.Log("Loading Level: " + tempInt);
-							Application.LoadLevel("Level_"+tempInt);
+							StartCoroutine(LoadLevelAsync(tempInt));
+							levelEnable = false;
 						}
 					}
-					if(hit.collider.name.Contains("Color")){
+					if(hit.collider.name== "Color_01"){
 						if(hit.collider.gameObject.GetComponent<Color_Enabled>().enabled == true){
 							Color colorApply = hit.collider.gameObject.GetComponentInChildren<tk2dSprite>().color;
 							if(selectedZone == "A"){
@@ -324,7 +1209,7 @@ public class Touch_Manager : MonoBehaviour {
 
 			}else{
 				if(paused){
-					Pause(null);
+					Pause(null,false);
 				}else{
 					Application.LoadLevel("Menu");
 				}
@@ -335,22 +1220,53 @@ public class Touch_Manager : MonoBehaviour {
 	}
 
 
-	void Pause(GameObject temp){
+	public bool Pause(GameObject temp, bool Ads){
+
 
 		if(!paused){
 			paused = true;
-			rigid.isKinematic = true;
-			animation["UIBase_RightCol_extended_UpDown"].speed = 1;
-			animation.Play("UIBase_RightCol_extended_UpDown");
- 			Debug.Log("Pause");
+			if(!Ads){
+				rigid.isKinematic = true;
+				animation["UIBase_RightCol_extended_UpDown"].speed = 1;
+				animation.Play("UIBase_RightCol_extended_UpDown");
+				if(!Application.loadedLevelName.Contains("Tuto"))
+				pauseText.SetActive(true);
+
+				for (int i=0; i< animators.Count; i++){
+					if (animators[i] != null)
+						animators[i].Pause();
+				}
+			}
+
+
+
+
+			return true;
 		}else{
 
 			paused = false;
-			rigid.isKinematic = false;
-			animation["UIBase_RightCol_extended_UpDown"].speed = -1;
-			animation.Play("UIBase_RightCol_extended_UpDown");
-			animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
-			Debug.Log("UnPause");
+			if(!Ads){
+				rigid.isKinematic = false;
+				rigid.velocity = ship.GetComponent<Damage>().saveSpeed;
+				animation["UIBase_RightCol_extended_UpDown"].speed = -1;
+				animation.Play("UIBase_RightCol_extended_UpDown");
+				animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
+				if(!Application.loadedLevelName.Contains("Tuto"))
+					pauseText.SetActive(false);
+				
+				if(Application.loadedLevelName.Contains("Level")){
+					uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
+					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
+					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(false);
+				}
+				for (int i=0; i< animators.Count; i++){
+					if (animators[i] != null)
+						animators[i].Resume();
+				}
+			}
+
+			return false;
 		}
 	}
 
@@ -363,7 +1279,6 @@ public class Touch_Manager : MonoBehaviour {
 				CancelInvoke("MoveCamera");
 			}else{
 				Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position,tempPos,MenuSpeed*Time.fixedDeltaTime);
-				Debug.Log("MoveCamera");
 			}
 		}else{
 			tempPos.x = Camera.main.GetComponent<tk2dCamera>().nativeResolutionWidth/2;
@@ -371,7 +1286,7 @@ public class Touch_Manager : MonoBehaviour {
 				CancelInvoke("MoveCamera");
 			}else{
 				Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position,tempPos,MenuSpeed*Time.fixedDeltaTime);
-				Debug.Log("MoveCamera");
+
 			}
 		}
 
@@ -388,8 +1303,15 @@ public class Touch_Manager : MonoBehaviour {
 					Result = "Lose";
 					Lose.SetActive(false);
 				}
+			}else{
+				GameObject.Find("UI_Camera").transform.FindChild("Options_Menu").gameObject.SetActive(false);
+			}
+			if(actualPrompt != null){
+				actualPrompt.SetActive(false);
+				GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 			}
 			garaje.SetActive(true);
+			levelEnable = false;
 		}
 		if(!activate){
 			if(Application.loadedLevelName != "Menu"){
@@ -401,10 +1323,22 @@ public class Touch_Manager : MonoBehaviour {
 				}
 			}
 			garaje.SetActive(false);
+			levelEnable = true;
 			Result = null;
 		}
 
 
+	}
+
+	IEnumerator LoadLevelAsync(int Level){
+		AsyncOperation async = Application.LoadLevelAsync("Level_" + Level);
+		yield return async;
+		Debug.Log("Loading complete");
+	}
+
+	string MyEscapeURL (string url)
+	{
+		return WWW.EscapeURL(url).Replace("+","%20");
 	}
 
 

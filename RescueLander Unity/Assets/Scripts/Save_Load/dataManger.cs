@@ -4,6 +4,7 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Collections.Generic;
+using GooglePlayGames;
 
 public class dataManger : MonoBehaviour {
 
@@ -13,7 +14,9 @@ public class dataManger : MonoBehaviour {
 	[HideInInspector]
 	public int fuelPowerUps;
 	[HideInInspector]
-	public int lifePowerUps;
+	public int shieldPowerUps;
+	[HideInInspector]
+	public int magnetPowerUps;
 	[HideInInspector]
 	public string Camposition = "";
 	[HideInInspector]
@@ -28,7 +31,7 @@ public class dataManger : MonoBehaviour {
 	public Dictionary<string,int> stars = new Dictionary<string, int>();
 	[HideInInspector]
 	public Dictionary<string,int> scores = new Dictionary<string, int>();
-
+	[HideInInspector]
 	public string actualShip = "Ship01";
 	[HideInInspector]
 	public int totalStars;
@@ -47,9 +50,22 @@ public class dataManger : MonoBehaviour {
 	public float color2g;
 	[HideInInspector]
 	public float color2b;
-	public List<GameObject> Ships = new List<GameObject>();
+	private List<GameObject> Ships = new List<GameObject>();
 	[HideInInspector]
-	public List<bool> shipUnlocks = new List<bool>();
+	public List<string> shipUnlocks = new List<string>();
+	[HideInInspector]
+	public bool inverted;
+	[HideInInspector]
+	public Dictionary<string,string> socialPending = new Dictionary<string, string>();
+	[HideInInspector]
+	public int coinsSpend;
+	[HideInInspector]
+	public int coinsAcumulated;
+	//[HideInInspector]
+	public int tutorial = 1;
+	[HideInInspector]
+	public int partidas;
+
 
 	private GameObject temp;
 
@@ -57,7 +73,7 @@ public class dataManger : MonoBehaviour {
 
 	void Awake () {
 
-
+		Screen.sleepTimeout = SleepTimeout.SystemSetting;
 		if(manager == null){
 
 			manager = this;
@@ -72,8 +88,18 @@ public class dataManger : MonoBehaviour {
 		if(Application.loadedLevelName == "Menu"){
 			Initialize();
 		}
+		// recommended for debugging:
+		PlayGamesPlatform.DebugLogEnabled = true;
+		// Activate the Google Play Games platform
+		PlayGamesPlatform.Activate();
 
+		StartCoroutine("tryLogin");
+	}
+	private IEnumerator tryLogin(){
+		yield return null;
+		Social.localUser.Authenticate((bool success) => {
 
+		});
 	}
 
 	
@@ -101,15 +127,25 @@ public class dataManger : MonoBehaviour {
 			data.shipUnlocks = shipUnlocks;
 			data.coins = coins;
 			data.totalStars = totalStars;
+			data.fuelPowerUps = fuelPowerUps;
+			data.magnetPowerUps = magnetPowerUps;
+			data.shieldPowerUps = shieldPowerUps;
+			data.inverted = inverted;
+			data.tutorial = tutorial;
 			if(complete){
 				for(int i = 1; i <= levels; i++){
 					if(stars["Level_"+i] > data.stars["Level_"+i]){
+						//totalStars -= data.stars["Level_"+i];
 						data.stars["Level_"+i] = stars["Level_"+i];
+						//totalStars += stars["Level_"+i];
+						data.totalStars = totalStars;
 						Debug.Log("Save Stars");
 					}
 					if(scores["Level_"+i] > data.scores["Level_"+i]){
 						data.scores["Level_"+i] = scores["Level_"+i];
 						Debug.Log("Save Scores");
+					}else{
+						scores["Level_"+i] = data.scores["Level_"+i];
 					}
 					
 					
@@ -149,30 +185,38 @@ public class dataManger : MonoBehaviour {
 			shipUnlocks = data.shipUnlocks;
 			coins = data.coins;
 			totalStars = data.totalStars;
+			fuelPowerUps = data.fuelPowerUps;
+			magnetPowerUps = data.magnetPowerUps;
+			shieldPowerUps = data.shieldPowerUps;
+			inverted = data.inverted;
+			tutorial = data.tutorial;
 
-			Debug.Log("Data Unlocks: " + data.unlocks);
 
 			for(int i = 1; i<= levels ; i++){
 				stars["Level_"+i] = data.stars["Level_"+i];
 				scores["Level_"+i] = data.scores["Level_"+i];
 
 				temp = GameObject.Find("Level_"+i);
-				
+				Transform tempChild;
+				tempChild =  temp.transform.FindChild("Level_Score");
+				tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.score")," "
+				                                                + scores["Level_"+i].ToString());
 				if(i<=unlocks){
-					Transform tempChild =  temp.transform.FindChild("Level_Number");
+
+					tempChild =  temp.transform.FindChild("Level_Number");
 					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
 					for(int j = 1; j<=3; j++){
 						if(j<=stars["Level_"+i]){
-							tempChild =  temp.transform.FindChild("LevelStar"+j);
+							tempChild =  temp.transform.FindChild("LevelStar_"+j);
 							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
 						}
 						
 					}
 					tempChild =  temp.transform.FindChild("Level_Score");
-					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
+					tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.score")," "
+					                                                + scores["Level_"+i].ToString());
 				}
 			}
-
 			file.Close();
 
 		}
@@ -185,14 +229,23 @@ public class dataManger : MonoBehaviour {
 			Load();
 			
 		}else{
+			if(PlayerPrefs.GetInt("Ads") == null){
+				PlayerPrefs.SetInt("Ads",0);
+			}
+			if(PlayerPrefs.GetInt("Garaje") == null){
+				PlayerPrefs.SetInt("Garaje",0);
+			}
 
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
 			Data data = new Data();
-			
+			data.tutorial = 1;
 			data.unlocks = 1;
 			unlocks = data.unlocks;
+			tutorial = data.tutorial;
 			data.actualShip = actualShip;
+			shipUnlocks.Add("Ship01");
+			data.shipUnlocks = shipUnlocks;
 			for(int i = 1; i <= levels; i++){
 				data.stars.Add("Level_"+i,0);
 				data.scores.Add("Level_"+i,0);
@@ -230,7 +283,9 @@ class Data {
 	[HideInInspector]
 	public int fuelPowerUps;
 	[HideInInspector]
-	public int lifePowerUps;
+	public int shieldPowerUps;
+	[HideInInspector]
+	public int magnetPowerUps;
 	[HideInInspector]
 	public int unlocks;
 	[HideInInspector]
@@ -260,6 +315,15 @@ class Data {
 	[HideInInspector]
 	public float color2b;
 	[HideInInspector]
-	public List<bool> shipUnlocks = new List<bool>();
-
+	public List<string> shipUnlocks = new List<string>();
+	[HideInInspector]
+	public bool inverted;
+	[HideInInspector]
+	public Dictionary<string,string> socialPending = new Dictionary<string, string>();
+	[HideInInspector]
+	public int coinsSpend;
+	[HideInInspector]
+	public int coinsAcumulated;
+	[HideInInspector]
+	public int tutorial;
 }
