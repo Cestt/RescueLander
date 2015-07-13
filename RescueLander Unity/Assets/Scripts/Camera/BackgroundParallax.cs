@@ -9,8 +9,8 @@ public class BackgroundParallax : MonoBehaviour {
 	GameObject[] backB = new GameObject[3];
 	float posX;
 	float shipPosX;
-	public float velA = 1.5f;
-	public float velB = 1;
+	public float velA = 0.5f;
+	public float velB = 0.25f;
 	bool first;
 
 	void Awake () {
@@ -29,12 +29,13 @@ public class BackgroundParallax : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (first) {
-			posX = camera2D.transform.position.x;
-			shipPosX = ship.transform.position.x;
+			//posX = camera2D.transform.position.x;
+			//shipPosX = ship.transform.position.x;
+			posX = ship.transform.position.x;
 			first = false;
 			return;
 		}
-		float distX = camera2D.transform.position.x - posX;
+		/*float distX = camera2D.transform.position.x - posX;
 		float distShip = Mathf.Abs(ship.transform.position.x - camera2D.transform.position.x);
 		float distShipX = ship.transform.position.x - shipPosX;
 		if (distX != 0 & distShip < 200 & Mathf.Abs (distShipX) > 0.5f) {
@@ -49,6 +50,20 @@ public class BackgroundParallax : MonoBehaviour {
 			}
 		}
 		posX = camera2D.transform.position.x;
-		shipPosX = ship.transform.position.x;
+		shipPosX = ship.transform.position.x;*/
+		if (ship != null) {
+			float distX = ship.transform.position.x - posX;
+			if (distX != 0) {
+				for (int i=0; i<3; i++) {
+					backA [i].transform.localPosition = new Vector3 (backA [i].transform.localPosition.x - (distX * velA),
+				                                                 backA [i].transform.localPosition.y);
+				}
+				for (int i=0; i<3; i++) {
+					backB [i].transform.localPosition = new Vector3 (backB [i].transform.localPosition.x - (distX * velB),
+				                                                 backB [i].transform.localPosition.y);
+				}
+			}
+			posX = ship.transform.position.x;
+		}
 	}
 }
