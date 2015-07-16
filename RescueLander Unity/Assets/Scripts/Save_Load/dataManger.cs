@@ -166,10 +166,10 @@ public class dataManger : MonoBehaviour {
 	
 	public void Load(){
 
-		if(File.Exists(Application.persistentDataPath + "/data.jmm")){
+		if(File.Exists(Application.persistentDataPath + "/data.jmma")){
 
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(Application.persistentDataPath + "/data.jmm",FileMode.Open);
+			FileStream file = File.Open(Application.persistentDataPath + "/data.jmma",FileMode.Open);
 			Data data = (Data)bf.Deserialize(file);
 
 			unlocks = data.unlocks;
@@ -224,58 +224,144 @@ public class dataManger : MonoBehaviour {
 	}
 
 	public void Initialize(){
-		if(File.Exists(Application.persistentDataPath + "/data.jmm")){
+		if(File.Exists(Application.persistentDataPath + "/data.jmm") & File.Exists(Application.persistentDataPath + "/data.jmma")){
 			Debug.Log("File found");
 			Load();
 			
 		}else{
-			if(PlayerPrefs.GetInt("Ads") == null){
-				PlayerPrefs.SetInt("Ads",0);
-			}
-			if(PlayerPrefs.GetInt("Garaje") == null){
-				PlayerPrefs.SetInt("Garaje",0);
-			}
+			if(File.Exists(Application.persistentDataPath + "/data.jmm")){
+				BinaryFormatter bf = new BinaryFormatter();
+				FileStream file = File.Create(Application.persistentDataPath + "/data.jmma");
+				Data data = new Data();
+				file = File.Open(Application.persistentDataPath + "/data.jmm",FileMode.Open);
+				Data2 data2 = (Data2)bf.Deserialize(file);
+				data.tutorial= data2.tutorial;
+				data.unlocks = data2.unlocks;
+				data.Sounds = data2.Sounds;
+				data.Music = data2.Music;
+				data.actualShip = data2.actualShip;
+				data.coins = data2.coins;
+				data.coinsAcumulated = data2.coinsAcumulated;
+				data.coinsSpend = data2.coinsSpend;
+				data.color1b = data2.color1b;
+				data.color1g = data2.color1g;
+				data.color1r = data2.color1r;
+				data.color2b = data2.color2b;
+				data.color2g = data2.color2g;
+				data.color2r = data2.color2r;
+				data.fuelPowerUps = data2.fuelPowerUps;
+				data.shieldPowerUps = data2.shieldPowerUps;
+				data.magnetPowerUps = data2.magnetPowerUps;
+				data.inverted = data2.inverted;
+				data.scores = data2.scores;
+				data.shipUnlocks = data2.shipUnlocks;
+				data.socialPending = data2.socialPending;
+				data.stars = data2.stars;
+				data.totalStars = data2.totalStars;
+				bf.Serialize(file,data);
+				file.Close();
+				Load();
 
-			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
-			Data data = new Data();
-			data.tutorial = 1;
-			data.unlocks = 1;
-			unlocks = data.unlocks;
-			tutorial = data.tutorial;
-			data.actualShip = actualShip;
-			shipUnlocks.Add("Ship01");
-			data.shipUnlocks = shipUnlocks;
-			for(int i = 1; i <= levels; i++){
-				data.stars.Add("Level_"+i,0);
-				data.scores.Add("Level_"+i,0);
-				stars.Add("Level_"+i,0);
-				scores.Add("Level_"+i,0);
-
-
-				temp = GameObject.Find("Level_"+i);
-				if(i<=unlocks & temp!=null){
-					Transform tempChild =  temp.transform.FindChild("Level_Number");
-					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
-					for(int j = 1; j<=3; j++){
-						if(j<=stars["Level_"+i]){
-							tempChild =  temp.transform.FindChild("LevelStar"+j);
-							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+			}else{
+				if(PlayerPrefs.GetInt("Ads") == null){
+					PlayerPrefs.SetInt("Ads",0);
+				}
+				if(PlayerPrefs.GetInt("Garaje") == null){
+					PlayerPrefs.SetInt("Garaje",0);
+				}
+				
+				BinaryFormatter bf = new BinaryFormatter();
+				FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
+				Data data = new Data();
+				data.tutorial = 1;
+				data.unlocks = 1;
+				unlocks = data.unlocks;
+				tutorial = data.tutorial;
+				data.actualShip = actualShip;
+				shipUnlocks.Add("Ship01");
+				data.shipUnlocks = shipUnlocks;
+				for(int i = 1; i <= levels; i++){
+					data.stars.Add("Level_"+i,0);
+					data.scores.Add("Level_"+i,0);
+					stars.Add("Level_"+i,0);
+					scores.Add("Level_"+i,0);
+					
+					
+					temp = GameObject.Find("Level_"+i);
+					if(i<=unlocks & temp!=null){
+						Transform tempChild =  temp.transform.FindChild("Level_Number");
+						tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
+						for(int j = 1; j<=3; j++){
+							if(j<=stars["Level_"+i]){
+								tempChild =  temp.transform.FindChild("LevelStar"+j);
+								tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+							}
+							
 						}
+						tempChild =  temp.transform.FindChild("Level_Score");
+						tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
 						
 					}
-					tempChild =  temp.transform.FindChild("Level_Score");
-					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
-
+					
 				}
-
+				
+				bf.Serialize(file,data);
+				file.Close();
 			}
-			
-			bf.Serialize(file,data);
-			file.Close();
+
 		}
 
 	}
+}
+
+[Serializable]
+class Data2 {
+	[HideInInspector]
+	public int fuelPowerUps;
+	[HideInInspector]
+	public int shieldPowerUps;
+	[HideInInspector]
+	public int magnetPowerUps;
+	[HideInInspector]
+	public int unlocks;
+	[HideInInspector]
+	public string actualShip;
+	[HideInInspector]
+	public bool Sounds = true;
+	[HideInInspector]
+	public bool Music = true;
+	[HideInInspector]
+	public Dictionary<string,int> stars = new Dictionary<string, int>();
+	[HideInInspector]
+	public Dictionary<string,int> scores = new Dictionary<string, int>();
+	[HideInInspector]
+	public int totalStars;
+	[HideInInspector]
+	public int coins;
+	[HideInInspector]
+	public float color1r;
+	[HideInInspector]
+	public float color1g;
+	[HideInInspector]
+	public float color1b;
+	[HideInInspector]
+	public float color2r;
+	[HideInInspector]
+	public float color2g;
+	[HideInInspector]
+	public float color2b;
+	[HideInInspector]
+	public List<string> shipUnlocks = new List<string>();
+	[HideInInspector]
+	public bool inverted;
+	[HideInInspector]
+	public Dictionary<string,string> socialPending = new Dictionary<string, string>();
+	[HideInInspector]
+	public int coinsSpend;
+	[HideInInspector]
+	public int coinsAcumulated;
+	[HideInInspector]
+	public int tutorial;
 }
 
 [Serializable]
@@ -327,3 +413,4 @@ class Data {
 	[HideInInspector]
 	public int tutorial;
 }
+
