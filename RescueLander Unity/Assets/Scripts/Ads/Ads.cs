@@ -22,12 +22,19 @@ public class Ads : MonoBehaviour {
 
 	}
 	void OnLevelWasLoaded(int level) {
-		if(Application.loadedLevelName != "Menu"){
+		if (Application.loadedLevelName != "Menu") {
 
-			AdRequest request = new AdRequest.Builder().Build();
-			interstitial.LoadAd(request);
+			AdRequest request = new AdRequest.Builder ().Build ();
+			interstitial.LoadAd (request);
+
+		} else {
+			if (PlayerPrefs.GetInt ("Ads") == 1) {
+				GameObject.Find ("MoreCoins_Button").SetActive (false);
+			}
 		}
-
+		if (PlayerPrefs.GetInt ("Ads") == 1) {
+			GameObject.Find ("UI_Camera").transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Coins_Menu/NoAds_Panel").gameObject.SetActive(false);
+		}
 		
 	}
 	void Update(){

@@ -47,15 +47,19 @@ public class Touch_Manager : MonoBehaviour {
 	private tk2dUIToggleButton[] buttonsPowerUps = new tk2dUIToggleButton[3];
 	private tk2dUIToggleButton[] buttonsShips = new tk2dUIToggleButton[7];
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
+	private GameObject coinCount;
+	private bool backCoins = false;
 	[HideInInspector]
 	public GameObject actualPrompt;
 	public int adLimit = 0;
+
 
 
 	void Awake(){
 		uicameraGameobject = GameObject.Find("UI_Camera");
 		adLimit = 0;
 		if(Application.loadedLevelName != "Menu"){
+
 			uiColumnExtended = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/UIBase_RightCol/UIBase_RightCol_Extended").gameObject;
 			if(Application.loadedLevelName.Contains("Tuto")){
 				if(Application.loadedLevelName == "Tuto_3"){
@@ -68,7 +72,6 @@ public class Touch_Manager : MonoBehaviour {
 				animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_02").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_03").GetComponent<tk2dSpriteAnimator>());
-
 			}
 
 			rigid = ship.GetComponent<Rigidbody2D>();
@@ -77,7 +80,8 @@ public class Touch_Manager : MonoBehaviour {
 			music = uiColumnExtended.transform.FindChild("Music_Button").gameObject;
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
-
+			coinCount = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/CoinCount_Ico").gameObject;
+	
 			animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
 
 			if(!Application.loadedLevelName.Contains("Tuto"))
@@ -281,14 +285,29 @@ public class Touch_Manager : MonoBehaviour {
 						case "PowerUp_Shield" :
 							if (!paused){
 								if(dataManger.manager.shieldPowerUps >= 1 & Input.touchCount == 1){
+
+									if(adLimit < 1 & dataManger.manager.shieldPowerUps == 1){
+										uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+										actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
+										actualPrompt.SetActive(true);
+										Pause(null,false);
+									}
 									powerManager.PowerUp("Shield");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else if(adLimit < 1){
-								
-
+								}/*else if(adLimit < 1 & dataManger.manager.shieldPowerUps == 1 & Input.touchCount == 1){
+									powerManager.PowerUp("Shield");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);
+								}*/else if(adLimit <= 0 & Input.touchCount == 1){
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
 									actualPrompt.SetActive(true);
@@ -297,15 +316,32 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							break;
 						case "PowerUp_Magnet" :
+
 							if (!paused){
 								if(dataManger.manager.magnetPowerUps >= 1 & Input.touchCount == 1){
+
+									if(adLimit < 1 & dataManger.manager.magnetPowerUps == 1){
+										uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+										actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
+										actualPrompt.SetActive(true);
+										Pause(null,false);
+									}
 									powerManager.PowerUp("Magnet");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else  if(adLimit < 1 & Input.touchCount == 1){
-
+								}/*else  if(adLimit < 1 & Input.touchCount == 1 & dataManger.manager.magnetPowerUps == 1){
+									powerManager.PowerUp("Magnet");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);
+								}*/else if(adLimit <= 0 & Input.touchCount == 1){
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
 									actualPrompt.SetActive(true);
@@ -315,18 +351,34 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "PowerUp_Fuel" :
 							if (!paused){
-								if(dataManger.manager.fuelPowerUps >= 1 ){
+								if(dataManger.manager.fuelPowerUps >= 1 & Input.touchCount == 1){
+
+									if(adLimit < 1 & dataManger.manager.fuelPowerUps == 1){
+										uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+										actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+										actualPrompt.SetActive(true);
+										Pause(null,false);
+									}
 									powerManager.PowerUp("Fuel");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}else  if(adLimit < 1){
-								
+								}/*else  if(adLimit < 1 & dataManger.manager.fuelPowerUps == 1 & Input.touchCount == 1){
+									powerManager.PowerUp("Fuel");
+									//ACHIEVEMENT
+									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
+									});
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);
+								}*/else if(adLimit <= 0 & Input.touchCount == 1){
+									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+									actualPrompt.SetActive(true);
+									Pause(null,false);		
 								}
 							}
 							break;
@@ -822,7 +874,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "PowerUp_Shield" :
 						if (!paused){
-							if(dataManger.manager.shieldPowerUps >= 1){
+							if(dataManger.manager.shieldPowerUps > 1){
 								powerManager.PowerUp("Shield");
 
 							}else{
@@ -835,7 +887,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "PowerUp_Magnet" :
 						if (!paused){
-							if(dataManger.manager.magnetPowerUps >= 1 & Input.touchCount == 1){
+							if(dataManger.manager.magnetPowerUps > 1 & Input.touchCount == 1){
 								powerManager.PowerUp("Magnet");
 
 							}else{
@@ -848,7 +900,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "PowerUp_Fuel" :
 						if (!paused){
-							if(dataManger.manager.fuelPowerUps >= 1 ){
+							if(dataManger.manager.fuelPowerUps > 1 ){
 								powerManager.PowerUp("Fuel");
 
 							}else{
@@ -1211,12 +1263,15 @@ public class Touch_Manager : MonoBehaviour {
 				if(paused){
 					Pause(null,false);
 				}else{
-					Application.LoadLevel("Menu");
+					Pause(null,false);
 				}
 			}
 
 		}
-
+	
+		if (backCoins && !animation.IsPlaying("UIBase_RightCol_extended_UpDown")) {
+			coinCount.transform.localPosition = new Vector3 (72, coinCount.transform.localPosition.y);
+		}
 	}
 
 
@@ -1231,7 +1286,8 @@ public class Touch_Manager : MonoBehaviour {
 				animation.Play("UIBase_RightCol_extended_UpDown");
 				if(!Application.loadedLevelName.Contains("Tuto"))
 				pauseText.SetActive(true);
-
+				backCoins = false;
+				coinCount.transform.localPosition = new Vector3(-72,coinCount.transform.localPosition.y);
 				for (int i=0; i< animators.Count; i++){
 					if (animators[i] != null)
 						animators[i].Pause();
@@ -1251,6 +1307,8 @@ public class Touch_Manager : MonoBehaviour {
 				animation["UIBase_RightCol_extended_UpDown"].speed = -1;
 				animation.Play("UIBase_RightCol_extended_UpDown");
 				animation["UIBase_RightCol_extended_UpDown"].time = animation["UIBase_RightCol_extended_UpDown"].length;
+				backCoins = true;
+		
 				if(!Application.loadedLevelName.Contains("Tuto"))
 					pauseText.SetActive(false);
 				
@@ -1335,6 +1393,7 @@ public class Touch_Manager : MonoBehaviour {
 		yield return async;
 		Debug.Log("Loading complete");
 	}
+
 
 	string MyEscapeURL (string url)
 	{

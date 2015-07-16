@@ -141,6 +141,7 @@ public class IAPHandler : MonoBehaviour {
 		uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 		touch.actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_ErrorIAP").gameObject;
 		touch.actualPrompt.SetActive(true);
+
 		
 	}
 	
@@ -157,6 +158,14 @@ public class IAPHandler : MonoBehaviour {
 			dataManger.manager.coins += amountAdded;
 			dataManger.manager.Save(false);
 			StoreInventory.TakeItem(GameAssets.COINS.ItemId,StoreInventory.GetItemBalance(GameAssets.COINS.ItemId));
+			if(Application.loadedLevelName == "Menu"){
+				if (PlayerPrefs.GetInt ("Ads") == 1) {
+					GameObject.Find ("MoreCoins_Button").SetActive (false);
+				}
+			}
+			if (PlayerPrefs.GetInt ("Ads") == 1) {
+				GameObject.Find ("UI_Camera").transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Coins_Menu/NoAds_Panel").gameObject.SetActive(false);
+			}
 		}
 
 

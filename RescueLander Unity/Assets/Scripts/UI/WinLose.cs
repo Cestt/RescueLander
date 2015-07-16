@@ -46,6 +46,7 @@ public class WinLose : MonoBehaviour {
 	private GameObject new_color;
 	private GameObject promptWorldComplete;
 	private bool worldComplete = false;
+	private bool alreadyComplete = false;
 	private int starsNewColor;
 
 	void Awake () {
@@ -133,9 +134,11 @@ public class WinLose : MonoBehaviour {
 			           "TIME: " + Time.time + "ACTUAL: " + actualTime + "Timer: "+WinTimer);*/
 			if (MisionAcomplished.activeInHierarchy & (Input.touchCount > 0 || Time.time > actualTime + WinTimer) && 
 			    dataManger.manager.actualLevel == 21 && !worldComplete){
-				GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-				touch.actualPrompt = promptWorldComplete;
-				touch.actualPrompt.SetActive(true);
+				if (!alreadyComplete){
+					GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+					touch.actualPrompt = promptWorldComplete;
+					touch.actualPrompt.SetActive(true);
+				}
 				MisionAcomplished.SetActive (false);
 				worldComplete = true;
 			}
@@ -163,6 +166,11 @@ public class WinLose : MonoBehaviour {
 						totalScore = (int)scoreManager.timeScore;
 
 						dataManger.manager.totalStars -= dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
+
+						if (dataManger.manager.actualLevel == 21 && dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] > 0){
+							alreadyComplete = true;
+						}
+
 						if(damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
 							dataManger.manager.stars["Level_"+dataManger.manager.actualLevel] = 3;
 							dataManger.manager.coins += coin_manager.ThreeStarCoin;
@@ -195,14 +203,15 @@ public class WinLose : MonoBehaviour {
 								= "1 Star:";
 						}
 						dataManger.manager.totalStars += dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
-						if ((int)scoreManager.scoreCalc() > dataManger.manager.scores["Level_"+dataManger.manager.actualLevel])
+						if ((int)scoreManager.scoreCalc() > dataManger.manager.scores["Level_"+dataManger.manager.actualLevel]){
 							new_record.SetActive(true);
+							dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = (int)scoreManager.scoreCalc();
+						}
 
 						if (starsNewColor <= dataManger.manager.totalStars ){
 							new_color.SetActive(true);
 							Debug.Log ("NUEVO COLOR!!!");
 						}
-						dataManger.manager.scores["Level_"+dataManger.manager.actualLevel] = (int)scoreManager.scoreCalc();
 						WinSprite.transform.FindChild("Resume/CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level "+dataManger.manager.actualLevel.ToString();
 						WinSprite.transform.FindChild("Resume/CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
 						WinSprite.transform.FindChild("Resume/CoinCount/Total Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = dataManger.manager.coins.ToString();
@@ -279,7 +288,7 @@ public class WinLose : MonoBehaviour {
 		for (int i=1; i<dataManger.manager.unlocks; i++){
 			new_score += dataManger.manager.scores["Level_"+i];
 		}
-		Debug.Log ("Leaderboard nueva puntuacion: "+ new_score);
+		//Debug.Log ("Leaderboard nueva puntuacion: "+ new_score);
 		Social.ReportScore(new_score, "CgkIuv-YgIkeEAIQDQ", (bool success) => {
 			socialManager.Check("Leaderboard",new_score.ToString(),success);
 		});
