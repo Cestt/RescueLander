@@ -14,90 +14,59 @@ public class Tuto_Behaviour : MonoBehaviour {
 	private Rigidbody2D rigid;
 	private Zoom zoom;
 	private int prevStep;
+	private Camera uicamera;
+
+
 	void Awake () {
+
 		prevStep = step;
 		ship = GameObject.Find("101(Clone)");
 		ship.GetComponent<Rigidbody2D>().fixedAngle = true;
 		ship.GetComponent<Rigidbody2D>().isKinematic = true;
+		uicamera = GameObject.Find ("UI_Camera").GetComponent<Camera> ();
 		rigid = ship.GetComponent<Rigidbody2D>();
 		zoom =  ship.transform.FindChild("Zoomer").GetComponent<Zoom>();
 		tuto = transform.FindChild("Tutorial").gameObject;
 		foreach(Transform child in tuto.transform){
 			if(child.transform.parent == tuto.transform){
 				texts.Add(child.gameObject);
-				if(child.name == "ChatText_1"){
+				if(child.name == "Step1"){
 					currentText = child.gameObject;
 				}
 			}
 		}
+		zoom.enabled = false;
+		zoom.cam.ZoomFactor = 1;
 	}
-	
+
 
 	void Update () {
-		if(prevStep != step){
+		if (prevStep != step) {
 			once = true;
 		}
-	
-		if(Input.touchCount > 0  & step !=7 & step !=10 & step != 11 & step != 12
-		   || Input.GetMouseButtonUp(0)& step !=7 & step !=10 & step != 11 & step != 12){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
-				step++;
-				first = true;
-				nextStep();
-				transform.FindChild("ObjectiveArea").gameObject.SetActive(false);
-				transform.FindChild("ObjectiveArea1").gameObject.SetActive(false);
-				tuto.gameObject.SetActive(true);
-			}
 
-		}
-		if(Input.touchCount > 0 &step == 7
-		   || Input.GetMouseButtonUp(0)&step == 7){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
-				if(ship.GetComponent<Rigidbody2D>().isKinematic)
-					ship.GetComponent<Rigidbody2D>().isKinematic = false;
-				tuto.SetActive(false);
-			}
-			
-		}
-
-		if(step == 7){
-			if(once & ship != null){
-				zoom.enabled = false;
-				ship.GetComponent<Rigidbody2D>().isKinematic = false;
-				transform.FindChild("ObjectiveArea").gameObject.SetActive(true);
-				zoom.zoom = "out";
-				zoom.CheckInvoke();
-				once = false;
-			}
-
-
-		}
-
-		if(step == 10){
-			if(once & ship != null){
-			ship.GetComponent<Rigidbody2D>().isKinematic = false;
-			ship.GetComponent<Rigidbody2D>().fixedAngle = false;
-				transform.FindChild("ObjectiveArea1").gameObject.SetActive(true);
-				tuto.gameObject.SetActive(false);
-				once = false;
+		if (Input.touchCount > 0) {
+			if (Input.GetTouch (0).phase == TouchPhase.Began) {
+				
+				Ray ray;
+				Ray ray2;
+				RaycastHit hit;
+				
+				ray = uicamera.ScreenPointToRay (Input.mousePosition);
+				ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
+				
+				if (Physics.Raycast (ray.origin, ray.direction * 100, out hit) || Physics.Raycast (ray2.origin, ray.direction * 100, out hit)) {
+					if (hit.collider.name == "Ok_Button") {
+						nextStep();
+						currentText.transform.FindChild("Prompt_Menu_Turn").gameObject.SetActive(false);
+					}
+				}
 			}
 		}
-		if(step == 12 & Input.touchCount > 0 || step == 12 & Input.GetMouseButtonUp(0)){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
-			Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
+		if (step == 2) {
+			if (Input.GetTouch (0).phase == TouchPhase.Began) {
+				//currentText
 			}
-			
-		}
-		if(step == 11 & Input.touchCount > 0  || step == 11 & Input.GetMouseButtonUp(0)){
-			if(Input.GetTouch(0).phase == TouchPhase.Began){
-			transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-			transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.SetActive(false);
-			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
-			step++;
-			first = true;
-			nextStep();
-			}
-			
 		}
 	}
 	public void nextStep(){
@@ -107,13 +76,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 		yield return null;
 		if(first){
 			first = false;
-			foreach(GameObject text in texts){
-				if(text.name == "ChatText_"+step){
-					currentText.SetActive(false);
-					text.SetActive(true);
-					currentText = text;
-				}
-			}
+			step++;
 
 		}
 	}
