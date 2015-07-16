@@ -19,13 +19,13 @@ public class Share : MonoBehaviour {
 		
 		string destination = Path.Combine(Application.persistentDataPath,"Screenshot.png");
 
-		Texture2D screenTexture = new Texture2D(Screen.width, Screen.height,TextureFormat.RGB24,true);
+		/*Texture2D screenTexture = new Texture2D(Screen.width, Screen.height,TextureFormat.RGB24,true);
 		screenTexture.ReadPixels(new Rect(0f, 0f, Screen.width, Screen.height),0,0);
 		screenTexture.Apply();
 	
 		byte[] dataToSave = screenTexture.EncodeToPNG();
 		File.WriteAllBytes(destination, dataToSave);
-		
+		*/
 
 		
 

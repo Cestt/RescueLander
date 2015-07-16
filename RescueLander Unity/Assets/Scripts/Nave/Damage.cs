@@ -102,7 +102,7 @@ public class Damage : MonoBehaviour {
 
 			}
 
-			lifebarScript.Starter((int)slicedsprite.dimensions.x,relation);
+			lifebarScript.Starter(maxLife-5,relation);
 			explosion.SetActive(true);
 			animator2.Play("Explosion");
 			gameObject.GetComponent<Rigidbody2D>().isKinematic = true;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
 
 public class PhotoFinish : MonoBehaviour {
 
@@ -67,9 +68,9 @@ public class PhotoFinish : MonoBehaviour {
 		photo.GetComponent<SpriteRenderer>().sprite = sprt;
 		RenderTexture.active = currentRT;
 		//Save screenshoot
-		/*byte[] bytes = screenShot.EncodeToPNG();
-		string filename = "C:/Users/Aarón/Documents/Juegos" + "/photo1.png";
-		System.IO.File.WriteAllBytes(filename, bytes);*/
+		byte[] dataToSave = screenShot.EncodeToPNG();
+		string destination = Path.Combine(Application.persistentDataPath,"Screenshot.png");
+		File.WriteAllBytes(destination, dataToSave);
 		Destroy (gameObject);
 
 	}
