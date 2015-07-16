@@ -10,6 +10,7 @@ public class dataManger : MonoBehaviour {
 
 	public static dataManger manager;
 
+	public GoogleAnalyticsV3 googleAnalytics;
 
 	[HideInInspector]
 	public int fuelPowerUps;
@@ -65,6 +66,7 @@ public class dataManger : MonoBehaviour {
 	public int tutorial = 1;
 	[HideInInspector]
 	public int partidas;
+
 
 
 	private GameObject temp;

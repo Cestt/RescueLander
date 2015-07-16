@@ -27,6 +27,12 @@ public class Coin_Manager : MonoBehaviour {
 			}else{
 				dataManger.manager.coins -= Coins;
 				dataManger.manager.coinsSpend += Coins;
+				//LOG
+				if (touch.googleAnalytics != null){
+					touch.googleAnalytics.LogEvent ("Coin", "Compra"+dataManger.manager.actualLevel, "Usados", (long)Coins);
+					touch.googleAnalytics.LogEvent ("Coin", "Compra"+dataManger.manager.actualLevel, "Total", (long)dataManger.manager.coins);
+					touch.googleAnalytics.LogEvent ("Coin", "Compra"+dataManger.manager.actualLevel, "TotalAcumulado", (long)dataManger.manager.coinsAcumulated);
+				}
 				//ACHIEVEMENT
 				if (dataManger.manager.coinsSpend >= 100000){
 					Social.ReportProgress("CgkIuv-YgIkeEAIQEg", 100.0f, (bool success) => {
@@ -70,6 +76,10 @@ public class Coin_Manager : MonoBehaviour {
 
 				}
 
+				//LOG
+				if (touch.googleAnalytics != null){
+					touch.googleAnalytics.LogEvent ("Coin", Type, Item, (long)1);
+				}
 				
 				return true;
 			}
@@ -83,6 +93,12 @@ public class Coin_Manager : MonoBehaviour {
 	public void LevelCoin(int coin){
 		dataManger.manager.coins += coin;
 		dataManger.manager.coinsAcumulated += coin;
+		//LOG
+		if (touch.googleAnalytics != null){
+			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualLevel.ToString(), "Ganados", (long)coin);
+			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualLevel.ToString(), "Total", (long)dataManger.manager.coins);
+			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualLevel.ToString(), "TotalAcumulado", (long)dataManger.manager.coinsAcumulated);
+		}
 		//ACHIEVEMENT
 		if (dataManger.manager.coinsAcumulated >= 100000){
 			Social.ReportProgress("CgkIuv-YgIkeEAIQEQ", 100.0f, (bool success) => {

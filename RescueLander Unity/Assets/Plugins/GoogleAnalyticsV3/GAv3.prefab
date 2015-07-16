@@ -47,7 +47,7 @@ MonoBehaviour:
   bundleVersion: 
   dispatchPeriod: 5
   sampleFrequency: 100
-  logLevel: 3
+  logLevel: 1
   anonymizeIP: 0
   UncaughtExceptionReporting: 0
   sendLaunchEvent: 0
@@ -59,7 +59,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: androidTrackingCode
+      value: UA-64107003-1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: otherTrackingCode
+      value: UA-64107003-1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
