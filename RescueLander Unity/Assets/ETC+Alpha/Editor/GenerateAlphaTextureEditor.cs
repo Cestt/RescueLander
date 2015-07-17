@@ -98,7 +98,7 @@ public class GenerateAlphaTextureEditor : EditorWindow
                 }
                 if (_arrowTexture2D == null)
                 {
-                    _arrowTexture2D = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/ETC+Alpha/Editor/Texture/arrow.png");
+                    _arrowTexture2D = Resources.LoadAssetAtPath<Texture2D>("Assets/ETC+Alpha/Editor/Texture/arrow.png");
                 }
                 GUI.DrawTexture(new Rect(120, y + (100 - _arrowTexture2D.height)/2, _arrowTexture2D.width, _arrowTexture2D.height), _arrowTexture2D);
                 GUI.Label(new Rect(270, y+20, 120, 20), "Format");

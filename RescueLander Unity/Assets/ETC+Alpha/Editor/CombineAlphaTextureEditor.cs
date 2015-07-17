@@ -483,7 +483,7 @@ public class CombineAlphaTextureEditor : EditorWindow
             GUI.DrawTexture(_rectB, _textureB);
         if (_combineNavigationTexture == null)
         {
-            _combineNavigationTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/ETC+Alpha/Editor/Texture/combine.png");
+            _combineNavigationTexture = Resources.LoadAssetAtPath<Texture2D>("Assets/ETC+Alpha/Editor/Texture/combine.png");
         }
         GUI.DrawTexture(_rectNavigation, _combineNavigationTexture);
 
