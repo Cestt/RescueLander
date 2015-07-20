@@ -130,7 +130,9 @@ public class Touch_Manager : MonoBehaviour {
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
 		faceBook = GetComponent<FacebookSocial>();
-
+		if (GetComponent<GoogleAnalyticsV3> ()) {
+			googleAnalytics = GetComponent<GoogleAnalyticsV3> ();
+		};
 
 	}
 
@@ -152,7 +154,10 @@ public class Touch_Manager : MonoBehaviour {
 					if (Physics.Raycast(ray.origin,ray.direction * 100, out hit) || Physics.Raycast(ray2.origin,ray.direction * 100, out hit)) {
 						
 						Debug.Log("Hit");
-						
+
+						if (googleAnalytics != null){
+							googleAnalytics.LogEvent ("Press", hit.collider.name , "Pulsado", (long)1);
+						}
 						switch(hit.collider.name ){
 						case "Play" :
 
@@ -174,6 +179,7 @@ public class Touch_Manager : MonoBehaviour {
 									}
 
 								}else{
+									googleAnalytics.LogScreen("Tuto_"+dataManger.manager.tutorial);
 									Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 								}
 							}
@@ -205,9 +211,11 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.partidas = 0;
 								ads.LaunchInterstital();
 							}
+							googleAnalytics.LogScreen(Application.loadedLevel.ToString());
 							Application.LoadLevel (Application.loadedLevel);
 							break;	
 						case "Levels_Button" :
+							googleAnalytics.LogScreen("Menu");
 							Application.LoadLevel ("Menu");
 							if(dataManger.manager.tutorial >= 3){
 								dataManger.manager.Camposition = "Forward";
@@ -243,6 +251,7 @@ public class Touch_Manager : MonoBehaviour {
 							int Level = dataManger.manager.actualLevel;
 							dataManger.manager.actualLevel ++;
 							dataManger.manager.Save(false);
+							googleAnalytics.LogScreen("Level_"+(Level + 1));
 							Application.LoadLevel("Level_"+(Level + 1));
 							break;
 						case "Share_Button" :
@@ -662,6 +671,7 @@ public class Touch_Manager : MonoBehaviour {
 						case "Button_Never":
 							dataManger.manager.tutorial = 4;
 							dataManger.manager.Save(false);
+							googleAnalytics.LogScreen ("Menu");
 							Application.LoadLevel("Menu");
 							break;
 						case "MoreCoins_Button":
@@ -681,7 +691,7 @@ public class Touch_Manager : MonoBehaviour {
 							Application.OpenURL("https://twitter.com/EvolveGames_");
 							break;
 						case "Reset_Button" :
-
+							googleAnalytics.LogScreen (Application.loadedLevel.ToString());
 							Application.LoadLevel (Application.loadedLevel);
 							break;
 						default :
@@ -744,22 +754,24 @@ public class Touch_Manager : MonoBehaviour {
 						if(levelEnable){
 
 							if(dataManger.manager.tutorial >= 4){
-								if(PlayerPrefs.GetInt("Garaje") == 0){
-									actualPrompt = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Garage").gameObject;
-									actualPrompt.SetActive(true);
-									GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-									PlayerPrefs.SetInt("Garaje",1);
-									PlayerPrefs.Save();
-								}else{
-									if(IsInvoking("MoveCamera")){
-										CancelInvoke("MoveCamera");
-										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+
+									if(PlayerPrefs.GetInt("Garaje") == 0){
+										actualPrompt = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Garage").gameObject;
+										actualPrompt.SetActive(true);
+										GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+										PlayerPrefs.SetInt("Garaje",1);
+										PlayerPrefs.Save();
 									}else{
-										InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+										if(IsInvoking("MoveCamera")){
+											CancelInvoke("MoveCamera");
+											InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+										}else{
+											InvokeRepeating("MoveCamera",0.01f,Time.fixedDeltaTime);
+										}
 									}
-								}
 
 							}else{
+								googleAnalytics.LogScreen("Tuto_"+dataManger.manager.tutorial);
 								Application.LoadLevel("Tuto_"+dataManger.manager.tutorial);
 							}
 						}
@@ -789,9 +801,11 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.partidas = 0;
 							ads.LaunchInterstital();
 						}
+						googleAnalytics.LogScreen(Application.loadedLevel.ToString());
 						Application.LoadLevel (Application.loadedLevel);
 						break;	
 					case "Levels_Button" :
+						googleAnalytics.LogScreen("Menu");
 						Application.LoadLevel ("Menu");
 						if(dataManger.manager.tutorial >= 3){
 							dataManger.manager.Camposition = "Forward";
@@ -826,6 +840,7 @@ public class Touch_Manager : MonoBehaviour {
 						int Level = dataManger.manager.actualLevel;
 						dataManger.manager.actualLevel ++;
 						dataManger.manager.Save(false);
+						googleAnalytics.LogScreen("Level_"+(Level + 1));
 						Application.LoadLevel("Level_"+(Level + 1));
 						break;
 					case "Share_Button" :
@@ -1180,6 +1195,7 @@ public class Touch_Manager : MonoBehaviour {
 					case "Button_Never":
 						dataManger.manager.tutorial = 4;
 						dataManger.manager.Save(false);
+						googleAnalytics.LogScreen ("Menu");
 						Application.LoadLevel("Menu");
 						break;
 					case "HelpButton":
@@ -1201,7 +1217,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 						
 					case "Reset_Button" :
-						
+						googleAnalytics.LogScreen (Application.loadedLevel.ToString());
 						Application.LoadLevel (Application.loadedLevel);
 						break;
 					default :
@@ -1410,6 +1426,9 @@ public class Touch_Manager : MonoBehaviour {
 	}
 
 	IEnumerator LoadLevelAsync(int Level,string World){
+		if (googleAnalytics != null) {
+			googleAnalytics.LogScreen ("Level_" + Level + "_" + World);
+		}
 		AsyncOperation async = Application.LoadLevelAsync("Level_" + Level + "_" + World);
 		yield return async;
 		Debug.Log("Loading complete");
