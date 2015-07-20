@@ -54,6 +54,7 @@ public class Touch_Manager : MonoBehaviour {
 	public int adLimit = 0;
 
 
+	public GoogleAnalyticsV3 googleAnalytics;
 
 	void Awake(){
 		uicameraGameobject = GameObject.Find("UI_Camera");
@@ -689,15 +690,8 @@ public class Touch_Manager : MonoBehaviour {
 							
 						}
 						if(hit.collider.tag == "Level_Ico" & levelEnable){
-							string tempString = hit.collider.name.Substring(6);
-							int tempInt = int.Parse(tempString);
-							Debug.Log("Clicked Level: "+tempInt);
-							if(dataManger.manager.unlocks >= tempInt){
-								uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
-								dataManger.manager.actualLevel = tempInt;
-								StartCoroutine(LoadLevelAsync(tempInt));
-								levelEnable = false;
-							}
+							ParseLevelName(hit.collider.name);
+
 						}
 						if(hit.collider.name.Contains("Color")){
 							if(hit.collider.gameObject.GetComponent<Color_Enabled>().enabled == true){
@@ -1216,15 +1210,7 @@ public class Touch_Manager : MonoBehaviour {
 						
 					}
 					if(hit.collider.tag == "Level_Ico" & levelEnable){
-						string tempString = hit.collider.name.Substring(6);
-						int tempInt = int.Parse(tempString);
-						Debug.Log("Clicked Level: "+tempInt);
-						if(dataManger.manager.unlocks >= tempInt){
-							uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
-							dataManger.manager.actualLevel = tempInt;
-							StartCoroutine(LoadLevelAsync(tempInt));
-							levelEnable = false;
-						}
+						ParseLevelName(hit.collider.name);
 					}
 					if(hit.collider.name== "Color_01"){
 						if(hit.collider.gameObject.GetComponent<Color_Enabled>().enabled == true){
@@ -1388,8 +1374,43 @@ public class Touch_Manager : MonoBehaviour {
 
 	}
 
-	IEnumerator LoadLevelAsync(int Level){
-		AsyncOperation async = Application.LoadLevelAsync("Level_" + Level);
+	void ParseLevelName(string name){
+		string tempString;
+		string tempString2;
+		if(name.Substring(7,1) == "_"){
+			tempString2 = name.Substring(6,1);
+			tempString = name.Substring(8);
+		}else{
+			tempString2 = name.Substring(6,2);
+			tempString = name.Substring(9);
+		}
+		Debug.Log(tempString + "World");
+		int tempInt = int.Parse(tempString2);
+
+		if(tempString == "Mars"){
+			if(dataManger.manager.unlocksMars >= tempInt){
+				uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
+				dataManger.manager.actualLevel = tempInt;
+				dataManger.manager.actualWorld = tempString;
+				Debug.Log("World : "+tempString+" Level : "+tempInt);
+				StartCoroutine(LoadLevelAsync(tempInt,tempString));
+				levelEnable = false;
+			}
+		}
+		if(tempString == "Ice"){
+			if(dataManger.manager.unlocksIce >= tempInt){
+				uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
+				dataManger.manager.actualLevel = tempInt;
+				dataManger.manager.actualWorld = tempString;
+				Debug.Log("World : "+tempString+" Level : "+tempInt);
+				StartCoroutine(LoadLevelAsync(tempInt,tempString));
+				levelEnable = false;
+			}
+		}
+	}
+
+	IEnumerator LoadLevelAsync(int Level,string World){
+		AsyncOperation async = Application.LoadLevelAsync("Level_" + Level + "_" + World);
 		yield return async;
 		Debug.Log("Loading complete");
 	}

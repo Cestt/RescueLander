@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Score_Global : MonoBehaviour {
@@ -10,6 +10,6 @@ public class Score_Global : MonoBehaviour {
 	}
 
 	void Update () {
-		text.text = "Score : " + dataManger.manager.scores["Level_"+dataManger.manager.actualLevel];
+		text.text = "Score : " + dataManger.manager.scoresMars["Level_"+dataManger.manager.actualLevel];
 	}
 }

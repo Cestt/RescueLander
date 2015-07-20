@@ -52,8 +52,8 @@ public class Tuto_Behaviour : MonoBehaviour {
 				Ray ray2;
 				RaycastHit hit;
 				
-				ray = uicamera.ScreenPointToRay (Input.mousePosition);
-				ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
+				ray = uicamera.ScreenPointToRay (Input.GetTouch(0).position);
+				ray2 = Camera.main.ScreenPointToRay (Input.GetTouch(0).position);
 				
 				if (Physics.Raycast (ray.origin, ray.direction * 100, out hit) || Physics.Raycast (ray2.origin, ray.direction * 100, out hit)) {
 					if (hit.collider.name == "Ok_Button") {
@@ -65,7 +65,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 		}
 		if (step == 2) {
 			if (Input.GetTouch (0).phase == TouchPhase.Began) {
-				//currentText
+				currentText.SetActive(false);
 			}
 		}
 	}

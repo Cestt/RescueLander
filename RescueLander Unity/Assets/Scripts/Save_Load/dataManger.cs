@@ -20,22 +20,31 @@ public class dataManger : MonoBehaviour {
 	[HideInInspector]
 	public string Camposition = "";
 	[HideInInspector]
-	public int unlocks = 1;
+	public int unlocksMars = 1;
+	[HideInInspector]
+	public int unlocksIce = 1;
 	[HideInInspector]
 	public int actualLevel;
+	[HideInInspector]
+	public string actualWorld;
 	[HideInInspector]
 	public bool Sounds = true;
 	[HideInInspector]
 	public bool Music = true;
 	[HideInInspector]
-	public Dictionary<string,int> stars = new Dictionary<string, int>();
+	public Dictionary<string,int> starsMars = new Dictionary<string, int>();
 	[HideInInspector]
-	public Dictionary<string,int> scores = new Dictionary<string, int>();
+	public Dictionary<string,int> scoresMars = new Dictionary<string, int>();
+	[HideInInspector]
+	public Dictionary<string,int> starsIce = new Dictionary<string, int>();
+	[HideInInspector]
+	public Dictionary<string,int> scoresIce = new Dictionary<string, int>();
 	[HideInInspector]
 	public string actualShip = "Ship01";
 	[HideInInspector]
 	public int totalStars;
-	public int levels;
+	public int levelsMars;
+	public int levelsIce;
 	[HideInInspector]
 	public int coins;
 	[HideInInspector]
@@ -107,14 +116,14 @@ public class dataManger : MonoBehaviour {
 
 	public void Save(bool complete){
 
-		if(File.Exists(Application.persistentDataPath + "/data.jmm")){
+		if(File.Exists(Application.persistentDataPath + "/data.jmma")){
 			
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(Application.persistentDataPath + "/data.jmm",FileMode.Open);
+			FileStream file = File.Open(Application.persistentDataPath + "/data.jmma",FileMode.Open);
 			Data data = (Data)bf.Deserialize(file);
 			file.Close();
 
-			data.unlocks = unlocks;
+			data.unlocksMars = unlocksMars;
 			data.Sounds = Sounds;
 			data.Music = Music;
 			data.actualShip = actualShip;
@@ -133,19 +142,19 @@ public class dataManger : MonoBehaviour {
 			data.inverted = inverted;
 			data.tutorial = tutorial;
 			if(complete){
-				for(int i = 1; i <= levels; i++){
-					if(stars["Level_"+i] > data.stars["Level_"+i]){
+				for(int i = 1; i <= levelsMars; i++){
+					if(starsMars["Level_"+i] > data.starsMars["Level_"+i]){
 						//totalStars -= data.stars["Level_"+i];
-						data.stars["Level_"+i] = stars["Level_"+i];
+						data.starsMars["Level_"+i] = starsMars["Level_"+i];
 						//totalStars += stars["Level_"+i];
 						data.totalStars = totalStars;
 						Debug.Log("Save Stars");
 					}
-					if(scores["Level_"+i] > data.scores["Level_"+i]){
-						data.scores["Level_"+i] = scores["Level_"+i];
+					if(scoresMars["Level_"+i] > data.scoresMars["Level_"+i]){
+						data.scoresMars["Level_"+i] = scoresMars["Level_"+i];
 						Debug.Log("Save Scores");
 					}else{
-						scores["Level_"+i] = data.scores["Level_"+i];
+						scoresMars["Level_"+i] = data.scoresMars["Level_"+i];
 					}
 					
 					
@@ -172,7 +181,7 @@ public class dataManger : MonoBehaviour {
 			FileStream file = File.Open(Application.persistentDataPath + "/data.jmma",FileMode.Open);
 			Data data = (Data)bf.Deserialize(file);
 
-			unlocks = data.unlocks;
+			unlocksMars = data.unlocksMars;
 			Sounds = data.Sounds;
 			Music = data.Music;
 			actualShip = data.actualShip;
@@ -192,29 +201,29 @@ public class dataManger : MonoBehaviour {
 			tutorial = data.tutorial;
 
 
-			for(int i = 1; i<= levels ; i++){
-				stars["Level_"+i] = data.stars["Level_"+i];
-				scores["Level_"+i] = data.scores["Level_"+i];
+			for(int i = 1; i<= levelsMars ; i++){
+				starsMars["Level_"+i] = data.starsMars["Level_"+i];
+				scoresMars["Level_"+i] = data.scoresMars["Level_"+i];
 
 				temp = GameObject.Find("Level_"+i);
 				Transform tempChild;
 				tempChild =  temp.transform.FindChild("Level_Score");
-				tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.score")," "
-				                                                + scores["Level_"+i].ToString());
-				if(i<=unlocks){
+				tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
+				                                                + scoresMars["Level_"+i].ToString();
+				if(i<=unlocksMars){
 
 					tempChild =  temp.transform.FindChild("Level_Number");
 					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
 					for(int j = 1; j<=3; j++){
-						if(j<=stars["Level_"+i]){
+						if(j<=starsMars["Level_"+i]){
 							tempChild =  temp.transform.FindChild("LevelStar_"+j);
 							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
 						}
 						
 					}
 					tempChild =  temp.transform.FindChild("Level_Score");
-					tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.score")," "
-					                                                + scores["Level_"+i].ToString());
+					tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
+														+ scoresMars["Level_"+i].ToString();		
 				}
 			}
 			file.Close();
@@ -230,36 +239,7 @@ public class dataManger : MonoBehaviour {
 			
 		}else{
 			if(File.Exists(Application.persistentDataPath + "/data.jmm")){
-				BinaryFormatter bf = new BinaryFormatter();
-				FileStream file = File.Create(Application.persistentDataPath + "/data.jmma");
-				Data data = new Data();
-				file = File.Open(Application.persistentDataPath + "/data.jmm",FileMode.Open);
-				Data2 data2 = (Data2)bf.Deserialize(file);
-				data.tutorial= data2.tutorial;
-				data.unlocks = data2.unlocks;
-				data.Sounds = data2.Sounds;
-				data.Music = data2.Music;
-				data.actualShip = data2.actualShip;
-				data.coins = data2.coins;
-				data.coinsAcumulated = data2.coinsAcumulated;
-				data.coinsSpend = data2.coinsSpend;
-				data.color1b = data2.color1b;
-				data.color1g = data2.color1g;
-				data.color1r = data2.color1r;
-				data.color2b = data2.color2b;
-				data.color2g = data2.color2g;
-				data.color2r = data2.color2r;
-				data.fuelPowerUps = data2.fuelPowerUps;
-				data.shieldPowerUps = data2.shieldPowerUps;
-				data.magnetPowerUps = data2.magnetPowerUps;
-				data.inverted = data2.inverted;
-				data.scores = data2.scores;
-				data.shipUnlocks = data2.shipUnlocks;
-				data.socialPending = data2.socialPending;
-				data.stars = data2.stars;
-				data.totalStars = data2.totalStars;
-				bf.Serialize(file,data);
-				file.Close();
+				ParseData();
 				Load();
 
 			}else{
@@ -272,34 +252,34 @@ public class dataManger : MonoBehaviour {
 				
 				BinaryFormatter bf = new BinaryFormatter();
 				FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
-				Data data = new Data();
+				Data2 data = new Data2();
 				data.tutorial = 1;
 				data.unlocks = 1;
-				unlocks = data.unlocks;
+				unlocksMars = data.unlocks;
 				tutorial = data.tutorial;
 				data.actualShip = actualShip;
 				shipUnlocks.Add("Ship01");
 				data.shipUnlocks = shipUnlocks;
-				for(int i = 1; i <= levels; i++){
+				for(int i = 1; i <= levelsMars; i++){
 					data.stars.Add("Level_"+i,0);
 					data.scores.Add("Level_"+i,0);
-					stars.Add("Level_"+i,0);
-					scores.Add("Level_"+i,0);
+					starsMars.Add("Level_"+i,0);
+					scoresMars.Add("Level_"+i,0);
 					
 					
 					temp = GameObject.Find("Level_"+i);
-					if(i<=unlocks & temp!=null){
+					if(i<=unlocksMars & temp!=null){
 						Transform tempChild =  temp.transform.FindChild("Level_Number");
 						tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
 						for(int j = 1; j<=3; j++){
-							if(j<=stars["Level_"+i]){
+							if(j<=starsMars["Level_"+i]){
 								tempChild =  temp.transform.FindChild("LevelStar"+j);
 								tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
 							}
 							
 						}
 						tempChild =  temp.transform.FindChild("Level_Score");
-						tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scores["Level_"+i].ToString();
+						tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scoresMars["Level_"+i].ToString();
 						
 					}
 					
@@ -307,10 +287,51 @@ public class dataManger : MonoBehaviour {
 				
 				bf.Serialize(file,data);
 				file.Close();
+				ParseData();
 			}
 
 		}
 
+	}
+	private void ParseData(){
+		BinaryFormatter bf = new BinaryFormatter();
+		FileStream file = File.Create(Application.persistentDataPath + "/data.jmma");
+		Data data = new Data();
+		FileStream file2 = File.Open(Application.persistentDataPath + "/data.jmm",FileMode.Open);
+		Data2 data2 = (Data2)bf.Deserialize(file2);
+		data.tutorial= data2.tutorial;
+		data.unlocksMars = data2.unlocks;
+		data.Sounds = data2.Sounds;
+		data.Music = data2.Music;
+		data.actualShip = data2.actualShip;
+		data.coins = data2.coins;
+		data.coinsAcumulated = data2.coinsAcumulated;
+		data.coinsSpend = data2.coinsSpend;
+		data.color1b = data2.color1b;
+		data.color1g = data2.color1g;
+		data.color1r = data2.color1r;
+		data.color2b = data2.color2b;
+		data.color2g = data2.color2g;
+		data.color2r = data2.color2r;
+		data.fuelPowerUps = data2.fuelPowerUps;
+		data.shieldPowerUps = data2.shieldPowerUps;
+		data.magnetPowerUps = data2.magnetPowerUps;
+		data.inverted = data2.inverted;
+		data.scoresMars = data2.scores;
+		data.shipUnlocks = data2.shipUnlocks;
+		data.socialPending = data2.socialPending;
+		data.starsMars = data2.stars;
+		data.totalStars = data2.totalStars;
+		data.unlocksIce = 1;
+		unlocksIce = 1;
+		for(int i = 1; i <= levelsMars; i++){
+			data.starsIce.Add("Level_"+i,0);
+			data.scoresIce.Add("Level_"+i,0);
+			starsIce.Add("Level_"+i,0);
+			scoresIce.Add("Level_"+i,0);
+		}
+		bf.Serialize(file,data);
+		file.Close();
 	}
 }
 
@@ -373,7 +394,9 @@ class Data {
 	[HideInInspector]
 	public int magnetPowerUps;
 	[HideInInspector]
-	public int unlocks;
+	public int unlocksMars;
+	[HideInInspector]
+	public int unlocksIce;
 	[HideInInspector]
 	public string actualShip;
 	[HideInInspector]
@@ -381,9 +404,13 @@ class Data {
 	[HideInInspector]
 	public bool Music = true;
 	[HideInInspector]
-	public Dictionary<string,int> stars = new Dictionary<string, int>();
+	public Dictionary<string,int> starsMars = new Dictionary<string, int>();
 	[HideInInspector]
-	public Dictionary<string,int> scores = new Dictionary<string, int>();
+	public Dictionary<string,int> scoresMars = new Dictionary<string, int>();
+	[HideInInspector]
+	public Dictionary<string,int> starsIce = new Dictionary<string, int>();
+	[HideInInspector]
+	public Dictionary<string,int> scoresIce = new Dictionary<string, int>();
 	[HideInInspector]
 	public int totalStars;
 	[HideInInspector]
