@@ -87,65 +87,6 @@ NavMeshSettings:
     cellSize: .166666657
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
---- !u!21 &487506
-Material:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprite/SpriteColorMasks3
-  m_Shader: {fileID: 4800000, guid: a28d9cde9a3eb3c458d34f29fee8568a, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskRedTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskGreenTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MaskBlueTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: PixelSnap
-        second: 0
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &14840250
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,8 +1196,12 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 487702, guid: 7cb93b160865cdc4b94fc29be6e11c75, type: 2}
       propertyPath: m_RootOrder
-      value: 18
+      value: 17
       objectReference: {fileID: 0}
+    - target: {fileID: 11428062, guid: 7cb93b160865cdc4b94fc29be6e11c75, type: 2}
+      propertyPath: googleAnalytics
+      value: 
+      objectReference: {fileID: 223052155}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7cb93b160865cdc4b94fc29be6e11c75, type: 2}
   m_IsPrefabParent: 0
@@ -1301,7 +1246,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_13
+      value: Level_13_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -1427,6 +1372,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1327672487}
   m_RootOrder: 0
+--- !u!114 &223052155 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400000, guid: eb5b47b08880548c795ced5f38c9e001,
+    type: 2}
+  m_PrefabInternal: {fileID: 1779236437}
+  m_Script: {fileID: 11500000, guid: 9d19fcca4c3864274a625305eece3f48, type: 3}
 --- !u!4 &241455846 stripped
 Transform:
   m_PrefabParentObject: {fileID: 453990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
@@ -2473,7 +2424,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_21
+      value: Level_21_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -2851,7 +2802,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_14
+      value: Level_14_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -3779,6 +3730,65 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1136271604}
   m_RootOrder: 0
+--- !u!21 &721172891
+Material:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprite/SpriteColorMasks3
+  m_Shader: {fileID: 4800000, guid: a28d9cde9a3eb3c458d34f29fee8568a, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3c1f243fb490aec47af85c166c73db6d, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskRedTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskGreenTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MaskBlueTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: PixelSnap
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!21 &741431601
 Material:
   serializedVersion: 5
@@ -4067,7 +4077,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_16
+      value: Level_16_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -4400,7 +4410,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_3
+      value: Level_3_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -5293,7 +5303,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_2
+      value: Level_2_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 3353990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Mesh
@@ -5671,7 +5681,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ba3e663b077e7401a83d69fff7548944, type: 2}
       propertyPath: m_RootOrder
-      value: 20
+      value: 19
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ba3e663b077e7401a83d69fff7548944, type: 2}
@@ -6646,7 +6656,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1142379413}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 960.662842, y: 540.000122, z: 10}
+  m_LocalPosition: {x: 924.314575, y: 540.000122, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1086630127}
@@ -6712,7 +6722,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_8
+      value: Level_8_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -6795,7 +6805,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5d99d2a7afd4a4856b8b091c814944c3, type: 2}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5d99d2a7afd4a4856b8b091c814944c3, type: 2}
@@ -6872,7 +6882,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_Materials:
-  - {fileID: 487506}
+  - {fileID: 721172891}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -7296,7 +7306,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_4
+      value: Level_4_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -7379,7 +7389,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_5
+      value: Level_5_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -7462,7 +7472,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_6
+      value: Level_6_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -8430,7 +8440,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_11
+      value: Level_11_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -8715,7 +8725,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_7
+      value: Level_7_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -9080,7 +9090,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_10
+      value: Level_10_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -10743,7 +10753,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_19
+      value: Level_19_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -10990,7 +11000,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 419180, guid: c9ace8a73b8dbe34f8fb89f16e259f31, type: 2}
       propertyPath: m_RootOrder
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 11427658, guid: c9ace8a73b8dbe34f8fb89f16e259f31, type: 2}
       propertyPath: timeScore
@@ -11044,7 +11054,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_1
+      value: Level_1_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 3353990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Mesh
@@ -11127,13 +11137,16 @@ MonoBehaviour:
   shieldPowerUps: 0
   magnetPowerUps: 0
   Camposition: 
-  unlocks: 1
+  unlocksMars: 1
+  unlocksIce: 1
   actualLevel: 0
+  actualWorld: 
   Sounds: 1
   Music: 1
   actualShip: Ship01
   totalStars: 0
-  levels: 21
+  levelsMars: 0
+  levelsIce: 0
   coins: 0
   color1r: 0
   color1g: 0
@@ -11384,6 +11397,48 @@ Material:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1001 &1779236437
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 2.79012108
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -7.8589859
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -1.81105065
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+      propertyPath: m_RootOrder
+      value: 20
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: eb5b47b08880548c795ced5f38c9e001, type: 2}
+  m_IsPrefabParent: 0
 --- !u!4 &1785094141 stripped
 Transform:
   m_PrefabParentObject: {fileID: 453990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
@@ -11458,7 +11513,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_9
+      value: Level_9_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -11648,7 +11703,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_15
+      value: Level_15_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -11979,7 +12034,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_20
+      value: Level_20_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -12163,7 +12218,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_17
+      value: Level_17_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -13496,7 +13551,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_12
+      value: Level_12_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
@@ -14507,7 +14562,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 153990, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: m_Name
-      value: Level_18
+      value: Level_18_Ice
       objectReference: {fileID: 0}
     - target: {fileID: 11481878, guid: 25092bae9b4207149ba0cabe789e6a99, type: 2}
       propertyPath: data.text
