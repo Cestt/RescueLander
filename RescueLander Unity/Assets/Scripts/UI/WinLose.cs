@@ -165,7 +165,7 @@ public class WinLose : MonoBehaviour {
 						scoreManager.stopScore();
 						totalScore = (int)scoreManager.timeScore;
 
-						dataManger.manager.totalStars -= dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel];
+						//dataManger.manager.totalStars -= dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel];
 
 						if (dataManger.manager.actualLevel == 21 && dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] > 0){
 							alreadyComplete = true;
