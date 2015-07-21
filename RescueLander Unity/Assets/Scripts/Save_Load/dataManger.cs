@@ -21,7 +21,7 @@ public class dataManger : MonoBehaviour {
 	public string Camposition = "";
 	[HideInInspector]
 	public int unlocksMars = 1;
-	[HideInInspector]
+	//[HideInInspector]
 	public int unlocksIce = 1;
 	[HideInInspector]
 	public int actualLevel;
@@ -182,6 +182,7 @@ public class dataManger : MonoBehaviour {
 			Data data = (Data)bf.Deserialize(file);
 
 			unlocksMars = data.unlocksMars;
+			unlocksIce = data.unlocksIce;
 			Sounds = data.Sounds;
 			Music = data.Music;
 			actualShip = data.actualShip;
@@ -205,25 +206,55 @@ public class dataManger : MonoBehaviour {
 				starsMars["Level_"+i] = data.starsMars["Level_"+i];
 				scoresMars["Level_"+i] = data.scoresMars["Level_"+i];
 
-				temp = GameObject.Find("Level_"+i);
+				temp = GameObject.Find("Level_"+i+"_Mars");
 				Transform tempChild;
-				tempChild =  temp.transform.FindChild("Level_Score");
-				tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
-				                                                + scoresMars["Level_"+i].ToString();
-				if(i<=unlocksMars){
-
-					tempChild =  temp.transform.FindChild("Level_Number");
-					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
-					for(int j = 1; j<=3; j++){
-						if(j<=starsMars["Level_"+i]){
-							tempChild =  temp.transform.FindChild("LevelStar_"+j);
-							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
-						}
-						
-					}
+				if(temp != null){
 					tempChild =  temp.transform.FindChild("Level_Score");
 					tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
-														+ scoresMars["Level_"+i].ToString();		
+						+ scoresMars["Level_"+i].ToString();
+					if(i<=unlocksMars){
+						
+						tempChild =  temp.transform.FindChild("Level_Number");
+						tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
+						for(int j = 1; j<=3; j++){
+							if(j<=starsMars["Level_"+i]){
+								tempChild =  temp.transform.FindChild("LevelStar_"+j);
+								tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+							}
+							
+						}
+						tempChild =  temp.transform.FindChild("Level_Score");
+						tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
+							+ scoresMars["Level_"+i].ToString();		
+					}
+				}
+				
+			}
+			for(int i = 1; i <= levelsIce; i++){
+				starsIce["Level_"+i] = data.starsIce["Level_"+i];
+				scoresIce["Level_"+i] = data.scoresIce["Level_"+i];
+				
+				temp = GameObject.Find("Level_"+i+"_Ice");
+				Transform tempChild;
+				if(temp!= null){
+					tempChild =  temp.transform.FindChild("Level_Score");
+					tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
+						+ scoresIce["Level_"+i].ToString();
+					if(i<=unlocksIce ){
+						tempChild =  temp.transform.FindChild("Level_Number");
+						tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
+						for(int j = 1; j<=3; j++){
+							if(j<=starsIce["Level_"+i]){
+								tempChild =  temp.transform.FindChild("LevelStar"+j);
+								tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+							}
+							
+						}
+						tempChild =  temp.transform.FindChild("Level_Score");
+						tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scoresIce["Level_"+i].ToString();
+
+				}
+					
 				}
 			}
 			file.Close();
@@ -253,7 +284,7 @@ public class dataManger : MonoBehaviour {
 				BinaryFormatter bf = new BinaryFormatter();
 				FileStream file = File.Create(Application.persistentDataPath + "/data.jmm");
 				Data2 data = new Data2();
-				data.tutorial = 1;
+				data.tutorial = 4;
 				data.unlocks = 1;
 				unlocksMars = data.unlocks;
 				tutorial = data.tutorial;
@@ -267,7 +298,7 @@ public class dataManger : MonoBehaviour {
 					scoresMars.Add("Level_"+i,0);
 					
 					
-					temp = GameObject.Find("Level_"+i);
+					temp = GameObject.Find("Level_"+i+"_Mars");
 					if(i<=unlocksMars & temp!=null){
 						Transform tempChild =  temp.transform.FindChild("Level_Number");
 						tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
@@ -322,13 +353,30 @@ public class dataManger : MonoBehaviour {
 		data.socialPending = data2.socialPending;
 		data.starsMars = data2.stars;
 		data.totalStars = data2.totalStars;
-		data.unlocksIce = 1;
-		unlocksIce = 1;
+		data.unlocksIce = 21;
+		unlocksIce = data.unlocksIce;
+		Debug.Log("Unlocks Ice: "+ unlocksIce);
 		for(int i = 1; i <= levelsIce; i++){
 			data.starsIce.Add("Level_"+i,0);
 			data.scoresIce.Add("Level_"+i,0);
 			starsIce.Add("Level_"+i,0);
 			scoresIce.Add("Level_"+i,0);
+
+			temp = GameObject.Find("Level_"+i+"_Ice");
+			if(i<=unlocksIce & temp!=null){
+				Transform tempChild =  temp.transform.FindChild("Level_Number");
+				tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
+				for(int j = 1; j<=3; j++){
+					if(j<=starsIce["Level_"+i]){
+						tempChild =  temp.transform.FindChild("LevelStar"+j);
+						tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+					}
+					
+				}
+				tempChild =  temp.transform.FindChild("Level_Score");
+				tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scoresIce["Level_"+i].ToString();
+				
+			}
 		}
 		bf.Serialize(file,data);
 		file.Close();
