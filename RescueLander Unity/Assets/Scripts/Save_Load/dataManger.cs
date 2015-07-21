@@ -324,7 +324,7 @@ public class dataManger : MonoBehaviour {
 		data.totalStars = data2.totalStars;
 		data.unlocksIce = 1;
 		unlocksIce = 1;
-		for(int i = 1; i <= levelsMars; i++){
+		for(int i = 1; i <= levelsIce; i++){
 			data.starsIce.Add("Level_"+i,0);
 			data.scoresIce.Add("Level_"+i,0);
 			starsIce.Add("Level_"+i,0);
