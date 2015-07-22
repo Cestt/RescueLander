@@ -34,7 +34,7 @@ public class LifeBar : MonoBehaviour {
 				damageAcumulated += damage;
 				damage -= damage;
 			}
-			Debug.Log ("ACU: "+damageAcumulated+" LIFE: "+ (450-damageAcumulated));
+
 		}
 	}
 

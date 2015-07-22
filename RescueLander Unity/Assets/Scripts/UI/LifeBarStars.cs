@@ -10,22 +10,26 @@ public class LifeBarStars : MonoBehaviour {
 	//public Sprite loseStar;
 
 	void Awake () {
-		damage = GameObject.Find (dataManger.manager.actualShip+"(Clone)").GetComponent<Damage>();
-		thirdStar = transform.parent.FindChild ("StarLife_3").gameObject.GetComponent<tk2dSprite> ();
-		secondStar = transform.parent.FindChild ("StarLife_2").gameObject.GetComponent<tk2dSprite> ();
+		if(!Application.loadedLevelName.Contains("Tuto")){
+			damage = GameObject.Find (dataManger.manager.actualShip+"(Clone)").GetComponent<Damage>();
+			thirdStar = transform.parent.FindChild ("StarLife_3").gameObject.GetComponent<tk2dSprite> ();
+			secondStar = transform.parent.FindChild ("StarLife_2").gameObject.GetComponent<tk2dSprite> ();
+		}
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-		if (damage.life < (((float)damage.maxLife * 90) / 100f) && thirdStar.CurrentSprite.name != "Estrella_Lose") {
-			thirdStar.SetSprite("Estrella_Lose");
-			Debug.Log("Apaga tercerca ESTRELLA");
-		}
-		if (damage.life < (((float)damage.maxLife * 50) / 100f)) {
-			secondStar.SetSprite("Estrella_Lose");
-			Debug.Log ("Apaga segunda estrella");
-			Destroy (this);
+		if(!Application.loadedLevelName.Contains("Tuto")){
+			if (damage.life < (((float)damage.maxLife * 90) / 100f) && thirdStar.CurrentSprite.name != "Estrella_Lose") {
+				thirdStar.SetSprite("Estrella_Lose");
+				Debug.Log("Apaga tercerca ESTRELLA");
+			}
+			if (damage.life < (((float)damage.maxLife * 50) / 100f)) {
+				secondStar.SetSprite("Estrella_Lose");
+				Debug.Log ("Apaga segunda estrella");
+				Destroy (this);
+			}
 		}
 	}
 }

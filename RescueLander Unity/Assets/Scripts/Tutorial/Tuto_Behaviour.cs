@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Tuto_Behaviour : MonoBehaviour {
 	
@@ -66,6 +67,22 @@ public class Tuto_Behaviour : MonoBehaviour {
 		if (step == 2) {
 			if (Input.GetTouch (0).phase == TouchPhase.Began) {
 				currentText.SetActive(false);
+				currentText = texts.Where(x => x.name == "Step2").SingleOrDefault();
+				currentText.SetActive(true);
+				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Play("GhostShip_03");
+				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().wrapMode = WrapMode.Loop;
+				nextStep();
+			}
+		}
+		if (step == 3) {
+			if (Input.GetTouch (0).phase == TouchPhase.Began) {
+				transform.FindChild("Tutorial/Step2/Chat_Astronaut").gameObject.SetActive(false);
+				transform.FindChild("Tutorial/Step2/Chat_Box").gameObject.SetActive(false);
+				transform.FindChild("Tutorial/Step2/ChatText_1").gameObject.SetActive(false);
+				transform.FindChild("Tutorial/Step2/TapToContinue").gameObject.SetActive(false);
+				ship.GetComponent<Rigidbody2D>().fixedAngle = false;
+				ship.GetComponent<Rigidbody2D>().isKinematic = false;
+				nextStep();
 			}
 		}
 	}
@@ -74,10 +91,9 @@ public class Tuto_Behaviour : MonoBehaviour {
 	}
 	IEnumerator Onestep(){
 		yield return null;
-		if(first){
+
 			first = false;
 			step++;
-
-		}
+		
 	}
 }
