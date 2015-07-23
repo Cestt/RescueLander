@@ -11,6 +11,8 @@ public class Damage : MonoBehaviour {
 	public int maxLife;
 	public int damageThreshold = 0;
 	public int damageThresholdFriction = 0;
+	private int damageThresholdFrictionIni;
+	public int damageThresholdFrictionIce = 0;
 	public float DamageVariant;
 	private ShipAstronautPickUp shipastronautpickup;
 	private GameObject lifeBar;
@@ -61,6 +63,7 @@ public class Damage : MonoBehaviour {
 		activateExplosion = true;
 		animator = sparks.GetComponent<tk2dSpriteAnimator>();
 		animator2 = explosion.GetComponent<tk2dSpriteAnimator>();
+		damageThresholdFrictionIni = damageThresholdFriction;
 	}
 
 
@@ -150,7 +153,14 @@ public class Damage : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Floor"){
-
+			PhysicsMaterial2D floorMaterial = coll.collider.sharedMaterial;
+			if (floorMaterial == null)
+				damageThresholdFriction = damageThresholdFrictionIni;
+			else if (floorMaterial.name == "IceMaterial"){
+				damageThresholdFriction = damageThresholdFrictionIce;
+			}else{
+				damageThresholdFriction = damageThresholdFrictionIni;
+			}
 			if(prevSpeed > damageThreshold){
 				ContactPoint2D contactpoint = coll.contacts[0];
 				sparks.SetActive(true);

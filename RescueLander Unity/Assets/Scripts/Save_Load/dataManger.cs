@@ -74,7 +74,9 @@ public class dataManger : MonoBehaviour {
 	public int tutorial = 1;
 	[HideInInspector]
 	public int partidas;
-
+	public bool nextPowerUp;
+	[HideInInspector]
+	public string nextPowerUpName;
 
 	private GameObject temp;
 
@@ -141,6 +143,8 @@ public class dataManger : MonoBehaviour {
 			data.shieldPowerUps = shieldPowerUps;
 			data.inverted = inverted;
 			data.tutorial = tutorial;
+			data.nextPowerUp = nextPowerUp;
+			data.nextPowerUpName = nextPowerUpName;
 			if(complete){
 				for(int i = 1; i <= levelsMars; i++){
 					if(starsMars["Level_"+i] > data.starsMars["Level_"+i]){
@@ -200,7 +204,8 @@ public class dataManger : MonoBehaviour {
 			shieldPowerUps = data.shieldPowerUps;
 			inverted = data.inverted;
 			tutorial = data.tutorial;
-
+			nextPowerUp = data.nextPowerUp;
+			nextPowerUpName = data.nextPowerUpName;
 
 			for(int i = 1; i<= levelsMars ; i++){
 				starsMars["Level_"+i] = data.starsMars["Level_"+i];
@@ -487,5 +492,9 @@ class Data {
 	public int coinsAcumulated;
 	[HideInInspector]
 	public int tutorial;
+	[HideInInspector]
+	public bool nextPowerUp;
+	[HideInInspector]
+	public string nextPowerUpName;
 }
 
