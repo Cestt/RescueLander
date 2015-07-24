@@ -60,6 +60,7 @@ public class Touch_Manager : MonoBehaviour {
 	void Awake(){
 		uicameraGameobject = GameObject.Find("UI_Camera");
 		adLimit = 0;
+		powerManager = GetComponent<PowerUp_Manager>();
 		if(Application.loadedLevelName != "Menu"){
 
 			uiColumnExtended = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/UIBase_RightCol/UIBase_RightCol_Extended").gameObject;
@@ -74,6 +75,10 @@ public class Touch_Manager : MonoBehaviour {
 				animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_02").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_03").GetComponent<tk2dSpriteAnimator>());
+				if (dataManger.manager.nextPowerUp){
+					powerManager.PowerUp(dataManger.manager.nextPowerUpName);
+					dataManger.manager.nextPowerUp = false;
+				}
 			}
 
 			rigid = ship.GetComponent<Rigidbody2D>();
@@ -86,9 +91,16 @@ public class Touch_Manager : MonoBehaviour {
 	
 			animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
 
+<<<<<<< HEAD
 			//if(!Application.loadedLevelName.Contains("Tuto"))
 //			foreach (tk2dSpriteAnimator animat in GameObject.Find("Coins").GetComponentsInChildren<tk2dSpriteAnimator>())
 //				animators.Add(animat);
+=======
+			if(!Application.loadedLevelName.Contains("Tuto"))
+			//foreach (tk2dSpriteAnimator animat in GameObject.Find("Coins").GetComponentsInChildren<tk2dSpriteAnimator>())
+				//animators.Add(animat);
+				Debug.Log ("AAA");
+>>>>>>> origin/Features_Javi_Test
 		}else{
 		
 			options = uicameraGameobject.transform.FindChild("Options_Menu").gameObject;
@@ -111,7 +123,6 @@ public class Touch_Manager : MonoBehaviour {
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
 		PUilustration = garaje.transform.FindChild("Canvas/Shop_Bg_01/PowerUps_Menu/Illustration_Shield").gameObject;
 		garage_manager = GetComponent<Garaje_Manager>();
-		powerManager = GetComponent<PowerUp_Manager>();
 		socialManager = GetComponent<Social_Manager>();
 		colorSet = GetComponent<Color_Set>();
 		ShipGaraje = uicameraGameobject.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
@@ -136,7 +147,7 @@ public class Touch_Manager : MonoBehaviour {
 		faceBook = GetComponent<FacebookSocial>();
 		if (GetComponent<GoogleAnalyticsV3> ()) {
 			googleAnalytics = GetComponent<GoogleAnalyticsV3> ();
-		};
+		}
 
 	}
 
@@ -300,33 +311,23 @@ public class Touch_Manager : MonoBehaviour {
 							if (!paused){
 								if(dataManger.manager.shieldPowerUps >= 1 & Input.touchCount == 1){
 
-									if(adLimit < 1 & dataManger.manager.shieldPowerUps == 1){
+									/*if(adLimit < 1 & dataManger.manager.shieldPowerUps == 1){
 										uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 										actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
 										actualPrompt.SetActive(true);
 										Pause(null,false);
-									}
+									}*/
 									powerManager.PowerUp("Shield");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}/*else if(adLimit < 1 & dataManger.manager.shieldPowerUps == 1 & Input.touchCount == 1){
-									powerManager.PowerUp("Shield");
-									//ACHIEVEMENT
-									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
-										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
-									});
+								}/*else if(adLimit <= 0 & Input.touchCount == 1){
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);
-								}*/else if(adLimit <= 0 & Input.touchCount == 1){
-									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
-									actualPrompt.SetActive(true);
-									Pause(null,false);
-								}
+								}*/
 							}
 							break;
 						case "PowerUp_Magnet" :
@@ -334,66 +335,46 @@ public class Touch_Manager : MonoBehaviour {
 							if (!paused){
 								if(dataManger.manager.magnetPowerUps >= 1 & Input.touchCount == 1){
 
-									if(adLimit < 1 & dataManger.manager.magnetPowerUps == 1){
+									/*if(adLimit < 1 & dataManger.manager.magnetPowerUps == 1){
 										uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 										actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
 										actualPrompt.SetActive(true);
 										Pause(null,false);
-									}
+									}*/
 									powerManager.PowerUp("Magnet");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}/*else  if(adLimit < 1 & Input.touchCount == 1 & dataManger.manager.magnetPowerUps == 1){
-									powerManager.PowerUp("Magnet");
-									//ACHIEVEMENT
-									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
-										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
-									});
+								}/*else if(adLimit <= 0 & Input.touchCount == 1){
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);
-								}*/else if(adLimit <= 0 & Input.touchCount == 1){
-									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
-									actualPrompt.SetActive(true);
-									Pause(null,false);
-								}
+								}*/
 							}
 							break;
 						case "PowerUp_Fuel" :
 							if (!paused){
 								if(dataManger.manager.fuelPowerUps >= 1 & Input.touchCount == 1){
 
-									if(adLimit < 1 & dataManger.manager.fuelPowerUps == 1){
+									/*if(adLimit < 1 & dataManger.manager.fuelPowerUps == 1){
 										uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 										actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
 										actualPrompt.SetActive(true);
 										Pause(null,false);
-									}
+									}*/
 									powerManager.PowerUp("Fuel");
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
 									});
-								}/*else  if(adLimit < 1 & dataManger.manager.fuelPowerUps == 1 & Input.touchCount == 1){
-									powerManager.PowerUp("Fuel");
-									//ACHIEVEMENT
-									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
-										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
-									});
-									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
-									actualPrompt.SetActive(true);
-									Pause(null,false);
-								}*/else if(adLimit <= 0 & Input.touchCount == 1){
+								}/*else if(adLimit <= 0 & Input.touchCount == 1){
 									uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 									actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
 									actualPrompt.SetActive(true);
 									Pause(null,false);		
-								}
+								}*/
 							}
 							break;
 						case "Button":

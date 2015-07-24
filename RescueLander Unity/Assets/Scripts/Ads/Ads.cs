@@ -5,10 +5,15 @@ using GoogleMobileAds.Api;
 
 public class Ads : MonoBehaviour {
 
+	private GameObject ship;
 	private string Items;
 	private Touch_Manager touch;
 	public GameObject Test;
 	InterstitialAd interstitial;
+	private GameObject fuelBar;
+	private float fuelBarOriginalSize;
+	public int Fuel_Recover = 20;
+
 	void Awake() {
 		interstitial = new InterstitialAd("ca-app-pub-6225305526112070/2285766744");
 		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
@@ -18,6 +23,10 @@ public class Ads : MonoBehaviour {
 			Advertisement.Initialize ("37545",false);
 		} else {
 			//Test.GetComponent<tk2dTextMesh>().text = "Ads not supported";
+			GameObject temp = GameObject.Find("UI_Camera");
+			fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
+			fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;		
+			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		}
 
 	}
@@ -53,7 +62,11 @@ public class Ads : MonoBehaviour {
 			Debug.Log("Ad finished");
 			switch(Items){
 			case "Fuel":
-				dataManger.manager.fuelPowerUps++;
+				Movement movement = ship.GetComponent<Movement>();
+				movement.fuel += (movement.originalFuel  * Fuel_Recover)/100;
+				tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
+				sliced.dimensions = new Vector2( 
+				                                sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
 				break;
 			case "Shield":
 				dataManger.manager.shieldPowerUps++;

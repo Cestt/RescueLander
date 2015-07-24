@@ -2,47 +2,61 @@
 using System.Collections;
 
 public class IceCube : MonoBehaviour {
-	
-	tk2dSpriteAnimator animator;
+
 	tk2dSpriteAnimator animatorAstronaut;
 	Movement move;
 	public float timeCube = 3; 
 	GameObject ship;
-	
+	GameObject[] ice = new GameObject[4];
+	float timeChange;
+	float timeTotal;
+	int iceAct;
+
 	void Awake () {
-		animator = GetComponent<tk2dSpriteAnimator> ();
 		animatorAstronaut = transform.parent.GetComponent<tk2dSpriteAnimator> ();
-		animator.AnimationCompleted = IceCubeLoop;
 		ship = GameObject.Find (dataManger.manager.actualShip + "(Clone)");
 		move = ship.GetComponent<Movement> ();
-	}
-	
-	
-	private void IceCubeLoop(tk2dSpriteAnimator animatorSprite, tk2dSpriteAnimationClip clip){
-		animatorAstronaut.Play ();
-		gameObject.SetActive (false);
+		ice [0] = transform.FindChild ("IceBlock_00").gameObject;
+		ice [1] = transform.FindChild ("IceBlock_01").gameObject;
+		ice [2] = transform.FindChild ("IceBlock_02").gameObject;
+		ice [3] = transform.FindChild ("IceBlock_03").gameObject;
+		timeChange = timeCube / 4f;
+		timeTotal = 0;
+		iceAct = 0;
+	//	Debug.Log ("TIEMPO CAMBIO: "+ timeChange);
 	}
 	
 	void OnTriggerStay2D(Collider2D coll) {
-		if (coll.gameObject.name == "Fire" & (ship.gameObject.transform.eulerAngles.magnitude < 50 || ship.gameObject.transform.eulerAngles.magnitude > 320)){
+		if (coll.gameObject.name == "Feet" & (ship.gameObject.transform.eulerAngles.magnitude < 50 || ship.gameObject.transform.eulerAngles.magnitude > 310)){
 			if (move.motor){
-				timeCube -= Time.deltaTime;
+				timeTotal += Time.deltaTime;
+				
+				//Debug.Log ("TIEMPO RESTANTE: "+ timeTotal);
+				if (timeTotal >= timeChange){
+					//Debug.Log ("CAMBIO "+ iceAct);
+					timeTotal -= timeChange;
+					ice[iceAct].SetActive(false);
+					iceAct++;
+					if (iceAct < 4){
+						ice[iceAct].SetActive(true);
+					}else{
+						animatorAstronaut.Play ();
+						gameObject.SetActive (false);
+					}
+				}
+				/*timeCube -= Time.deltaTime;
 				Debug.Log ("TIEMPO RESTANTE: "+ timeCube);
 				if (timeCube <= 0){
 					animatorAstronaut.Play ();
 					gameObject.SetActive (false);
-				}
-				//animator.Play();
-			}else if (animator.Playing){
-				animator.Pause();
+				}*/
 			}
-			
 		}
 	}
-	
+	/*
 	void OnTriggerExit2D(Collider2D coll){
-		if (coll.gameObject.name == "Fire" & animator.Playing) {
-			//animator.Pause ();
+		if (coll.gameObject.name == "Feet" & animator.Playing) {
+			animator.Pause ();
 		}
-	}
+	}*/
 }

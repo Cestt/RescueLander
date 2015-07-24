@@ -47,6 +47,7 @@ public class Movement : MonoBehaviour {
 	public float actualTime;
 	public float LoseTime;
 	private bool running;
+	private bool prompFuel;
 	private AudioSource audioThruster;
 	private bool once = false;
 	private Damage damage;
@@ -54,8 +55,10 @@ public class Movement : MonoBehaviour {
 	void Awake() {
 
 		if(Application.loadedLevelName.Contains("Tuto")){
+			prompFuel = true;
 			fuel = 2500;
 		}else{
+			prompFuel = false;
 			fuel = fuelLevel[dataManger.manager.actualLevel-1];
 		}
 		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
@@ -81,6 +84,7 @@ public class Movement : MonoBehaviour {
 			Debug.Log(gravityLevel[dataManger.manager.actualLevel-1]);
 			rigid.gravityScale = gravityLevel[dataManger.manager.actualLevel-1];
 		}
+
 	}
 
 
@@ -93,11 +97,20 @@ public class Movement : MonoBehaviour {
 		if ((!dataManger.manager.Sounds  || touchmanager.paused) & audioThruster.isPlaying){
 			audioThruster.Stop();
 		}
-		if(fuel < 0 & !running){
+		if (fuel < 0 & !prompFuel) {
+			touchmanager.uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+			touchmanager.actualPrompt = touchmanager.uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+			touchmanager.actualPrompt.SetActive(true);
+			touchmanager.Pause(null,false);
+			prompFuel = true;
+		}
+		if(fuel < 0 & !running & prompFuel & !touchmanager.paused){
+
 			actualTime = Time.time;
 			running = true;
 
-		}else if(fuel > 0){
+		}
+		else if(fuel > 0){
 			running = false;
 		}
 		if(running & actualTime + LoseTime < Time.time){
