@@ -64,15 +64,23 @@ public class PowerUp_Manager : MonoBehaviour {
 				break;
 			case "Shield" :
 				Debug.Log("Shield PU");
-				Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Shield").gameObject);
-				dataManger.manager.shieldPowerUps --;
-				dataManger.manager.Save(false);
+				if (!ship.transform.FindChild("PU_Shield").gameObject.activeInHierarchy){
+					 //Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Shield").gameObject);
+					damage.DamageVariant = Shield_DmgReduction;
+					ship.transform.FindChild("PU_Shield").gameObject.SetActive(true);
+					dataManger.manager.shieldPowerUps --;
+					dataManger.manager.Save(false);
+				}
 				break;
 			case "Magnet" :
 				Debug.Log("Magnet PU");
-				Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Magnet").gameObject);
-				dataManger.manager.magnetPowerUps --;
-				dataManger.manager.Save(false);
+				if (!ship.transform.FindChild("PU_Magnet").gameObject.activeInHierarchy){
+					//Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Magnet").gameObject);
+					On = true;
+					ship.transform.FindChild("PU_Magnet").gameObject.SetActive(true);
+					dataManger.manager.magnetPowerUps --;
+					dataManger.manager.Save(false);
+				}
 				break;
 				
 			}

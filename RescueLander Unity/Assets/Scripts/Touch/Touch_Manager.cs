@@ -43,7 +43,7 @@ public class Touch_Manager : MonoBehaviour {
 	private GameObject options;
 	private bool levelEnable = true;
 	private tk2dUIToggleButton[] buttonsPaint = new tk2dUIToggleButton[2];
-	private tk2dUIToggleButton[] buttonsGarage = new tk2dUIToggleButton[3];
+	private tk2dUIToggleButton[] buttonsGarage = new tk2dUIToggleButton[4];
 	private tk2dUIToggleButton[] buttonsPowerUps = new tk2dUIToggleButton[3];
 	private tk2dUIToggleButton[] buttonsShips = new tk2dUIToggleButton[7];
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
@@ -131,6 +131,7 @@ public class Touch_Manager : MonoBehaviour {
 		buttonsGarage[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/ShipsButton").GetComponent<tk2dUIToggleButton>();
 		buttonsGarage[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/PowerUps_Button").GetComponent<tk2dUIToggleButton>();
 		buttonsGarage[2] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/Coins_Button").GetComponent<tk2dUIToggleButton>();
+		buttonsGarage[3] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Header/PaintButton").GetComponent<tk2dUIToggleButton>();
 		buttonsPowerUps[0] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Shield").GetComponent<tk2dUIToggleButton>();
 		buttonsPowerUps[1] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Fuel").GetComponent<tk2dUIToggleButton>();
 		buttonsPowerUps[2] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/PowerUps_Menu/Button_Magnet").GetComponent<tk2dUIToggleButton>();
@@ -397,11 +398,13 @@ public class Touch_Manager : MonoBehaviour {
 								
 							}
 							break;
-						case "GarageHeader_Button" :
+						case "PaintButton" :
 							garage_manager.LayoutChanger("Paint");
 							buttonsGarage[0].IsOn = false;
 							buttonsGarage[1].IsOn = false;
 							buttonsGarage[2].IsOn = false;
+							if (buttonsGarage[3].IsOn)
+								buttonsGarage[3].IsOn = false;
 							break;
 						case "ShipsButton" :
 							garage_manager.LayoutChanger("Ships");
@@ -409,6 +412,7 @@ public class Touch_Manager : MonoBehaviour {
 								buttonsGarage[0].IsOn = false;
 							buttonsGarage[1].IsOn = false;
 							buttonsGarage[2].IsOn = false;
+							buttonsGarage[3].IsOn = false;
 							break;
 						case "PowerUps_Button" :
 							garage_manager.LayoutChanger("PowerUps");
@@ -416,6 +420,7 @@ public class Touch_Manager : MonoBehaviour {
 							if (buttonsGarage[1].IsOn)
 								buttonsGarage[1].IsOn = false;
 							buttonsGarage[2].IsOn = false;
+							buttonsGarage[3].IsOn = false;
 							break;
 						case "Coins_Button" :
 							garage_manager.LayoutChanger("Coins");
@@ -423,6 +428,7 @@ public class Touch_Manager : MonoBehaviour {
 							buttonsGarage[1].IsOn = false;
 							if (buttonsGarage[2].IsOn)
 								buttonsGarage[2].IsOn = false;
+							buttonsGarage[3].IsOn = false;
 							break;
 						case "Button_Ship01" :
 							if(dataManger.manager.shipUnlocks.Contains("Ship01")){
@@ -882,42 +888,43 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "PowerUp_Shield" :
 						if (!paused){
-							if(dataManger.manager.shieldPowerUps > 1){
+							if(dataManger.manager.shieldPowerUps >= 1){
 								powerManager.PowerUp("Shield");
 
-							}else{
+							}/*else{
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject;
 								actualPrompt.SetActive(true);
 								Pause(null,false);
-							}
+							}*/
 						}
 						break;
 					case "PowerUp_Magnet" :
 						if (!paused){
-							if(dataManger.manager.magnetPowerUps > 1 & Input.touchCount == 1){
+							if(dataManger.manager.magnetPowerUps >= 1){
+
 								powerManager.PowerUp("Magnet");
 
-							}else{
+							}/*else{
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject;
 								actualPrompt.SetActive(true);
 								Pause(null,false);
-							}
+							}*/
 						}
 						break;
 					case "PowerUp_Fuel" :
 						if (!paused){
-							if(dataManger.manager.fuelPowerUps > 1 ){
+							if(dataManger.manager.fuelPowerUps >= 1 ){
 								powerManager.PowerUp("Fuel");
 
-							}else{
+							}/*else{
 								Debug.Log("PU_Global");
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 								actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
 								actualPrompt.SetActive(true);
 								Pause(null,false);
-							}
+							}*/
 						}
 						break;
 					case "Button":
@@ -943,11 +950,13 @@ public class Touch_Manager : MonoBehaviour {
 
 						}
 						break;
-					case "GarageHeader_Button" :
+					case "PaintButton" :
 						garage_manager.LayoutChanger("Paint");
 						buttonsGarage[0].IsOn = false;
 						buttonsGarage[1].IsOn = false;
 						buttonsGarage[2].IsOn = false;
+						if (buttonsGarage[3].IsOn)
+							buttonsGarage[3].IsOn = false;
 						break;
 					case "ShipsButton" :
 						garage_manager.LayoutChanger("Ships");
@@ -955,6 +964,7 @@ public class Touch_Manager : MonoBehaviour {
 							buttonsGarage[0].IsOn = false;
 						buttonsGarage[1].IsOn = false;
 						buttonsGarage[2].IsOn = false;
+						buttonsGarage[3].IsOn = false;
 						break;
 					case "PowerUps_Button" :
 						garage_manager.LayoutChanger("PowerUps");
@@ -962,6 +972,7 @@ public class Touch_Manager : MonoBehaviour {
 						if (buttonsGarage[1].IsOn)
 							buttonsGarage[1].IsOn = false;
 						buttonsGarage[2].IsOn = false;
+						buttonsGarage[3].IsOn = false;
 						break;
 					case "Coins_Button" :
 						garage_manager.LayoutChanger("Coins");
@@ -969,6 +980,7 @@ public class Touch_Manager : MonoBehaviour {
 						buttonsGarage[1].IsOn = false;
 						if (buttonsGarage[2].IsOn)
 							buttonsGarage[2].IsOn = false;
+						buttonsGarage[3].IsOn = false;
 						break;
 					case "Button_Ship01" :
 						if(prevStats != null)
