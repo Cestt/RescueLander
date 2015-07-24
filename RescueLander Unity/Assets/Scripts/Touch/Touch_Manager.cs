@@ -91,16 +91,16 @@ public class Touch_Manager : MonoBehaviour {
 	
 			animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
 
-<<<<<<< HEAD
+
 			//if(!Application.loadedLevelName.Contains("Tuto"))
 //			foreach (tk2dSpriteAnimator animat in GameObject.Find("Coins").GetComponentsInChildren<tk2dSpriteAnimator>())
 //				animators.Add(animat);
-=======
-			if(!Application.loadedLevelName.Contains("Tuto"))
+
+			//if(!Application.loadedLevelName.Contains("Tuto"))
 			//foreach (tk2dSpriteAnimator animat in GameObject.Find("Coins").GetComponentsInChildren<tk2dSpriteAnimator>())
 				//animators.Add(animat);
-				Debug.Log ("AAA");
->>>>>>> origin/Features_Javi_Test
+
+
 		}else{
 		
 			options = uicameraGameobject.transform.FindChild("Options_Menu").gameObject;
@@ -691,7 +691,7 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "TutorialButton" : 
 							dataManger.manager.tutorial = 1;
-							dataManger.manager.Save();
+							dataManger.manager.Save(false);
 							Application.LoadLevel("Tuto_1");
 							break;
 						default :
@@ -1248,7 +1248,7 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "TutorialButton" : 
 						dataManger.manager.tutorial = 1;
-						dataManger.manager.Save();
+						dataManger.manager.Save(false);
 						Application.LoadLevel("Tuto_1");
 						break;
 					default :
