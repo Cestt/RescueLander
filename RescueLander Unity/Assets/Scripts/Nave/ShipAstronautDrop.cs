@@ -11,6 +11,7 @@ public class ShipAstronautDrop : MonoBehaviour {
 	private GameObject gameManager;
 	private WinLose winLose;
 
+
 	void Awake () {
 		gameManager = GameObject.Find("Game Manager");
 		rigid = this.GetComponent<Rigidbody2D>();
@@ -33,9 +34,13 @@ public class ShipAstronautDrop : MonoBehaviour {
 
 
 				astronautsDroped += shipastronautpickup.astronautPicked;
-				shipastronautpickup.astronautPicked = 0;
+				//shipastronautpickup.astronautPicked = 0;
 				//dataManger.manager.Save();
 				Debug.Log("Astronaut dropped "+ astronautsDroped);
+				if(Application.loadedLevelName.Contains("Tuto")){
+					GameObject.Find("UI_Camera").GetComponent<Tuto_Behaviour>().step++;
+
+				}
 				
 			}
 

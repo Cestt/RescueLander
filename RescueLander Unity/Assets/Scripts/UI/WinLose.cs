@@ -73,7 +73,7 @@ public class WinLose : MonoBehaviour {
 				scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
 				scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
 				if (dataManger.manager.actualLevel <= 21)
-					promptWorldComplete = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_MarsFinished").gameObject;
+
 				//Se obtiene el numero de estrellas necesario para obtener el siguiente color
 
 				GameObject colorbuttons = uicamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/Color_Buttons").gameObject;
@@ -133,8 +133,9 @@ public class WinLose : MonoBehaviour {
 			Debug.Log ("WIN: "+ WinSprite.activeInHierarchy +", MISION: "+ MisionAcomplished.activeInHierarchy + 
 			           "TIME: " + Time.time + "ACTUAL: " + actualTime + "Timer: "+WinTimer);*/
 			if (MisionAcomplished.activeInHierarchy & (Input.touchCount > 0 || Time.time > actualTime + WinTimer) && 
-			    dataManger.manager.actualLevel == 21 && !worldComplete){
+			    dataManger.manager.actualLevel == 21 && !worldComplete & dataManger.manager.actualWorld == "Mars"){
 				if (!alreadyComplete){
+					promptWorldComplete = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_MarsFinished").gameObject;
 					GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 					touch.actualPrompt = promptWorldComplete;
 					touch.actualPrompt.SetActive(true);

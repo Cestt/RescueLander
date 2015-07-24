@@ -41,9 +41,12 @@ public class ShipAstronautPickUp : MonoBehaviour {
 				Pickable = false;
 				animator.AnimationCompleted = DestroyAstro;
 				Astronaut = null;
+				if(Application.loadedLevelName.Contains("Tuto")){
+					GameObject.Find("UI_Camera").GetComponent<Tuto_Behaviour>().step++;
+				}
 			}
 
-			Debug.Log("Astronaut Picked: "+astronautPicked);
+
 
 		}
 

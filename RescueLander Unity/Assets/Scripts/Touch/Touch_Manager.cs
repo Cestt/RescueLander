@@ -52,6 +52,7 @@ public class Touch_Manager : MonoBehaviour {
 	[HideInInspector]
 	public GameObject actualPrompt;
 	public int adLimit = 0;
+	private GameObject prevStats;
 
 
 	public GoogleAnalyticsV3 googleAnalytics;
@@ -85,9 +86,9 @@ public class Touch_Manager : MonoBehaviour {
 	
 			animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
 
-			if(!Application.loadedLevelName.Contains("Tuto"))
-			foreach (tk2dSpriteAnimator animat in GameObject.Find("Coins").GetComponentsInChildren<tk2dSpriteAnimator>())
-				animators.Add(animat);
+			//if(!Application.loadedLevelName.Contains("Tuto"))
+//			foreach (tk2dSpriteAnimator animat in GameObject.Find("Coins").GetComponentsInChildren<tk2dSpriteAnimator>())
+//				animators.Add(animat);
 		}else{
 		
 			options = uicameraGameobject.transform.FindChild("Options_Menu").gameObject;
@@ -102,6 +103,9 @@ public class Touch_Manager : MonoBehaviour {
 
 		}
 		if(!Application.loadedLevelName.Contains("Tuto"))
+			prevStats = GameObject.Find("UI_Camera").transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Ship01/Stats").gameObject;
+
+		
 		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 		ads = GameObject.Find("Data Manager").GetComponent<Ads>();
 		garaje = uicameraGameobject.transform.FindChild ("Garage_Menu").gameObject;
@@ -252,7 +256,7 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualLevel ++;
 							dataManger.manager.Save(false);
 							googleAnalytics.LogScreen("Level_"+(Level + 1));
-							Application.LoadLevel("Level_"+(Level + 1));
+							Application.LoadLevel("Level_"+(Level + 1)+"_Ice");
 							break;
 						case "Share_Button" :
 							share.ShareScreenshot();
@@ -445,8 +449,10 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Ship01";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Ship01");
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
 							}else{
 								colorSet.SpriteSet(false,"Ship01");
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
 							}
 							for (int i=0; i < 7; i++){
 								if (i == 0 && buttonsShips[i].IsOn)
@@ -694,6 +700,19 @@ public class Touch_Manager : MonoBehaviour {
 							googleAnalytics.LogScreen (Application.loadedLevel.ToString());
 							Application.LoadLevel (Application.loadedLevel);
 							break;
+						case "Button_World_Ice" :
+							Debug.Log("World: " + hit.transform.name.Substring(13));
+							hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
+							break;
+						case "Button_World_Mars" :
+							Debug.Log("World: " + hit.transform.name.Substring(13));
+							hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
+							break;
+						case "TutorialButton" : 
+							dataManger.manager.tutorial = 1;
+							dataManger.manager.Save();
+							Application.LoadLevel("Tuto_1");
+							break;
 						default :
 
 							break;
@@ -841,7 +860,7 @@ public class Touch_Manager : MonoBehaviour {
 						dataManger.manager.actualLevel ++;
 						dataManger.manager.Save(false);
 						googleAnalytics.LogScreen("Level_"+(Level + 1));
-						Application.LoadLevel("Level_"+(Level + 1));
+						Application.LoadLevel("Level_"+(Level + 1)+"_Ice");
 						break;
 					case "Share_Button" :
 						share.ShareScreenshot();
@@ -972,12 +991,18 @@ public class Touch_Manager : MonoBehaviour {
 							buttonsGarage[2].IsOn = false;
 						break;
 					case "Button_Ship01" :
+						if(prevStats != null)
+							prevStats.SetActive(false);
+						prevStats = hit.transform.FindChild("Stats").gameObject;
+							prevStats.SetActive(true);
 						if(dataManger.manager.shipUnlocks.Contains("Ship01")){
 							dataManger.manager.actualShip = "Ship01";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Ship01");
+
 						}else{
 							colorSet.SpriteSet(false,"Ship01");
+
 						}
 						for (int i=0; i < 7; i++){
 							if (i == 0 && buttonsShips[i].IsOn)
@@ -987,12 +1012,18 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Button_369" :
+						if(prevStats != null)
+							prevStats.SetActive(false);
+						prevStats = hit.transform.FindChild("Stats").gameObject;
+							prevStats.SetActive(true);
 						if(dataManger.manager.shipUnlocks.Contains("369")){
 							dataManger.manager.actualShip = "369";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"369");
+
 						}else{
 							colorSet.SpriteSet(false,"369");
+
 						}
 						for (int i=0; i < 7; i++){
 							if (i == 2 && buttonsShips[i].IsOn)
@@ -1002,12 +1033,18 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Button_Taboo" :
+						if(prevStats != null)
+							prevStats.SetActive(false);
+						prevStats = hit.transform.FindChild("Stats").gameObject;
+							prevStats.SetActive(true);
 						if(dataManger.manager.shipUnlocks.Contains("Taboo")){
 							dataManger.manager.actualShip = "Taboo";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Taboo");
-						}else{
+
+						}else{	
 							colorSet.SpriteSet(false,"Taboo");
+
 						}
 						for (int i=0; i < 7; i++){
 							if (i == 1 && buttonsShips[i].IsOn)
@@ -1219,6 +1256,19 @@ public class Touch_Manager : MonoBehaviour {
 					case "Reset_Button" :
 						googleAnalytics.LogScreen (Application.loadedLevel.ToString());
 						Application.LoadLevel (Application.loadedLevel);
+						break;
+					case "Button_World_Ice" :
+						Debug.Log("World: " + hit.transform.name.Substring(13));
+						hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
+						break;
+					case "Button_World_Mars" :
+						Debug.Log("World: " + hit.transform.name.Substring(13));
+						hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
+						break;
+					case "TutorialButton" : 
+						dataManger.manager.tutorial = 1;
+						dataManger.manager.Save();
+						Application.LoadLevel("Tuto_1");
 						break;
 					default :
 						

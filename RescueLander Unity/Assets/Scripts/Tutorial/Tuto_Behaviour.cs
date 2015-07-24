@@ -9,7 +9,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 	public int step = 1;
 	private List<GameObject> texts = new List<GameObject>();
 	public bool first = true;
-	private bool once = true;
+	public bool once = true;
 	private GameObject currentText;
 	private GameObject ship;
 	private Rigidbody2D rigid;
@@ -37,13 +37,14 @@ public class Tuto_Behaviour : MonoBehaviour {
 			}
 		}
 		zoom.enabled = false;
-		zoom.cam.ZoomFactor = 1;
+		zoom.cam.ZoomFactor = 1.25f;
 	}
 
 
 	void Update () {
 		if (prevStep != step) {
 			once = true;
+			prevStep = step;
 		}
 
 		if (Input.touchCount > 0) {
@@ -60,6 +61,11 @@ public class Tuto_Behaviour : MonoBehaviour {
 					if (hit.collider.name == "Ok_Button") {
 						nextStep();
 						currentText.transform.FindChild("Prompt_Menu_Turn").gameObject.SetActive(false);
+					}
+					if (hit.collider.name == "Exit_Button") {
+						dataManger.manager.tutorial = 4;
+						dataManger.manager.Save(true);
+						Application.LoadLevel("Menu");
 					}
 				}
 			}
@@ -85,6 +91,34 @@ public class Tuto_Behaviour : MonoBehaviour {
 				nextStep();
 			}
 		}
+		if (step == 5) {
+			if(once){
+				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Stop();
+				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Play("GhostShip_04");
+				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().wrapMode = WrapMode.Loop;
+				once = false;
+			}
+		}
+		if (step == 6) {
+			if(once){
+				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
+				step++;
+			}
+		}
+		if (step == 7) {
+			if (Input.GetTouch (0).phase == TouchPhase.Began) {
+
+				currentText.SetActive(false);
+				transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+				transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_2").gameObject.SetActive(true);
+				transform.FindChild("WinLayout").gameObject.SetActive(false);
+				step++;
+			}
+
+
+			
+		}
+	
 	}
 	public void nextStep(){
 		StartCoroutine("Onestep");
