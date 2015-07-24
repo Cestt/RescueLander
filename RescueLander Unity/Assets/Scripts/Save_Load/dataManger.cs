@@ -77,6 +77,8 @@ public class dataManger : MonoBehaviour {
 	public bool nextPowerUp;
 	[HideInInspector]
 	public string nextPowerUpName;
+	[HideInInspector]
+	public bool tutoComplete;
 
 	private GameObject temp;
 
@@ -145,6 +147,8 @@ public class dataManger : MonoBehaviour {
 			data.tutorial = tutorial;
 			data.nextPowerUp = nextPowerUp;
 			data.nextPowerUpName = nextPowerUpName;
+			data.actualWorld = actualWorld;
+			data.tutoComplete = tutoComplete;
 			if(complete){
 				for(int i = 1; i <= levelsMars; i++){
 					if(starsMars["Level_"+i] > data.starsMars["Level_"+i]){
@@ -205,7 +209,9 @@ public class dataManger : MonoBehaviour {
 			inverted = data.inverted;
 			tutorial = data.tutorial;
 			nextPowerUp = data.nextPowerUp;
+			actualWorld = data.actualWorld;
 			nextPowerUpName = data.nextPowerUpName;
+			tutoComplete = data.tutoComplete;
 
 			for(int i = 1; i<= levelsMars ; i++){
 				starsMars["Level_"+i] = data.starsMars["Level_"+i];
@@ -296,6 +302,7 @@ public class dataManger : MonoBehaviour {
 				data.actualShip = actualShip;
 				shipUnlocks.Add("Ship01");
 				data.shipUnlocks = shipUnlocks;
+
 				for(int i = 1; i <= levelsMars; i++){
 					data.stars.Add("Level_"+i,0);
 					data.scores.Add("Level_"+i,0);
@@ -359,7 +366,11 @@ public class dataManger : MonoBehaviour {
 		data.starsMars = data2.stars;
 		data.totalStars = data2.totalStars;
 		data.unlocksIce = 21;
+		actualWorld = "Mars";
+		data.actualWorld = actualWorld;
 		unlocksIce = data.unlocksIce;
+		tutoComplete = false;
+		data.tutoComplete = tutoComplete;
 		Debug.Log("Unlocks Ice: "+ unlocksIce);
 		for(int i = 1; i <= levelsIce; i++){
 			data.starsIce.Add("Level_"+i,0);
@@ -496,5 +507,9 @@ class Data {
 	public bool nextPowerUp;
 	[HideInInspector]
 	public string nextPowerUpName;
+	[HideInInspector]
+	public string actualWorld;
+	[HideInInspector]
+	public bool tutoComplete;
 }
 
