@@ -72,18 +72,22 @@ public class WinLose : MonoBehaviour {
 				coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 				scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
 				scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
-				if (dataManger.manager.actualLevel <= 21)
-
-				//Se obtiene el numero de estrellas necesario para obtener el siguiente color
-
-				GameObject colorbuttons = uicamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/Color_Buttons").gameObject;
-				starsNewColor = 10000;
-				foreach (Transform child in colorbuttons.transform) {
-					int starAct = child.gameObject.GetComponent<Color_Enabled>().StarsRequired;
-					if (dataManger.manager.totalStars < starAct && starAct < starsNewColor)
-						starsNewColor = starAct;
+				if (dataManger.manager.actualLevel <= 21){
+					GameObject colorbuttons = uicamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/Color_Buttons").gameObject;
+					//Se obtiene el numero de estrellas necesario para obtener el siguiente color
+					
+					
+					starsNewColor = 10000;
+					foreach (Transform child in colorbuttons.transform) {
+						int starAct = child.gameObject.GetComponent<Color_Enabled>().StarsRequired;
+						if (dataManger.manager.totalStars < starAct && starAct < starsNewColor)
+							starsNewColor = starAct;
+					}
+					//starsNewColor += dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
 				}
-				//starsNewColor += dataManger.manager.stars["Level_"+dataManger.manager.actualLevel];
+						
+					
+
 			}
 			touch = GetComponent<Touch_Manager>();
 			damage = ship.GetComponent<Damage>();
