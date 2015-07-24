@@ -79,6 +79,8 @@ public class dataManger : MonoBehaviour {
 	public string nextPowerUpName;
 	[HideInInspector]
 	public bool tutoComplete;
+	[HideInInspector]
+	public List<string>worldUnlocks = new List<string>();
 
 	private GameObject temp;
 
@@ -149,6 +151,7 @@ public class dataManger : MonoBehaviour {
 			data.nextPowerUpName = nextPowerUpName;
 			data.actualWorld = actualWorld;
 			data.tutoComplete = tutoComplete;
+			data.worldUnlocks = worldUnlocks;
 			if(complete){
 				for(int i = 1; i <= levelsMars; i++){
 					if(starsMars["Level_"+i] > data.starsMars["Level_"+i]){
@@ -167,11 +170,28 @@ public class dataManger : MonoBehaviour {
 					
 					
 				}
+				for(int i = 1; i <= levelsIce; i++){
+					if(starsIce["Level_"+i] > data.starsIce["Level_"+i]){
+						//totalStars -= data.stars["Level_"+i];
+						data.starsIce["Level_"+i] = starsIce["Level_"+i];
+						//totalStars += stars["Level_"+i];
+						data.totalStars = totalStars;
+						Debug.Log("Save Stars");
+					}
+					if(scoresIce["Level_"+i] > data.scoresIce["Level_"+i]){
+						data.scoresIce["Level_"+i] = scoresIce["Level_"+i];
+						Debug.Log("Save Scores");
+					}else{
+						scoresIce["Level_"+i] = data.scoresIce["Level_"+i];
+					}
+					
+					
+				}
 			}
 
 			
 
-			 file = File.Create(Application.persistentDataPath + "/data.jmm");
+			 file = File.Create(Application.persistentDataPath + "/data.jmma");
 
 			
 			bf.Serialize(file,data);
@@ -212,7 +232,7 @@ public class dataManger : MonoBehaviour {
 			actualWorld = data.actualWorld;
 			nextPowerUpName = data.nextPowerUpName;
 			tutoComplete = data.tutoComplete;
-
+			worldUnlocks = data.worldUnlocks;
 			for(int i = 1; i<= levelsMars ; i++){
 				starsMars["Level_"+i] = data.starsMars["Level_"+i];
 				scoresMars["Level_"+i] = data.scoresMars["Level_"+i];
@@ -237,6 +257,9 @@ public class dataManger : MonoBehaviour {
 						tempChild =  temp.transform.FindChild("Level_Score");
 						tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
 							+ scoresMars["Level_"+i].ToString();		
+					}else{
+						tempChild =  temp.transform.FindChild("Level_Number");
+						tempChild.GetComponent<tk2dTextMesh>().color = new Color32(164,182,182,255);
 					}
 				}
 				
@@ -371,6 +394,8 @@ public class dataManger : MonoBehaviour {
 		unlocksIce = data.unlocksIce;
 		tutoComplete = false;
 		data.tutoComplete = tutoComplete;
+		data.worldUnlocks.Add("Mars");
+		worldUnlocks = data.worldUnlocks;
 		Debug.Log("Unlocks Ice: "+ unlocksIce);
 		for(int i = 1; i <= levelsIce; i++){
 			data.starsIce.Add("Level_"+i,0);
@@ -511,5 +536,7 @@ class Data {
 	public string actualWorld;
 	[HideInInspector]
 	public bool tutoComplete;
+	[HideInInspector]
+	public List<string>worldUnlocks = new List<string>();
 }
 

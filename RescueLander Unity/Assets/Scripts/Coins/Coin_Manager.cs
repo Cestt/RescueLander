@@ -74,6 +74,12 @@ public class Coin_Manager : MonoBehaviour {
 						StoreInventory.BuyItem(GameAssets.COINS_575000.ItemId);
 
 				}
+				if(Type == "World"){
+					switch(Item){
+						case "Ice":
+						break;
+					}
+				}
 				if (touch.googleAnalytics != null){
 					touch.googleAnalytics.LogEvent ("Coin", Type, Item, (long)1);
 				}

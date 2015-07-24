@@ -1444,7 +1444,7 @@ public class Touch_Manager : MonoBehaviour {
 		}
 
 		int tempInt = int.Parse(tempString2);
-		tempString = "Ice";
+
 		if(tempString == "Mars"){
 			if(dataManger.manager.unlocksMars >= tempInt){
 				uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
