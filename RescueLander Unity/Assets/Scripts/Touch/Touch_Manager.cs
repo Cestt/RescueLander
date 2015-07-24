@@ -88,7 +88,7 @@ public class Touch_Manager : MonoBehaviour {
 			Win = uicameraGameobject.transform.FindChild ("WinLayout").gameObject;
 			Lose = uicameraGameobject.transform.FindChild ("LoseLayout").gameObject;
 			coinCount = uicameraGameobject.transform.FindChild("Anchor (UpperRight)/UIBase_Right/CoinCount_Ico").gameObject;
-	
+			
 			animators.Add(GameObject.Find("Landing Platform").transform.FindChild("LandingPlatform_Lights").GetComponent<tk2dSpriteAnimator>());
 
 
@@ -150,7 +150,6 @@ public class Touch_Manager : MonoBehaviour {
 		}
 
 	}
-
 
 
 

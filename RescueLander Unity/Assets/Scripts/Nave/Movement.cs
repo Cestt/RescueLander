@@ -80,7 +80,8 @@ public class Movement : MonoBehaviour {
 		clipRealenti = Resources.Load ("Sounds/EngineRealenti(Loop)") as AudioClip;
 		clipMotor = Resources.Load ("Sounds/Motor1(Loop)") as AudioClip;
 		audioThruster = transform.FindChild("Feet").GetComponent<AudioSource>();
-		if(!Application.loadedLevelName.Contains("Tuto") & dataManger.manager.actualLevel -1 < gravityLevel.Length){
+		if(!Application.loadedLevelName.Contains("Tuto") & dataManger.manager.actualLevel -1 < gravityLevel.Length 
+		   & dataManger.manager.actualWorld == "Mars"){
 			Debug.Log(gravityLevel[dataManger.manager.actualLevel-1]);
 			rigid.gravityScale = gravityLevel[dataManger.manager.actualLevel-1];
 		}

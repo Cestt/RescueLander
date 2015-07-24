@@ -12,6 +12,11 @@ public class World_Change : MonoBehaviour {
 				Levels.Add(child.gameObject);
 			}
 		}
+		if(dataManger.manager.actualWorld == "Mars"){
+			ChangeLevelName("Mars");
+		}else{
+			ChangeLevelName("Ice");
+		}
 	}
 	
 	// Update is called once per frame
@@ -19,6 +24,8 @@ public class World_Change : MonoBehaviour {
 	
 	}
 	public void ChangeLevelName(string World){
+		dataManger.manager.actualWorld = World;
+		dataManger.manager.Save(false);
 		for(int i = 0; i < Levels.Count; i++){
 			if(Levels[i].name.Substring(7,1) == "_")
 				Levels[i].name = Levels[i].name.Substring(0,8)+World;
@@ -28,60 +35,29 @@ public class World_Change : MonoBehaviour {
 		UpdateLevels(World);
 	}
 	void UpdateLevels(string World){
-		/*for(int i = 1; i<= levelsMars ; i++){
-			starsMars["Level_"+i] = data.starsMars["Level_"+i];
-			scoresMars["Level_"+i] = data.scoresMars["Level_"+i];
-			
-			temp = GameObject.Find("Level_"+i+"_Mars");
-			Transform tempChild;
-			if(temp != null){
-				tempChild =  temp.transform.FindChild("Level_Score");
-				tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
-					+ scoresMars["Level_"+i].ToString();
-				if(i<=unlocksMars){
-					
-					tempChild =  temp.transform.FindChild("Level_Number");
-					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
-					for(int j = 1; j<=3; j++){
-						if(j<=starsMars["Level_"+i]){
-							tempChild =  temp.transform.FindChild("LevelStar_"+j);
-							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
-						}
-						
-					}
-					tempChild =  temp.transform.FindChild("Level_Score");
-					tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
-						+ scoresMars["Level_"+i].ToString();		
-				}
-			}
-			
+		dataManger.manager.Load();
+		GameObject temp = GameObject.Find("Background");
+		if(World == "Mars"){
+			temp.transform.FindChild("MidParalax_A").GetComponent<tk2dSprite>().SetSprite("Mid_Paralax_A");
+			temp.transform.FindChild("MidParalax_A 1").GetComponent<tk2dSprite>().SetSprite("Mid_Paralax_A");
+			temp.transform.FindChild("MidParalax_B").GetComponent<tk2dSprite>().SetSprite("Mid_Paralax_B");
+			temp.transform.FindChild("MidParalax_B 1").GetComponent<tk2dSprite>().SetSprite("Mid_Paralax_B");
+			temp.transform.FindChild("RatioGround_Extra/RatioGround_Tile_B").GetComponent<tk2dTiledSprite>().SetSprite("GroundBg_Tile");
+			temp.transform.FindChild("RatioGround_Extra/RatioGround_Tile").GetComponent<tk2dTiledSprite>().SetSprite("GroundBg_TileTop");
+			temp.transform.FindChild("BG_Sprite01").GetComponent<tk2dSprite>().SetSprite("Background_01");
+			temp.transform.FindChild("Rocks_Mars").gameObject.SetActive(true);
+			temp.transform.FindChild("Rocks_Ice").gameObject.SetActive(false);
+		}else{
+			temp.transform.FindChild("MidParalax_A").GetComponent<tk2dSprite>().SetSprite("Mid_Paralax_Ice_A");
+			temp.transform.FindChild("MidParalax_A 1").GetComponent<tk2dSprite>().SetSprite("Mid_Paralax_Ice_A");
+			temp.transform.FindChild("MidParalax_B").GetComponent<tk2dSprite>().SetSprite("Mid_Paralax_Ice_B");
+			temp.transform.FindChild("MidParalax_B 1").GetComponent<tk2dSprite>().SetSprite("Mid_Paralax_Ice_B");
+			temp.transform.FindChild("RatioGround_Extra/RatioGround_Tile_B").GetComponent<tk2dTiledSprite>().SetSprite("GroundBg_Tile_Ice");
+			temp.transform.FindChild("RatioGround_Extra/RatioGround_Tile").GetComponent<tk2dTiledSprite>().SetSprite("GroundBg_TileTop_Ice");
+			temp.transform.FindChild("BG_Sprite01").GetComponent<tk2dSprite>().SetSprite("Background_02");
+			temp.transform.FindChild("Rocks_Mars").gameObject.SetActive(false);
+			temp.transform.FindChild("Rocks_Ice").gameObject.SetActive(true);
 		}
-		for(int i = 1; i <= levelsIce; i++){
-			starsIce["Level_"+i] = data.starsIce["Level_"+i];
-			scoresIce["Level_"+i] = data.scoresIce["Level_"+i];
-			
-			temp = GameObject.Find("Level_"+i+"_Ice");
-			Transform tempChild;
-			if(temp!= null){
-				tempChild =  temp.transform.FindChild("Level_Score");
-				tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
-					+ scoresIce["Level_"+i].ToString();
-				if(i<=unlocksIce ){
-					tempChild =  temp.transform.FindChild("Level_Number");
-					tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
-					for(int j = 1; j<=3; j++){
-						if(j<=starsIce["Level_"+i]){
-							tempChild =  temp.transform.FindChild("LevelStar"+j);
-							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
-						}
-						
-					}
-					tempChild =  temp.transform.FindChild("Level_Score");
-					tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scoresIce["Level_"+i].ToString();
-					
-				}
-				
-			}
-		}*/
+
 	}
 }
