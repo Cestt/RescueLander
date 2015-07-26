@@ -45,7 +45,7 @@ public class Touch_Manager : MonoBehaviour {
 	private tk2dUIToggleButton[] buttonsPaint = new tk2dUIToggleButton[2];
 	private tk2dUIToggleButton[] buttonsGarage = new tk2dUIToggleButton[4];
 	private tk2dUIToggleButton[] buttonsPowerUps = new tk2dUIToggleButton[3];
-	private tk2dUIToggleButton[] buttonsShips = new tk2dUIToggleButton[7];
+	private tk2dUIToggleButton[] buttonsShips = new tk2dUIToggleButton[10];
 	private List<tk2dSpriteAnimator> animators = new List<tk2dSpriteAnimator>();
 	private GameObject coinCount;
 	private bool backCoins = false;
@@ -142,6 +142,9 @@ public class Touch_Manager : MonoBehaviour {
 		buttonsShips[4] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_UFLO").GetComponent<tk2dUIToggleButton>();
 		buttonsShips[5] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Mush").GetComponent<tk2dUIToggleButton>();
 		buttonsShips[6] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Bow").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[7] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Big").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[8] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Jupitar").GetComponent<tk2dUIToggleButton>();
+		buttonsShips[9] = uicameraGameobject.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Evolve").GetComponent<tk2dUIToggleButton>();
 		colorChange = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 		uicamera = uicameraGameobject.GetComponent<Camera>();
 		share = GetComponent<Share>();
@@ -440,7 +443,7 @@ public class Touch_Manager : MonoBehaviour {
 								colorSet.SpriteSet(false,"Ship01");
 								hit.transform.FindChild("Stats").gameObject.SetActive(true);
 							}
-							for (int i=0; i < 7; i++){
+							for (int i=0; i < 10; i++){
 								if (i == 0 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
 								else
@@ -455,7 +458,7 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"369");
 							}
-							for (int i=0; i < 7; i++){
+							for (int i=0; i < 10; i++){
 								if (i == 2 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
 								else
@@ -470,7 +473,7 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Taboo");
 							}
-							for (int i=0; i < 7; i++){
+							for (int i=0; i < 10; i++){
 								if (i == 1 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
 								else
@@ -485,7 +488,7 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"UFLO");
 							}
-							for (int i=0; i < 7; i++){
+							for (int i=0; i < 10; i++){
 								if (i == 4 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
 								else
@@ -500,7 +503,7 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Box");
 							}
-							for (int i=0; i < 7; i++){
+							for (int i=0; i < 10; i++){
 								if (i == 3 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
 								else
@@ -515,7 +518,7 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Mush");
 							}
-							for (int i=0; i < 7; i++){
+							for (int i=0; i < 10; i++){
 								if (i == 5 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
 								else
@@ -530,8 +533,53 @@ public class Touch_Manager : MonoBehaviour {
 							}else{
 								colorSet.SpriteSet(false,"Bow");
 							}
-							for (int i=0; i < 7; i++){
+							for (int i=0; i < 10; i++){
 								if (i == 6 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_Big" :
+							/*if(dataManger.manager.shipUnlocks.Contains("Big")){
+								dataManger.manager.actualShip = "Big";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Big");
+							}else{
+								colorSet.SpriteSet(false,"Big");
+							}*/
+							for (int i=0; i < 10; i++){
+								if (i == 7 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_Jupitar" :
+							/*if(dataManger.manager.shipUnlocks.Contains("Jupitar")){
+								dataManger.manager.actualShip = "Jupitar";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Jupitar");
+							}else{
+								colorSet.SpriteSet(false,"Jupitar");
+							}*/
+							for (int i=0; i < 10; i++){
+								if (i == 8 && buttonsShips[i].IsOn)
+									buttonsShips[i].IsOn = false;
+								else
+									buttonsShips[i].IsOn = false;
+							}
+							break;
+						case "Button_Evolve" :
+							/*if(dataManger.manager.shipUnlocks.Contains("Evolve")){
+								dataManger.manager.actualShip = "Evolve";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Evolve");
+							}else{
+								colorSet.SpriteSet(false,"Evolve");
+							}*/
+							for (int i=0; i < 10; i++){
+								if (i == 9 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
 								else
 									buttonsShips[i].IsOn = false;
@@ -983,20 +1031,16 @@ public class Touch_Manager : MonoBehaviour {
 						buttonsGarage[3].IsOn = false;
 						break;
 					case "Button_Ship01" :
-						if(prevStats != null)
-							prevStats.SetActive(false);
-						prevStats = hit.transform.FindChild("Stats").gameObject;
-							prevStats.SetActive(true);
 						if(dataManger.manager.shipUnlocks.Contains("Ship01")){
 							dataManger.manager.actualShip = "Ship01";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Ship01");
-
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
 						}else{
 							colorSet.SpriteSet(false,"Ship01");
-
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
 						}
-						for (int i=0; i < 7; i++){
+						for (int i=0; i < 10; i++){
 							if (i == 0 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
 							else
@@ -1004,20 +1048,14 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Button_369" :
-						if(prevStats != null)
-							prevStats.SetActive(false);
-						prevStats = hit.transform.FindChild("Stats").gameObject;
-							prevStats.SetActive(true);
 						if(dataManger.manager.shipUnlocks.Contains("369")){
 							dataManger.manager.actualShip = "369";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"369");
-
 						}else{
 							colorSet.SpriteSet(false,"369");
-
 						}
-						for (int i=0; i < 7; i++){
+						for (int i=0; i < 10; i++){
 							if (i == 2 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
 							else
@@ -1025,20 +1063,14 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Button_Taboo" :
-						if(prevStats != null)
-							prevStats.SetActive(false);
-						prevStats = hit.transform.FindChild("Stats").gameObject;
-							prevStats.SetActive(true);
 						if(dataManger.manager.shipUnlocks.Contains("Taboo")){
 							dataManger.manager.actualShip = "Taboo";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Taboo");
-
-						}else{	
+						}else{
 							colorSet.SpriteSet(false,"Taboo");
-
 						}
-						for (int i=0; i < 7; i++){
+						for (int i=0; i < 10; i++){
 							if (i == 1 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
 							else
@@ -1053,7 +1085,7 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							colorSet.SpriteSet(false,"UFLO");
 						}
-						for (int i=0; i < 7; i++){
+						for (int i=0; i < 10; i++){
 							if (i == 4 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
 							else
@@ -1068,7 +1100,7 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							colorSet.SpriteSet(false,"Box");
 						}
-						for (int i=0; i < 7; i++){
+						for (int i=0; i < 10; i++){
 							if (i == 3 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
 							else
@@ -1083,7 +1115,7 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							colorSet.SpriteSet(false,"Mush");
 						}
-						for (int i=0; i < 7; i++){
+						for (int i=0; i < 10; i++){
 							if (i == 5 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
 							else
@@ -1098,8 +1130,53 @@ public class Touch_Manager : MonoBehaviour {
 						}else{
 							colorSet.SpriteSet(false,"Bow");
 						}
-						for (int i=0; i < 7; i++){
+						for (int i=0; i < 10; i++){
 							if (i == 6 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_Big" :
+						/*if(dataManger.manager.shipUnlocks.Contains("Big")){
+								dataManger.manager.actualShip = "Big";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Big");
+							}else{
+								colorSet.SpriteSet(false,"Big");
+							}*/
+						for (int i=0; i < 10; i++){
+							if (i == 7 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_Jupitar" :
+						/*if(dataManger.manager.shipUnlocks.Contains("Jupitar")){
+								dataManger.manager.actualShip = "Jupitar";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Jupitar");
+							}else{
+								colorSet.SpriteSet(false,"Jupitar");
+							}*/
+						for (int i=0; i < 10; i++){
+							if (i == 8 && buttonsShips[i].IsOn)
+								buttonsShips[i].IsOn = false;
+							else
+								buttonsShips[i].IsOn = false;
+						}
+						break;
+					case "Button_Evolve" :
+						/*if(dataManger.manager.shipUnlocks.Contains("Evolve")){
+								dataManger.manager.actualShip = "Evolve";
+								dataManger.manager.Save(false);
+								colorSet.SpriteSet(true,"Evolve");
+							}else{
+								colorSet.SpriteSet(false,"Evolve");
+							}*/
+						for (int i=0; i < 10; i++){
+							if (i == 9 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
 							else
 								buttonsShips[i].IsOn = false;
