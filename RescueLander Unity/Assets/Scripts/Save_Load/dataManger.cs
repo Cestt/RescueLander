@@ -233,6 +233,13 @@ public class dataManger : MonoBehaviour {
 			nextPowerUpName = data.nextPowerUpName;
 			tutoComplete = data.tutoComplete;
 			worldUnlocks = data.worldUnlocks;
+			if (worldUnlocks.Contains("Ice")){
+				GameObject.Find ("World_Buttons").transform.FindChild("Button_World_Ice/World2_Text").gameObject.SetActive(true);
+				Transform tempWorld = GameObject.Find ("World_Buttons").transform.FindChild("Button_World_Ice/Button_Buy");
+				if (tempWorld != null)
+					tempWorld.gameObject.SetActive(false);
+
+			}
 			for(int i = 1; i<= levelsMars ; i++){
 				starsMars["Level_"+i] = data.starsMars["Level_"+i];
 				scoresMars["Level_"+i] = data.scoresMars["Level_"+i];
@@ -388,7 +395,7 @@ public class dataManger : MonoBehaviour {
 		data.socialPending = data2.socialPending;
 		data.starsMars = data2.stars;
 		data.totalStars = data2.totalStars;
-		data.unlocksIce = 21;
+		data.unlocksIce = 1;
 		actualWorld = "Mars";
 		data.actualWorld = actualWorld;
 		unlocksIce = data.unlocksIce;

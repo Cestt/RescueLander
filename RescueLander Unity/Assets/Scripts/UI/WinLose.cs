@@ -73,7 +73,7 @@ public class WinLose : MonoBehaviour {
 				scoreManager =  GameObject.Find("ScoreCoin_Manager").GetComponent<ScoreManager> ();
 				scoreTotalText = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Total").gameObject.GetComponent<tk2dTextMesh> ();
 				if (dataManger.manager.actualLevel <= 21){
-					GameObject colorbuttons = uicamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/Color_Buttons").gameObject;
+					GameObject colorbuttons = uicamera.transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/Color_Buttons_Scroll/Color_Buttons").gameObject;
 					//Se obtiene el numero de estrellas necesario para obtener el siguiente color
 					
 					

@@ -17,6 +17,7 @@ public class Coin_Manager : MonoBehaviour {
 		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 	}
 	public bool Compra(int Coins,string Type,string Item){
+		Debug.Log ("COMPRA: "+Item);
 		try{
 			if(Coins > dataManger.manager.coins){
 				GameObject uicameraGameobject = GameObject.Find("UI_Camera");
@@ -76,7 +77,10 @@ public class Coin_Manager : MonoBehaviour {
 				}
 				if(Type == "World"){
 					switch(Item){
-						case "Ice":
+						case "World_Ice":
+							dataManger.manager.worldUnlocks.Add ("Ice");
+							GameObject.Find ("World_Buttons").transform.FindChild("Button_World_Ice/Button_Buy").gameObject.SetActive(false);
+							GameObject.Find ("World_Buttons").transform.FindChild("Button_World_Ice/World2_Text").gameObject.SetActive(true);
 						break;
 					}
 				}

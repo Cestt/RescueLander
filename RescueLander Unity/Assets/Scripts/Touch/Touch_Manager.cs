@@ -270,7 +270,7 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualLevel ++;
 							dataManger.manager.Save(false);
 							googleAnalytics.LogScreen("Level_"+(Level + 1));
-							Application.LoadLevel("Level_"+(Level + 1)+"_Ice");
+							Application.LoadLevel("Level_"+(Level + 1)+"_"+dataManger.manager.actualWorld);
 							break;
 						case "Share_Button" :
 							share.ShareScreenshot();
@@ -735,8 +735,10 @@ public class Touch_Manager : MonoBehaviour {
 							Application.LoadLevel (Application.loadedLevel);
 							break;
 						case "Button_World_Ice" :
-							Debug.Log("World: " + hit.transform.name.Substring(13));
-							hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
+							if (dataManger.manager.worldUnlocks.Contains("Ice")){
+								Debug.Log("World: " + hit.transform.name.Substring(13));
+								hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
+							}
 							break;
 						case "Button_World_Mars" :
 							Debug.Log("World: " + hit.transform.name.Substring(13));
@@ -894,7 +896,7 @@ public class Touch_Manager : MonoBehaviour {
 						dataManger.manager.actualLevel ++;
 						dataManger.manager.Save(false);
 						googleAnalytics.LogScreen("Level_"+(Level + 1));
-						Application.LoadLevel("Level_"+(Level + 1)+"_Ice");
+						Application.LoadLevel("Level_"+(Level + 1)+"_"+dataManger.manager.actualWorld);
 						break;
 					case "Share_Button" :
 						share.ShareScreenshot();
@@ -1327,8 +1329,10 @@ public class Touch_Manager : MonoBehaviour {
 						Application.LoadLevel (Application.loadedLevel);
 						break;
 					case "Button_World_Ice" :
-						Debug.Log("World: " + hit.transform.name.Substring(13));
-						hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
+						if (dataManger.manager.worldUnlocks.Contains("Ice")){
+							Debug.Log("World: " + hit.transform.name.Substring(13));
+							hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
+						}
 						break;
 					case "Button_World_Mars" :
 						Debug.Log("World: " + hit.transform.name.Substring(13));
