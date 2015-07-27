@@ -11,7 +11,8 @@ public class IceCube : MonoBehaviour {
 	float timeChange;
 	float timeTotal;
 	int iceAct;
-
+	AstronautPickUp pickUp;
+	float distIni;
 	void Awake () {
 		animatorAstronaut = transform.parent.GetComponent<tk2dSpriteAnimator> ();
 		ship = GameObject.Find (dataManger.manager.actualShip + "(Clone)");
@@ -23,6 +24,9 @@ public class IceCube : MonoBehaviour {
 		timeChange = timeCube / 4f;
 		timeTotal = 0;
 		iceAct = 0;
+		pickUp = transform.parent.GetComponent<AstronautPickUp> ();
+		distIni = pickUp.pickUpDistance;
+		pickUp.pickUpDistance = -1;
 	//	Debug.Log ("TIEMPO CAMBIO: "+ timeChange);
 	}
 	
@@ -40,6 +44,7 @@ public class IceCube : MonoBehaviour {
 					if (iceAct < 4){
 						ice[iceAct].SetActive(true);
 					}else{
+						pickUp.pickUpDistance = distIni;
 						animatorAstronaut.Play ();
 						gameObject.SetActive (false);
 					}

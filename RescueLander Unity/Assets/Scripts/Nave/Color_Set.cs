@@ -116,6 +116,27 @@ public class Color_Set : MonoBehaviour {
 					tintMask.colorMaskGreen = new Color32(255,127,0,255);
 					
 					break;
+				case "Big" :
+					tintMask = 
+						ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+					tintMask.colorMaskRed = new Color32(124,124,124,124);
+					tintMask.colorMaskGreen = new Color32(124,124,124,124);
+					break;
+				case "Jupitar" :
+					tintMask = 
+						ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+					tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+					tintMask.colorMaskRed = new Color32(0,0,255,255);
+					tintMask.colorMaskGreen = new Color32(255,255,255,255);
+					break;
+				case "Evolve" :
+					tintMask = 
+						ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+					tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+					tintMask.colorMaskRed = new Color32(204,204,204,255);
+					tintMask.colorMaskGreen = new Color32(0,0,0,255);
+					break;
 				}
 				
 			}
@@ -177,6 +198,27 @@ public class Color_Set : MonoBehaviour {
 						tintMask.colorMaskGreen = new Color32(255,127,0,255);
 						
 						break;
+					case "Big" :
+						tintMask = 
+							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+						tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.colorMaskRed = new Color32(124,124,124,124);
+						tintMask.colorMaskGreen = new Color32(124,124,124,124);
+						break;
+					case "Jupitar" :
+						tintMask = 
+							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+						tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.colorMaskRed = new Color32(0,0,255,255);
+						tintMask.colorMaskGreen = new Color32(255,255,255,255);
+						break;
+					case "Evolve" :
+						tintMask = 
+							ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+						tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+						tintMask.colorMaskRed = new Color32(204,204,204,255);
+						tintMask.colorMaskGreen = new Color32(0,0,0,255);
+						break;
 					}
 
 				}
@@ -234,11 +276,31 @@ public class Color_Set : MonoBehaviour {
 					tintMask.colorMaskGreen = new Color32(255,127,0,255);
 					
 					break;
+			case "Big" :
+				tintMask = 
+					ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+				tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+				tintMask.colorMaskRed = new Color32(124,124,124,124);
+				tintMask.colorMaskGreen = new Color32(124,124,124,124);
+				break;
+			case "Jupitar" :
+				tintMask = 
+					ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+				tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+				tintMask.colorMaskRed = new Color32(0,0,255,255);
+				tintMask.colorMaskGreen = new Color32(255,255,255,255);
+				break;
+			case "Evolve" :
+				tintMask = 
+					ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+				tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+				tintMask.colorMaskRed = new Color32(204,204,204,255);
+				tintMask.colorMaskGreen = new Color32(0,0,0,255);
+				break;
 			}
 
 		}else{
 			ShipGaraje2.GetComponent<SpriteRenderer>().sprite =  Resources.Load("Sprites/"+shipChange + "_High", typeof(Sprite)) as Sprite;
-
 			
 			switch(shipChange){
 			case "Ship01" :
@@ -289,6 +351,27 @@ public class Color_Set : MonoBehaviour {
 				tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
 				tintMask.colorMaskRed = new Color32(147,104,181,255);
 				tintMask.colorMaskGreen = new Color32(255,127,0,255);
+				break;
+			case "Big" :
+				tintMask = 
+					ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+				tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+				tintMask.colorMaskRed = new Color32(124,124,124,255);
+				tintMask.colorMaskGreen = new Color32(124,124,124,255);
+				break;
+			case "Jupitar" :
+				tintMask = 
+					ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+				tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+				tintMask.colorMaskRed = new Color32(0,0,255,255);
+				tintMask.colorMaskGreen = new Color32(255,255,255,255);
+				break;
+			case "Evolve" :
+				tintMask = 
+					ShipGaraje2.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+				tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+				tintMask.colorMaskRed = new Color32(204,204,204,255);
+				tintMask.colorMaskGreen = new Color32(0,0,0,255);
 				break;
 			}
 		}

@@ -130,6 +130,7 @@ public class dataManger : MonoBehaviour {
 			file.Close();
 
 			data.unlocksMars = unlocksMars;
+			data.unlocksIce = unlocksIce;
 			data.Sounds = Sounds;
 			data.Music = Music;
 			data.actualShip = actualShip;
@@ -258,8 +259,10 @@ public class dataManger : MonoBehaviour {
 							if(j<=starsMars["Level_"+i]){
 								tempChild =  temp.transform.FindChild("LevelStar_"+j);
 								tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
+							}else{
+								tempChild =  temp.transform.FindChild("LevelStar_"+j);
+								tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Lose");
 							}
-							
 						}
 						tempChild =  temp.transform.FindChild("Level_Score");
 						tempChild.GetComponent<tk2dTextMesh>().text = "Score :"
@@ -286,16 +289,23 @@ public class dataManger : MonoBehaviour {
 						tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
 						for(int j = 1; j<=3; j++){
 							if(j<=starsIce["Level_"+i]){
-								tempChild =  temp.transform.FindChild("LevelStar"+j);
+								tempChild =  temp.transform.FindChild("LevelStar_"+j);
 								tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Win");
-							}
-							
+							}else{
+								tempChild =  temp.transform.FindChild("LevelStar_"+j);
+								tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Lose");
+							}	
 						}
 						tempChild =  temp.transform.FindChild("Level_Score");
 						tempChild.GetComponent<tk2dTextMesh>().text ="Score: "+ scoresIce["Level_"+i].ToString();
-
-				}
-					
+					}else if (i<= unlocksMars){
+						for(int j = 1; j<=3; j++){
+							tempChild =  temp.transform.FindChild("LevelStar_"+j);
+							tempChild.GetComponent<tk2dSprite>().SetSprite("Estrella_Lose");
+						}
+						tempChild =  temp.transform.FindChild("Level_Number");
+						tempChild.GetComponent<tk2dTextMesh>().color = new Color32(164,182,182,255);
+					}
 				}
 			}
 			file.Close();

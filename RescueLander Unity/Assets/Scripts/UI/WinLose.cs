@@ -161,58 +161,112 @@ public class WinLose : MonoBehaviour {
 					float fuel = mov.GetComponent<Movement>().fuel;
 					float maxFuel = mov.GetComponent<Movement>().originalFuel;
 
-					
-					if(dataManger.manager.actualLevel == dataManger.manager.unlocksMars & !Application.loadedLevelName.Contains("Tuto")){
-						dataManger.manager.unlocksMars++;
+					if (dataManger.manager.actualWorld == "Mars"){
+						if(dataManger.manager.actualLevel == dataManger.manager.unlocksMars & !Application.loadedLevelName.Contains("Tuto")){
+							dataManger.manager.unlocksMars++;
+						}
+					}
+					if (dataManger.manager.actualWorld == "Ice"){
+						if(dataManger.manager.actualLevel == dataManger.manager.unlocksIce & !Application.loadedLevelName.Contains("Tuto")){
+							dataManger.manager.unlocksIce++;
+						}
 					}
 					if(!Application.loadedLevelName.Contains("Tuto")){
-						coin_manager.LevelCoin(coin_manager.levelCoins);
-						scoreManager.stopScore();
-						totalScore = (int)scoreManager.timeScore;
+						if (dataManger.manager.actualWorld == "Mars"){
+							coin_manager.LevelCoin(coin_manager.levelCoins);
+							scoreManager.stopScore();
+							totalScore = (int)scoreManager.timeScore;
 
-						dataManger.manager.totalStars -= dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel];
+							dataManger.manager.totalStars -= dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel];
 
-						if (dataManger.manager.actualLevel == 21 && dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] > 0){
-							alreadyComplete = true;
-						}
+							if (dataManger.manager.actualLevel == 21 && dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] > 0){
+								alreadyComplete = true;
+							}
 
-						if(damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
-							dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] = 3;
-							dataManger.manager.coins += coin_manager.ThreeStarCoin;
-							stars[1].SetActive(true);
-							stars[2].SetActive(true);
-							WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
-								= coin_manager.ThreeStarCoin.ToString();
-							WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-								= "3 Stars:";
-							//ACHIEVEMENT
-							Social.ReportProgress("CgkIuv-YgIkeEAIQCQ", 100.0f, (bool success) => {
-								socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
-							});
+							if(damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
+								dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] = 3;
+								dataManger.manager.coins += coin_manager.ThreeStarCoin;
+								stars[1].SetActive(true);
+								stars[2].SetActive(true);
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+									= coin_manager.ThreeStarCoin.ToString();
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+									= "3 Stars:";
+								//ACHIEVEMENT
+								Social.ReportProgress("CgkIuv-YgIkeEAIQCQ", 100.0f, (bool success) => {
+									socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
+								});
+							}
+							else if(damage.life >= (((float)damage.maxLife*50)/100f)){
+								dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] = 2;
+								dataManger.manager.coins += coin_manager.TwoStarCoin;
+								stars[1].SetActive(true);
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+									= coin_manager.TwoStarCoin.ToString();
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+									= "2 Stars:";
+							}
+							else {
+								dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] = 1;
+								dataManger.manager.coins += coin_manager.OneStarCoin;
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+									= coin_manager.OneStarCoin.ToString();
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+									= "1 Star:";
+							}
+							dataManger.manager.totalStars += dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel];
+							if ((int)scoreManager.scoreCalc() > dataManger.manager.scoresMars["Level_"+dataManger.manager.actualLevel]){
+								new_record.SetActive(true);
+								dataManger.manager.scoresMars["Level_"+dataManger.manager.actualLevel] = (int)scoreManager.scoreCalc();
+							}
+						}else if (dataManger.manager.actualWorld == "Ice"){
+							coin_manager.LevelCoin(coin_manager.levelCoins);
+							scoreManager.stopScore();
+							totalScore = (int)scoreManager.timeScore;
+							
+							dataManger.manager.totalStars -= dataManger.manager.starsIce["Level_"+dataManger.manager.actualLevel];
+							
+							if (dataManger.manager.actualLevel == 21 && dataManger.manager.starsIce["Level_"+dataManger.manager.actualLevel] > 0){
+								alreadyComplete = true;
+							}
+							
+							if(damage.life >= (((float)damage.maxLife*lifeThrdStarPercent)/100f)){
+								dataManger.manager.starsIce["Level_"+dataManger.manager.actualLevel] = 3;
+								dataManger.manager.coins += coin_manager.ThreeStarCoin;
+								stars[1].SetActive(true);
+								stars[2].SetActive(true);
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+									= coin_manager.ThreeStarCoin.ToString();
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+									= "3 Stars:";
+								//ACHIEVEMENT
+								Social.ReportProgress("CgkIuv-YgIkeEAIQCQ", 100.0f, (bool success) => {
+									socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
+								});
+							}
+							else if(damage.life >= (((float)damage.maxLife*50)/100f)){
+								dataManger.manager.starsIce["Level_"+dataManger.manager.actualLevel] = 2;
+								dataManger.manager.coins += coin_manager.TwoStarCoin;
+								stars[1].SetActive(true);
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+									= coin_manager.TwoStarCoin.ToString();
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+									= "2 Stars:";
+							}
+							else {
+								dataManger.manager.starsIce["Level_"+dataManger.manager.actualLevel] = 1;
+								dataManger.manager.coins += coin_manager.OneStarCoin;
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
+									= coin_manager.OneStarCoin.ToString();
+								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
+									= "1 Star:";
+							}
+							dataManger.manager.totalStars += dataManger.manager.starsIce["Level_"+dataManger.manager.actualLevel];
+							if ((int)scoreManager.scoreCalc() > dataManger.manager.scoresIce["Level_"+dataManger.manager.actualLevel]){
+								new_record.SetActive(true);
+								dataManger.manager.scoresIce["Level_"+dataManger.manager.actualLevel] = (int)scoreManager.scoreCalc();
+							}
 						}
-						else if(damage.life >= (((float)damage.maxLife*50)/100f)){
-							dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] = 2;
-							dataManger.manager.coins += coin_manager.TwoStarCoin;
-							stars[1].SetActive(true);
-							WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
-								= coin_manager.TwoStarCoin.ToString();
-							WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-								= "2 Stars:";
-						}
-						else {
-							dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] = 1;
-							dataManger.manager.coins += coin_manager.OneStarCoin;
-							WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
-								= coin_manager.OneStarCoin.ToString();
-							WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-								= "1 Star:";
-						}
-						dataManger.manager.totalStars += dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel];
-						if ((int)scoreManager.scoreCalc() > dataManger.manager.scoresMars["Level_"+dataManger.manager.actualLevel]){
-							new_record.SetActive(true);
-							dataManger.manager.scoresMars["Level_"+dataManger.manager.actualLevel] = (int)scoreManager.scoreCalc();
-						}
-
 						if (starsNewColor <= dataManger.manager.totalStars ){
 							new_color.SetActive(true);
 							Debug.Log ("NUEVO COLOR!!!");

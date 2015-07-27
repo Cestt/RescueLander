@@ -541,13 +541,13 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							break;
 						case "Button_Big" :
-							/*if(dataManger.manager.shipUnlocks.Contains("Big")){
+							if(dataManger.manager.shipUnlocks.Contains("Big")){
 								dataManger.manager.actualShip = "Big";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Big");
 							}else{
 								colorSet.SpriteSet(false,"Big");
-							}*/
+							}
 							for (int i=0; i < 10; i++){
 								if (i == 7 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
@@ -556,13 +556,13 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							break;
 						case "Button_Jupitar" :
-							/*if(dataManger.manager.shipUnlocks.Contains("Jupitar")){
+							if(dataManger.manager.shipUnlocks.Contains("Jupitar")){
 								dataManger.manager.actualShip = "Jupitar";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Jupitar");
 							}else{
 								colorSet.SpriteSet(false,"Jupitar");
-							}*/
+							}
 							for (int i=0; i < 10; i++){
 								if (i == 8 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
@@ -571,13 +571,13 @@ public class Touch_Manager : MonoBehaviour {
 							}
 							break;
 						case "Button_Evolve" :
-							/*if(dataManger.manager.shipUnlocks.Contains("Evolve")){
+							if(dataManger.manager.shipUnlocks.Contains("Evolve")){
 								dataManger.manager.actualShip = "Evolve";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Evolve");
 							}else{
 								colorSet.SpriteSet(false,"Evolve");
-							}*/
+							}
 							for (int i=0; i < 10; i++){
 								if (i == 9 && buttonsShips[i].IsOn)
 									buttonsShips[i].IsOn = false;
@@ -1140,13 +1140,13 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Button_Big" :
-						/*if(dataManger.manager.shipUnlocks.Contains("Big")){
+						if(dataManger.manager.shipUnlocks.Contains("Big")){
 								dataManger.manager.actualShip = "Big";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Big");
 							}else{
 								colorSet.SpriteSet(false,"Big");
-							}*/
+							}
 						for (int i=0; i < 10; i++){
 							if (i == 7 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
@@ -1155,13 +1155,13 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Button_Jupitar" :
-						/*if(dataManger.manager.shipUnlocks.Contains("Jupitar")){
+						if(dataManger.manager.shipUnlocks.Contains("Jupitar")){
 								dataManger.manager.actualShip = "Jupitar";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Jupitar");
 							}else{
 								colorSet.SpriteSet(false,"Jupitar");
-							}*/
+							}
 						for (int i=0; i < 10; i++){
 							if (i == 8 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
@@ -1170,13 +1170,13 @@ public class Touch_Manager : MonoBehaviour {
 						}
 						break;
 					case "Button_Evolve" :
-						/*if(dataManger.manager.shipUnlocks.Contains("Evolve")){
+						if(dataManger.manager.shipUnlocks.Contains("Evolve")){
 								dataManger.manager.actualShip = "Evolve";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Evolve");
 							}else{
 								colorSet.SpriteSet(false,"Evolve");
-							}*/
+							}
 						for (int i=0; i < 10; i++){
 							if (i == 9 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
@@ -1439,9 +1439,9 @@ public class Touch_Manager : MonoBehaviour {
 				
 				if(Application.loadedLevelName.Contains("Level")){
 					uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
+					/*uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
 					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
-					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(false);
+					uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(false);*/
 				}
 				for (int i=0; i< animators.Count; i++){
 					if (animators[i] != null)

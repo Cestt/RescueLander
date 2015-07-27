@@ -26,8 +26,10 @@ public class Value : MonoBehaviour {
 		if(Tipo == Type.World){
 			_Type = "World";
 		}
-		tk2dTextMesh text = gameObject.transform.FindChild("Button_Buy_Up/ButtonShip_Price").GetComponent<tk2dTextMesh>();
-		text.text = Cost.ToString();
+		if (_Type != "World") {
+			tk2dTextMesh text = gameObject.transform.FindChild ("Button_Buy_Up/ButtonShip_Price").GetComponent<tk2dTextMesh> ();
+			text.text = Cost.ToString ();
+		}
 	}
 
 }

@@ -43,6 +43,7 @@ public class Movement : MonoBehaviour {
 	private AudioClip clipRealenti;
 	private AudioClip clipMotor;
 	public float [] fuelLevel;
+	public float [] fuelLevelIce;
 	public float [] gravityLevel;
 	public float actualTime;
 	public float LoseTime;
@@ -59,7 +60,10 @@ public class Movement : MonoBehaviour {
 			fuel = 2500;
 		}else{
 			prompFuel = false;
-			fuel = fuelLevel[dataManger.manager.actualLevel-1];
+			if (dataManger.manager.actualWorld == "Mars")
+				fuel = fuelLevel[dataManger.manager.actualLevel-1];
+			else if (dataManger.manager.actualWorld == "Ice")
+				fuel = fuelLevelIce[dataManger.manager.actualLevel-1];
 		}
 		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		fuelBar = GameObject.Find("BarraFuel");
