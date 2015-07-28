@@ -25,7 +25,7 @@ public class Movement : MonoBehaviour {
 	public float angularForce = 0f;
 	public float angularSpeedUpgrade = 0f;
 	public int maxAngularSpeed = 0;
-	[HideInInspector]
+	//[HideInInspector]
 	public float fuel;
 	public float fuelConsumption = 0;
 	public float massMotor = 0f;

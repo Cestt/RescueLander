@@ -63,9 +63,9 @@ public class ScoreManager : MonoBehaviour {
 		CancelInvoke ("timeScoreCalc");
 		float totalScore = timeScore + damage.life + movement.fuel;
 		if (touch.googleAnalytics != null) {
-			touch.googleAnalytics.LogEvent ("Score", dataManger.manager.actualLevel.ToString(), "Time", (long)timeScore);
-			touch.googleAnalytics.LogEvent ("Score", dataManger.manager.actualLevel.ToString(), "Damage", (long)damage.life);
-			touch.googleAnalytics.LogEvent ("Score", dataManger.manager.actualLevel.ToString(), "Movement", (long)movement.fuel);
+			touch.googleAnalytics.LogEvent ("Score", dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel.ToString(), "Time", (long)timeScore);
+			touch.googleAnalytics.LogEvent ("Score", dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel.ToString(), "Damage", (long)damage.life);
+			touch.googleAnalytics.LogEvent ("Score", dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel.ToString(), "Movement", (long)movement.fuel);
 		}
 
 		return totalScore;

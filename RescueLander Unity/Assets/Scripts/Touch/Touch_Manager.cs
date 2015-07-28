@@ -269,7 +269,7 @@ public class Touch_Manager : MonoBehaviour {
 							int Level = dataManger.manager.actualLevel;
 							dataManger.manager.actualLevel ++;
 							dataManger.manager.Save(false);
-							googleAnalytics.LogScreen("Level_"+(Level + 1));
+							googleAnalytics.LogScreen("Level_"+(Level + 1)+"_"+dataManger.manager.actualWorld);
 							Application.LoadLevel("Level_"+(Level + 1)+"_"+dataManger.manager.actualWorld);
 							break;
 						case "Share_Button" :
@@ -438,10 +438,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Ship01";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Ship01");
+								prevStats.SetActive(false);
 								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"Ship01");
+								prevStats.SetActive(false);
 								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 0 && buttonsShips[i].IsOn)
@@ -455,8 +459,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "369";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"369");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"369");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 2 && buttonsShips[i].IsOn)
@@ -470,8 +480,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Taboo";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Taboo");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"Taboo");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 1 && buttonsShips[i].IsOn)
@@ -485,8 +501,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "UFLO";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"UFLO");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"UFLO");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 4 && buttonsShips[i].IsOn)
@@ -500,8 +522,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Box";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Box");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"Box");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 3 && buttonsShips[i].IsOn)
@@ -515,8 +543,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Mush";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Mush");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"Mush");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 5 && buttonsShips[i].IsOn)
@@ -530,8 +564,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Bow";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Bow");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"Bow");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 6 && buttonsShips[i].IsOn)
@@ -545,8 +585,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Big";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Big");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"Big");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 7 && buttonsShips[i].IsOn)
@@ -560,8 +606,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Jupitar";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Jupitar");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"Jupitar");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 8 && buttonsShips[i].IsOn)
@@ -575,8 +627,14 @@ public class Touch_Manager : MonoBehaviour {
 								dataManger.manager.actualShip = "Evolve";
 								dataManger.manager.Save(false);
 								colorSet.SpriteSet(true,"Evolve");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}else{
 								colorSet.SpriteSet(false,"Evolve");
+								prevStats.SetActive(false);
+								hit.transform.FindChild("Stats").gameObject.SetActive(true);
+								prevStats = hit.transform.FindChild("Stats").gameObject;
 							}
 							for (int i=0; i < 10; i++){
 								if (i == 9 && buttonsShips[i].IsOn)
@@ -895,7 +953,7 @@ public class Touch_Manager : MonoBehaviour {
 						int Level = dataManger.manager.actualLevel;
 						dataManger.manager.actualLevel ++;
 						dataManger.manager.Save(false);
-						googleAnalytics.LogScreen("Level_"+(Level + 1));
+						googleAnalytics.LogScreen("Level_"+(Level + 1)+"_"+dataManger.manager.actualWorld);
 						Application.LoadLevel("Level_"+(Level + 1)+"_"+dataManger.manager.actualWorld);
 						break;
 					case "Share_Button" :
@@ -1037,10 +1095,14 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualShip = "Ship01";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Ship01");
+							prevStats.SetActive(false);
 							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}else{
 							colorSet.SpriteSet(false,"Ship01");
+							prevStats.SetActive(false);
 							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}
 						for (int i=0; i < 10; i++){
 							if (i == 0 && buttonsShips[i].IsOn)
@@ -1054,8 +1116,14 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualShip = "369";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"369");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}else{
 							colorSet.SpriteSet(false,"369");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}
 						for (int i=0; i < 10; i++){
 							if (i == 2 && buttonsShips[i].IsOn)
@@ -1069,8 +1137,14 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualShip = "Taboo";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Taboo");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}else{
 							colorSet.SpriteSet(false,"Taboo");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}
 						for (int i=0; i < 10; i++){
 							if (i == 1 && buttonsShips[i].IsOn)
@@ -1084,8 +1158,14 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualShip = "UFLO";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"UFLO");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}else{
 							colorSet.SpriteSet(false,"UFLO");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}
 						for (int i=0; i < 10; i++){
 							if (i == 4 && buttonsShips[i].IsOn)
@@ -1099,8 +1179,14 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualShip = "Box";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Box");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}else{
 							colorSet.SpriteSet(false,"Box");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}
 						for (int i=0; i < 10; i++){
 							if (i == 3 && buttonsShips[i].IsOn)
@@ -1114,8 +1200,14 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualShip = "Mush";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Mush");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}else{
 							colorSet.SpriteSet(false,"Mush");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}
 						for (int i=0; i < 10; i++){
 							if (i == 5 && buttonsShips[i].IsOn)
@@ -1129,8 +1221,14 @@ public class Touch_Manager : MonoBehaviour {
 							dataManger.manager.actualShip = "Bow";
 							dataManger.manager.Save(false);
 							colorSet.SpriteSet(true,"Bow");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}else{
 							colorSet.SpriteSet(false,"Bow");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
 						}
 						for (int i=0; i < 10; i++){
 							if (i == 6 && buttonsShips[i].IsOn)
@@ -1141,12 +1239,18 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Button_Big" :
 						if(dataManger.manager.shipUnlocks.Contains("Big")){
-								dataManger.manager.actualShip = "Big";
-								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true,"Big");
-							}else{
-								colorSet.SpriteSet(false,"Big");
-							}
+							dataManger.manager.actualShip = "Big";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"Big");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
+						}else{
+							colorSet.SpriteSet(false,"Big");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
+						}
 						for (int i=0; i < 10; i++){
 							if (i == 7 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
@@ -1156,12 +1260,18 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Button_Jupitar" :
 						if(dataManger.manager.shipUnlocks.Contains("Jupitar")){
-								dataManger.manager.actualShip = "Jupitar";
-								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true,"Jupitar");
-							}else{
-								colorSet.SpriteSet(false,"Jupitar");
-							}
+							dataManger.manager.actualShip = "Jupitar";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"Jupitar");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
+						}else{
+							colorSet.SpriteSet(false,"Jupitar");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
+						}
 						for (int i=0; i < 10; i++){
 							if (i == 8 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;
@@ -1171,12 +1281,18 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Button_Evolve" :
 						if(dataManger.manager.shipUnlocks.Contains("Evolve")){
-								dataManger.manager.actualShip = "Evolve";
-								dataManger.manager.Save(false);
-								colorSet.SpriteSet(true,"Evolve");
-							}else{
-								colorSet.SpriteSet(false,"Evolve");
-							}
+							dataManger.manager.actualShip = "Evolve";
+							dataManger.manager.Save(false);
+							colorSet.SpriteSet(true,"Evolve");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
+						}else{
+							colorSet.SpriteSet(false,"Evolve");
+							prevStats.SetActive(false);
+							hit.transform.FindChild("Stats").gameObject.SetActive(true);
+							prevStats = hit.transform.FindChild("Stats").gameObject;
+						}
 						for (int i=0; i < 10; i++){
 							if (i == 9 && buttonsShips[i].IsOn)
 								buttonsShips[i].IsOn = false;

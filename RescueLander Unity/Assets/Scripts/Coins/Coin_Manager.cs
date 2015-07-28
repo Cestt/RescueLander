@@ -29,9 +29,9 @@ public class Coin_Manager : MonoBehaviour {
 				dataManger.manager.coins -= Coins;
 				dataManger.manager.coinsSpend += Coins;
 				if (touch.googleAnalytics != null){
-					touch.googleAnalytics.LogEvent ("Coin", "Compra"+dataManger.manager.actualLevel, "Usados", (long)Coins);
-					touch.googleAnalytics.LogEvent ("Coin", "Compra"+dataManger.manager.actualLevel, "Total", (long)dataManger.manager.coins);
-					touch.googleAnalytics.LogEvent ("Coin", "Compra"+dataManger.manager.actualLevel, "TotalAcumulado", (long)dataManger.manager.coinsAcumulated);
+					touch.googleAnalytics.LogEvent ("Coin", "Compra" + dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel, "Usados", (long)Coins);
+					touch.googleAnalytics.LogEvent ("Coin", "Compra" + dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel, "Total", (long)dataManger.manager.coins);
+					touch.googleAnalytics.LogEvent ("Coin", "Compra" + dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel, "TotalAcumulado", (long)dataManger.manager.coinsAcumulated);
 				}
 				//ACHIEVEMENT
 				if (dataManger.manager.coinsSpend >= 100000){
@@ -103,9 +103,9 @@ public class Coin_Manager : MonoBehaviour {
 		dataManger.manager.coinsAcumulated += coin;
 
 		if (touch.googleAnalytics != null){
-			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualLevel.ToString(), "Ganados", (long)coin);
-			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualLevel.ToString(), "Total", (long)dataManger.manager.coins);
-			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualLevel.ToString(), "TotalAcumulado", (long)dataManger.manager.coinsAcumulated);
+			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel.ToString(), "Ganados", (long)coin);
+			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel.ToString(), "Total", (long)dataManger.manager.coins);
+			touch.googleAnalytics.LogEvent ("Coin", dataManger.manager.actualWorld + "_" + dataManger.manager.actualLevel.ToString(), "TotalAcumulado", (long)dataManger.manager.coinsAcumulated);
 		}
 		//ACHIEVEMENT
 		if (dataManger.manager.coinsAcumulated >= 100000){
