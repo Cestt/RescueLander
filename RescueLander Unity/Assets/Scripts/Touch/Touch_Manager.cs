@@ -1052,7 +1052,7 @@ public class Touch_Manager : MonoBehaviour {
 						case "Fuel":
 
 							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Magnet").gameObject.SetActive(false);
+							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject.SetActive(false);
 							ads.Launch("Fuel","Rewarded");
 							break;
 

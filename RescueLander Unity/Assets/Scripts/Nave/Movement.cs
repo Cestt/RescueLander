@@ -103,10 +103,19 @@ public class Movement : MonoBehaviour {
 			audioThruster.Stop();
 		}
 		if (fuel < 0 & !prompFuel) {
-			touchmanager.uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-			touchmanager.actualPrompt = touchmanager.uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
-			touchmanager.actualPrompt.SetActive(true);
-			touchmanager.Pause(null,false);
+			int timeAct = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
+			timeAct -= dataManger.manager.timePrompFuel;
+			Debug.Log ("FUelTime " + timeAct);
+			if (timeAct < 0 )
+				dataManger.manager.timePrompFuel = 0;
+			if ((dataManger.manager.actualLevel < 6 && dataManger.manager.actualWorld == "Mars" ) || (timeAct > 9)){
+				touchmanager.uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+				touchmanager.actualPrompt = touchmanager.uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+				touchmanager.actualPrompt.SetActive(true);
+				touchmanager.Pause(null,false);
+				dataManger.manager.timePrompFuel = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
+
+			}
 			prompFuel = true;
 		}
 		if(fuel < 0 & !running & prompFuel & !touchmanager.paused){

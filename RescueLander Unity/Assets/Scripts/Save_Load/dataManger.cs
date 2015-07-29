@@ -81,6 +81,8 @@ public class dataManger : MonoBehaviour {
 	public bool tutoComplete;
 	[HideInInspector]
 	public List<string>worldUnlocks = new List<string>();
+	[HideInInspector]
+	public int timePrompFuel;
 
 	private GameObject temp;
 
@@ -153,6 +155,7 @@ public class dataManger : MonoBehaviour {
 			data.actualWorld = actualWorld;
 			data.tutoComplete = tutoComplete;
 			data.worldUnlocks = worldUnlocks;
+			data.timePrompFuel = timePrompFuel;
 			if(complete){
 				for(int i = 1; i <= levelsMars; i++){
 					if(starsMars["Level_"+i] > data.starsMars["Level_"+i]){
@@ -234,6 +237,7 @@ public class dataManger : MonoBehaviour {
 			nextPowerUpName = data.nextPowerUpName;
 			tutoComplete = data.tutoComplete;
 			worldUnlocks = data.worldUnlocks;
+			timePrompFuel = data.timePrompFuel;
 			if (worldUnlocks.Contains("Ice")){
 				GameObject.Find ("World_Buttons").transform.FindChild("Button_World_Ice/World2_Text").gameObject.SetActive(true);
 				Transform tempWorld = GameObject.Find ("World_Buttons").transform.FindChild("Button_World_Ice/Button_Buy");
@@ -413,6 +417,8 @@ public class dataManger : MonoBehaviour {
 		data.tutoComplete = tutoComplete;
 		data.worldUnlocks.Add("Mars");
 		worldUnlocks = data.worldUnlocks;
+		timePrompFuel = 0;
+		data.timePrompFuel = timePrompFuel;
 		Debug.Log("Unlocks Ice: "+ unlocksIce);
 		for(int i = 1; i <= levelsIce; i++){
 			data.starsIce.Add("Level_"+i,0);
@@ -555,5 +561,7 @@ class Data {
 	public bool tutoComplete;
 	[HideInInspector]
 	public List<string>worldUnlocks = new List<string>();
+	[HideInInspector]
+	public int timePrompFuel;
 }
 

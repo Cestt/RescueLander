@@ -5,7 +5,6 @@ using GoogleMobileAds.Api;
 
 public class Ads : MonoBehaviour {
 
-	private GameObject ship;
 	private string Items;
 	private Touch_Manager touch;
 	public GameObject Test;
@@ -23,12 +22,9 @@ public class Ads : MonoBehaviour {
 			Advertisement.Initialize ("37545",false);
 		} else {
 			//Test.GetComponent<tk2dTextMesh>().text = "Ads not supported";
-			GameObject temp = GameObject.Find("UI_Camera");
-			fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
-			fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;		
-			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
-		}
 
+		}
+		//ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 	}
 	void OnLevelWasLoaded(int level) {
 		if (Application.loadedLevelName != "Menu") {
@@ -62,8 +58,13 @@ public class Ads : MonoBehaviour {
 			Debug.Log("Ad finished");
 			switch(Items){
 			case "Fuel":
-				Movement movement = ship.GetComponent<Movement>();
+				GameObject temp = GameObject.Find("UI_Camera");
+				fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
+				fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;
+				Debug.Log ("Ship : " + GameObject.Find(dataManger.manager.actualShip + "(Clone)").name);
+				Movement movement = GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<Movement>();
 				movement.fuel += (movement.originalFuel  * Fuel_Recover)/100;
+				dataManger.manager.timePrompFuel = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
 				tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
 				sliced.dimensions = new Vector2( 
 				                                sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
