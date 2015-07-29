@@ -64,7 +64,6 @@ public class Ads : MonoBehaviour {
 				Debug.Log ("Ship : " + GameObject.Find(dataManger.manager.actualShip + "(Clone)").name);
 				Movement movement = GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<Movement>();
 				movement.fuel += (movement.originalFuel  * Fuel_Recover)/100;
-				dataManger.manager.timePrompFuel = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
 				tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
 				sliced.dimensions = new Vector2( 
 				                                sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
