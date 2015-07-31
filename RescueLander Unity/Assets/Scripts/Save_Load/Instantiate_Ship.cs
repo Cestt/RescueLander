@@ -14,7 +14,7 @@ public class Instantiate_Ship : MonoBehaviour {
 				instance.GetComponent<ShipAstronautDrop>().totalAstronauts = 0;
 				break;
 			case "Tuto_2":
-				instance.GetComponent<ShipAstronautDrop>().totalAstronauts = 0;
+				instance.GetComponent<ShipAstronautDrop>().totalAstronauts = 1;
 				break;
 			case "Tuto_3":
 				instance.GetComponent<ShipAstronautDrop>().totalAstronauts = 1;

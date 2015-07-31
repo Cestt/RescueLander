@@ -279,7 +279,7 @@ public class WinLose : MonoBehaviour {
 						Win();
 					}else{
 						first = false;
-						dataManger.manager.tutorial++;
+						//dataManger.manager.tutorial++;
 						stars[1].SetActive(true);
 						stars[2].SetActive(true);
 						WinSprite.SetActive(true);

@@ -48,7 +48,8 @@ void Update () {
 		once = true;
 		prevStep = step;
 	}
-	
+
+		Debug.Log ("STEP: " + step);
 	if (Input.touchCount > 0) {
 		if (Input.GetTouch (0).phase == TouchPhase.Began) {
 			
@@ -65,7 +66,7 @@ void Update () {
 						dataManger.manager.fuelPowerUps++;
 						dataManger.manager.shieldPowerUps++;
 						dataManger.manager.magnetPowerUps++;
-					dataManger.manager.tutorial = 4;
+					dataManger.manager.tutorial = 2;
 					dataManger.manager.Save(true);
 					Application.LoadLevel("Tuto_2");
 				}
@@ -73,7 +74,7 @@ void Update () {
 		}
 	}
 	if (step == 1) {
-		if (Input.GetTouch (0).phase == TouchPhase.Began) {
+		if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
 			currentText.SetActive(false);
 			currentText = texts.Where(x => x.name == "Step2").SingleOrDefault();
 			currentText.SetActive(true);
@@ -81,7 +82,7 @@ void Update () {
 		}
 	}
 	if (step == 2) {
-		if (Input.GetTouch (0).phase == TouchPhase.Began) {
+			if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
 			step++;
 			transform.FindChild("Tutorial/Step2/Tap_Left").gameObject.SetActive(false);
 			transform.FindChild("Tutorial/Step2/Tap_Right").gameObject.SetActive(false);
@@ -92,38 +93,39 @@ void Update () {
 		}
 	}
 	
-	if (step == 3) {
-			if(ship.transform.position.y > 860){
+	if (step == 4) {
+			/*if(ship.transform.position.y > 860){*/
 				step++;
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Play("GhostShip_02");
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().wrapMode = WrapMode.Loop;
 
-			}
+			//}
 	}
 	
-	if (step == 5) {
-		if (Input.GetTouch (0).phase == TouchPhase.Began) {
+	/*if (step == 6) {
+			//if (Input.touchCount > 0  && Input.GetTouch (0).phase == TouchPhase.Began) {
 			
 			currentText.SetActive(false);
 			transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 			transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.SetActive(true);
 			transform.FindChild("WinLayout").gameObject.SetActive(false);
 			step++;
-		}
+		//}
 		
 		
 		
 	}
-		if(step == 7){
+		/*if(step == 7){
 			if (Input.GetTouch (0).phase == TouchPhase.Began) {
 				Application.LoadLevel("Tuto2");
 			}
-		}
+		}/*/
 	
 }
 public void nextStep(){
 	StartCoroutine("Onestep");
 }
+
 IEnumerator Onestep(){
 	yield return null;
 	

@@ -46,7 +46,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 			once = true;
 			prevStep = step;
 		}
-
+		Debug.Log ("STEP: " + step);
 		if (Input.touchCount > 0) {
 			if (Input.GetTouch (0).phase == TouchPhase.Began) {
 				
@@ -71,7 +71,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 			}
 		}
 		if (step == 2) {
-			if (Input.GetTouch (0).phase == TouchPhase.Began) {
+			if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
 				currentText.SetActive(false);
 				currentText = texts.Where(x => x.name == "Step2").SingleOrDefault();
 				currentText.SetActive(true);
@@ -81,7 +81,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 			}
 		}
 		if (step == 3) {
-			if (Input.GetTouch (0).phase == TouchPhase.Began) {
+			if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
 				transform.FindChild("Tutorial/Step2/Chat_Astronaut").gameObject.SetActive(false);
 				transform.FindChild("Tutorial/Step2/Chat_Box").gameObject.SetActive(false);
 				transform.FindChild("Tutorial/Step2/ChatText_1").gameObject.SetActive(false);
@@ -106,7 +106,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 			}
 		}
 		if (step == 7) {
-			if (Input.GetTouch (0).phase == TouchPhase.Began) {
+			if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
 
 				currentText.SetActive(false);
 				transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
@@ -128,6 +128,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 
 			first = false;
 			step++;
+		Debug.Log ("UN paso mas : " + step);
 		
 	}
 }

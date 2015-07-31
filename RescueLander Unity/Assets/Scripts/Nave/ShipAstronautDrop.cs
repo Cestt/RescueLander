@@ -30,7 +30,7 @@ public class ShipAstronautDrop : MonoBehaviour {
 
 		if (coll.gameObject.name == "Landing Platform"){
 			
-			if(rigid.velocity.magnitude == 0 & shipastronautpickup.astronautPicked != 0){
+			if(rigid.velocity.magnitude == 0 & shipastronautpickup.astronautPicked != 0 & astronautsDroped < totalAstronauts){
 
 
 				astronautsDroped += shipastronautpickup.astronautPicked;
