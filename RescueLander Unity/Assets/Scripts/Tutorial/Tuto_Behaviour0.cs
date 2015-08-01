@@ -102,7 +102,7 @@ void Update () {
 			//}
 	}
 	
-	/*if (step == 6) {
+	if (step == 6) {
 			//if (Input.touchCount > 0  && Input.GetTouch (0).phase == TouchPhase.Began) {
 			
 			currentText.SetActive(false);
@@ -110,11 +110,19 @@ void Update () {
 			transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.SetActive(true);
 			transform.FindChild("WinLayout").gameObject.SetActive(false);
 			step++;
-		//}
-		
-		
-		
+		}
+
+
+	if (step == 7 & !transform.FindChild ("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.activeInHierarchy) {
+			dataManger.manager.fuelPowerUps++;
+			dataManger.manager.shieldPowerUps++;
+			dataManger.manager.magnetPowerUps++;
+			dataManger.manager.tutorial = 2;
+			dataManger.manager.Save(true);
+			Application.LoadLevel("Tuto_2");
 	}
+		
+	//}
 		/*if(step == 7){
 			if (Input.GetTouch (0).phase == TouchPhase.Began) {
 				Application.LoadLevel("Tuto2");
@@ -122,6 +130,7 @@ void Update () {
 		}/*/
 	
 }
+
 public void nextStep(){
 	StartCoroutine("Onestep");
 }

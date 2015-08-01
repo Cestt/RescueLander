@@ -50,9 +50,9 @@ public class Key_Areas : MonoBehaviour {
 		if(actualTime + TimerTime < Time.time & running & tuto.step == 5){
 			ship.GetComponent<Rigidbody2D>().isKinematic = true;
 			running = false;
-			GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+			/*GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 			GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.SetActive(true);
-
+			*/
 				tuto.tuto.SetActive(false);
 			tuto.step++;
 			tuto.first = true;

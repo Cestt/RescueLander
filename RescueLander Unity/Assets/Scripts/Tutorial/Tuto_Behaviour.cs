@@ -118,7 +118,13 @@ public class Tuto_Behaviour : MonoBehaviour {
 
 			
 		}
-	
+
+		if (step == 8 & !transform.FindChild ("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_2").gameObject.activeInHierarchy) {
+			dataManger.manager.tutorial = 4;
+			dataManger.manager.Save(true);
+			Application.LoadLevel("Menu");
+		}
+
 	}
 	public void nextStep(){
 		StartCoroutine("Onestep");

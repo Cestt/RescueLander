@@ -1511,7 +1511,7 @@ public class Touch_Manager : MonoBehaviour {
 		}
 	
 		if (backCoins && !animation.IsPlaying("UIBase_RightCol_extended_UpDown")) {
-			coinCount.transform.localPosition = new Vector3 (72, coinCount.transform.localPosition.y);
+			coinCount.transform.localPosition = new Vector3 (-90, coinCount.transform.localPosition.y);
 		}
 	}
 
@@ -1528,7 +1528,7 @@ public class Touch_Manager : MonoBehaviour {
 				if(!Application.loadedLevelName.Contains("Tuto"))
 				pauseText.SetActive(true);
 				backCoins = false;
-				coinCount.transform.localPosition = new Vector3(-72,coinCount.transform.localPosition.y);
+				coinCount.transform.localPosition = new Vector3(-210,coinCount.transform.localPosition.y);
 				for (int i=0; i< animators.Count; i++){
 					if (animators[i] != null)
 						animators[i].Pause();

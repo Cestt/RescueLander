@@ -23,7 +23,7 @@ public class IAPHandler : MonoBehaviour {
 		StoreEvents.OnBillingNotSupported += onBillingNotSupported;
 		StoreEvents.OnMarketPurchaseStarted += onMarketPurchaseStarted;
 		StoreEvents.OnItemPurchaseStarted += onItemPurchaseStarted;
-		StoreEvents.OnUnexpectedErrorInStore += onUnexpectedErrorInStore;
+		StoreEvents.OnUnexpectedStoreError += onUnexpectedErrorInStore;
 		StoreEvents.OnCurrencyBalanceChanged += onCurrencyBalanceChanged;
 		StoreEvents.OnGoodBalanceChanged += onGoodBalanceChanged;
 		StoreEvents.OnMarketPurchaseCancelled += onMarketPurchaseCancelled;
@@ -136,7 +136,7 @@ public class IAPHandler : MonoBehaviour {
 	/// Handles an unexpected error in store event.
 	/// </summary>
 	/// <param name="message">Error message.</param>
-	public void onUnexpectedErrorInStore(string message) {
+	public void onUnexpectedErrorInStore(int message) {
 		GameObject uicameraGameobject = GameObject.Find("UI_Camera");
 		uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 		touch.actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_ErrorIAP").gameObject;

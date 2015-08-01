@@ -13,7 +13,10 @@ public class Coin_Move : MonoBehaviour {
 
 	bool first;
 	void Awake(){
-		ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
+		if (Application.loadedLevelName.Contains("Tuto"))
+			ship = GameObject.Find("101(Clone)");
+		else
+			ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 		powerManager = GameObject.Find("Game Manager").GetComponent<PowerUp_Manager>();
 		coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 		soundManager = GameObject.Find("Game Manager").GetComponent<Sound_Manager>();
