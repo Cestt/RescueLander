@@ -105,7 +105,7 @@ public class Movement : MonoBehaviour {
 		if (fuel < 0 & !prompFuel) {
 			int timeAct = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
 			timeAct -= dataManger.manager.timePrompFuel;
-			Debug.Log ("FUelTime " + timeAct);
+
 			if (timeAct < 0 )
 				dataManger.manager.timePrompFuel = 0;
 			if ((dataManger.manager.actualLevel < 6 && dataManger.manager.actualWorld == "Mars" ) || (timeAct > 9)){

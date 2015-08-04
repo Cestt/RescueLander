@@ -49,7 +49,7 @@ void Update () {
 		prevStep = step;
 	}
 
-		Debug.Log ("STEP: " + step);
+
 	if (Input.touchCount > 0) {
 		if (Input.GetTouch (0).phase == TouchPhase.Began) {
 			
@@ -93,17 +93,17 @@ void Update () {
 		}
 	}
 	
-	if (step == 4) {
-			/*if(ship.transform.position.y > 860){*/
+	if (step == 3) {
+			if(ship.transform.position.y > 860){
 				step++;
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Play("GhostShip_02");
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().wrapMode = WrapMode.Loop;
 
-			//}
+		}
 	}
 	
-	if (step == 6) {
-			//if (Input.touchCount > 0  && Input.GetTouch (0).phase == TouchPhase.Began) {
+	if (step == 5) {
+			if (Input.touchCount > 0  && Input.GetTouch (0).phase == TouchPhase.Began) {
 			
 			currentText.SetActive(false);
 			transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
@@ -113,7 +113,7 @@ void Update () {
 		}
 
 
-	if (step == 7 & !transform.FindChild ("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.activeInHierarchy) {
+	if (step == 6 & !transform.FindChild ("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.activeInHierarchy) {
 			dataManger.manager.fuelPowerUps++;
 			dataManger.manager.shieldPowerUps++;
 			dataManger.manager.magnetPowerUps++;
@@ -122,12 +122,8 @@ void Update () {
 			Application.LoadLevel("Tuto_2");
 	}
 		
-	//}
-		/*if(step == 7){
-			if (Input.GetTouch (0).phase == TouchPhase.Began) {
-				Application.LoadLevel("Tuto2");
-			}
-		}/*/
+	}
+
 	
 }
 
@@ -135,11 +131,11 @@ public void nextStep(){
 	StartCoroutine("Onestep");
 }
 
-IEnumerator Onestep(){
-	yield return null;
-	
-	first = false;
-	step++;
-	
-}
+	IEnumerator Onestep(){
+		yield return null;
+		
+		first = false;
+		step++;
+		
+	}
 }

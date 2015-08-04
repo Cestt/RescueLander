@@ -46,7 +46,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 			once = true;
 			prevStep = step;
 		}
-		Debug.Log ("STEP: " + step);
+
 		if (Input.touchCount > 0) {
 			if (Input.GetTouch (0).phase == TouchPhase.Began) {
 				
@@ -134,7 +134,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 
 			first = false;
 			step++;
-		Debug.Log ("UN paso mas : " + step);
+
 		
 	}
 }

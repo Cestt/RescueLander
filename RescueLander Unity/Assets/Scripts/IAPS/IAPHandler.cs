@@ -23,7 +23,7 @@ public class IAPHandler : MonoBehaviour {
 		StoreEvents.OnBillingNotSupported += onBillingNotSupported;
 		StoreEvents.OnMarketPurchaseStarted += onMarketPurchaseStarted;
 		StoreEvents.OnItemPurchaseStarted += onItemPurchaseStarted;
-		StoreEvents.OnUnexpectedStoreError += onUnexpectedErrorInStore;
+
 		StoreEvents.OnCurrencyBalanceChanged += onCurrencyBalanceChanged;
 		StoreEvents.OnGoodBalanceChanged += onGoodBalanceChanged;
 		StoreEvents.OnMarketPurchaseCancelled += onMarketPurchaseCancelled;
