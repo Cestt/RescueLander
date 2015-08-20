@@ -16,20 +16,24 @@ public class Ads : MonoBehaviour {
 	void Awake() {
 		interstitial = new InterstitialAd("ca-app-pub-6225305526112070/2285766744");
 		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
-		if(Application.loadedLevelName == "Menu")
-		if (Advertisement.isSupported) {
-			Advertisement.allowPrecache = true;
-			Advertisement.Initialize ("37545",false);
-		} else {
-			//Test.GetComponent<tk2dTextMesh>().text = "Ads not supported";
 
-		}
+			if (Advertisement.isSupported) {
+				Advertisement.allowPrecache = true;
+				Advertisement.Initialize ("37545",false);
+				Debug.Log("Ad initialized");
+			} else {
+				Debug.Log("Ad not supported");
+				
+			}
+
+
 		//ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 	}
 	void OnLevelWasLoaded(int level) {
 		if (Application.loadedLevelName != "Menu") {
 
 			AdRequest request = new AdRequest.Builder ().Build ();
+			interstitial = new InterstitialAd("ca-app-pub-6225305526112070/2285766744");
 			interstitial.LoadAd (request);
 
 		} else {

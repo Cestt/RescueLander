@@ -62,7 +62,7 @@ void Update () {
 			
 			if (Physics.Raycast (ray.origin, ray.direction * 100, out hit) || Physics.Raycast (ray2.origin, ray.direction * 100, out hit)) {
 				
-				if (hit.collider.name == "Exit_Button") {
+				if (hit.collider.name == "Ext_Button") {
 						dataManger.manager.fuelPowerUps++;
 						dataManger.manager.shieldPowerUps++;
 						dataManger.manager.magnetPowerUps++;
@@ -110,17 +110,11 @@ void Update () {
 			transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.SetActive(true);
 			transform.FindChild("WinLayout").gameObject.SetActive(false);
 			step++;
+			Finish();
 		}
 
 
-	if (step == 6 & !transform.FindChild ("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_1").gameObject.activeInHierarchy) {
-			dataManger.manager.fuelPowerUps++;
-			dataManger.manager.shieldPowerUps++;
-			dataManger.manager.magnetPowerUps++;
-			dataManger.manager.tutorial = 2;
-			dataManger.manager.Save(true);
-			Application.LoadLevel("Tuto_2");
-	}
+	
 		
 	}
 
@@ -136,6 +130,10 @@ public void nextStep(){
 		
 		first = false;
 		step++;
+		
+	}
+	IEnumerator Finish(){
+		yield return new WaitForSeconds(1.0f);
 		
 	}
 }
