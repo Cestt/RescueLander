@@ -45,6 +45,7 @@ public class WinLose : MonoBehaviour {
 	private GameObject new_record;
 	private GameObject new_color;
 	private GameObject promptWorldComplete;
+	private GameObject promptRate;
 	private bool worldComplete = false;
 	private bool alreadyComplete = false;
 	private int starsNewColor;
@@ -107,9 +108,17 @@ public class WinLose : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (promptRate != null ) {
+			if (promptRate.activeInHierarchy){
+				actualTime = Time.time;
+				return;
+			}
+		}
 		if (Application.loadedLevelName != "Menu" & !Application.loadedLevelName.Contains("Tuto") & !adsInters) {
 			if(Time.time > actualTime + WinTimer & WinSprite.activeInHierarchy & dataManger.manager.actualLevel < 21
 			   ){
+				UI4.SetActive(true);
+				UI5.SetActive(true);
 				adsInters = true;
 				WinSprite.transform.FindChild("Resume").gameObject.SetActive (true);
 				MisionAcomplished.SetActive (false);
@@ -122,6 +131,8 @@ public class WinLose : MonoBehaviour {
 			if((MisionAcomplished.activeInHierarchy & Input.touchCount > 0 
 			    && dataManger.manager.actualLevel < 21) || (dataManger.manager.actualLevel == 21 && worldComplete && !promptWorldComplete.activeInHierarchy
 			    )){
+				UI4.SetActive(true);
+				UI5.SetActive(true);
 				adsInters = true;
 				dataManger.manager.partidas++;
 				if(dataManger.manager.partidas >= 3){
@@ -319,10 +330,19 @@ public class WinLose : MonoBehaviour {
 		UI1.SetActive (false);
 		UI2.SetActive (false);
 		UI3.SetActive (false);
-		UI4.SetActive(true);
-		UI5.SetActive(true);
+
 		//Muestra los score
 		scoreAct = 1;
+
+		if (dataManger.manager.actualLevel > 4 && PlayerPrefs.GetInt("Rate")!= 100 && PlayerPrefs.GetInt("Rate")!=int.Parse(System.DateTime.UtcNow.ToString("dd")))
+		{
+			PlayerPrefs.SetInt("Rate",int.Parse(System.DateTime.UtcNow.ToString("dd")));
+			PlayerPrefs.Save();
+			promptRate = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_RateUs").gameObject;
+			GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
+			touch.actualPrompt = promptRate;
+			touch.actualPrompt.SetActive(true);
+		}
 		InvokeRepeating("ShowScore",0,2f);
 		//ACHIEVEMENT: Can't touch this
 		if (damage.life == damage.maxLife){
@@ -374,38 +394,40 @@ public class WinLose : MonoBehaviour {
 	}
 
 	private void ShowScore(){
-		if (scoreAct == 1){
-			scoreTotal = 0;
-			scoreObject = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Time").gameObject;
-			scoreObject.SetActive(true);
-			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
-			scoreNumber = scoreManager.timeScore;
-			scoreAct++;
-			scoreChangeText = 0;
-			scoreTextRemaining = "Time Score";
-			InvokeRepeating("ChangeScore",0,0.05f);
-		}else if (scoreAct == 2){
-			scoreObject.SetActive(false);
-			scoreObject = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Life").gameObject;
-			scoreObject.SetActive(true);
-			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
-			scoreNumber = damage.life;
-			scoreChangeText = 0;
-			scoreTextRemaining = "Life Score";
-			InvokeRepeating("ChangeScore",0,0.05f);
-			scoreAct++;
-		}else if (scoreAct == 3){
-			scoreObject.SetActive(false);
-			scoreObject = MisionAcomplished.transform.FindChild("Score_Resumen/Score_Fuel").gameObject;
-			scoreObject.SetActive(true);
-			scoreText = scoreObject.GetComponent<tk2dTextMesh>();
-			scoreNumber = (int)GameObject.Find(dataManger.manager.actualShip + "(Clone)").GetComponent<Movement>().fuel;
-			scoreChangeText = 0;
-			scoreTextRemaining = "Fuel Score";
-			InvokeRepeating("ChangeScore",0,0.05f);
-			scoreAct++;
-		}else if (scoreAct == 4){
-			CancelInvoke("ShowScore");
+		if (promptRate == null || !promptRate.activeInHierarchy) {
+			if (scoreAct == 1) {
+				scoreTotal = 0;
+				scoreObject = MisionAcomplished.transform.FindChild ("Score_Resumen/Score_Time").gameObject;
+				scoreObject.SetActive (true);
+				scoreText = scoreObject.GetComponent<tk2dTextMesh> ();
+				scoreNumber = scoreManager.timeScore;
+				scoreAct++;
+				scoreChangeText = 0;
+				scoreTextRemaining = "Time Score";
+				InvokeRepeating ("ChangeScore", 0, 0.05f);
+			} else if (scoreAct == 2) {
+				scoreObject.SetActive (false);
+				scoreObject = MisionAcomplished.transform.FindChild ("Score_Resumen/Score_Life").gameObject;
+				scoreObject.SetActive (true);
+				scoreText = scoreObject.GetComponent<tk2dTextMesh> ();
+				scoreNumber = damage.life;
+				scoreChangeText = 0;
+				scoreTextRemaining = "Life Score";
+				InvokeRepeating ("ChangeScore", 0, 0.05f);
+				scoreAct++;
+			} else if (scoreAct == 3) {
+				scoreObject.SetActive (false);
+				scoreObject = MisionAcomplished.transform.FindChild ("Score_Resumen/Score_Fuel").gameObject;
+				scoreObject.SetActive (true);
+				scoreText = scoreObject.GetComponent<tk2dTextMesh> ();
+				scoreNumber = (int)GameObject.Find (dataManger.manager.actualShip + "(Clone)").GetComponent<Movement> ().fuel;
+				scoreChangeText = 0;
+				scoreTextRemaining = "Fuel Score";
+				InvokeRepeating ("ChangeScore", 0, 0.05f);
+				scoreAct++;
+			} else if (scoreAct == 4) {
+				CancelInvoke ("ShowScore");
+			}
 		}
 	}
 

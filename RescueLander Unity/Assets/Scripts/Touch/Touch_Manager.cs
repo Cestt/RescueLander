@@ -751,6 +751,8 @@ public class Touch_Manager : MonoBehaviour {
 							else if (platform == RuntimePlatform.IPhonePlayer){
 								Application.OpenURL("itms-apps://itunes.apple.com/app/idYOUR_ID");
 							}
+							PlayerPrefs.SetInt("Rate",100);
+							PlayerPrefs.Save();
 							break;
 						case "MorePowerUps_Button":
 							Garaje(true);
@@ -764,12 +766,15 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "Button_Later":
 							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(false);
+							//uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(false);
 							break;
 						case "Button_Never":
-							dataManger.manager.tutorial = 4;
-							dataManger.manager.Save(false);
-							googleAnalytics.LogScreen ("Menu");
+							PlayerPrefs.SetInt("Rate",100);
+							PlayerPrefs.Save();
+							//dataManger.manager.tutorial = 4;
+							//dataManger.manager.Save(false);
+							//googleAnalytics.LogScreen ("Menu");
+							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 							Application.LoadLevel("Menu");
 							break;
 						case "MoreCoins_Button":
@@ -1414,13 +1419,17 @@ public class Touch_Manager : MonoBehaviour {
 						break;
 					case "Button_Later":
 						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-						uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(false);
+						//uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoSkip").gameObject.SetActive(false);
 						break;
 					case "Button_Never":
+						PlayerPrefs.SetInt("Rate",100);
+						PlayerPrefs.Save();
+						/*
 						dataManger.manager.tutorial = 4;
 						dataManger.manager.Save(false);
 						googleAnalytics.LogScreen ("Menu");
-						Application.LoadLevel("Menu");
+						Application.LoadLevel("Menu");*/
+						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 						break;
 					case "HelpButton":
 						actualPrompt = uicameraGameobject.transform.FindChild("Prompt_Help").gameObject;
