@@ -98,6 +98,7 @@ void Update () {
 				step++;
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Play("GhostShip_02");
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().wrapMode = WrapMode.Loop;
+				transform.FindChild("Tutorial/Step2/ObjectiveHeight").gameObject.SetActive(false);
 
 		}
 	}

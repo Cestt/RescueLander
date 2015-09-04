@@ -157,12 +157,12 @@ public class dataManger : MonoBehaviour {
 			data2.worldUnlocks = worldUnlocks;
 			data2.timePrompFuel = timePrompFuel;
 			if(complete){
-
+				int starscheck = 0;
 				for(int i = 1; i <= levelsMars; i++){
 					if(starsMars["Level_"+i] > data2.starsMars["Level_"+i]){
-						//totalStars -= data2.stars["Level_"+i];
+						totalStars -= data2.starsMars["Level_"+i];
 						data2.starsMars["Level_"+i] = starsMars["Level_"+i];
-						//totalStars += stars["Level_"+i];
+						totalStars += starsMars["Level_"+i];
 						data2.totalStars = totalStars;
 						Debug.Log("Save Stars");
 					}
@@ -173,13 +173,13 @@ public class dataManger : MonoBehaviour {
 						scoresMars["Level_"+i] = data2.scoresMars["Level_"+i];
 					}
 					
-					
+					starscheck += data2.starsMars["Level_"+i];
 				}
 				for(int i = 1; i <= levelsIce; i++){
 					if(starsIce["Level_"+i] > data2.starsIce["Level_"+i]){
-						//totalStars -= data2.stars["Level_"+i];
+						totalStars -= data2.starsIce["Level_"+i];
 						data2.starsIce["Level_"+i] = starsIce["Level_"+i];
-						//totalStars += stars["Level_"+i];
+						totalStars += starsIce["Level_"+i];
 						data2.totalStars = totalStars;
 						Debug.Log("Save Stars");
 					}
@@ -189,8 +189,11 @@ public class dataManger : MonoBehaviour {
 					}else{
 						scoresIce["Level_"+i] = data2.scoresIce["Level_"+i];
 					}
+					starscheck += data2.starsIce["Level_"+i];
 					
-					
+				}
+				if(totalStars != starscheck){
+					totalStars = starscheck;
 				}
 			}
 			

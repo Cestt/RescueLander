@@ -807,7 +807,7 @@ public class Touch_Manager : MonoBehaviour {
 							Debug.Log("World: " + hit.transform.name.Substring(13));
 							hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
 							break;
-						case "TutorialButton" : 
+						case "Tuto_Button" : 
 							dataManger.manager.tutorial = 1;
 							dataManger.manager.Save(false);
 							Application.LoadLevel("Tuto_1");
@@ -1463,7 +1463,7 @@ public class Touch_Manager : MonoBehaviour {
 						Debug.Log("World: " + hit.transform.name.Substring(13));
 						hit.transform.GetComponent<World_Change>().ChangeLevelName(hit.transform.name.Substring(13));
 						break;
-					case "TutorialButton" : 
+					case "Tuto_Button" : 
 						dataManger.manager.tutorial = 1;
 						dataManger.manager.Save(false);
 						Application.LoadLevel("Tuto_1");

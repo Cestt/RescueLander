@@ -41,6 +41,10 @@ public class Damage : MonoBehaviour {
 	private bool activateExplosion;
 	private float actualTime;
 	private bool once = false;
+	[HideInInspector]
+	public float prevDamage = 0f;
+	[HideInInspector]
+	public float damageTime = -100f;
 	// Use this for initialization
 	void Awake () {
 		rigid = GetComponent<Rigidbody2D>();
@@ -179,8 +183,8 @@ public class Damage : MonoBehaviour {
 					totalDamage += (int)realDamage;
 				}
 				lifebarScript.Starter(totalDamage,relation);
-
-
+				prevDamage = realDamage;
+				damageTime = Time.time;
 			}
 			if(gameObject.transform.eulerAngles.magnitude > 50 & gameObject.transform.eulerAngles.magnitude < 320 & first == true ){
 				movement.angularSpeedUpgrade = thrusterExtra;
@@ -218,6 +222,9 @@ public class Damage : MonoBehaviour {
 			}
 
 		}
+	}
+	void OnCollisionExit2D(Collision2D coll) {
+		prevDamage = 0;
 	}
 
 

@@ -14,12 +14,18 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	private tk2dSpriteAnimator animator;
 	private Touch_Manager touchmanager;
 	private Sound_Manager soundManager;
+	private Damage damage;
+	private Coin_Manager coin_manager;
+	public float PerfectLandingCoins;
+	public float PerfectLandingTimer;
 
 	// Use this for initialization
 	void Awake () {
 		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 		rigid = GetComponent<Rigidbody2D>();
 		soundManager = GameObject.Find("Game Manager").GetComponent<Sound_Manager>();
+		damage = GetComponent<Damage>();
+		coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
 
 	}
 
@@ -39,6 +45,10 @@ public class ShipAstronautPickUp : MonoBehaviour {
 				astronautPicked++;
 				soundManager.PlaySound("PickUp");
 				Pickable = false;
+				if(damage.prevDamage == 0 & damage.damageTime + PerfectLandingTimer < Time.time){
+					coin_manager.LevelCoin(PerfectLandingCoins);
+					Debug.Log("Perfect Landing");
+				}
 				animator.AnimationCompleted = DestroyAstro;
 				Astronaut = null;
 				if(Application.loadedLevelName.Contains("Tuto")){
