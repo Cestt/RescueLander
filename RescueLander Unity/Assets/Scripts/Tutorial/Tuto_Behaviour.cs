@@ -75,6 +75,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 				currentText.SetActive(false);
 				currentText = texts.Where(x => x.name == "Step2").SingleOrDefault();
 				currentText.SetActive(true);
+				transform.FindChild("Tutorial/Step2/GhostShip").gameObject.SetActive(true);
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Play("GhostShip_03");
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().wrapMode = WrapMode.Loop;
 				nextStep();
