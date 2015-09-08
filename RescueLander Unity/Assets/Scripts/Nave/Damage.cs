@@ -45,6 +45,8 @@ public class Damage : MonoBehaviour {
 	public float prevDamage = 0f;
 	[HideInInspector]
 	public float damageTime = -100f;
+	private bool showed = false;
+	private Touch_Manager touchmanager;
 	// Use this for initialization
 	void Awake () {
 		rigid = GetComponent<Rigidbody2D>();
@@ -68,6 +70,10 @@ public class Damage : MonoBehaviour {
 		animator = sparks.GetComponent<tk2dSpriteAnimator>();
 		animator2 = explosion.GetComponent<tk2dSpriteAnimator>();
 		damageThresholdFrictionIni = damageThresholdFriction;
+		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
+		if(PlayerPrefs.GetInt("TimeShield") ==null){
+			PlayerPrefs.SetInt("TimeShield",0);
+		}
 	}
 
 
@@ -103,51 +109,8 @@ public class Damage : MonoBehaviour {
 
 		if(life < 0 & activateExplosion){
 
-			if(shipastronautpickup.Astronaut != null){
-
-				shipastronautpickup.Astronaut = null;
-
-			}
-
-			lifebarScript.Starter(maxLife-5,relation);
-			explosion.SetActive(true);
-			animator2.Play("Explosion");
-			gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
-			if(Application.loadedLevelName.Contains("Tuto")){
-				GetComponent<tk2dSprite>().enabled = false;
-			}else{
-				GetComponent<SpriteRenderer>().sprite = null;
-			}
-			if(transform.FindChild("Ship_Window") != null){
-				GameObject temp = transform.FindChild("Ship_Window").gameObject;
-				if(temp != null)
-					temp.SetActive(false);
-			}
-			if (transform.FindChild("Fire") != null){
-				GameObject temp = transform.FindChild("Fire").gameObject;
-				if(temp != null)
-					temp.SetActive(false);
-			}
-			if (transform.FindChild("Fire_Smoke") != null){
-				GameObject temp = transform.FindChild("Fire_Smoke").gameObject;
-				if(temp != null)
-					temp.SetActive(false);
-			}
-			if (transform.FindChild("Thruster_R") != null){
-				GameObject temp = transform.FindChild("Thruster_R").gameObject;
-				if(temp != null)
-					temp.SetActive(false);
-			} 
-			if (transform.FindChild("Thruster_L") != null){
-				GameObject temp = transform.FindChild("Thruster_L").gameObject;
-				if(temp != null)
-					temp.SetActive(false);
-			} 
-			activateExplosion = false;
-
-
-			Debug.Log("Last instruction");
-			animator2.AnimationCompleted = DestroyShip;
+			Finish();	
+				
 
 
 		}
@@ -229,8 +192,22 @@ public class Damage : MonoBehaviour {
 
 
 	void DestroyShip(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
+		int timeAct = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
+		timeAct -= PlayerPrefs.GetInt("TimeShield");
+		Debug.Log("Time remaining shield : " + timeAct);
+		if (timeAct < 0 ){
+			dataManger.manager.timePrompFuel = 0;
+			showed = false;
+		}
 		Debug.Log("Show Lose");
-		winLose.End("Lose");
+		if ((dataManger.manager.actualLevel < 3 && dataManger.manager.actualWorld == "Mars" ) || (timeAct > 9)){
+
+
+			winLose.End("Lose",true);
+		}else{
+			winLose.End("Lose",false);
+		}
+
 		Debug.Log("Destroy ship");
 		Destroy(gameObject);
 	}
@@ -238,6 +215,53 @@ public class Damage : MonoBehaviour {
 		animator.AnimationCompleted = null;
 		Vector2 temp = new Vector2(-100,0);
 		sparks.transform.position = temp;
+	}
+	public void Finish(){
+		if(shipastronautpickup.Astronaut != null){
+			
+			shipastronautpickup.Astronaut = null;
+			
+		}
+		
+		lifebarScript.Starter(maxLife-5,relation);
+		explosion.SetActive(true);
+		animator2.Play("Explosion");
+		gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+		if(Application.loadedLevelName.Contains("Tuto")){
+			GetComponent<tk2dSprite>().enabled = false;
+		}else{
+			GetComponent<SpriteRenderer>().sprite = null;
+		}
+		if(transform.FindChild("Ship_Window") != null){
+			GameObject temp = transform.FindChild("Ship_Window").gameObject;
+			if(temp != null)
+				temp.SetActive(false);
+		}
+		if (transform.FindChild("Fire") != null){
+			GameObject temp = transform.FindChild("Fire").gameObject;
+			if(temp != null)
+				temp.SetActive(false);
+		}
+		if (transform.FindChild("Fire_Smoke") != null){
+			GameObject temp = transform.FindChild("Fire_Smoke").gameObject;
+			if(temp != null)
+				temp.SetActive(false);
+		}
+		if (transform.FindChild("Thruster_R") != null){
+			GameObject temp = transform.FindChild("Thruster_R").gameObject;
+			if(temp != null)
+				temp.SetActive(false);
+		} 
+		if (transform.FindChild("Thruster_L") != null){
+			GameObject temp = transform.FindChild("Thruster_L").gameObject;
+			if(temp != null)
+				temp.SetActive(false);
+		} 
+		activateExplosion = false;
+		
+		
+		Debug.Log("Last instruction");
+		animator2.AnimationCompleted = DestroyShip;
 	}
 
 

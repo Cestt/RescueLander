@@ -73,7 +73,10 @@ public class Ads : MonoBehaviour {
 				                                sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
 				break;
 			case "Shield":
-				dataManger.manager.shieldPowerUps++;
+				dataManger.manager.nextPowerUp = true;
+				PlayerPrefs.SetInt("TimeShield", int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm")));
+				dataManger.manager.Save(true);
+				Application.LoadLevel(Application.loadedLevel);
 				break;
 			case "Magnet":
 				dataManger.manager.magnetPowerUps++;

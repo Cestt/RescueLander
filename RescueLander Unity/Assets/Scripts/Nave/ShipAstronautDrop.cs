@@ -46,7 +46,7 @@ public class ShipAstronautDrop : MonoBehaviour {
 
 			if(astronautsDroped >= totalAstronauts & Application.loadedLevelName != "Tuto_1" & Application.loadedLevelName != "Tuto_2"){
 
-				winLose.End("Win");
+				winLose.End("Win",false);
 			}
 			
 		}

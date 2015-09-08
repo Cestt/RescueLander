@@ -116,8 +116,7 @@ public class Movement : MonoBehaviour {
 				dataManger.manager.timePrompFuel = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
 
 			}
-			prompFuel = true;
-		}
+			prompFuel = true;	}
 		if(fuel < 0 & !running & prompFuel & !touchmanager.paused){
 
 			actualTime = Time.time;
@@ -129,7 +128,7 @@ public class Movement : MonoBehaviour {
 		}
 		if(running & actualTime + LoseTime < Time.time){
 			if(!once){
-				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose");
+				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose",false);
 				once = true;
 			}
 

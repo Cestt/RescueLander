@@ -99,6 +99,8 @@ void Update () {
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Play("GhostShip_02");
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().wrapMode = WrapMode.Loop;
 				transform.FindChild("Tutorial/Step2/ObjectiveHeight").gameObject.SetActive(false);
+				transform.FindChild("Tutorial/Step2/Arrows/Arrow").gameObject.transform.Rotate(0,0,90);
+				transform.FindChild("Tutorial/Step2/Arrows/Arrow 1").gameObject.transform.Rotate(0,0,-90);
 
 		}
 	}

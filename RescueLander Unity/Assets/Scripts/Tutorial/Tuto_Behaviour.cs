@@ -102,7 +102,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 		}
 		if (step == 6) {
 			if(once){
-				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
+				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win",false);
 				step++;
 			}
 		}

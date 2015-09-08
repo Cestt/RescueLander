@@ -75,10 +75,7 @@ public class Touch_Manager : MonoBehaviour {
 				animators.Add(GameObject.Find("Astronaut_01").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_02").GetComponent<tk2dSpriteAnimator>());
 				animators.Add(GameObject.Find("Astronaut_03").GetComponent<tk2dSpriteAnimator>());
-				if (dataManger.manager.nextPowerUp){
-					powerManager.PowerUp(dataManger.manager.nextPowerUpName);
-					dataManger.manager.nextPowerUp = false;
-				}
+
 			}
 
 			rigid = ship.GetComponent<Rigidbody2D>();
@@ -114,8 +111,16 @@ public class Touch_Manager : MonoBehaviour {
 			}
 
 		}
-		if(!Application.loadedLevelName.Contains("Tuto"))
+		if(!Application.loadedLevelName.Contains("Tuto")){
 			prevStats = GameObject.Find("UI_Camera").transform.FindChild("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/Ship_Buttons_Scroll/Ship_Buttons/Button_Ship01/Stats").gameObject;
+			if(dataManger.manager.nextPowerUp){
+				dataManger.manager.nextPowerUp = false;
+				dataManger.manager.Save(false);
+				powerManager.PowerUp("Shield");
+			}
+
+		}
+			
 
 		
 		coin_manager =GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
@@ -155,8 +160,13 @@ public class Touch_Manager : MonoBehaviour {
 
 	}
 
-
-
+	void OnLevelWasLoaded(int level) {
+		if (dataManger.manager.nextPowerUp){
+			powerManager.PowerUp(dataManger.manager.nextPowerUpName);
+			dataManger.manager.nextPowerUp = false;
+		}
+	}
+	
 	void Update () {
 		if(platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer){
 			if(Input.touchCount > 0) {
@@ -291,6 +301,8 @@ public class Touch_Manager : MonoBehaviour {
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 							if(actualPrompt != null)
 								actualPrompt.SetActive(false);
+							if(actualPrompt.name == "Prompt_Ads_Shield")
+								ship.GetComponent<Damage>().Finish();
 
 							
 							levelEnable = true;
@@ -1045,8 +1057,8 @@ public class Touch_Manager : MonoBehaviour {
 						switch(hit.transform.parent.name.Substring(11)){
 
 						case "Shield":
-							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-							uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
+							//uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+							//uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
 							ads.Launch("Shield","Rewarded");
 								break;
 						case "Magnet":

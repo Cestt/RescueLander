@@ -13,7 +13,7 @@ public class Finish_Platform : MonoBehaviour {
 
 		if(coll.gameObject.name == "101(Clone)" & coll.gameObject.GetComponent<Rigidbody2D>().velocity.magnitude < 0.01f & first & tuto.step == 4){
 			first = false;
-			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win");
+			GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win",false);
 			tuto.step++;
 			tuto.first = false;
 		}

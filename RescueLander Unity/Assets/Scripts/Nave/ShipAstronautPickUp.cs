@@ -18,6 +18,7 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	private Coin_Manager coin_manager;
 	public float PerfectLandingCoins;
 	public float PerfectLandingTimer;
+	private GameObject perfectLanding;
 
 	// Use this for initialization
 	void Awake () {
@@ -26,7 +27,7 @@ public class ShipAstronautPickUp : MonoBehaviour {
 		soundManager = GameObject.Find("Game Manager").GetComponent<Sound_Manager>();
 		damage = GetComponent<Damage>();
 		coin_manager = GameObject.Find("ScoreCoin_Manager").GetComponent<Coin_Manager>();
-
+		perfectLanding = GameObject.Find("Perfect");
 	}
 
 	void Start(){
@@ -46,7 +47,8 @@ public class ShipAstronautPickUp : MonoBehaviour {
 				soundManager.PlaySound("PickUp");
 				Pickable = false;
 				if(damage.prevDamage == 0 & damage.damageTime + PerfectLandingTimer < Time.time){
-					coin_manager.LevelCoin(PerfectLandingCoins);
+
+					StartCoroutine("DestroyPerfect");
 					Debug.Log("Perfect Landing");
 				}
 				animator.AnimationCompleted = DestroyAstro;
@@ -66,5 +68,18 @@ public class ShipAstronautPickUp : MonoBehaviour {
 	void DestroyAstro(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
 		Destroy(Astronaut);
 		animator.AnimationCompleted = null;
+	}
+	IEnumerator DestroyPerfect(){
+		coin_manager.LevelCoin(PerfectLandingCoins);
+		perfectLanding.SetActive(true);
+		Vector2 temp = Astronaut.transform.position;
+		temp.x += 10;
+		temp.y += 136;
+		perfectLanding.transform.position = temp;
+		Animation animation = perfectLanding.transform.FindChild("Coin_Perfect").GetComponent<Animation>();
+		animation.Play();
+		perfectLanding.transform.FindChild("Coin_Perfect_Text").GetComponent<Animation>().Play();
+		yield return new WaitForSeconds(animation.clip.length + 0.25f);
+		perfectLanding.SetActive(false);
 	}
 }

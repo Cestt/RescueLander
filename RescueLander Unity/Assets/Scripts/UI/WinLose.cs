@@ -162,7 +162,7 @@ public class WinLose : MonoBehaviour {
 
 	}
 
-	public void End(string result){
+	public void End(string result,bool dead){
 		touch.adLimit = 0;
 		if(first){
 
@@ -309,7 +309,12 @@ public class WinLose : MonoBehaviour {
 
 
 				dataManger.manager.Save(true);
-				Lose();
+				if(dead){
+					Lose(true);
+				}else{
+					Lose(false);
+				}
+
 			}
 
 
@@ -372,7 +377,7 @@ public class WinLose : MonoBehaviour {
 			socialManager.Check("Leaderboard",new_score.ToString(),success);
 		});
 	}
-	void Lose(){
+	void Lose(bool ad){
 
 		soundManager.PlaySound("Lose");
 		dataManger.manager.partidas++;
@@ -381,6 +386,10 @@ public class WinLose : MonoBehaviour {
 			ads.LaunchInterstital();
 		}
 		LoseSprite.SetActive (true);
+		if(ad){
+			LoseSprite.transform.FindChild("More_PowerUps").gameObject.SetActive(false);
+			LoseSprite.transform.FindChild("Prompt_Ads_Shield").gameObject.SetActive(true);
+		}
 		UI1.SetActive (false);
 		UI2.SetActive (false);
 		if(!Application.loadedLevelName.Contains("Tuto")){
