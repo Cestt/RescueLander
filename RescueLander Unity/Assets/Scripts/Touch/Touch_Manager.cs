@@ -53,13 +53,14 @@ public class Touch_Manager : MonoBehaviour {
 	public GameObject actualPrompt;
 	public int adLimit = 0;
 	private GameObject prevStats;
-
+	private List<GameObject> garajeDesactivar; 
 
 	public GoogleAnalyticsV3 googleAnalytics;
 
 	void Awake(){
 		uicameraGameobject = GameObject.Find("UI_Camera");
 		adLimit = 0;
+		garajeDesactivar = new List<GameObject> ();
 		powerManager = GetComponent<PowerUp_Manager>();
 		if(Application.loadedLevelName != "Menu"){
 
@@ -792,6 +793,11 @@ public class Touch_Manager : MonoBehaviour {
 						case "MoreCoins_Button":
 							Garaje(true);
 							garage_manager.LayoutChanger("Coins");
+							buttonsGarage[0].IsOn = false;
+							buttonsGarage[1].IsOn = false;
+							//if (buttonsGarage[2].IsOn)
+								buttonsGarage[2].IsOn = true;
+							buttonsGarage[3].IsOn = false;
 							uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 							actualPrompt.SetActive(false);
 							break;
@@ -1450,6 +1456,11 @@ public class Touch_Manager : MonoBehaviour {
 					case "MoreCoins_Button":
 						Garaje(true);
 						garage_manager.LayoutChanger("Coins");
+						buttonsGarage[0].IsOn = false;
+						buttonsGarage[1].IsOn = false;
+						//if (buttonsGarage[2].IsOn)
+							buttonsGarage[2].IsOn = true;
+						buttonsGarage[3].IsOn = false;
 						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 						if(actualPrompt != null)
 							actualPrompt.SetActive(false);
@@ -1614,7 +1625,12 @@ public class Touch_Manager : MonoBehaviour {
 
 	void Garaje(bool activate){
 		if(activate){
+			garajeDesactivar.Clear ();
 			if(Application.loadedLevelName != "Menu"){
+				garajeDesactivar.Add (GameObject.Find("UI_Camera").transform.FindChild("Anchor (LowerLeft)").gameObject);
+				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
+				garajeDesactivar.Add (GameObject.Find("UI_Camera").transform.FindChild("Anchor (LowerRight)").gameObject);
+				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
 				if(Win.activeInHierarchy){
 					Result = "Win";
 					Win.SetActive(false);
@@ -1625,6 +1641,14 @@ public class Touch_Manager : MonoBehaviour {
 				}
 			}else{
 				GameObject.Find("UI_Camera").transform.FindChild("Options_Menu").gameObject.SetActive(false);
+				garajeDesactivar.Add (GameObject.Find("UI_Camera").transform.FindChild("Anchor (UpperRight)").gameObject);
+				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
+				garajeDesactivar.Add (GameObject.Find("Back_Button"));
+				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
+				garajeDesactivar.Add (GameObject.Find ("Button_Garage"));
+				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
+				garajeDesactivar.Add (GameObject.Find ("World_Buttons"));
+				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
 			}
 			if(actualPrompt != null){
 				actualPrompt.SetActive(false);
@@ -1642,6 +1666,8 @@ public class Touch_Manager : MonoBehaviour {
 					Lose.SetActive(true);
 				}
 			}
+			foreach(GameObject garajeActivar in garajeDesactivar)
+				garajeActivar.SetActive(true);
 			garaje.SetActive(false);
 			levelEnable = true;
 			Result = null;
