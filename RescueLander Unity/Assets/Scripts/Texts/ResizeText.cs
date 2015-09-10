@@ -10,14 +10,15 @@ public class ResizeText : MonoBehaviour {
 	tk2dTextMesh textMesh;
 	public bool button;
 	
-	void Start (){
-		textMesh = GetComponent<tk2dTextMesh>();
-		widthIni = textMesh.GetEstimatedMeshBoundsForString(textMesh.text).size.x;
-		heightIni = textMesh.GetEstimatedMeshBoundsForString(textMesh.text).size.y;
-	}
-	IEnumerator FinalText(){
-		yield return new WaitForEndOfFrame();
+
+	void FinalText(){
+		if(textMesh == null){
+			textMesh = GetComponent<tk2dTextMesh>();
+			widthIni = textMesh.GetEstimatedMeshBoundsForString(textMesh.text).size.x;
+			heightIni = textMesh.GetEstimatedMeshBoundsForString(textMesh.text).size.y;
+		}
 		float newWidth = textMesh.GetEstimatedMeshBoundsForString(newText).size.x;
+
 		float percentX = widthIni/newWidth;
 		if (button){
 			if (percentX < 1){
@@ -44,12 +45,12 @@ public class ResizeText : MonoBehaviour {
 	public void ChangeText(string Text){
 		newText = Text;
 		apendText = null;
-		StartCoroutine("FinalText");
+		Invoke("FinalText",0.2f);
 	}
 	public void ChangeText(string Text, string AppendText){
 		apendText = AppendText;
 		newText = Text;
-		StartCoroutine("FinalText");
+		Invoke("FinalText",0.2f);
 	}
 
 }
