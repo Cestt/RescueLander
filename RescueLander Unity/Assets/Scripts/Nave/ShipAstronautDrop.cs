@@ -33,7 +33,7 @@ public class ShipAstronautDrop : MonoBehaviour {
 			if(rigid.velocity.magnitude == 0 & shipastronautpickup.astronautPicked != 0 & astronautsDroped < totalAstronauts){
 
 
-				astronautsDroped += shipastronautpickup.astronautPicked;
+
 				//shipastronautpickup.astronautPicked = 0;
 				//dataManger.manager.Save();
 				Debug.Log("Astronaut dropped "+ astronautsDroped);
@@ -44,7 +44,7 @@ public class ShipAstronautDrop : MonoBehaviour {
 				
 			}
 
-			if(astronautsDroped >= totalAstronauts & Application.loadedLevelName != "Tuto_1" & Application.loadedLevelName != "Tuto_2"){
+			if(shipastronautpickup.astronautPicked >= totalAstronauts & (gameObject.transform.eulerAngles.magnitude < 50 || gameObject.transform.eulerAngles.magnitude > 320) & Application.loadedLevelName != "Tuto_1" & Application.loadedLevelName != "Tuto_2"){
 
 				winLose.End("Win",false);
 			}

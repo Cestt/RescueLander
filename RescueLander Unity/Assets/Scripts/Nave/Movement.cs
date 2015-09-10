@@ -52,6 +52,10 @@ public class Movement : MonoBehaviour {
 	private AudioSource audioThruster;
 	private bool once = false;
 	private Damage damage;
+	[HideInInspector]
+	public bool fuel_PU;
+	private tk2dSlicedSprite slicedSpritePU;
+	private float speedFuelPU;
 	// Use this for initialization
 	void Awake() {
 
@@ -76,8 +80,10 @@ public class Movement : MonoBehaviour {
 		animator2 = Fire.GetComponent<tk2dSpriteAnimator>();
 		rigid = GetComponent<Rigidbody2D>();
 		slicedsprite = fuelBar.GetComponent<tk2dSlicedSprite>();
+		slicedSpritePU = GameObject.Find ("UI_Camera").transform.FindChild ("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/PowerUp_Fuel").GetComponent<tk2dSlicedSprite> ();
 		originlSize = slicedsprite.dimensions.x;
 		originalFuel = fuel;
+		speedFuelPU = 100;
 		animator =  Fire.GetComponent<tk2dSpriteAnimator>();
 		damage = GetComponent<Damage>();
 		audioSource = GetComponent<AudioSource>();
@@ -94,181 +100,181 @@ public class Movement : MonoBehaviour {
 
 
 	void FixedUpdate () {
-		if ((!dataManger.manager.Sounds || touchmanager.paused) && audioSource.isPlaying){
+		if ((!dataManger.manager.Sounds || touchmanager.paused) && audioSource.isPlaying) {
 			audioSource.Stop ();
-		}else if (dataManger.manager.Sounds & !touchmanager.paused && !audioSource.isPlaying){
-			audioSource.Play();
+		} else if (dataManger.manager.Sounds & !touchmanager.paused && !audioSource.isPlaying) {
+			audioSource.Play ();
 		}
-		if ((!dataManger.manager.Sounds  || touchmanager.paused) & audioThruster.isPlaying){
-			audioThruster.Stop();
+		if ((!dataManger.manager.Sounds || touchmanager.paused) & audioThruster.isPlaying) {
+			audioThruster.Stop ();
 		}
 		if (fuel < 0 & !prompFuel) {
-			int timeAct = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
+			int timeAct = int.Parse (System.DateTime.UtcNow.ToString ("MMddHHmm"));
 			timeAct -= dataManger.manager.timePrompFuel;
 
-			if (timeAct < 0 )
+			if (timeAct < 0)
 				dataManger.manager.timePrompFuel = 0;
-			if ((dataManger.manager.actualLevel < 6 && dataManger.manager.actualWorld == "Mars" ) || (timeAct > 9)){
-				touchmanager.uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
-				touchmanager.actualPrompt = touchmanager.uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
-				touchmanager.actualPrompt.SetActive(true);
-				touchmanager.Pause(null,false);
-				dataManger.manager.timePrompFuel = int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm"));
+			if ((dataManger.manager.actualLevel < 6 && dataManger.manager.actualWorld == "Mars") || (timeAct > 9)) {
+				touchmanager.uicameraGameobject.transform.FindChild ("Prompt_Menu").gameObject.SetActive (true);
+				touchmanager.actualPrompt = touchmanager.uicameraGameobject.transform.FindChild ("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Fuel").gameObject;
+				touchmanager.actualPrompt.SetActive (true);
+				touchmanager.Pause (null, false);
+				dataManger.manager.timePrompFuel = int.Parse (System.DateTime.UtcNow.ToString ("MMddHHmm"));
 
 			}
-			prompFuel = true;	}
-		if(fuel < 0 & !running & prompFuel & !touchmanager.paused){
+			prompFuel = true;
+		}
+		if (fuel < 0 & !running & prompFuel & !touchmanager.paused) {
 
 			actualTime = Time.time;
 			running = true;
 
-		}
-		else if(fuel > 0){
+		} else if (fuel > 0) {
 			running = false;
 		}
-		if(running & actualTime + LoseTime < Time.time){
-			if(!once){
-				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Lose",false);
+		if (running & actualTime + LoseTime < Time.time) {
+			if (!once) {
+				GameObject.Find ("Game Manager").GetComponent<WinLose> ().End ("Lose", false);
 				once = true;
 			}
 
 		}
-		if(animator != null & animator.IsPlaying("Fire_Start")||
-		   animator != null & animator.IsPlaying("Fire_End")||
-		   animator != null & animator.IsPlaying("Fire_Loop")){
+		if (animator != null & animator.IsPlaying ("Fire_Start") ||
+			animator != null & animator.IsPlaying ("Fire_End") ||
+			animator != null & animator.IsPlaying ("Fire_Loop")) {
 			currentFrame = animator.CurrentFrame;
 		}
-			if(platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer){
-				if (motor & Input.touchCount < 2){
-					motor  = false;
-					if(animator2.IsPlaying("Fire_Start")){
-						animator2.Play("Fire_End");
-						animator2.PlayFromFrame(7-currentFrame);
-					}else{
-						animator2.Play("Fire_End");
-					}
-					if (dataManger.manager.Sounds){
-						if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
-							audioSource.clip = clipRealenti;
-							audioSource.Play();
-						}
+		if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
+			if (motor & Input.touchCount < 2) {
+				motor = false;
+				if (animator2.IsPlaying ("Fire_Start")) {
+					animator2.Play ("Fire_End");
+					animator2.PlayFromFrame (7 - currentFrame);
+				} else {
+					animator2.Play ("Fire_End");
+				}
+				if (dataManger.manager.Sounds) {
+					if (audioSource.clip != clipRealenti || (audioSource.clip == clipRealenti && !audioSource.isPlaying)) {
+						audioSource.clip = clipRealenti;
+						audioSource.Play ();
 					}
 				}
-				if(Input.touchCount > 0) {
+			}
+			if (Input.touchCount > 0) {
 
 				Touch touch;
-				if(!touchmanager.paused & damage.life > 0){
-					if (Input.touchCount == 1){
+				if (!touchmanager.paused & damage.life > 0) {
+					if (Input.touchCount == 1) {
 						
-						touch = Input.GetTouch(0);
+						touch = Input.GetTouch (0);
 						
 						
-						if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended){
+						if (touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended) {
 
-							Vector3 tempVect = Camera.main.ScreenToWorldPoint(touch.position);
+							Vector3 tempVect = Camera.main.ScreenToWorldPoint (touch.position);
 							
-							if(tempVect.x > Camera.main.transform.position.x){
-								if(dataManger.manager.inverted){
-									rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
-								}else{
-									rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
+							if (tempVect.x > Camera.main.transform.position.x) {
+								if (dataManger.manager.inverted) {
+									rigid.AddTorque (angularForce + ((angularForce * angularSpeedUpgrade) / 100));
+								} else {
+									rigid.AddTorque (-angularForce - ((angularForce * angularSpeedUpgrade) / 100));
 								}
-								if(angularSpeedUpgrade != 0){
-									ConsumeFuel(false,false);
+								if (angularSpeedUpgrade != 0) {
+									ConsumeFuel (false, false);
 								}
 
 								
-								if(!Thruster_l.activeInHierarchy){
-									Thruster_l.SetActive(true);
+								if (!Thruster_l.activeInHierarchy) {
+									Thruster_l.SetActive (true);
 								}
-								if(Thruster_r.activeInHierarchy){
-									Thruster_r.SetActive(false);
+								if (Thruster_r.activeInHierarchy) {
+									Thruster_r.SetActive (false);
 								}
-								animator = Thruster_l.GetComponent<tk2dSpriteAnimator>();
-								if(!animator.IsPlaying("Thruster_Loop")){
-									animator.Play("Thruster_Start");
+								animator = Thruster_l.GetComponent<tk2dSpriteAnimator> ();
+								if (!animator.IsPlaying ("Thruster_Loop")) {
+									animator.Play ("Thruster_Start");
 								}
 								animator.AnimationCompleted = ThrusterLoop;
 							} 
-							if(tempVect.x < Camera.main.transform.position.x){
+							if (tempVect.x < Camera.main.transform.position.x) {
 
-								if(dataManger.manager.inverted){
-									rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
-								}else{
-									rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
+								if (dataManger.manager.inverted) {
+									rigid.AddTorque (-angularForce - ((angularForce * angularSpeedUpgrade) / 100));
+								} else {
+									rigid.AddTorque (angularForce + ((angularForce * angularSpeedUpgrade) / 100));
 								}
-								if(angularSpeedUpgrade != 0){
-									ConsumeFuel(false,false);
+								if (angularSpeedUpgrade != 0) {
+									ConsumeFuel (false, false);
 								}
 
 								
-								if(!Thruster_r.activeInHierarchy){
-									Thruster_r.SetActive(true);
+								if (!Thruster_r.activeInHierarchy) {
+									Thruster_r.SetActive (true);
 								}
-								if(Thruster_l.activeInHierarchy){
-									Thruster_l.SetActive(false);
+								if (Thruster_l.activeInHierarchy) {
+									Thruster_l.SetActive (false);
 								}
-								animator = Thruster_r.GetComponent<tk2dSpriteAnimator>();
-								if(!animator.IsPlaying("Thruster_Loop")){
-									animator.Play("Thruster_Start");
+								animator = Thruster_r.GetComponent<tk2dSpriteAnimator> ();
+								if (!animator.IsPlaying ("Thruster_Loop")) {
+									animator.Play ("Thruster_Start");
 								}
 								
 								animator.AnimationCompleted = ThrusterLoop;
 							}
 
 							if (dataManger.manager.Sounds && !audioThruster.isPlaying)
-								audioThruster.Play();
+								audioThruster.Play ();
 						}
 						
-						if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended || Input.touchCount == 2){
-							animator.Stop();
-							Thruster_l.SetActive(false);
-							Thruster_r.SetActive(false);
+						if (touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended || Input.touchCount == 2) {
+							animator.Stop ();
+							Thruster_l.SetActive (false);
+							Thruster_r.SetActive (false);
 							if (audioThruster.isPlaying)
-								audioThruster.Stop();
+								audioThruster.Stop ();
 						}
 						
-						motor  = false;
+						motor = false;
 					}
 					
 					
 					
-					if (Input.touchCount == 2 & fuel > 0){	
-						touch = Input.GetTouch(1);
-						animator.Stop();
-						Thruster_l.SetActive(false);
-						Thruster_r.SetActive(false);
+					if (Input.touchCount == 2 & fuel > 0) {	
+						touch = Input.GetTouch (1);
+						animator.Stop ();
+						Thruster_l.SetActive (false);
+						Thruster_r.SetActive (false);
 						if (audioThruster.isPlaying)
-							audioThruster.Stop();
-						if(touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended){
+							audioThruster.Stop ();
+						if (touch.phase != TouchPhase.Began || touch.phase != TouchPhase.Canceled || touch.phase != TouchPhase.Ended) {
 							
-							Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
-							rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
+							Vector3 dir = Quaternion.AngleAxis (gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
+							rigid.AddForce (dir * (motorForce + (motorForce * speedUpgrade)), ForceMode2D.Force);
 
-							if(!Fire.activeInHierarchy)
-								Fire.SetActive(true);
-							ConsumeFuel(true,false);
+							if (!Fire.activeInHierarchy)
+								Fire.SetActive (true);
+							ConsumeFuel (true, false);
 							motor = true;
 
-							if (dataManger.manager.Sounds){
-								if (audioSource.clip != clipMotor || ( audioSource.clip == clipMotor && !audioSource.isPlaying)){
+							if (dataManger.manager.Sounds) {
+								if (audioSource.clip != clipMotor || (audioSource.clip == clipMotor && !audioSource.isPlaying)) {
 									audioSource.clip = clipMotor;
-									audioSource.Play();
+									audioSource.Play ();
 								}
 							}
 						}
-						if(touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended){
-							motor  = false;
-							if(animator2.IsPlaying("Fire_Start")){
-								animator2.Play("Fire_End");
-								animator2.PlayFromFrame(7-currentFrame);
-							}else{
-								animator2.Play("Fire_End");
+						if (touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended) {
+							motor = false;
+							if (animator2.IsPlaying ("Fire_Start")) {
+								animator2.Play ("Fire_End");
+								animator2.PlayFromFrame (7 - currentFrame);
+							} else {
+								animator2.Play ("Fire_End");
 							}
-							if (dataManger.manager.Sounds){
-								if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
+							if (dataManger.manager.Sounds) {
+								if (audioSource.clip != clipRealenti || (audioSource.clip == clipRealenti && !audioSource.isPlaying)) {
 									audioSource.clip = clipRealenti;
-									audioSource.Play();
+									audioSource.Play ();
 								}
 							}
 						}
@@ -280,115 +286,123 @@ public class Movement : MonoBehaviour {
 			
 			
 		}
-		if(platform == RuntimePlatform.WindowsEditor){
+		if (platform == RuntimePlatform.WindowsEditor) {
 
-			if(!touchmanager.paused & damage.life > 0){
+			if (!touchmanager.paused & damage.life > 0) {
 
-				if(Input.GetKey(KeyCode.Space) & fuel > 0 & rigid.velocity.magnitude < maxSpeed){
-					animator.Stop();
-					Thruster_l.SetActive(false);
-					Thruster_r.SetActive(false);
+				if (Input.GetKey (KeyCode.Space) & fuel > 0 & rigid.velocity.magnitude < maxSpeed) {
+					animator.Stop ();
+					Thruster_l.SetActive (false);
+					Thruster_r.SetActive (false);
 					if (audioThruster.isPlaying)
-						audioThruster.Stop();
+						audioThruster.Stop ();
 
-					Vector3 dir = Quaternion.AngleAxis(gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
-					rigid.AddForce(dir * (motorForce + (motorForce * speedUpgrade)),ForceMode2D.Force);
+					Vector3 dir = Quaternion.AngleAxis (gameObject.transform.eulerAngles.magnitude + 90, Vector3.forward) * Vector3.right;
+					rigid.AddForce (dir * (motorForce + (motorForce * speedUpgrade)), ForceMode2D.Force);
 
-					if(!Fire.activeInHierarchy)
-						Fire.SetActive(true);					
-					ConsumeFuel(true,false);
+					if (!Fire.activeInHierarchy)
+						Fire.SetActive (true);					
+					ConsumeFuel (true, false);
 					motor = true;
-					if (dataManger.manager.Sounds){
-						if (audioSource.clip != clipMotor || ( audioSource.clip == clipMotor && !audioSource.isPlaying)){
+					if (dataManger.manager.Sounds) {
+						if (audioSource.clip != clipMotor || (audioSource.clip == clipMotor && !audioSource.isPlaying)) {
 							audioSource.volume = 0.35f;
 							audioSource.clip = clipMotor;
-							audioSource.Play();
+							audioSource.Play ();
 						}
 					}
 				}
-				if(Input.GetKeyUp(KeyCode.Space)){
+				if (Input.GetKeyUp (KeyCode.Space)) {
 					motor = false;
-					if(animator2.IsPlaying("Fire_Start")){
-						animator2.Play("Fire_End");
-						animator2.PlayFromFrame(7-currentFrame);
-					}else{
-						animator2.Play("Fire_End");
+					if (animator2.IsPlaying ("Fire_Start")) {
+						animator2.Play ("Fire_End");
+						animator2.PlayFromFrame (7 - currentFrame);
+					} else {
+						animator2.Play ("Fire_End");
 					}
-					if (dataManger.manager.Sounds){
-						if (audioSource.clip != clipRealenti || ( audioSource.clip == clipRealenti && !audioSource.isPlaying)){
+					if (dataManger.manager.Sounds) {
+						if (audioSource.clip != clipRealenti || (audioSource.clip == clipRealenti && !audioSource.isPlaying)) {
 							audioSource.volume = 0.1f;
 							audioSource.clip = clipRealenti;
-							audioSource.Play();
+							audioSource.Play ();
 						}
 					}
 				}
 				
 				
 				
-				if(Input.GetMouseButton(0) & rigid.angularVelocity < maxAngularSpeed){
+				if (Input.GetMouseButton (0) & rigid.angularVelocity < maxAngularSpeed) {
 					
 					
 					
-					Vector3 tempVect = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+					Vector3 tempVect = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 					
-					if(tempVect.x > Camera.main.transform.position.x){
-						if(dataManger.manager.inverted){
-							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
-						}else{
-							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
+					if (tempVect.x > Camera.main.transform.position.x) {
+						if (dataManger.manager.inverted) {
+							rigid.AddTorque (angularForce + ((angularForce * angularSpeedUpgrade) / 100));
+						} else {
+							rigid.AddTorque (-angularForce - ((angularForce * angularSpeedUpgrade) / 100));
 						}
-						if(angularSpeedUpgrade != 0){
-							ConsumeFuel(false,true);
+						if (angularSpeedUpgrade != 0) {
+							ConsumeFuel (false, true);
 						}
 						
-						if(!Thruster_l.activeInHierarchy){
-							Thruster_l.SetActive(true);
+						if (!Thruster_l.activeInHierarchy) {
+							Thruster_l.SetActive (true);
 						}
-						animator = Thruster_l.GetComponent<tk2dSpriteAnimator>();
-						if(!animator.IsPlaying("Thruster_Loop")){
-							animator.Play("Thruster_Start");
+						animator = Thruster_l.GetComponent<tk2dSpriteAnimator> ();
+						if (!animator.IsPlaying ("Thruster_Loop")) {
+							animator.Play ("Thruster_Start");
 						}
 						animator.AnimationCompleted = ThrusterLoop;
 						
 					}
-					if(tempVect.x  < Camera.main.transform.position.x){
+					if (tempVect.x < Camera.main.transform.position.x) {
 						
-						if(dataManger.manager.inverted){
-							rigid.AddTorque(-angularForce - ((angularForce * angularSpeedUpgrade)/100));
-						}else{
-							rigid.AddTorque(angularForce + ((angularForce * angularSpeedUpgrade)/100));
+						if (dataManger.manager.inverted) {
+							rigid.AddTorque (-angularForce - ((angularForce * angularSpeedUpgrade) / 100));
+						} else {
+							rigid.AddTorque (angularForce + ((angularForce * angularSpeedUpgrade) / 100));
 						}
-						if(angularSpeedUpgrade != 0){
-							ConsumeFuel(false,true);
+						if (angularSpeedUpgrade != 0) {
+							ConsumeFuel (false, true);
 						}
 						
-						if(!Thruster_r.activeInHierarchy){
-							Thruster_r.SetActive(true);
+						if (!Thruster_r.activeInHierarchy) {
+							Thruster_r.SetActive (true);
 						}
-						animator = Thruster_r.GetComponent<tk2dSpriteAnimator>();
-						if(!animator.IsPlaying("Thruster_Loop")){
-							animator.Play("Thruster_Start");
+						animator = Thruster_r.GetComponent<tk2dSpriteAnimator> ();
+						if (!animator.IsPlaying ("Thruster_Loop")) {
+							animator.Play ("Thruster_Start");
 						}
 						animator.AnimationCompleted = ThrusterLoop;
 					}
 
 					if (dataManger.manager.Sounds && !audioThruster.isPlaying)
-						audioThruster.Play();
-					motor  = false;
+						audioThruster.Play ();
+					motor = false;
 					
 				}
-				if(Input.GetMouseButtonUp(0)){
-					animator.Stop();
-					Thruster_l.SetActive(false);
-					Thruster_r.SetActive(false);
+				if (Input.GetMouseButtonUp (0)) {
+					animator.Stop ();
+					Thruster_l.SetActive (false);
+					Thruster_r.SetActive (false);
 					if (audioThruster.isPlaying)
-						audioThruster.Stop();
+						audioThruster.Stop ();
 				}
 				
 			}
 		}
 		
-		
+		/*SI SE USADO PU FUEL*/
+		if (fuel_PU) {
+			slicedsprite.dimensions = new Vector2 (slicedsprite.dimensions.x+(Time.deltaTime*speedFuelPU), slicedsprite.dimensions.y);
+			if (slicedsprite.dimensions.x >= slicedSpritePU.dimensions.x){
+				fuel_PU = false;
+				slicedsprite.dimensions = new Vector2(slicedSpritePU.dimensions.x,slicedsprite.dimensions.y);
+				slicedSpritePU.gameObject.SetActive(false);
+			}
+		}
 	}
 	
 	void ConsumeFuel (bool Complete,bool increment) {
@@ -397,8 +411,14 @@ public class Movement : MonoBehaviour {
 		}else{
 			fuel -= fuelConsumption * 1.5f;
 		}
-		if(fuel > 0)
-		slicedsprite.dimensions = new Vector2(originlSize * (fuel/originalFuel),slicedsprite.dimensions.y);
+		if (fuel > 0) {
+			if (fuel_PU){
+				slicedSpritePU.dimensions = new Vector2 (originlSize * (fuel / originalFuel), slicedSpritePU.dimensions.y);
+			}else{
+				slicedsprite.dimensions = new Vector2 (originlSize * (fuel / originalFuel), slicedsprite.dimensions.y);
+			}
+		}
+
 		motor = true;
 		if(Complete){
 			if(!animator2.IsPlaying("Fire_Loop")){

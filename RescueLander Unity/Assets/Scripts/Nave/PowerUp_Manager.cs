@@ -5,6 +5,7 @@ public class PowerUp_Manager : MonoBehaviour {
 
 	private GameObject ship;
 	private GameObject fuelBar;
+	private GameObject fuelBarPU;
 	private float fuelBarOriginalSize;
 	public int Magnet_Duration;
 	public int Shield_Duration;
@@ -29,6 +30,7 @@ public class PowerUp_Manager : MonoBehaviour {
 			GameObject temp = GameObject.Find("UI_Camera");
 			fuelBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/BarraFuel").gameObject;
 			fuelBarOriginalSize = fuelBar.GetComponent<tk2dSlicedSprite>().dimensions.x;		
+			fuelBarPU = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Fuel/PowerUp_Fuel").gameObject;
 			damage = ship.GetComponent<Damage>();
 			touch = gameObject.GetComponent<Touch_Manager>();
 		}
@@ -51,9 +53,12 @@ public class PowerUp_Manager : MonoBehaviour {
 				Debug.Log("Fuel PU");
 				Movement movement = ship.GetComponent<Movement>();
 				movement.fuel += (movement.originalFuel  * Fuel_Recover)/100;
-				tk2dSlicedSprite sliced = fuelBar.GetComponent<tk2dSlicedSprite>();
+				movement.fuel_PU = true;
+				fuelBarPU.SetActive(true);
+				tk2dSlicedSprite sliced = fuelBarPU.GetComponent<tk2dSlicedSprite>();
+				tk2dSlicedSprite slicedNormal = fuelBar.GetComponent<tk2dSlicedSprite>();
 				sliced.dimensions = new Vector2( 
-				                                sliced.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),sliced.dimensions.y);
+				                                slicedNormal.dimensions.x  + ((fuelBarOriginalSize * Fuel_Recover)/100),slicedNormal.dimensions.y);
 				dataManger.manager.fuelPowerUps --;
 				if(sliced.dimensions.x > fuelBarOriginalSize || movement.fuel > movement.originalFuel){
 					sliced.dimensions = new Vector2( 
