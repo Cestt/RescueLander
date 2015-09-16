@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 public class Damage : MonoBehaviour {
 	[HideInInspector]
@@ -47,6 +49,8 @@ public class Damage : MonoBehaviour {
 	public float damageTime = -100f;
 	private bool showed = false;
 	private Touch_Manager touchmanager;
+	float sliceTime;
+	Social_Manager socialManager;
 	// Use this for initialization
 	void Awake () {
 		rigid = GetComponent<Rigidbody2D>();
@@ -58,6 +62,7 @@ public class Damage : MonoBehaviour {
 		GameObject temp = GameObject.Find("UI_Camera");
 		lifeBar = temp.transform.FindChild("Anchor (UpperLeft)/UIBase_Left/BarraFondo_Vida/BarraVida").gameObject;
 		GameManager = GameObject.Find("Game Manager");
+		socialManager = GameManager.GetComponent<Social_Manager> ();
 		touch = GameManager.GetComponent<Touch_Manager>();
 		shipastronautpickup = this.GetComponent<ShipAstronautPickUp>();
 		slicedsprite = lifeBar.GetComponent<tk2dSlicedSprite>();
@@ -157,11 +162,27 @@ public class Damage : MonoBehaviour {
 				movement.Thruster_r.GetComponent<tk2dSprite>().scale = new Vector3(1,1,1);
 				first = false;
 			}
+			sliceTime = Time.time;
 		}
 	}
 	void OnCollisionStay2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Floor"){
-			
+			//ACHIEVEMENT de deslizamiento
+			if (sliceTime != -2){
+				if (coll.relativeVelocity.magnitude > 20){
+					if (sliceTime == -1){
+						sliceTime = Time.time;
+					}
+					if (Time.time >= (sliceTime+2)){
+						sliceTime = -2;
+						Social.ReportProgress("CgkIuv-YgIkeEAIQCA", 100.0f, (bool success) => {
+							socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCA",success);
+						});
+					}
+				}else{
+					sliceTime = -1;
+				}
+			}
 			if(coll.relativeVelocity.magnitude > damageThresholdFriction){
 
 				ContactPoint2D contactpoint = coll.contacts[0];

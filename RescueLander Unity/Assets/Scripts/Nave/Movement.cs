@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 [System.Serializable]
 public class Movement : MonoBehaviour {
 
 	RuntimePlatform platform = Application.platform;
 	private Touch_Manager touchmanager;
+	private Social_Manager socialManager;
 	[HideInInspector]
 	public GameObject fuelBar;
 	[HideInInspector]
@@ -56,6 +58,10 @@ public class Movement : MonoBehaviour {
 	public bool fuel_PU;
 	private tk2dSlicedSprite slicedSpritePU;
 	private float speedFuelPU;
+
+	private int dirRotation;
+	private float rotationIni;
+	private bool[] rotationRoll;
 	// Use this for initialization
 	void Awake() {
 
@@ -70,12 +76,14 @@ public class Movement : MonoBehaviour {
 				fuel = fuelLevelIce[dataManger.manager.actualLevel-1];
 		}
 		touchmanager = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
+		socialManager = GameObject.Find("Game Manager").GetComponent<Social_Manager>();
 		fuelBar = GameObject.Find("BarraFuel");
 		Transform findChild = transform.FindChild("Thruster_R");
 		Thruster_r = findChild.gameObject;
 		findChild = transform.FindChild("Thruster_L");
 		Thruster_l = findChild.gameObject;
 		findChild = transform.FindChild("Fire");
+		rotationRoll = new bool[2];
 		Fire = findChild.gameObject;
 		animator2 = Fire.GetComponent<tk2dSpriteAnimator>();
 		rigid = GetComponent<Rigidbody2D>();
@@ -84,6 +92,7 @@ public class Movement : MonoBehaviour {
 		originlSize = slicedsprite.dimensions.x;
 		originalFuel = fuel;
 		speedFuelPU = 100;
+		dirRotation = 0;
 		animator =  Fire.GetComponent<tk2dSpriteAnimator>();
 		damage = GetComponent<Damage>();
 		audioSource = GetComponent<AudioSource>();
@@ -181,6 +190,31 @@ public class Movement : MonoBehaviour {
 								}
 								if (angularSpeedUpgrade != 0) {
 									ConsumeFuel (false, false);
+									dirRotation = 0;
+								}else{
+									
+									if (dirRotation != 1){
+										
+										dirRotation = 1;
+										rotationIni = (int)transform.eulerAngles.z;
+										if (rotationIni == 0 || rotationIni == 360 || rotationIni == 359)
+											rotationIni = 358;
+										if (rotationIni == 1)
+											rotationIni = 2;
+										rotationRoll[0] = false;
+										rotationRoll[1] = false;
+									}else{
+										if (!rotationRoll[0] && transform.eulerAngles.z <= rotationIni){
+											rotationRoll[0] = true;
+										}
+										if (rotationRoll[0] && !rotationRoll[1] && transform.eulerAngles.z >= rotationIni){
+											rotationRoll[1] = true;
+										}else if (rotationRoll[1] && transform.eulerAngles.z <= rotationIni){
+											Social.ReportProgress("CgkIuv-YgIkeEAIQAA", 100.0f, (bool success) => {
+												socialManager.Check("Achievement","CgkIuv-YgIkeEAIQAA",success);
+											});
+										}
+									}
 								}
 
 								
@@ -205,6 +239,31 @@ public class Movement : MonoBehaviour {
 								}
 								if (angularSpeedUpgrade != 0) {
 									ConsumeFuel (false, false);
+									dirRotation = 0;
+								}else{
+									
+									if (dirRotation != -1){
+										
+										dirRotation = -1;
+										rotationIni = (int)transform.eulerAngles.z;
+										if (rotationIni == 0 || rotationIni == 360 || rotationIni == 1)
+											rotationIni = 2;
+										if (rotationIni == 359)
+											rotationIni = 358;
+										rotationRoll[0] = false;
+										rotationRoll[1] = false;
+									}else{
+										if (!rotationRoll[0] && transform.eulerAngles.z >= rotationIni){
+											rotationRoll[0] = true;
+										}
+										if (rotationRoll[0] && !rotationRoll[1] && transform.eulerAngles.z <= rotationIni){
+											rotationRoll[1] = true;
+										}else if (rotationRoll[1] && transform.eulerAngles.z >= rotationIni){
+											Social.ReportProgress("CgkIuv-YgIkeEAIQAA", 100.0f, (bool success) => {
+												socialManager.Check("Achievement","CgkIuv-YgIkeEAIQAA",success);
+											});
+										}
+									}
 								}
 
 								
@@ -241,6 +300,7 @@ public class Movement : MonoBehaviour {
 					
 					if (Input.touchCount == 2 & fuel > 0) {	
 						touch = Input.GetTouch (1);
+						dirRotation = 0;
 						animator.Stop ();
 						Thruster_l.SetActive (false);
 						Thruster_r.SetActive (false);
@@ -292,6 +352,7 @@ public class Movement : MonoBehaviour {
 
 				if (Input.GetKey (KeyCode.Space) & fuel > 0 & rigid.velocity.magnitude < maxSpeed) {
 					animator.Stop ();
+					dirRotation = 0;
 					Thruster_l.SetActive (false);
 					Thruster_r.SetActive (false);
 					if (audioThruster.isPlaying)
@@ -345,7 +406,33 @@ public class Movement : MonoBehaviour {
 						}
 						if (angularSpeedUpgrade != 0) {
 							ConsumeFuel (false, true);
+							dirRotation = 0;
+						}else{
+
+							if (dirRotation != 1){
+
+								dirRotation = 1;
+								rotationIni = (int)transform.eulerAngles.z;
+								if (rotationIni == 0 || rotationIni == 360 || rotationIni == 359)
+									rotationIni = 358;
+								if (rotationIni == 1)
+									rotationIni = 2;
+								rotationRoll[0] = false;
+								rotationRoll[1] = false;
+							}else{
+								if (!rotationRoll[0] && transform.eulerAngles.z <= rotationIni){
+									rotationRoll[0] = true;
+								}
+								if (rotationRoll[0] && !rotationRoll[1] && transform.eulerAngles.z >= rotationIni){
+									rotationRoll[1] = true;
+								}else if (rotationRoll[1] && transform.eulerAngles.z <= rotationIni){
+									Social.ReportProgress("CgkIuv-YgIkeEAIQAA", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQAA",success);
+									});
+								}
+							}
 						}
+
 						
 						if (!Thruster_l.activeInHierarchy) {
 							Thruster_l.SetActive (true);
@@ -366,6 +453,31 @@ public class Movement : MonoBehaviour {
 						}
 						if (angularSpeedUpgrade != 0) {
 							ConsumeFuel (false, true);
+							dirRotation = 0;
+						}else{
+							
+							if (dirRotation != -1){
+								
+								dirRotation = -1;
+								rotationIni = (int)transform.eulerAngles.z;
+								if (rotationIni == 0 || rotationIni == 360 || rotationIni == 1)
+									rotationIni = 2;
+								if (rotationIni == 359)
+									rotationIni = 358;
+								rotationRoll[0] = false;
+								rotationRoll[1] = false;
+							}else{
+								if (!rotationRoll[0] && transform.eulerAngles.z >= rotationIni){
+									rotationRoll[0] = true;
+								}
+								if (rotationRoll[0] && !rotationRoll[1] && transform.eulerAngles.z <= rotationIni){
+									rotationRoll[1] = true;
+								}else if (rotationRoll[1] && transform.eulerAngles.z >= rotationIni){
+									Social.ReportProgress("CgkIuv-YgIkeEAIQAA", 100.0f, (bool success) => {
+										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQAA",success);
+									});
+								}
+							}
 						}
 						
 						if (!Thruster_r.activeInHierarchy) {

@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 public class Tuto_Behaviour : MonoBehaviour {
 	
@@ -16,7 +18,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 	private Zoom zoom;
 	private int prevStep;
 	private Camera uicamera;
-
+	Social_Manager socialManager;
 
 	void Awake () {
 
@@ -38,6 +40,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 		}
 		zoom.enabled = false;
 		zoom.cam.ZoomFactor = 1.25f;
+		socialManager = GameObject.Find ("Game Manager").GetComponent<Social_Manager>();
 	}
 
 
@@ -63,6 +66,9 @@ public class Tuto_Behaviour : MonoBehaviour {
 						currentText.transform.FindChild("Prompt_Menu_Turn").gameObject.SetActive(false);
 					}
 					if (hit.collider.name == "Exit_Button") {
+						Social.ReportProgress("CgkIuv-YgIkeEAIQCg", 100.0f, (bool success) => {
+							socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCg",success);
+						});
 						dataManger.manager.tutorial = 4;
 						dataManger.manager.Save(true);
 						Application.LoadLevel("Menu");
@@ -121,6 +127,9 @@ public class Tuto_Behaviour : MonoBehaviour {
 		}
 
 		if (step == 8 & !transform.FindChild ("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_2").gameObject.activeInHierarchy) {
+			Social.ReportProgress("CgkIuv-YgIkeEAIQCg", 100.0f, (bool success) => {
+				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCg",success);
+			});
 			dataManger.manager.tutorial = 4;
 			dataManger.manager.Save(true);
 			Application.LoadLevel("Menu");

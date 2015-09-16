@@ -367,6 +367,12 @@ public class WinLose : MonoBehaviour {
 				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQDA",success);
 			});
 		}
+		//ACHIEVEMENT
+		if (dataManger.manager.totalStars == ((dataManger.manager.levelsMars*3) + (dataManger.manager.levelsIce*3))){
+			Social.ReportProgress("CgkIuv-YgIkeEAIQAw", 100.0f, (bool success) => {
+				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQAw",success);
+			});
+		}
 		//Sumamos las puntuaciones totales y se publica en el leaderboard
 		int new_score = 0;
 		for (int i=1; i<dataManger.manager.unlocksMars; i++){
@@ -376,6 +382,14 @@ public class WinLose : MonoBehaviour {
 		Social.ReportScore(new_score, "CgkIuv-YgIkeEAIQDQ", (bool success) => {
 			socialManager.Check("Leaderboard",new_score.ToString(),success);
 		});
+		new_score = 0;
+		for (int i=1; i<dataManger.manager.unlocksIce; i++) {
+			new_score += dataManger.manager.scoresIce["Level_"+1];
+		}
+		Social.ReportScore(new_score, "CgkIuv-YgIkeEAIQFQ", (bool success) => {
+			socialManager.Check("Leaderboard",new_score.ToString(),success);
+		});
+
 	}
 	void Lose(bool ad){
 

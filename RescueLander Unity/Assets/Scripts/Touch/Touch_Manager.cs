@@ -8,6 +8,7 @@ using System;
 
 
 public class Touch_Manager : MonoBehaviour {
+
 	RuntimePlatform platform = Application.platform;
 	[HideInInspector]
 	public GameObject uicameraGameobject;
