@@ -45,7 +45,7 @@ public class PowerUp_Manager : MonoBehaviour {
 		}
 	}
 	
-	public void PowerUp(string Power){
+	public void PowerUp(string Power,bool Ad){
 		if(!touch.paused){
 			switch(Power){
 				
@@ -73,7 +73,8 @@ public class PowerUp_Manager : MonoBehaviour {
 					 //Timer("Start",Shield_Duration,ship.transform.FindChild("PU_Shield").gameObject);
 					damage.DamageVariant = Shield_DmgReduction;
 					ship.transform.FindChild("PU_Shield").gameObject.SetActive(true);
-					dataManger.manager.shieldPowerUps --;
+					if(!Ad)
+						dataManger.manager.shieldPowerUps --;
 					dataManger.manager.Save(false);
 				}
 				break;

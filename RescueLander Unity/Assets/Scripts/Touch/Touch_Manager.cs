@@ -118,7 +118,7 @@ public class Touch_Manager : MonoBehaviour {
 			if(dataManger.manager.nextPowerUp){
 				dataManger.manager.nextPowerUp = false;
 				dataManger.manager.Save(false);
-				powerManager.PowerUp("Shield");
+				powerManager.PowerUp("Shield",true);
 			}
 
 		}
@@ -164,7 +164,7 @@ public class Touch_Manager : MonoBehaviour {
 
 	void OnLevelWasLoaded(int level) {
 		if (dataManger.manager.nextPowerUp){
-			powerManager.PowerUp(dataManger.manager.nextPowerUpName);
+			powerManager.PowerUp(dataManger.manager.nextPowerUpName,true);
 			dataManger.manager.nextPowerUp = false;
 		}
 	}
@@ -334,7 +334,7 @@ public class Touch_Manager : MonoBehaviour {
 										actualPrompt.SetActive(true);
 										Pause(null,false);
 									}*/
-									powerManager.PowerUp("Shield");
+									powerManager.PowerUp("Shield",false);
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
@@ -358,7 +358,7 @@ public class Touch_Manager : MonoBehaviour {
 										actualPrompt.SetActive(true);
 										Pause(null,false);
 									}*/
-									powerManager.PowerUp("Magnet");
+									powerManager.PowerUp("Magnet",false);
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
@@ -381,7 +381,7 @@ public class Touch_Manager : MonoBehaviour {
 										actualPrompt.SetActive(true);
 										Pause(null,false);
 									}*/
-									powerManager.PowerUp("Fuel");
+									powerManager.PowerUp("Fuel",false);
 									//ACHIEVEMENT
 									Social.ReportProgress("CgkIuv-YgIkeEAIQBg", 100.0f, (bool success) => {
 										socialManager.Check("Achievement","CgkIuv-YgIkeEAIQBg",success);
@@ -1021,7 +1021,7 @@ public class Touch_Manager : MonoBehaviour {
 					case "PowerUp_Shield" :
 						if (!paused){
 							if(dataManger.manager.shieldPowerUps >= 1){
-								powerManager.PowerUp("Shield");
+								powerManager.PowerUp("Shield",false);
 
 							}/*else{
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
@@ -1035,7 +1035,7 @@ public class Touch_Manager : MonoBehaviour {
 						if (!paused){
 							if(dataManger.manager.magnetPowerUps >= 1){
 
-								powerManager.PowerUp("Magnet");
+								powerManager.PowerUp("Magnet",false);
 
 							}/*else{
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
@@ -1048,7 +1048,7 @@ public class Touch_Manager : MonoBehaviour {
 					case "PowerUp_Fuel" :
 						if (!paused){
 							if(dataManger.manager.fuelPowerUps >= 1 ){
-								powerManager.PowerUp("Fuel");
+								powerManager.PowerUp("Fuel",false);
 
 							}/*else{
 								Debug.Log("PU_Global");
@@ -1537,7 +1537,12 @@ public class Touch_Manager : MonoBehaviour {
 				if(paused){
 					Pause(null,false);
 				}else{
-					Pause(null,false);
+					if(actualPrompt.activeInHierarchy){
+						actualPrompt.SetActive(false);
+					}else{
+						Pause(null,false);
+					}
+
 				}
 			}
 
@@ -1695,7 +1700,6 @@ public class Touch_Manager : MonoBehaviour {
 				uicameraGameobject.transform.FindChild("Loading").gameObject.SetActive(true);
 				dataManger.manager.actualLevel = tempInt;
 				dataManger.manager.actualWorld = tempString;
-				Debug.Log("World : "+tempString+" Level : "+tempInt);
 				StartCoroutine(LoadLevelAsync(tempInt,tempString));
 				levelEnable = false;
 			}

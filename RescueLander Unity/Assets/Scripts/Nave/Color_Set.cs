@@ -9,21 +9,46 @@ public class Color_Set : MonoBehaviour {
 	private GameObject ShipMenu;
 	private SpriteColorFX.SpriteColorMasks3 tintGaraje;
 
+	void OnLevelWasLoaded(int level){
+		if (Application.loadedLevelName == "Menu") {
+			if (dataManger.manager.color1b < 1000) {
+				SpriteColorFX.SpriteColorMasks3 tintMask;
+				ShipMenu = GameObject.Find("Ship_Anim").transform.FindChild("Ship01").gameObject;
+				tintMask = 
+					ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+				tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+				Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+				tintMask.colorMaskRed = temp[0];
+				tintMask.colorMaskGreen = temp[1];
+			}
+		}
+	}
 	void Awake () {
 
 		GameObject uicamera = GameObject.Find("UI_Camera");
 		ShipGaraje = uicamera.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Paint_Menu/TV/Ship01_Garage").gameObject;
 		ShipGaraje2 = uicamera.transform.FindChild ("Garage_Menu/Canvas/Shop_Bg_01/Ships_Menu/TV/Ship01_Garage").gameObject;
 		tintGaraje = ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3> ();
-		if (Application.loadedLevelName == "Menu") {
-			ShipMenu = GameObject.Find("Ship_Anim").transform.FindChild("Ship01").gameObject;
-		}
+
 		if (dataManger.manager.color1b < 1000) {
 			tintGaraje.GetComponent<SpriteRenderer> ().sprite = Resources.Load ("Sprites/" + dataManger.manager.actualShip + "_High", typeof(Sprite)) as Sprite;
 			tintGaraje.textureMask = Resources.Load ("Sprites/" + dataManger.manager.actualShip + "_Shader", typeof(Texture2D)) as Texture2D;
 			tintGaraje.colorMaskRed = new Color (dataManger.manager.color1r, dataManger.manager.color1g, dataManger.manager.color1b);
 			tintGaraje.colorMaskGreen = new Color (dataManger.manager.color2r, dataManger.manager.color2g, dataManger.manager.color2b);
-		}	
+		}
+		if (Application.loadedLevelName == "Menu") {
+			if (dataManger.manager.color1b < 1000) {
+			SpriteColorFX.SpriteColorMasks3 tintMask;
+			ShipMenu = GameObject.Find("Ship_Anim").transform.FindChild("Ship01").gameObject;
+
+			tintMask = 
+				ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+			tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+			Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+			tintMask.colorMaskRed = temp[0];
+			tintMask.colorMaskGreen = temp[1];
+			}
+		}
 		SpriteSet (true,"");
 	}
 	
@@ -38,7 +63,7 @@ public class Color_Set : MonoBehaviour {
 				tint.colorMaskRed = color;
 			}
 
-			dataManger.manager.Save(true);
+
 		}
 		if (zone == "B") {
 			
@@ -49,9 +74,19 @@ public class Color_Set : MonoBehaviour {
 				tint.colorMaskGreen = color;
 			}
 
-			dataManger.manager.Save(true);
-		}
 
+		}
+		SpriteColorFX.SpriteColorMasks3 tintMask;
+		ShipMenu = GameObject.Find("Ship_Anim").transform.FindChild("Ship01").gameObject;
+		tintMask = 
+			ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+		tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+		tintMask.colorMaskRed = new Color (dataManger.manager.color1r, dataManger.manager.color1g, dataManger.manager.color1b);
+		tintMask.colorMaskGreen = new Color (dataManger.manager.color2r, dataManger.manager.color2g, dataManger.manager.color2b);
+		dataManger.manager.colorDictionary[dataManger.manager.actualShip] = new Color32[]{(Color32) tintMask.colorMaskRed,
+			(Color32) tintMask.colorMaskGreen};
+		Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+		dataManger.manager.Save(true);
 	}
 
 	public void SpriteSet(bool complete,string shipChange){
@@ -68,7 +103,7 @@ public class Color_Set : MonoBehaviour {
 					tintMask = 
 						ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
-					tintMask.colorMaskRed = new Color32(249,176,0,255);
+					tintMask.colorMaskRed = new Color32(1,1,1,255);
 					tintMask.colorMaskGreen = new Color32(197,0,0,255);
 					break;
 				case "369" :
@@ -139,6 +174,61 @@ public class Color_Set : MonoBehaviour {
 					break;
 				}
 				
+			}else{
+				Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+				tintMask = 
+					ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+				tintMask.colorMaskRed = temp[0];
+				tintMask.colorMaskGreen = temp[1];
+				dataManger.manager.color1r = temp[0].r;
+				dataManger.manager.color1g = temp[0].g;
+				dataManger.manager.color1b = temp[0].b;
+				dataManger.manager.color2r = temp[1].r;
+				dataManger.manager.color2g = temp[1].g;
+				dataManger.manager.color2b = temp[1].b;
+			
+				switch(dataManger.manager.actualShip){
+				case "Ship01" :
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+
+					break;
+				case "369" :
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+
+					break;
+				case "Taboo" :
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+
+					break;
+				case "UFLO" :
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+			
+					break;
+				case "Box" :
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+					
+					break;
+				case "Mush" :
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+
+					break;
+				case "Bow" :
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+					
+					break;
+				case "Big" :
+					tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
+
+					break;
+				case "Jupitar" :
+					tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+
+					break;
+				case "Evolve" :
+					tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+
+					break;
+				}
 			}
 			if(Application.loadedLevelName == "Menu"){
 				
@@ -220,6 +310,15 @@ public class Color_Set : MonoBehaviour {
 						tintMask.colorMaskGreen = new Color32(0,0,0,255);
 						break;
 					}
+
+				}else{
+					tintMask = 
+						ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
+					tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
+
+					Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+					tintMask.colorMaskRed = temp[0];
+					tintMask.colorMaskGreen = temp[1];
 
 				}
 			}

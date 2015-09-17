@@ -38,8 +38,7 @@ public class ResizeText : MonoBehaviour {
 		}else{
 			textMesh.text = newText;
 		}
-
-		Debug.Log("Text changed to: " + newText);
+		
 	}
 	
 	public void ChangeText(string Text){

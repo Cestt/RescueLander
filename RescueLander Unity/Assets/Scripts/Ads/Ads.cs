@@ -20,10 +20,6 @@ public class Ads : MonoBehaviour {
 			if (Advertisement.isSupported) {
 				Advertisement.allowPrecache = true;
 				Advertisement.Initialize ("37545",false);
-				Debug.Log("Ad initialized");
-			} else {
-				Debug.Log("Ad not supported");
-				
 			}
 
 

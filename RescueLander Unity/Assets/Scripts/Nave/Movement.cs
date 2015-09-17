@@ -101,7 +101,6 @@ public class Movement : MonoBehaviour {
 		audioThruster = transform.FindChild("Feet").GetComponent<AudioSource>();
 		if(!Application.loadedLevelName.Contains("Tuto") & dataManger.manager.actualLevel -1 < gravityLevel.Length 
 		   & dataManger.manager.actualWorld == "Mars"){
-			Debug.Log(gravityLevel[dataManger.manager.actualLevel-1]);
 			rigid.gravityScale = gravityLevel[dataManger.manager.actualLevel-1];
 		}
 

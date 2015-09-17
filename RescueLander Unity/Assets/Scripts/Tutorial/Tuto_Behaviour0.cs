@@ -63,9 +63,13 @@ void Update () {
 			if (Physics.Raycast (ray.origin, ray.direction * 100, out hit) || Physics.Raycast (ray2.origin, ray.direction * 100, out hit)) {
 				
 				if (hit.collider.name == "Ext_Button") {
-						dataManger.manager.fuelPowerUps++;
-						dataManger.manager.shieldPowerUps++;
-						dataManger.manager.magnetPowerUps++;
+						if(PlayerPrefs.GetInt("TutoReward") != 1){
+							dataManger.manager.fuelPowerUps++;
+							dataManger.manager.shieldPowerUps++;
+							dataManger.manager.magnetPowerUps++;
+							PlayerPrefs.SetInt("TutoReward",1);
+						}
+
 					dataManger.manager.tutorial = 2;
 					dataManger.manager.Save(true);
 					Application.LoadLevel("Tuto_2");
