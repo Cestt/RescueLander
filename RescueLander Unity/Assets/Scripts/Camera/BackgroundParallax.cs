@@ -56,11 +56,11 @@ public class BackgroundParallax : MonoBehaviour {
 			if (distX != 0) {
 				for (int i=0; i<3; i++) {
 					backA [i].transform.localPosition = new Vector3 (backA [i].transform.localPosition.x - (distX * velA),
-				                                                 backA [i].transform.localPosition.y);
+				                                                 backA [i].transform.localPosition.y, 800);
 				}
 				for (int i=0; i<3; i++) {
 					backB [i].transform.localPosition = new Vector3 (backB [i].transform.localPosition.x - (distX * velB),
-				                                                 backB [i].transform.localPosition.y);
+				                                                 backB [i].transform.localPosition.y, 850);
 				}
 			}
 			posX = ship.transform.position.x;
