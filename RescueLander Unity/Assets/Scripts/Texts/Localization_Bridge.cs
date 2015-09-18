@@ -54,11 +54,17 @@ public class Localization_Bridge : MonoBehaviour {
 		GameObject UICamera = GameObject.Find("UI_Camera");
 		if(Application.loadedLevelName == "Menu"){
 			GameObject.Find("Button_Garage").transform.FindChild("GarageButton_Graphic/TextGarage").GetComponent<ResizeText>().ChangeText
-				(Localization_Bridge.manager.GetTextValue("RescueLander.garage"));
+				(Localization_Bridge.manager.GetTextValue("RescueLander.Garage"));
+			UICamera.transform.FindChild("Prompt_Help/Shop_Bg_01/Tuto_Text").GetComponent<ResizeText>().ChangeText  
+				(Localization_Bridge.manager.GetTextValue("RescueLander.HelpMenuText"));
+			UICamera.transform.FindChild("Loading").GetComponent<ResizeText>().ChangeText  
+				(Localization_Bridge.manager.GetTextValue("RescueLander.Loading"));
+			UICamera.transform.FindChild("Prompt_Help/Shop_Bg_01/Tuto_Button/Tuto_Text").GetComponent<ResizeText>().ChangeText  
+				(Localization_Bridge.manager.GetTextValue("RescueLander.HelpMenuTutoButton"));
 			GameObject.Find("World_Buttons").transform.FindChild("Button_World_Mars/World1_Text").GetComponent<ResizeText>().ChangeText
 				(Localization_Bridge.manager.GetTextValue("RescueLander.mars"));
 			UICamera.transform.FindChild("Options_Menu/Shop_Bg_01/Invert Rotation").GetComponent<ResizeText>().ChangeText  
-				(Localization_Bridge.manager.GetTextValue("RescueLander.invert"));
+				(Localization_Bridge.manager.GetTextValue("RescueLander.InvertRotation"));
 			UICamera.transform.FindChild("Options_Menu/Shop_Bg_01/Texts/RateUs_Text").GetComponent<ResizeText>().ChangeText  
 				(Localization_Bridge.manager.GetTextValue("RescueLander.rateus"));
 			UICamera.transform.FindChild("Options_Menu/Shop_Bg_01/Texts/Achievments_Text").GetComponent<ResizeText>().ChangeText  
@@ -99,6 +105,16 @@ public class Localization_Bridge : MonoBehaviour {
 			UICamera.transform.FindChild("UI_Camera/Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_2/Text_Reward3").GetComponent<ResizeText>().ChangeText  
 				(Localization_Bridge.manager.GetTextValue(""));
 		}
+		if(!Application.loadedLevelName.Contains("Tuto") & !Application.loadedLevelName.Contains("Menu")){
+			UICamera.transform.FindChild("LoseLayout/More_PowerUps/More_PowerUps_Text").GetComponent<ResizeText>().ChangeText  
+				(Localization_Bridge.manager.GetTextValue("RescueLander.LoseMorePU"));
+			UICamera.transform.FindChild("LoseLayout/More_PowerUps/MorePowerUps_Button/MorePowerUps_Text").GetComponent<ResizeText>().ChangeText  
+				(Localization_Bridge.manager.GetTextValue("RescueLander.LoseGetSome"));
+		}
+		UICamera.transform.FindChild("Anchor (LowerCenter)/Paused").GetComponent<ResizeText>().ChangeText  
+			(Localization_Bridge.manager.GetTextValue("RescueLander.IngamePaused"));
+		UICamera.transform.FindChild("Anchor (LowerCenter)/BackToPlatform_Text").GetComponent<ResizeText>().ChangeText  
+			(Localization_Bridge.manager.GetTextValue("RescueLander.IngameReachPlatform"));
 
 		UICamera.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_WinCoins/Text_Ads").GetComponent<ResizeText>().ChangeText  
 			(Localization_Bridge.manager.GetTextValue(""));
