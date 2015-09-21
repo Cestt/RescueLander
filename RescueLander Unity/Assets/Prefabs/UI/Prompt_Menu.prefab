@@ -26,6 +26,7 @@ GameObject:
   - 33: {fileID: 3370570}
   - 23: {fileID: 2372932}
   - 114: {fileID: 11435126}
+  - 114: {fileID: 11425830}
   m_Layer: 5
   m_Name: Text_Coins
   m_TagString: Untagged
@@ -427,6 +428,7 @@ GameObject:
   - 33: {fileID: 3352700}
   - 23: {fileID: 2329624}
   - 114: {fileID: 11482780}
+  - 114: {fileID: 11495542}
   m_Layer: 5
   m_Name: TextGarage
   m_TagString: Untagged
@@ -951,6 +953,7 @@ GameObject:
   - 23: {fileID: 2319348}
   - 33: {fileID: 3386044}
   - 114: {fileID: 11427944}
+  - 114: {fileID: 11445074}
   m_Layer: 5
   m_Name: Invert Rotation
   m_TagString: Untagged
@@ -1040,7 +1043,6 @@ GameObject:
   - 33: {fileID: 3320616}
   - 23: {fileID: 2309800}
   - 114: {fileID: 11486600}
-  - 114: {fileID: 11405984}
   - 114: {fileID: 11422532}
   m_Layer: 5
   m_Name: Text_MarsFinished 1
@@ -1078,6 +1080,7 @@ GameObject:
   - 33: {fileID: 3303012}
   - 23: {fileID: 2313000}
   - 114: {fileID: 11499246}
+  - 114: {fileID: 11459918}
   m_Layer: 5
   m_Name: Text_Later
   m_TagString: Untagged
@@ -1354,6 +1357,7 @@ GameObject:
   - 33: {fileID: 3330074}
   - 23: {fileID: 2360018}
   - 114: {fileID: 11406366}
+  - 114: {fileID: 11489834}
   m_Layer: 5
   m_Name: Text_Sure
   m_TagString: Untagged
@@ -1508,6 +1512,7 @@ GameObject:
   - 33: {fileID: 3344062}
   - 23: {fileID: 2378250}
   - 114: {fileID: 11416438}
+  - 114: {fileID: 11473820}
   m_Layer: 5
   m_Name: Text_Never
   m_TagString: Untagged
@@ -5108,9 +5113,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'We are sorry.
-
-      Something went wrong processing your purchase.'
+    text: "  We are sorry.   \nSomething went wrong processing your purchase."
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -5141,18 +5144,6 @@ MonoBehaviour:
   tweenDuration: .100000001
   canButtonBeHeldDown: 1
   useOnReleaseInsteadOfOnUp: 0
---- !u!114 &11405984
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 162398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57c8a1d8282e799439e4c24126ae8734, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: 0
 --- !u!114 &11406020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5226,7 +5217,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11444320, guid: bc8dc7641496cea479e0ba3c0b2be6c0, type: 2}
-    text: Sure!
+    text: ' Sure! '
     color: {r: 1, g: 1, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -5446,7 +5437,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: Never
+    text: ' Never  '
     color: {r: 0, g: 0, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -5732,6 +5723,18 @@ MonoBehaviour:
   isHoverEnabled: 0
   editorExtraBounds: []
   editorIgnoreBounds: []
+--- !u!114 &11425830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 101730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c8a1d8282e799439e4c24126ae8734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: 1
 --- !u!114 &11426236
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5777,9 +5780,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11444320, guid: bc8dc7641496cea479e0ba3c0b2be6c0, type: 2}
-    text: 'Invert
-
-      Rotation'
+    text: "Invert    \nRotation"
     color: {r: 1, g: 1, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -5823,9 +5824,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'Well done!
-
-      You''ve won some PowerUps!'
+    text: "               Well done!               \nYou've won some PowerUps!"
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6013,7 +6012,8 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: Each time you avoid rating, an astronaut gets lost forever... A bit of mercy?
+    text: 'Each time you avoid rating, an astronaut gets lost forever... A bit of
+      mercy?              '
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6093,7 +6093,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: More Coins!
+    text: 'More Coins! '
     color: {r: 0, g: 0, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6251,7 +6251,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: Visit the Garage!
+    text: '   Visit the Garage!    '
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6350,9 +6350,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'You don''t have enough coins.
-
-      Get some for that awesome ship!'
+    text: "You don't have enough coins.   \nGet some for that awesome ship!"
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6367,6 +6365,18 @@ MonoBehaviour:
     wordWrapWidth: 859
     spacing: 0
     lineSpacing: -5
+--- !u!114 &11445074
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 155672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c8a1d8282e799439e4c24126ae8734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: 0
 --- !u!114 &11446414
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6435,7 +6445,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11444320, guid: bc8dc7641496cea479e0ba3c0b2be6c0, type: 2}
-    text: We hope you're enjoying...
+    text: 'We hope you''re enjoying...     '
     color: {r: 1, g: 1, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6491,9 +6501,8 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'Out of Fuel?
-
-      Get some watching a video and reach that platform!'
+    text: "           Out of Fuel?           \nGet some watching a video and reach
+      that platform!"
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6703,7 +6712,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: Please make sure you have internet connection and try again later.
+    text: 'Please make sure you have internet connection and try again later.          '
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6751,6 +6760,18 @@ MonoBehaviour:
   isHoverEnabled: 0
   editorExtraBounds: []
   editorIgnoreBounds: []
+--- !u!114 &11459918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 163772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c8a1d8282e799439e4c24126ae8734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: 1
 --- !u!114 &11460770
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6782,7 +6803,7 @@ MonoBehaviour:
     font: {fileID: 11444320, guid: bc8dc7641496cea479e0ba3c0b2be6c0, type: 2}
     text: '
 
-      While you Rate Us!'
+      While you Rate Us! '
     color: {r: 1, g: 1, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6981,9 +7002,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'Congratulations!
-
-      You earned a Critic Refuel!'
+    text: "    Congratulations!     \nYou earned a Critic Refuel!"
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -6992,7 +7011,7 @@ MonoBehaviour:
     renderLayer: 18
     scale: {x: 1.89999998, y: -1.89999998, z: 1}
     kerning: 1
-    maxChars: 44
+    maxChars: 52
     inlineStyling: 0
     formatting: 1
     wordWrapWidth: 874
@@ -7062,9 +7081,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'Congratulations!
-
-      You earned some coins!'
+    text: "   Congratulations!    \nYou earned some coins!"
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -7108,9 +7125,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'Congratulations!
-
-      You earned a Coin Magnet!'
+    text: "    Congratulations!     \nYou earned a Coin Magnet!"
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -7119,7 +7134,7 @@ MonoBehaviour:
     renderLayer: 18
     scale: {x: 1.89999998, y: -1.89999998, z: 1}
     kerning: 1
-    maxChars: 42
+    maxChars: 50
     inlineStyling: 0
     formatting: 1
     wordWrapWidth: 840
@@ -7154,7 +7169,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: (You can change this later from the options menu)
+    text: '  (You can change this later from the options menu)   '
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -7181,6 +7196,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: 0
+--- !u!114 &11473820
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 196496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c8a1d8282e799439e4c24126ae8734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: 1
 --- !u!114 &11473836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7210,9 +7237,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'Congratulations!
-
-      You earned a Shield!'
+    text: "    Congratulations!    \n   You earned a Shield!   "
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -7221,7 +7246,7 @@ MonoBehaviour:
     renderLayer: 18
     scale: {x: 1.89999998, y: -1.89999998, z: 1}
     kerning: 1
-    maxChars: 42
+    maxChars: 50
     inlineStyling: 0
     formatting: 1
     wordWrapWidth: 840
@@ -7330,7 +7355,7 @@ MonoBehaviour:
     renderLayer: 18
     scale: {x: 1.29999995, y: -1.29999995, z: 1}
     kerning: 0
-    maxChars: 92
+    maxChars: 94
     inlineStyling: 0
     formatting: 1
     wordWrapWidth: 865
@@ -7621,9 +7646,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'Want to invert the controls
-
-      for rotating the ship?'
+    text: "Want to invert the controls\n     for rotating the ship?     "
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -7667,7 +7690,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11444320, guid: bc8dc7641496cea479e0ba3c0b2be6c0, type: 2}
-    text: Congratulations!
+    text: '   Congratulations!   '
     color: {r: 1, g: 1, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -7736,6 +7759,18 @@ MonoBehaviour:
   isHoverEnabled: 0
   editorExtraBounds: []
   editorIgnoreBounds: []
+--- !u!114 &11489834
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 186082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c8a1d8282e799439e4c24126ae8734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: 1
 --- !u!114 &11490814
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7847,6 +7882,18 @@ MonoBehaviour:
   upButtonSound: {fileID: 0}
   clickButtonSound: {fileID: 0}
   releaseButtonSound: {fileID: 0}
+--- !u!114 &11495542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 117634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c8a1d8282e799439e4c24126ae8734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: 1
 --- !u!114 &11495678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7984,9 +8031,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: 'Perfect!
-
-      The Rescuer''s Ship is now yours!'
+    text: "          Perfect!          \nThe Rescuer's Ship is now yours!"
     color: {r: .666666687, g: .247058824, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
@@ -7995,7 +8040,7 @@ MonoBehaviour:
     renderLayer: 18
     scale: {x: 1.79999995, y: -1.79999995, z: 1}
     kerning: 0
-    maxChars: 42
+    maxChars: 60
     inlineStyling: 0
     formatting: 1
     wordWrapWidth: 872
@@ -8030,7 +8075,7 @@ MonoBehaviour:
   data:
     version: 1
     font: {fileID: 11454224, guid: a8f9a625cdf6a854792e60cd0c2022e4, type: 2}
-    text: Later
+    text: ' Later  '
     color: {r: 0, g: 0, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useGradient: 0
