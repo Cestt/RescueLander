@@ -267,8 +267,8 @@ public class dataManger : MonoBehaviour {
 					if(temp != null){
 						tempChild =  temp.transform.FindChild("Level_Score");
 
-						tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+": "
-							+ scoresMars["Level_"+i].ToString());
+						tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+
+							 scoresMars["Level_"+i].ToString());
 						if(i<=unlocksMars){
 							
 							tempChild =  temp.transform.FindChild("Level_Number");
@@ -283,8 +283,8 @@ public class dataManger : MonoBehaviour {
 								}
 							}
 							tempChild =  temp.transform.FindChild("Level_Score");
-							tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+": "
-								+ scoresMars["Level_"+i].ToString());		
+							tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+
+								 scoresMars["Level_"+i].ToString());		
 						}else{
 							tempChild =  temp.transform.FindChild("Level_Number");
 							tempChild.GetComponent<tk2dTextMesh>().color = new Color32(164,182,182,255);
@@ -301,8 +301,8 @@ public class dataManger : MonoBehaviour {
 					Transform tempChild;
 					if(temp!= null){
 						tempChild =  temp.transform.FindChild("Level_Score");
-						tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+": "
-							+ scoresIce["Level_"+i].ToString());
+						tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+
+							 scoresIce["Level_"+i].ToString());
 						if(i<=unlocksIce ){
 							tempChild =  temp.transform.FindChild("Level_Number");
 							tempChild.GetComponent<tk2dTextMesh>().color = new Color(255,195,0,255);
@@ -316,8 +316,8 @@ public class dataManger : MonoBehaviour {
 								}	
 							}
 							tempChild =  temp.transform.FindChild("Level_Score");
-							tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+": "
-							                                                + scoresIce["Level_"+i].ToString());
+							tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+
+							                                                 scoresIce["Level_"+i].ToString());
 						}else if (i<= unlocksMars){
 							for(int j = 1; j<=3; j++){
 								tempChild =  temp.transform.FindChild("LevelStar_"+j);
@@ -390,8 +390,8 @@ public class dataManger : MonoBehaviour {
 							
 						}
 						tempChild =  temp.transform.FindChild("Level_Score");
-						tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+": "
-                                                + scoresMars["Level_"+i].ToString());
+						tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+
+                                                 scoresMars["Level_"+i].ToString());
 						
 					}
 					
@@ -464,8 +464,8 @@ public class dataManger : MonoBehaviour {
 					
 				}
 				tempChild =  temp.transform.FindChild("Level_Score");
-				tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+": "
-				                                                + scoresIce["Level_"+i].ToString());
+				tempChild.GetComponent<ResizeText>().ChangeText(Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore")+
+				                                                 scoresIce["Level_"+i].ToString());
 				
 			}
 		}
