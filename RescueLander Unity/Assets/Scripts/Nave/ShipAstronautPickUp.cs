@@ -46,7 +46,7 @@ public class ShipAstronautPickUp : MonoBehaviour {
 				astronautPicked++;
 				soundManager.PlaySound("PickUp");
 				Pickable = false;
-				if(damage.prevDamage == 0 & damage.damageTime + PerfectLandingTimer < Time.time){
+				if(damage.prevDamage == 0 & damage.damageTime + PerfectLandingTimer < Time.time & !Application.loadedLevelName.Contains("Tuto")){
 
 					StartCoroutine("DestroyPerfect");
 					Debug.Log("Perfect Landing");

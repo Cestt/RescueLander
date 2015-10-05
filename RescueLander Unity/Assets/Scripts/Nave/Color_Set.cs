@@ -17,7 +17,7 @@ public class Color_Set : MonoBehaviour {
 				tintMask = 
 					ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 				tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
-				Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+				Color[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
 				tintMask.colorMaskRed = temp[0];
 				tintMask.colorMaskGreen = temp[1];
 			}
@@ -44,7 +44,7 @@ public class Color_Set : MonoBehaviour {
 			tintMask = 
 				ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 			tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
-			Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+			Color[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
 			tintMask.colorMaskRed = temp[0];
 			tintMask.colorMaskGreen = temp[1];
 			}
@@ -83,9 +83,11 @@ public class Color_Set : MonoBehaviour {
 		tintMask.textureMask = Resources.Load("Sprites/"+dataManger.manager.actualShip+"_Shader_High", typeof(Texture2D)) as Texture2D;
 		tintMask.colorMaskRed = new Color (dataManger.manager.color1r, dataManger.manager.color1g, dataManger.manager.color1b);
 		tintMask.colorMaskGreen = new Color (dataManger.manager.color2r, dataManger.manager.color2g, dataManger.manager.color2b);
-		dataManger.manager.colorDictionary[dataManger.manager.actualShip] = new Color32[]{(Color32) tintMask.colorMaskRed,
-			(Color32) tintMask.colorMaskGreen};
-		Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+		Debug.Log("Red :" + dataManger.manager.color1r +","+ dataManger.manager.color1g +","+ dataManger.manager.color1b +
+		          "Green :" + tintMask.colorMaskGreen);
+		dataManger.manager.colorDictionary[dataManger.manager.actualShip] = new Color[]{(Color) tintMask.colorMaskRed,
+			(Color) tintMask.colorMaskGreen};
+		Color[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
 		dataManger.manager.Save(true);
 	}
 
@@ -175,7 +177,7 @@ public class Color_Set : MonoBehaviour {
 				}
 				
 			}else{
-				Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+				Color[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
 				tintMask = 
 					ShipGaraje.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 				tintMask.colorMaskRed = temp[0];
@@ -316,7 +318,7 @@ public class Color_Set : MonoBehaviour {
 						ShipMenu.GetComponent<SpriteColorFX.SpriteColorMasks3>();
 					tintMask.textureMask = Resources.Load("Sprites/"+shipChange+"_Shader_High", typeof(Texture2D)) as Texture2D;
 
-					Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+					Color[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
 					tintMask.colorMaskRed = temp[0];
 					tintMask.colorMaskGreen = temp[1];
 

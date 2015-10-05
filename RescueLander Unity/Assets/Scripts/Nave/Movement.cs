@@ -190,7 +190,7 @@ public class Movement : MonoBehaviour {
 								if (angularSpeedUpgrade != 0) {
 									ConsumeFuel (false, false);
 									dirRotation = 0;
-								}else{
+								}/*else{
 									
 									if (dirRotation != 1){
 										
@@ -214,7 +214,7 @@ public class Movement : MonoBehaviour {
 											});
 										}
 									}
-								}
+								}*/
 
 								
 								if (!Thruster_l.activeInHierarchy) {
@@ -239,7 +239,7 @@ public class Movement : MonoBehaviour {
 								if (angularSpeedUpgrade != 0) {
 									ConsumeFuel (false, false);
 									dirRotation = 0;
-								}else{
+								}/*else{
 									
 									if (dirRotation != -1){
 										
@@ -263,7 +263,7 @@ public class Movement : MonoBehaviour {
 											});
 										}
 									}
-								}
+								}*/
 
 								
 								if (!Thruster_r.activeInHierarchy) {
@@ -406,7 +406,7 @@ public class Movement : MonoBehaviour {
 						if (angularSpeedUpgrade != 0) {
 							ConsumeFuel (false, true);
 							dirRotation = 0;
-						}else{
+						}/*else{
 
 							if (dirRotation != 1){
 
@@ -430,7 +430,7 @@ public class Movement : MonoBehaviour {
 									});
 								}
 							}
-						}
+						}*/
 
 						
 						if (!Thruster_l.activeInHierarchy) {
@@ -453,7 +453,7 @@ public class Movement : MonoBehaviour {
 						if (angularSpeedUpgrade != 0) {
 							ConsumeFuel (false, true);
 							dirRotation = 0;
-						}else{
+						}/*else{
 							
 							if (dirRotation != -1){
 								
@@ -477,7 +477,7 @@ public class Movement : MonoBehaviour {
 									});
 								}
 							}
-						}
+						}*/
 						
 						if (!Thruster_r.activeInHierarchy) {
 							Thruster_r.SetActive (true);

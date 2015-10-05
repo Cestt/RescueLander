@@ -62,9 +62,9 @@ public class Instantiate_Ship : MonoBehaviour {
 				}
 			}else{
 				Debug.Log("True colors: " + new Color (dataManger.manager.color1r, dataManger.manager.color1g, dataManger.manager.color1b));
-				Color32[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
-				tintMask.colorMaskRed = new Color32 (temp[0].r, temp[0].g, temp[0].b,255);
-				tintMask.colorMaskGreen = new Color32 (temp[1].r, temp[1].g, temp[1].b,255);
+				Color[] temp = dataManger.manager.colorDictionary[dataManger.manager.actualShip];
+				tintMask.colorMaskRed = new Color (temp[0].r, temp[0].g, temp[0].b,255);
+				tintMask.colorMaskGreen = new Color (temp[1].r, temp[1].g, temp[1].b,255);
 			}
 			instance.transform.position = new Vector3(transform.position.x - 7,transform.position.y + 52, transform.position.z - 50);
 		}

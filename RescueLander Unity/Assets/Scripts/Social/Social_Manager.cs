@@ -9,7 +9,7 @@ using GooglePlayGames;
 
 public class Social_Manager : MonoBehaviour{
 
-
+	private bool once = false;
 
 
 	private void SocialPending(){
@@ -36,10 +36,11 @@ public class Social_Manager : MonoBehaviour{
 	void Update(){
 		//ACHIEVEMENT
 		if(!Application.loadedLevelName.Contains("Tuto"))
-			if (dataManger.manager.shipUnlocks.Count >= 6){
+			if (dataManger.manager.shipUnlocks.Count >= 6 & !once){
 				Social.ReportProgress("CgkIuv-YgIkeEAIQAg", 100.0f, (bool success) => {
 					Check("Achievement","CgkIuv-YgIkeEAIQAg",success);
 				});
+			once = true;
 			}
 	}
 

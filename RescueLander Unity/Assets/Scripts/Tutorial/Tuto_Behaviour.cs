@@ -65,13 +65,18 @@ public class Tuto_Behaviour : MonoBehaviour {
 						nextStep();
 						currentText.transform.FindChild("Prompt_Menu_Turn").gameObject.SetActive(false);
 					}
-					if (hit.collider.name == "Exit_Button") {
+					if (hit.collider.name == "Exit_Button" & step == 8) {
+						Application.LoadLevel("Menu");
 						Social.ReportProgress("CgkIuv-YgIkeEAIQCg", 100.0f, (bool success) => {
 							socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCg",success);
 						});
+						transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_2").gameObject.SetActive(false);
 						dataManger.manager.tutorial = 4;
-						dataManger.manager.Save(true);
+						dataManger.manager.Save(false);
 						Application.LoadLevel("Menu");
+
+
+
 					}
 				}
 			}
@@ -83,6 +88,7 @@ public class Tuto_Behaviour : MonoBehaviour {
 				currentText.SetActive(true);
 				transform.FindChild("Tutorial/Step2/GhostShip").gameObject.SetActive(true);
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().Play("GhostShip_03");
+				Debug.Log("Null?");
 				transform.FindChild("Tutorial/Step2/GhostShip").GetComponent<Animation>().wrapMode = WrapMode.Loop;
 				nextStep();
 			}
@@ -109,24 +115,26 @@ public class Tuto_Behaviour : MonoBehaviour {
 		if (step == 6) {
 			if(once){
 				GameObject.Find("Game Manager").GetComponent<WinLose>().End("Win",false);
-				step++;
+				nextStep();
+				once = false;
 			}
 		}
 		if (step == 7) {
-			if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
+			if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began & once) {
 
 				currentText.SetActive(false);
 				transform.FindChild("Prompt_Menu").gameObject.SetActive(true);
 				transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_2").gameObject.SetActive(true);
 				transform.FindChild("WinLayout").gameObject.SetActive(false);
-				step++;
+				nextStep();
+				once = false;
 			}
 
 
 			
 		}
 
-		if (step == 8 & !transform.FindChild ("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_2").gameObject.activeInHierarchy) {
+		if (step >= 8 & !transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_TutoReward_2").gameObject.activeInHierarchy ) {
 			Social.ReportProgress("CgkIuv-YgIkeEAIQCg", 100.0f, (bool success) => {
 				socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCg",success);
 			});

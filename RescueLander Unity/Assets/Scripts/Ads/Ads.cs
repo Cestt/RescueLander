@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using GoogleMobileAds.Api;
@@ -12,20 +13,23 @@ public class Ads : MonoBehaviour {
 	private GameObject fuelBar;
 	private float fuelBarOriginalSize;
 	public int Fuel_Recover = 20;
+	int timesRepeat = 0;
+	AsyncOperation async;
 
 	void Awake() {
 		interstitial = new InterstitialAd("ca-app-pub-6225305526112070/2285766744");
 		touch = GameObject.Find("Game Manager").GetComponent<Touch_Manager>();
 
-			if (Advertisement.isSupported) {
+			
 				Advertisement.allowPrecache = true;
 				Advertisement.Initialize ("37545",false);
-			}
+			
 
 
 		//ship = GameObject.Find(dataManger.manager.actualShip + "(Clone)");
 	}
 	void OnLevelWasLoaded(int level) {
+
 		if (Application.loadedLevelName != "Menu") {
 
 			AdRequest request = new AdRequest.Builder ().Build ();
@@ -70,7 +74,7 @@ public class Ads : MonoBehaviour {
 				break;
 			case "Shield":
 				dataManger.manager.nextPowerUp = true;
-				PlayerPrefs.SetInt("TimeShield", int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm")));
+				//PlayerPrefs.SetInt("TimeShield", int.Parse(System.DateTime.UtcNow.ToString("MMddHHmm")));
 				dataManger.manager.Save(true);
 				Application.LoadLevel(Application.loadedLevel);
 				break;
@@ -85,6 +89,39 @@ public class Ads : MonoBehaviour {
 
 			break;
 		}
+	}
+	public void loadlevel(int Level, string World){
+		StartCoroutine(LoadLevelAsync(Level,World));
+	}
+	
+	IEnumerator LoadLevelAsync(int Level,string World){
+		
+		async = Application.LoadLevelAsync("Level_" + Level + "_" + World);
+		async.allowSceneActivation = false;
+		yield return null;
+		StartCoroutine("WaitToAdvert");
+		Debug.Log("Loading complete");
+	}
+	
+	IEnumerator WaitToAdvert(){
+		if(Advertisement.isInitialized){
+			async.allowSceneActivation = true;
+			Debug.Log("Advertiment ready");
+		}else{
+			yield return new WaitForSeconds(0.2f);
+			Debug.Log("Waiting to Advertiment");
+			StartCoroutine("WaitToAdvert");
+			timesRepeat++;
+			if(timesRepeat == 15){
+				Advertisement.allowPrecache = true;
+				Advertisement.Initialize ("37545",false);
+
+			}
+			if(timesRepeat == 60){
+				async.allowSceneActivation = true;
+			}
+		}
+		
 	}
 	public void Launch(string Item,string Type){
 		if(Advertisement.isInitialized){

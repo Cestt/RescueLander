@@ -9,7 +9,7 @@ public class LoadingScript : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		text = GetComponent<tk2dTextMesh>();
-		text.text = "Loading";
+		text.text = Localization_Bridge.manager.GetTextValue("RescueLander.Loading");
 	}
 	
 	// Update is called once per frame
@@ -17,13 +17,13 @@ public class LoadingScript : MonoBehaviour {
 		timeUpdate += Time.deltaTime;
 		if (timeUpdate >= 0.5f){
 			if (numText == 0)
-				text.text = "Loading";
+				text.text = Localization_Bridge.manager.GetTextValue("RescueLander.Loading");
 			else if (numText == 1)
-				text.text = "Loading .";
+				text.text = Localization_Bridge.manager.GetTextValue("RescueLander.Loading")+ " .";
 			else if (numText == 2)
-				text.text = "Loading . .";
+				text.text =Localization_Bridge.manager.GetTextValue("RescueLander.Loading") + " . .";
 			else if (numText == 3)
-				text.text = "Loading . . .";
+				text.text =Localization_Bridge.manager.GetTextValue("RescueLander.Loading")+ " . . .";
 			numText++;
 			if (numText == 4)
 				numText = 0;

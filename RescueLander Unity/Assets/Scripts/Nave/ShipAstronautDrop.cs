@@ -10,7 +10,7 @@ public class ShipAstronautDrop : MonoBehaviour {
 	public int totalAstronauts;
 	private GameObject gameManager;
 	private WinLose winLose;
-
+	private bool once = true;
 
 	void Awake () {
 		gameManager = GameObject.Find("Game Manager");
@@ -36,10 +36,10 @@ public class ShipAstronautDrop : MonoBehaviour {
 
 				//shipastronautpickup.astronautPicked = 0;
 				//dataManger.manager.Save();
-				Debug.Log("Astronaut dropped "+ astronautsDroped);
-				if(Application.loadedLevelName.Contains("Tuto")){
+				//Debug.Log("Astronaut dropped "+ astronautsDroped);
+				if(Application.loadedLevelName.Contains("Tuto") & once){
 					GameObject.Find("UI_Camera").GetComponent<Tuto_Behaviour>().step++;
-
+					once =false;
 				}
 				
 			}

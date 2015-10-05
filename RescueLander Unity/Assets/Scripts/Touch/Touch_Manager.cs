@@ -303,8 +303,7 @@ public class Touch_Manager : MonoBehaviour {
 								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 							if(actualPrompt != null)
 								actualPrompt.SetActive(false);
-							if(actualPrompt.name == "Prompt_Ads_Shield")
-								ship.GetComponent<Damage>().Finish();
+
 
 							
 							levelEnable = true;
@@ -398,8 +397,8 @@ public class Touch_Manager : MonoBehaviour {
 							adLimit++;
 							switch(hit.transform.parent.name.Substring(11)){
 							case "Shield":
-								uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
-								uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
+								//uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
+								//uicameraGameobject.transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_Ads_Shield").gameObject.SetActive(false);
 								ads.Launch("Shield","Rewarded");
 								break;
 							case "Magnet":
@@ -1650,11 +1649,14 @@ public class Touch_Manager : MonoBehaviour {
 				garajeDesactivar.Add (GameObject.Find("UI_Camera").transform.FindChild("Anchor (UpperRight)").gameObject);
 				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
 				garajeDesactivar.Add (GameObject.Find("Back_Button"));
-				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
-				garajeDesactivar.Add (GameObject.Find ("Button_Garage"));
-				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
-				garajeDesactivar.Add (GameObject.Find ("World_Buttons"));
-				garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
+				if(garajeDesactivar[garajeDesactivar.Count-1] != null){
+					garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
+					garajeDesactivar.Add (GameObject.Find ("Button_Garage"));
+					garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
+					garajeDesactivar.Add (GameObject.Find ("World_Buttons"));
+					garajeDesactivar[garajeDesactivar.Count-1].SetActive(false);
+				}
+
 			}
 			if(actualPrompt != null){
 				actualPrompt.SetActive(false);
@@ -1720,9 +1722,8 @@ public class Touch_Manager : MonoBehaviour {
 		if (googleAnalytics != null) {
 			googleAnalytics.LogScreen ("Level_" + Level + "_" + World);
 		}
-		AsyncOperation async = Application.LoadLevelAsync("Level_" + Level + "_" + World);
-		yield return async;
-		Debug.Log("Loading complete");
+		ads.loadlevel(Level,World);
+		yield return null;
 	}
 
 

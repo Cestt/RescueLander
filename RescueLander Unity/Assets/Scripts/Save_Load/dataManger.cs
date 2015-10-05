@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Globalization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Collections.Generic;
@@ -84,13 +85,17 @@ public class dataManger : MonoBehaviour {
 	[HideInInspector]
 	public int timePrompFuel;
 	[HideInInspector]
-	public Dictionary<string,Color32[]> colorDictionary = new Dictionary<string, Color32[]>();
+	public Dictionary<string,Color[]> colorDictionary = new Dictionary<string, Color[]>();
 	
 	private GameObject temp;
 	
 	
 	
 	void Awake () {
+		GarajeSizeChange temp = (GarajeSizeChange) GameObject.FindObjectOfType(typeof(GarajeSizeChange));
+		
+		Debug.Log(temp.name);
+
 		Debug.Log("Persistent data :" + Application.persistentDataPath);
 		Screen.sleepTimeout = SleepTimeout.SystemSetting;
 		if(manager == null){
@@ -109,7 +114,7 @@ public class dataManger : MonoBehaviour {
 			PlayerPrefLoad();
 		}
 		// recommended for debugging:
-		PlayGamesPlatform.DebugLogEnabled = true;
+		PlayGamesPlatform.DebugLogEnabled = false;
 		// Activate the Google Play Games platform
 		PlayGamesPlatform.Activate();
 		
@@ -123,7 +128,11 @@ public class dataManger : MonoBehaviour {
 	}
 	
 	
-	
+	void OnLevelWasLoaded(int level){
+		GarajeSizeChange temp = (GarajeSizeChange) GameObject.FindObjectOfType(typeof(GarajeSizeChange));
+
+			Debug.Log(temp.name);
+	}
 	
 	public void Save(bool complete){
 		
@@ -329,9 +338,9 @@ public class dataManger : MonoBehaviour {
 					}
 				}
 			}
-		
+
 			file.Close();
-			
+
 		}
 		
 	}
@@ -488,8 +497,8 @@ public class dataManger : MonoBehaviour {
 			if(source != "" & source != null){
 
 				string[] result = source.Split(new string[]{","},StringSplitOptions.RemoveEmptyEntries);
-				Color32[] temps = new Color32[]{ new Color32(byte.Parse(result[0]),byte.Parse(result[1]),byte.Parse(result[2]),255),
-					new Color32(byte.Parse(result[3]),byte.Parse(result[4]),byte.Parse(result[5]),255)};
+				Color[] temps = new Color[]{ new Color(float.Parse(result[0],NumberStyles.AllowDecimalPoint,CultureInfo.InvariantCulture),float.Parse(result[1],NumberStyles.AllowDecimalPoint,CultureInfo.InvariantCulture),float.Parse(result[2],NumberStyles.AllowDecimalPoint,CultureInfo.InvariantCulture),255),
+					new Color(float.Parse(result[3],NumberStyles.AllowDecimalPoint,CultureInfo.InvariantCulture),float.Parse(result[4],NumberStyles.AllowDecimalPoint,CultureInfo.InvariantCulture),float.Parse(result[5],NumberStyles.AllowDecimalPoint,CultureInfo.InvariantCulture),255)};
 				colorDictionary.Add(shipUnlocks[i],temps);
 			}else{
 
@@ -497,56 +506,56 @@ public class dataManger : MonoBehaviour {
 				switch(shipUnlocks[i]){
 				case "Ship01" :
 					PlayerPrefs.SetString(shipUnlocks[i],"249,176,0,197,0,0");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{new Color32(249,176,0,255),
-																		new Color32(197,0,0,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color)new Color32(249,176,0,255),
+						(Color)	new Color32(197,0,0,255)});
 					break;
 				case "369" :
 					PlayerPrefs.SetString(shipUnlocks[i],"207,207,207,106,161,185");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{new Color32(207,207,207,255),
-																		new Color32(106,161,185,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color)new Color32(207,207,207,255),
+						(Color)new Color32(106,161,185,255)});
 					break;
 				case "Taboo" :
 					PlayerPrefs.SetString(shipUnlocks[i],"247,233,32,255,127,0");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{new Color32(247,233,32,255),
-																		new Color32(255,127,0,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color)new Color32(247,233,32,255),
+						(Color)new Color32(255,127,0,255)});
 					break;
 				case "UFLO" :
 					PlayerPrefs.SetString(shipUnlocks[i],"147,104,181,255,127,0");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{new Color32(147,104,181,255),
-																		new Color32(255,127,0,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color)new Color32(147,104,181,255),
+						(Color)new Color32(255,127,0,255)});
 					break;
 				case "Box" :
 					PlayerPrefs.SetString(shipUnlocks[i],"198,156,109,247,49,56");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{new Color32(198,156,109,255),
-																		new Color32(247,49,56,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color)new Color32(198,156,109,255),
+						(Color)new Color32(247,49,56,255)});
 					
 					break;
 				case "Mush" :
 					PlayerPrefs.SetString(shipUnlocks[i],"184,154,121,255,0,0");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{new Color32(184,154,121,255),
-															new Color32(255,0,0,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color)new Color32(184,154,121,255),
+						(Color)new Color32(255,0,0,255)});
 					
 					break;
 				case "Bow" :
 					PlayerPrefs.SetString(shipUnlocks[i],"147,104,181,255,127,0");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{new Color32(147,104,181,255),
-																		new Color32(255,127,0,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color)new Color32(147,104,181,255),
+						(Color)new Color32(255,127,0,255)});
 					
 					break;
 				case "Big" :
 					PlayerPrefs.SetString(shipUnlocks[i],"124,124,124,124,124,124");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{new Color32(124,124,124,255),
-																		new Color32(124,124,124,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color)new Color32(124,124,124,255),
+						(Color)new Color32(124,124,124,255)});
 					break;
 				case "Jupitar" :
 					PlayerPrefs.SetString(shipUnlocks[i],"0,0,255,255,255,255");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{ new Color32(0,0,255,255),
-																			new Color32(255,255,255,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color) new Color32(0,0,255,255),
+						(Color)new Color32(255,255,255,255)});
 					break;
 				case "Evolve" :
 					PlayerPrefs.SetString(shipUnlocks[i],"204,204,204,0,0,0");
-					colorDictionary.Add(shipUnlocks[i] ,new Color32[]{ new Color32(204,204,204,255),
-																			new Color32(0,0,0,255)});
+					colorDictionary.Add(shipUnlocks[i] ,new Color[]{(Color) new Color32(204,204,204,255),
+						(Color)new Color32(0,0,0,255)});
 					break;
 				}#endregion 
 			}
@@ -559,64 +568,74 @@ public class dataManger : MonoBehaviour {
 			switch(ship){
 			case "Ship01" :
 				PlayerPrefs.SetString("Ship01","249,176,0,197,0,0");
-				colorDictionary.Add("Ship01" ,new Color32[]{new Color32(249,176,0,255),
-					new Color32(197,0,0,255)});
+			colorDictionary.Add("Ship01" ,new Color[]{(Color)new Color32(249,176,0,255),
+				(Color)new Color32(197,0,0,255)});
 				break;
 			case "369" :
 				PlayerPrefs.SetString("369","207,207,207,106,161,185");
-				colorDictionary.Add("369" ,new Color32[]{new Color32(207,207,207,255),
-					new Color32(106,161,185,255)});
+			colorDictionary.Add("369" ,new Color[]{(Color)new Color32(207,207,207,255),
+				(Color)new Color32(106,161,185,255)});
 				break;
 			case "Taboo" :
 				PlayerPrefs.SetString("Taboo","247,233,32,255,127,0");
-				colorDictionary.Add("Taboo" ,new Color32[]{new Color32(247,233,32,255),
-					new Color32(255,127,0,255)});
+			colorDictionary.Add("Taboo" ,new Color[]{(Color)new Color32(247,233,32,255),
+				(Color)new Color32(255,127,0,255)});
 				break;
 			case "UFLO" :
 				PlayerPrefs.SetString("UFLO","147,104,181,255,127,0");
-				colorDictionary.Add("UFLO" ,new Color32[]{new Color32(147,104,181,255),
-					new Color32(255,127,0,255)});
+			colorDictionary.Add("UFLO" ,new Color[]{(Color)new Color32(147,104,181,255),
+				(Color)new Color32(255,127,0,255)});
 				break;
 			case "Box" :
 				PlayerPrefs.SetString("Box","198,156,109,247,49,56");
-				colorDictionary.Add("Box" ,new Color32[]{new Color32(198,156,109,255),
-					new Color32(247,49,56,255)});
+			colorDictionary.Add("Box" ,new Color[]{(Color)new Color32(198,156,109,255),
+				(Color)new Color32(247,49,56,255)});
 				
 				break;
 			case "Mush" :
 				PlayerPrefs.SetString("Mush","184,154,121,255,0,0");
-				colorDictionary.Add("Mush" ,new Color32[]{new Color32(184,154,121,255),
-					new Color32(255,0,0,255)});
+			colorDictionary.Add("Mush" ,new Color[]{(Color)new Color32(184,154,121,255),
+				(Color)new Color32(255,0,0,255)});
 				
 				break;
 			case "Bow" :
 				PlayerPrefs.SetString("Bow","147,104,181,255,127,0");
-				colorDictionary.Add("Bow" ,new Color32[]{new Color32(147,104,181,255),
-					new Color32(255,127,0,255)});
+			colorDictionary.Add("Bow" ,new Color[]{(Color)new Color32(147,104,181,255),
+				(Color)new Color32(255,127,0,255)});
 				
 				break;
 			case "Big" :
 				PlayerPrefs.SetString("Big","124,124,124,124,124,124");
-				colorDictionary.Add("Big" ,new Color32[]{new Color32(124,124,124,255),
-					new Color32(124,124,124,255)});
+			colorDictionary.Add("Big" ,new Color[]{(Color)new Color32(124,124,124,255),
+				(Color)new Color32(124,124,124,255)});
 				break;
 			case "Jupitar" :
 				PlayerPrefs.SetString("Jupitar","0,0,255,255,255,255");
-				colorDictionary.Add("Jupitar" ,new Color32[]{ new Color32(0,0,255,255),
-					new Color32(255,255,255,255)});
+			colorDictionary.Add("Jupitar" ,new Color[]{(Color) new Color32(0,0,255,255),
+				(Color)new Color32(255,255,255,255)});
 				break;
 			case "Evolve" :
 				PlayerPrefs.SetString("Evolve","204,204,204,0,0,0");
-				colorDictionary.Add("Evolve" ,new Color32[]{ new Color32(204,204,204,255),
-					new Color32(0,0,0,255)});
+			colorDictionary.Add("Evolve" ,new Color[]{(Color) new Color32(204,204,204,255),
+				(Color)new Color32(0,0,0,255)});
 				break;
 		}
 	}
 	public void SavePlayerPref(){
 			for(int i = 0;i < shipUnlocks.Count; i++){
-				Color32[] temp = colorDictionary[shipUnlocks[i]];
-				PlayerPrefs.SetString(shipUnlocks[i],temp[0].r.ToString() + "," + temp[0].g.ToString() + "," + temp[0].b.ToString() + "," + temp[1].r.ToString() + "," + temp[1].g.ToString() + "," + temp[1].b.ToString());
-				
+				Color[] temp = colorDictionary[shipUnlocks[i]];
+				if(temp[0].r != null){
+					if(temp[0].r.ToString().Length >4){
+					PlayerPrefs.SetString(shipUnlocks[i],temp[0].r.ToString().Substring(0,Mathf.Min(4,temp[0].r.ToString().Length)) + "," 
+					                      + temp[0].g.ToString().Substring(0,Mathf.Min(4,temp[0].g.ToString().Length)) + "," 
+					                      + temp[0].b.ToString().Substring(0,Mathf.Min(4,temp[0].b.ToString().Length)) + "," 
+					                      + temp[1].r.ToString().Substring(0,Mathf.Min(4,temp[1].r.ToString().Length)) + "," 
+					                      + temp[1].g.ToString().Substring(0,Mathf.Min(4,temp[1].g.ToString().Length)) + "," 
+					                      + temp[1].b.ToString().Substring(0,Mathf.Min(4,temp[1].b.ToString().Length)));
+					}
+					
+				}
+
 			}
 		PlayerPrefs.SetInt("DailyRewardsDay",1);
 	}

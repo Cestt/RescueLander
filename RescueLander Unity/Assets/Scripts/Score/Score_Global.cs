@@ -10,6 +10,6 @@ public class Score_Global : MonoBehaviour {
 	}
 
 	void Update () {
-		text.text = "Score : " + dataManger.manager.scoresMars["Level_"+dataManger.manager.actualLevel];
+		text.text = Localization_Bridge.manager.GetTextValue("RescueLander.LevelsScore") + dataManger.manager.scoresMars["Level_"+dataManger.manager.actualLevel];
 	}
 }

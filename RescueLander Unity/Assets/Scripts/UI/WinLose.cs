@@ -202,7 +202,7 @@ public class WinLose : MonoBehaviour {
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 									= coin_manager.ThreeStarCoin.ToString();
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-									= "3 Stars:";
+									= "3 "+Localization_Bridge.manager.GetTextValue("RescueLander.ResumeFinishedCoins");
 								//ACHIEVEMENT
 								Social.ReportProgress("CgkIuv-YgIkeEAIQCQ", 100.0f, (bool success) => {
 									socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
@@ -215,7 +215,7 @@ public class WinLose : MonoBehaviour {
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 									= coin_manager.TwoStarCoin.ToString();
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-									= "2 Stars:";
+									= "2 "+Localization_Bridge.manager.GetTextValue("RescueLander.ResumeFinishedCoins");
 							}
 							else {
 								dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel] = 1;
@@ -223,7 +223,7 @@ public class WinLose : MonoBehaviour {
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 									= coin_manager.OneStarCoin.ToString();
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-									= "1 Star:";
+									= "1 "+Localization_Bridge.manager.GetTextValue("RescueLander.ResumeFinishedCoins");
 							}
 							dataManger.manager.totalStars += dataManger.manager.starsMars["Level_"+dataManger.manager.actualLevel];
 							if ((int)scoreManager.scoreCalc() > dataManger.manager.scoresMars["Level_"+dataManger.manager.actualLevel]){
@@ -249,7 +249,7 @@ public class WinLose : MonoBehaviour {
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 									= coin_manager.ThreeStarCoin.ToString();
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-									= "3 Stars:";
+									= "3 "+Localization_Bridge.manager.GetTextValue("RescueLander.ResumeFinishedCoins");
 								//ACHIEVEMENT
 								Social.ReportProgress("CgkIuv-YgIkeEAIQCQ", 100.0f, (bool success) => {
 									socialManager.Check("Achievement","CgkIuv-YgIkeEAIQCQ",success);
@@ -262,7 +262,7 @@ public class WinLose : MonoBehaviour {
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 									= coin_manager.TwoStarCoin.ToString();
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-									= "2 Stars:";
+									= "2 "+Localization_Bridge.manager.GetTextValue("RescueLander.ResumeFinishedCoins");
 							}
 							else {
 								dataManger.manager.starsIce["Level_"+dataManger.manager.actualLevel] = 1;
@@ -270,7 +270,7 @@ public class WinLose : MonoBehaviour {
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text 
 									= coin_manager.OneStarCoin.ToString();
 								WinSprite.transform.FindChild("Resume/CoinCount/LevelFinished Coins").GetComponent<tk2dTextMesh>().text 
-									= "1 Star:";
+									= "1 "+Localization_Bridge.manager.GetTextValue("RescueLander.ResumeFinishedCoins");
 							}
 							dataManger.manager.totalStars += dataManger.manager.starsIce["Level_"+dataManger.manager.actualLevel];
 							if ((int)scoreManager.scoreCalc() > dataManger.manager.scoresIce["Level_"+dataManger.manager.actualLevel]){
@@ -282,7 +282,8 @@ public class WinLose : MonoBehaviour {
 							new_color.SetActive(true);
 							Debug.Log ("NUEVO COLOR!!!");
 						}
-						WinSprite.transform.FindChild("Resume/CoinCount/Level Title").GetComponent<tk2dTextMesh>().text = "Level "+dataManger.manager.actualLevel.ToString();
+						WinSprite.transform.FindChild("Resume/CoinCount/Level Title").GetComponent<ResizeText>().ChangeText(
+							Localization_Bridge.manager.GetTextValue("RescueLander.ResumeLevelTitle")+dataManger.manager.actualLevel.ToString());
 						WinSprite.transform.FindChild("Resume/CoinCount/Collected Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = coin_manager.levelCoins.ToString();
 						WinSprite.transform.FindChild("Resume/CoinCount/Total Coins/CoinCount_Number").GetComponent<tk2dTextMesh>().text = dataManger.manager.coins.ToString();
 						
@@ -426,7 +427,7 @@ public class WinLose : MonoBehaviour {
 				scoreNumber = scoreManager.timeScore;
 				scoreAct++;
 				scoreChangeText = 0;
-				scoreTextRemaining = "Time Score";
+				scoreTextRemaining = Localization_Bridge.manager.GetTextValue("RescueLander.WinScoreTime")+"\n";
 				InvokeRepeating ("ChangeScore", 0, 0.05f);
 			} else if (scoreAct == 2) {
 				scoreObject.SetActive (false);
@@ -435,7 +436,7 @@ public class WinLose : MonoBehaviour {
 				scoreText = scoreObject.GetComponent<tk2dTextMesh> ();
 				scoreNumber = damage.life;
 				scoreChangeText = 0;
-				scoreTextRemaining = "Life Score";
+				scoreTextRemaining = Localization_Bridge.manager.GetTextValue("RescueLander.WinScoreTime")+"\n";
 				InvokeRepeating ("ChangeScore", 0, 0.05f);
 				scoreAct++;
 			} else if (scoreAct == 3) {
@@ -445,7 +446,7 @@ public class WinLose : MonoBehaviour {
 				scoreText = scoreObject.GetComponent<tk2dTextMesh> ();
 				scoreNumber = (int)GameObject.Find (dataManger.manager.actualShip + "(Clone)").GetComponent<Movement> ().fuel;
 				scoreChangeText = 0;
-				scoreTextRemaining = "Fuel Score";
+				scoreTextRemaining = Localization_Bridge.manager.GetTextValue("RescueLander.WinScoreFuel")+"\n";
 				InvokeRepeating ("ChangeScore", 0, 0.05f);
 				scoreAct++;
 			} else if (scoreAct == 4) {
@@ -461,7 +462,7 @@ public class WinLose : MonoBehaviour {
 		}else{
 			scoreText.text = scoreTextRemaining +" "+ scoreNumber.ToString();
 			scoreTotal += scoreNumber;
-			scoreTotalText.text = "Score "+ scoreTotal.ToString();
+			scoreTotalText.text = Localization_Bridge.manager.GetTextValue("RescueLander.WinScoreTotal")+ scoreTotal.ToString();
 			CancelInvoke("ChangeScore");
 		}
 	}

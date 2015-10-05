@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class Finish_Platform1 : MonoBehaviour {
-	private Tuto_Behaviour2 tuto;
+	private Tuto_Behaviour tuto;
 	// Use this for initialization
 	void Awake () {
-		tuto = GameObject.Find("UI_Camera").GetComponent<Tuto_Behaviour2>();
+		tuto = GameObject.Find("UI_Camera").GetComponent<Tuto_Behaviour>();
 	}
 	
 	void OnCollisionStay2D(Collision2D coll) {
