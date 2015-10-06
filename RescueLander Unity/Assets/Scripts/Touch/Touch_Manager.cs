@@ -295,7 +295,10 @@ public class Touch_Manager : MonoBehaviour {
 							break;
 						case "Exit_Button" :
 							dataManger.manager.Save(false);
-							Garaje(false);
+							if (!uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.activeInHierarchy){
+								Garaje(false);
+								levelEnable = true;
+							}
 							if(Application.loadedLevelName == "Menu"){
 								options.SetActive(false);
 							}
@@ -306,7 +309,7 @@ public class Touch_Manager : MonoBehaviour {
 
 
 							
-							levelEnable = true;
+
 							break;
 						case "A_Button" :
 							selectedZone = "A";
@@ -990,7 +993,10 @@ public class Touch_Manager : MonoBehaviour {
 						Garaje(true);
 						break;
 					case "Exit_Button" :
-						Garaje(false);
+						if (!uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.activeInHierarchy){
+							Garaje(false);
+							levelEnable = true;
+						}
 						dataManger.manager.Save(false);
 						if(Application.loadedLevelName == "Menu"){
 							options.SetActive(false);
@@ -998,8 +1004,7 @@ public class Touch_Manager : MonoBehaviour {
 						uicameraGameobject.transform.FindChild("Prompt_Menu").gameObject.SetActive(false);
 						if(actualPrompt != null)
 							actualPrompt.SetActive(false);
-						
-						levelEnable = true;
+
 						break;
 					case "A_Button" :
 						selectedZone = "A";

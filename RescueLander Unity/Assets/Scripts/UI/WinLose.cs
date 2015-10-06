@@ -128,7 +128,7 @@ public class WinLose : MonoBehaviour {
 					ads.LaunchInterstital();
 				}
 			}
-			if((MisionAcomplished.activeInHierarchy & Input.touchCount > 0 
+			if((MisionAcomplished.activeInHierarchy & ((Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began) || Input.GetMouseButtonDown(0)) 
 			    && dataManger.manager.actualLevel < 21) || (dataManger.manager.actualLevel == 21 && worldComplete && !promptWorldComplete.activeInHierarchy
 			    )){
 				UI4.SetActive(true);
@@ -147,7 +147,7 @@ public class WinLose : MonoBehaviour {
 			if (dataManger.manager.actualLevel == 21)
 			Debug.Log ("WIN: "+ WinSprite.activeInHierarchy +", MISION: "+ MisionAcomplished.activeInHierarchy + 
 			           "TIME: " + Time.time + "ACTUAL: " + actualTime + "Timer: "+WinTimer);*/
-			if (MisionAcomplished.activeInHierarchy & (Input.touchCount > 0 || Time.time > actualTime + WinTimer) && 
+			if (MisionAcomplished.activeInHierarchy & ((Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began) || Input.GetMouseButtonDown(0) || Time.time > actualTime + WinTimer) && 
 			    dataManger.manager.actualLevel == 21 && !worldComplete & dataManger.manager.actualWorld == "Mars"){
 				if (!alreadyComplete){
 					promptWorldComplete = GameObject.Find("UI_Camera").transform.FindChild("Prompt_Menu/Shop_Bg_01/Prompt_MarsFinished").gameObject;
